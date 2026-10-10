@@ -2375,6 +2375,7 @@ p.impbox-w{padding-left:0}
 .ph-i span{font-size:13px;color:var(--muted,#666)}
 .ph-a{display:flex;gap:6px;flex:none}
 @media (max-width:520px){.ph-i{flex-direction:column;align-items:stretch}.ph-a{justify-content:flex-end}}
+.lg-err.ok{background:var(--teal-soft);color:var(--teal-ink)}
 
 </style>
 
@@ -4992,7 +4993,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261010220859';let verT=0;
+const APP_VER='20261010230618';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5015,8 +5016,30 @@ function renderLogin(msg){
    '<label class="cell"><span class="lbl show">Email</span><input id="lgU" class="in" type="email" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false"></label>'+
    '<label class="cell"><span class="lbl show">Contraseña</span><div class="pw"><input id="lgP" class="in" type="password" autocomplete="current-password"><button type="button" class="linkbtn" data-act="togglePw">Mostrar</button></div></label>'+
    '<p id="lgErr" class="lg-err" role="alert"'+(msg?'':' hidden')+'>'+esc(msg||'')+'</p><button type="submit" class="btn primary lg-btn">Entrar</button>'+
-   '<p class="muted lg-help">¿Has olvidado la contraseña? Escribe a tu entrenador y te pone una nueva.</p></form>');
+   '<p class="muted lg-help"><button type="button" class="linkbtn" id="lgForgot">¿Has olvidado la contraseña?</button></p></form>');
+  const f=$('#lgForgot');if(f)f.onclick=()=>renderForgot(($('#lgU')||{}).value||'');
   setTimeout(()=>{const u=$('#lgU');if(u)u.focus()},0);
+}
+/* recuperar contraseña: enlace por email → pantalla para poner una nueva */
+const RECOVERY=/type=recovery/.test(location.hash);
+const RECOVERY_ERR=/error_description=/.test(location.hash)?decodeURIComponent((location.hash.match(/error_description=([^&]*)/)||[])[1]||'').replace(/\+/g,' '):'';
+function clearHash(){try{history.replaceState(null,'',location.pathname+location.search)}catch(_){}}
+function renderForgot(em){
+  loginShell('<form id="fgForm" class="lg-form" novalidate><h2>Recuperar contraseña</h2>'+
+   '<p class="muted">Escribe el email de tu cuenta y te enviaremos un enlace para crear una contraseña nueva.</p>'+
+   '<label class="cell"><span class="lbl show">Email</span><input id="fgU" class="in" type="email" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" value="'+esc(em)+'"></label>'+
+   '<p id="fgMsg" class="lg-err" role="alert" hidden></p><button type="submit" class="btn primary lg-btn">Enviar enlace</button>'+
+   '<p class="muted lg-help"><button type="button" class="linkbtn" id="fgBack">Volver a entrar</button></p></form>');
+  $('#fgBack').onclick=()=>renderLogin();
+  setTimeout(()=>{const u=$('#fgU');if(u)u.focus()},0);
+}
+function renderNewPw(msg){
+  loginShell('<form id="npForm" class="lg-form" novalidate><h2>Nueva contraseña</h2>'+
+   '<p class="muted">Elige una contraseña nueva de al menos 8 caracteres.</p>'+
+   '<label class="cell"><span class="lbl show">Nueva contraseña</span><input id="npA" class="in" type="password" autocomplete="new-password"></label>'+
+   '<label class="cell"><span class="lbl show">Repítela</span><input id="npB" class="in" type="password" autocomplete="new-password"></label>'+
+   '<p id="npMsg" class="lg-err" role="alert"'+(msg?'':' hidden')+'>'+esc(msg||'')+'</p><button type="submit" class="btn primary lg-btn">Guardar y entrar</button></form>');
+  setTimeout(()=>{const u=$('#npA');if(u)u.focus()},0);
 }
 function renderLoading(txt){
   document.body.dataset.screen='login';
@@ -5055,6 +5078,32 @@ async function startSession(session){
   if(n)toast('Tienes '+n+(n===1?' aviso nuevo':' avisos nuevos'));
 }
 document.addEventListener('submit',async e=>{
+  if(e.target.id==='fgForm'){
+    e.preventDefault();
+    const em=$('#fgU').value.trim().toLowerCase(),m=$('#fgMsg'),btn=e.target.querySelector('button[type=submit]');
+    if(!okEmail(em)){m.textContent='Escribe un email válido.';m.hidden=false;return}
+    btn.disabled=true;btn.textContent='Enviando…';
+    const{error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});
+    btn.disabled=false;btn.textContent='Enviar enlace';
+    if(error&&!/rate|seconds/i.test(error.message)){m.textContent=/fetch|network/i.test(error.message)?'Sin conexión. Inténtalo de nuevo.':'No se ha podido enviar. Inténtalo dentro de un rato.';m.hidden=false;return}
+    if(error){m.textContent='Ya se ha enviado un enlace hace poco. Espera un minuto y vuelve a intentarlo.';m.hidden=false;return}
+    m.classList.add('ok');m.textContent='Listo. Si ese email tiene cuenta, te llegará un enlace en unos minutos. Revisa también la carpeta de spam.';m.hidden=false;
+    return;
+  }
+  if(e.target.id==='npForm'){
+    e.preventDefault();
+    const a=$('#npA').value,b=$('#npB').value,m=$('#npMsg'),btn=e.target.querySelector('button[type=submit]');
+    if(a.length<8){m.textContent='La contraseña debe tener al menos 8 caracteres.';m.hidden=false;return}
+    if(a!==b){m.textContent='Las dos contraseñas no coinciden.';m.hidden=false;return}
+    btn.disabled=true;btn.textContent='Guardando…';
+    const{error}=await sb.auth.updateUser({password:a});
+    btn.disabled=false;btn.textContent='Guardar y entrar';
+    if(error){m.textContent=/same|different/i.test(error.message)?'Usa una contraseña distinta de la anterior.':'No se ha podido guardar. Vuelve a pedir el enlace.';m.hidden=false;return}
+    clearHash();
+    const{data}=await sb.auth.getSession();
+    if(data&&data.session){toast('Contraseña cambiada ✓');startSession(data.session)}else renderLogin('Contraseña cambiada. Ya puedes entrar.');
+    return;
+  }
   if(e.target.id!=='loginForm')return;
   e.preventDefault();
   const em=$('#lgU').value.trim().toLowerCase(),pw=$('#lgP').value,err=$('#lgErr'),btn=e.target.querySelector('button[type=submit]');
@@ -5065,7 +5114,7 @@ document.addEventListener('submit',async e=>{
   if(error){err.textContent=/fetch|network/i.test(error.message)?'Sin conexión. Inténtalo de nuevo.':'Email o contraseña incorrectos.';err.hidden=false;$('#lgP').value='';$('#lgP').focus();return}
   startSession(data.session);
 });
-sb.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_OUT'&&RB.role&&!RB.leaving){setTimeout(()=>{sb.auth.getSession().then(({data})=>{if(data&&data.session)return;if(RB.role){flush().catch(()=>{});RB.role=null;renderLogin('Tu sesión ha caducado. Vuelve a entrar.')}})},800)}});
+sb.auth.onAuthStateChange((ev)=>{if(ev==='PASSWORD_RECOVERY'&&!RB.role){renderNewPw();return}if(ev==='SIGNED_OUT'&&RB.role&&!RB.leaving){setTimeout(()=>{sb.auth.getSession().then(({data})=>{if(data&&data.session)return;if(RB.role){flush().catch(()=>{});RB.role=null;renderLogin('Tu sesión ha caducado. Vuelve a entrar.')}})},800)}});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&RB.role){sb.auth.getSession().catch(()=>{})}});
 
 /* ---------- alta y acceso de clientes (entrenador) ---------- */
@@ -5321,7 +5370,10 @@ setInterval(()=>{if(document.hidden)return;document.querySelectorAll('.exo-ph im
 
 function boot(){
   renderLoading('Comprobando acceso…');
-  sb.auth.getSession().then(({data})=>{if(data&&data.session)startSession(data.session);else renderLogin()}).catch(()=>renderLogin());
+  if(RECOVERY_ERR){clearHash();renderLogin('El enlace para cambiar la contraseña ha caducado o ya se usó. Pide uno nuevo.');return}
+  sb.auth.getSession().then(({data})=>{
+    if(RECOVERY){if(data&&data.session)renderNewPw();else{clearHash();renderLogin('El enlace para cambiar la contraseña ha caducado o ya se usó. Pide uno nuevo.')}return}
+    if(data&&data.session)startSession(data.session);else renderLogin()}).catch(()=>renderLogin());
 }
 
 /* ---------- imprimir en la app del iPhone (pantalla de inicio): window.print no funciona → PDF ---------- */

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Tactical Biscuit Training · Entrenamiento personal y nutrición deportiva en Valencia</title>
-<meta name="description" content="Entrenador personal en Valencia. Planes individuales de entrenamiento y alimentación deportiva, con seguimiento real, en persona u online.">
+<meta name="description" content="Entrenamiento personal y alimentación deportiva en un solo plan, con seguimiento en todo momento. Valencia y online.">
 <meta name="theme-color" content="#0B1211">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Tactical Biscuit Training">
@@ -54,12 +54,15 @@ section { padding-block: 96px 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
 .chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 16px; font-size: 15px; font-weight: 600; }
 
-/* Método */
-.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; counter-reset: s; }
-.step { position: relative; padding: 28px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); display: grid; gap: 10px; align-content: start; }
-.step .n { font-family: var(--font-display); font-weight: 900; font-size: 56px; line-height: .8; color: transparent; -webkit-text-stroke: 1.5px var(--coral); }
-.step h3 { font-size: 28px; font-weight: 800; margin-top: 8px; }
-.step p { color: var(--muted); font-size: 15px; }
+/* Método: línea de pasos */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; position: relative; }
+.steps::before { content: ""; position: absolute; top: 27px; left: 28px; right: calc(33.33% - 28px); height: 2px; background: linear-gradient(90deg, var(--coral), var(--teal)); opacity: .55; }
+.step { position: relative; display: grid; gap: 8px; align-content: start; }
+.step .n { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); border: 2px solid var(--coral); color: var(--coral); font-family: var(--font-display); font-weight: 900; font-size: 26px; position: relative; z-index: 1; margin-bottom: 8px; }
+.step:nth-child(2) .n { border-color: color-mix(in srgb, var(--coral) 50%, var(--teal)); color: color-mix(in srgb, var(--coral) 50%, var(--teal)); }
+.step:nth-child(3) .n { border-color: var(--teal); color: var(--teal-ink); }
+.step h3 { font-size: 30px; font-weight: 800; }
+.step p { color: var(--muted); font-size: 15px; max-width: 30ch; }
 
 /* App */
 .app-band { background: var(--band); color: var(--band-fg); margin-top: 96px; padding-block: 88px; overflow: hidden; }
@@ -82,14 +85,14 @@ section { padding-block: 96px 0; }
 .about .txt p { max-width: 62ch; }
 .story { margin-top: 32px; padding: 26px 28px; border-radius: var(--radius); background: var(--teal-soft); border-left: 4px solid var(--teal); }
 .story .eyebrow { margin-bottom: 10px; }
-.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 24px; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 24px; }
 .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: grid; gap: 6px; align-content: start; }
-.stat b { font-family: var(--font-display); font-weight: 900; font-size: 44px; line-height: 1; color: var(--teal-ink); }
+.stat b { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: 1; color: var(--teal-ink); }
 .stat span { font-size: 13px; color: var(--muted); line-height: 1.4; }
-.facts { list-style: none; padding: 0; margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
-.facts li { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 12px; padding: 14px 20px; font-size: 15px; }
-.facts li + li { border-top: 1px solid var(--line); }
-.facts li span:first-child { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal-ink); padding-top: 4px; }
+.edu { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 22px 8px; }
+.edu ul { list-style: none; padding: 0; margin: 12px 0 0; }
+.edu li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; border-top: 1px solid var(--line); font-size: 15px; font-weight: 600; line-height: 1.4; }
+.edu li b { flex: none; font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; color: var(--teal-ink); background: var(--teal-soft); border-radius: 999px; padding: 4px 10px; }
 
 /* Servicios */
 .svc-feat { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px 40px; align-items: center; padding: 34px; border-radius: var(--radius); background: var(--band); color: var(--band-fg); position: relative; overflow: hidden; }
@@ -150,17 +153,19 @@ section { padding-block: 96px 0; }
   .hero { padding-block: 40px 56px; }
   .hero-logo { justify-self: start; max-width: 190px; order: -1; }
   .svc-feat::after { display: none; }
-  .pillars, .steps, .ways, .svc-grid { grid-template-columns: minmax(0, 1fr); }
+  .pillars, .ways, .svc-grid { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .steps::before { top: 28px; bottom: 28px; left: 27px; right: auto; width: 2px; height: auto; background: linear-gradient(180deg, var(--coral), var(--teal)); }
+  .step { grid-template-columns: 56px minmax(0, 1fr); column-gap: 18px; row-gap: 4px; }
+  .step .n { grid-row: span 2; margin: 0; }
+  .step h3 { align-self: end; }
   .svc-feat { grid-template-columns: minmax(0, 1fr); padding: 26px; }
   .goals { grid-template-columns: minmax(0, 1fr); gap: 12px; }
 }
 @media (max-width: 560px) {
   section { padding-block-start: 72px; }
   .app-band, .contact { margin-top: 72px; padding-block: 64px; }
-  .stats { grid-template-columns: minmax(0, 1fr); }
-  .stat { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; }
-  .stat b { font-size: 36px; min-width: 84px; }
-  .facts li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .stat b { font-size: 40px; }
   .phones { gap: 10px; }
   .phone { padding: 5px; border-radius: 22px; }
   .phone img { border-radius: 18px; }
@@ -169,37 +174,71 @@ section { padding-block: 96px 0; }
   .btn-client { padding: 7px 12px; }
   .lema { letter-spacing: .08em; }
 }
-/* Entrada con el logo */
-#intro, #introRing { display: none; }
-html.intro-on #intro, #intro.opening { display: grid; }
-html.intro-lock, html.intro-lock body { overflow: hidden; }
-html.intro-on body > *:not(#intro):not(#introRing) { visibility: hidden; }
-.intro { position: fixed; inset: 0; z-index: 9999; place-items: center; align-content: center; border: 0; padding: 16px; margin: 0; cursor: pointer; color: var(--band-fg); font: inherit;
-  background-color: var(--band);
-  background-image: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--teal) 16%, var(--band)) 0%, var(--band) 62%); }
-.intro.opening { -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent var(--r, 0px), #000 calc(var(--r, 0px) + 1.5px)); mask-image: radial-gradient(circle at 50% 50%, transparent var(--r, 0px), #000 calc(var(--r, 0px) + 1.5px)); pointer-events: none; }
-.intro-core { display: grid; justify-items: center; gap: 28px; animation: introIn 0.8s cubic-bezier(.2,.7,.2,1) both; transition: transform 0.7s ease; }
-.intro.opening .intro-core { transform: scale(1.12); }
-.intro-core img { display: block; width: min(60vw, 260px); height: auto; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 2px var(--teal), 0 0 0 10px var(--band), 0 0 0 11px var(--band-line); animation: introPulse 2.4s ease-in-out 0.8s infinite; }
-.intro-hint { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--band-muted); animation: introHint 2.4s ease-in-out 0.8s infinite; }
-#introRing { position: fixed; left: 50%; top: 50%; width: 0; height: 0; transform: translate(-50%, -50%); border: 3px solid var(--teal); border-radius: 50%; box-sizing: border-box; pointer-events: none; z-index: 10000; }
-@keyframes introIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: none; } }
-@keyframes introPulse { 0%, 100% { box-shadow: 0 0 0 2px var(--teal), 0 0 0 10px var(--band), 0 0 0 11px var(--band-line); } 50% { box-shadow: 0 0 0 2px var(--teal), 0 0 0 16px color-mix(in srgb, var(--teal) 28%, transparent), 0 0 0 17px var(--band-line); } }
-@keyframes introHint { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .intro-core, .intro-core img, .intro-hint { animation: none; } }
+/* Entrada: Impacto + barrido */
+#intro { display: none; }
+html.intro #intro { display: block; }
+html.intro, html.intro body { overflow: hidden; }
+#intro { position: fixed; inset: 0; z-index: 9999; cursor: pointer; overflow: hidden; }
+#intro .i-bg { position: absolute; inset: 0; display: grid; place-items: center; background: var(--band); background-image: radial-gradient(circle at 50% 45%, #0F2B28 0%, var(--band) 62%); }
+#intro .i-core { position: relative; display: grid; justify-items: center; gap: 26px; }
+#intro .i-logo { width: min(46vw, 240px); height: auto; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 2px var(--teal); animation: iDrop .62s cubic-bezier(.55,0,.75,.2) both; }
+#intro .i-wave { position: absolute; left: 50%; top: calc(min(46vw, 240px) / 2); width: min(46vw, 240px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 3px solid var(--teal); opacity: 0; animation: iWave .9s cubic-bezier(.2,.7,.2,1) .62s; }
+#intro .i-wave.w2 { border-color: var(--coral); animation-delay: .78s; }
+#intro .i-words { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-family: var(--font-display); font-weight: 900; font-size: clamp(20px, 5vw, 32px); letter-spacing: .16em; text-transform: uppercase; color: var(--band-fg); }
+#intro .i-words span { opacity: 0; animation: iStamp .35s cubic-bezier(.2,.9,.3,1.3) forwards; }
+#intro .i-words span:nth-child(1) { animation-delay: 1.25s; }
+#intro .i-words span:nth-child(2) { color: var(--teal); animation-delay: 1.6s; }
+#intro .i-words span:nth-child(3) { color: var(--coral); animation-delay: 1.95s; }
+#intro .i-shake { animation: iShake .35s linear .62s; }
+#intro .i-skip { position: absolute; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--band-muted); opacity: .7; }
+#intro .i-wipe { position: absolute; top: -10%; bottom: -10%; left: -30%; right: -30%; transform: translateX(-130%) skewX(-14deg); z-index: 2; }
+#intro .i-wipe.w1 { background: var(--coral); } #intro .i-wipe.w2 { background: var(--teal); }
+#intro.out .i-wipe.w1 { animation: iWipe 1.1s cubic-bezier(.76,0,.24,1) forwards; }
+#intro.out .i-wipe.w2 { animation: iWipe 1.1s cubic-bezier(.76,0,.24,1) .15s forwards; }
+#intro.out .i-bg { animation: iHide .01s linear .55s forwards; }
+#intro.out { pointer-events: none; }
+@keyframes iDrop { 0% { transform: scale(3); opacity: 0; filter: blur(12px); } 100% { transform: none; opacity: 1; filter: none; } }
+@keyframes iWave { 0% { opacity: .9; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(2.6); } }
+@keyframes iStamp { 0% { opacity: 0; transform: scale(1.8); } 100% { opacity: 1; transform: none; } }
+@keyframes iShake { 0%,100% { transform: none; } 20% { transform: translate(-6px,4px); } 40% { transform: translate(6px,-4px); } 60% { transform: translate(-4px,-3px); } 80% { transform: translate(4px,3px); } }
+@keyframes iWipe { to { transform: translateX(130%) skewX(-14deg); } }
+@keyframes iHide { to { visibility: hidden; } }
+
 </style>
 <script>
 (function () { try {
-  var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!rm) {
-    var h = document.documentElement;
-    h.classList.add('intro-on', 'intro-lock');
-    window.setTimeout(function () { if (!window.__introReady) { h.classList.remove('intro-on', 'intro-lock'); } }, 3500);
-  }
+  var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, seen = false;
+  try { seen = sessionStorage.getItem('tbIntro') === '1'; } catch (e) {}
+  if (!rm && !seen) { document.documentElement.classList.add('intro'); }
 } catch (e) {} })();
 </script>
+
 </head>
 <body>
+<div id="intro" role="button" tabindex="0" aria-label="Saltar la animación de entrada">
+  <div class="i-bg"><div class="i-shake"><div class="i-core">
+    <span class="i-wave"></span><span class="i-wave w2"></span>
+    <img class="i-logo" src="img/logo.jpg" alt="Tactical Biscuit Training" width="240" height="240">
+    <div class="i-words"><span>Fuerza</span><span>Resistencia</span><span>Disciplina</span></div>
+  </div></div><span class="i-skip">Toca para saltar</span></div>
+  <span class="i-wipe w1"></span><span class="i-wipe w2"></span>
+</div>
+<script>
+(function () {
+  var h = document.documentElement, el = document.getElementById('intro');
+  if (!el) return;
+  if (!h.classList.contains('intro')) { el.remove(); return; }
+  try { sessionStorage.setItem('tbIntro', '1'); } catch (e) {}
+  var out = false;
+  function done() { h.classList.remove('intro'); el.remove(); }
+  function exit() { if (out) return; out = true; el.classList.add('out'); setTimeout(function () { h.classList.remove('intro'); }, 560); setTimeout(done, 1350); }
+  setTimeout(exit, 2600);
+  setTimeout(done, 6000);
+  el.addEventListener('click', exit);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') exit(); });
+})();
+</script>
+
 
 <header class="site-head">
   <div class="wrap">
@@ -226,7 +265,7 @@ html.intro-on body > *:not(#intro):not(#introRing) { visibility: hidden; }
       <div>
         <p class="eyebrow">Entrenador personal · Valencia y online</p>
         <h1>Entrenamiento y alimentación deportiva <em>en un solo plan</em></h1>
-        <p class="lead"><strong>Soy Robert, entrenador personal en Valencia.</strong> Preparo planes individuales de entrenamiento y alimentación deportiva, con seguimiento real, en persona u online.</p>
+        <p class="lead">Planes individuales de entrenamiento y alimentación deportiva, diseñados para tu objetivo, con seguimiento y contacto directo en todo momento.</p>
         <div class="cta-row">
           <a class="btn primary" href="#contacto">Pide información</a>
           <a class="btn ghost" href="#servicios">Ver servicios</a>
@@ -241,20 +280,19 @@ html.intro-on body > *:not(#intro):not(#introRing) { visibility: hidden; }
 <div class="wrap">
   <section id="que-hago">
     <div class="sec-head rv">
-      <p class="eyebrow">Qué hago</p>
-      <h2>Lo que comes y cómo entrenas, en la misma dirección</h2>
-      <p>Planifico las dos cosas a la vez, así cada parte suma a tu objetivo en lugar de ir por separado.</p>
+      <h2>Qué hago</h2>
+      <p>Entrenamiento y alimentación en un mismo plan, pensados para que cada parte te acerque a tu objetivo.</p>
     </div>
     <div class="pillars">
       <div class="pillar rv">
         <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/></svg></span>
         <h3>Entrenamiento personalizado</h3>
-        <p>Un programa adaptado a tu nivel, tu objetivo y el tiempo que tienes. Fuerza, resistencia y técnica, por fases.</p>
+        <p>Un programa diseñado para tu nivel y tu objetivo, que evoluciona por fases a medida que progresas.</p>
       </div>
       <div class="pillar rv">
         <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M17 3c-2 1-3 4-3 7h3v11"/></svg></span>
         <h3>Alimentación deportiva</h3>
-        <p>Pautas con cantidades en gramos, alternativas para cada comida y lista de la compra, según tu deporte y tu objetivo.</p>
+        <p>Un plan de comidas adaptado a tu deporte y a tu objetivo, flexible para tu día a día, con alternativas para cada comida y lista de la compra.</p>
       </div>
       <div class="pillar rv">
         <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
@@ -276,15 +314,14 @@ html.intro-on body > *:not(#intro):not(#introRing) { visibility: hidden; }
 
   <section id="metodo">
     <div class="sec-head rv">
-      <p class="eyebrow">Método</p>
-      <h2>Un plan que se ajusta a tu vida</h2>
-      <p>Nada de plantillas genéricas. Cada programa parte de tu situación real y se corrige con los resultados.</p>
+      <h2>Cómo trabajamos</h2>
+      <p>Tres pasos, sin plantillas genéricas.</p>
     </div>
-    <div class="steps">
-      <div class="step rv"><span class="n">01</span><h3>Valoración</h3><p>Hablamos de tu objetivo, tu día a día y tu historial. Medimos tu composición corporal y abrimos tu ficha.</p></div>
-      <div class="step rv"><span class="n">02</span><h3>Plan</h3><p>Recibes tu entrenamiento y tus pautas de alimentación deportiva en la app, con cantidades en gramos y lista de la compra.</p></div>
-      <div class="step rv"><span class="n">03</span><h3>Seguimiento</h3><p>Revisamos tu progreso cada mes, medimos de nuevo y ajustamos el plan por fases.</p></div>
-    </div>
+    <ol class="steps rv">
+      <li class="step"><span class="n">1</span><h3>Valoración</h3><p>Entrevista, objetivos y medición de tu composición corporal.</p></li>
+      <li class="step"><span class="n">2</span><h3>Plan</h3><p>Tu entrenamiento y tu alimentación, listos en la app.</p></li>
+      <li class="step"><span class="n">3</span><h3>Seguimiento</h3><p>Contacto en todo momento, revisión mensual y ajustes según tus resultados.</p></li>
+    </ol>
   </section>
 </div>
 
@@ -306,7 +343,7 @@ html.intro-on body > *:not(#intro):not(#introRing) { visibility: hidden; }
         </ul>
       </div>
       <div class="phones rv" aria-label="Capturas de la app Team Biscuit">
-        <div class="phone"><img src="img/app-home.webp" alt="Pantalla de inicio de la app" width="390" height="650"></div>
+        <div class="phone"><img src="img/app-home.webp" alt="Pantalla de inicio de la app (cliente de ejemplo)" width="390" height="650"></div>
         <div class="phone"><img src="img/app-ent.webp" alt="Pantalla de entrenamiento" width="390" height="650"></div>
         <div class="phone"><img src="img/app-diet.webp" alt="Pantalla de dieta" width="390" height="650"></div>
       </div>
@@ -322,9 +359,9 @@ html.intro-on body > *:not(#intro):not(#introRing) { visibility: hidden; }
     </div>
     <div class="about">
       <div class="txt rv">
-        <p>Llevo más de 15 años dedicado al culturismo y toda la vida practicando deporte: gimnasio, bici, running y montaña. Conozco de primera mano lo que cuesta construir un físico y mantener la constancia.</p>
-        <p>Soy entrenador personal y asesoro en nutrición deportiva. Junto las dos cosas en un mismo plan para que lo que comes y cómo entrenas trabajen en la misma dirección.</p>
-        <p>Combino la evidencia científica con la experiencia práctica: lo que dicen los estudios y lo que funciona de verdad con cada persona. Exijo constancia y rigor, y ajusto el plan cuando tu vida lo necesita.</p>
+        <p>Llevo más de 15 años en el culturismo y toda la vida haciendo deporte: entrenamiento de fuerza, ciclismo, running y montaña. Sé lo que cuesta construir un físico y mantener la constancia.</p>
+        <p>Como entrenador personal y asesor en nutrición deportiva, uno las dos cosas en un mismo plan para que entrenamiento y alimentación trabajen juntos.</p>
+        <p>Me baso en la evidencia científica y en la experiencia práctica. Cada plan se adapta a la persona que lo sigue: pido compromiso y, a cambio, ajusto el plan cuando tu vida lo necesita.</p>
         <div class="story">
           <p class="eyebrow">Mi historia</p>
           <p>En 2016 superé un grave accidente de tráfico que me dejó en coma y me obligó a un año de rehabilitación para volver a caminar. Esa experiencia define mi forma de entender el entrenamiento: constancia, progresión gradual y respeto por el punto de partida de cada persona.</p>
@@ -332,16 +369,17 @@ html.intro-on body > *:not(#intro):not(#introRing) { visibility: hidden; }
       </div>
       <div class="rv">
         <div class="stats">
-          <div class="stat"><b>+15</b><span>años de práctica deportiva, especializado en culturismo</span></div>
-          <div class="stat"><b>785 h</b><span>de formación en entrenamiento, nutrición y suplementación</span></div>
-          <div class="stat"><b>4</b><span>idiomas: español, valenciano, inglés y rumano</span></div>
+          <div class="stat"><b>+15</b><span>años de experiencia en culturismo</span></div>
+          <div class="stat"><b>785 h</b><span>de formación en entrenamiento y nutrición deportiva</span></div>
         </div>
-        <ul class="facts">
-          <li><span>Entrenamiento</span><span>Entrenador Personal de Alto Rendimiento y Técnicas Avanzadas de Musculación · 620 h</span></li>
-          <li><span>Nutrición</span><span>Nutrición Deportiva de Alto Rendimiento y Dietética Avanzada · 120 h</span></li>
-          <li><span>Suplementación</span><span>Suplementación Deportiva · 45 h</span></li>
-          <li><span>Centro</span><span>Apta Vital Sport, Valencia</span></li>
-        </ul>
+        <div class="edu">
+          <p class="eyebrow">Formación</p>
+          <ul>
+            <li><span>Entrenador Personal de Alto Rendimiento y Técnicas Avanzadas de Musculación</span><b>620 h</b></li>
+            <li><span>Nutrición Deportiva de Alto Rendimiento y Dietética Avanzada</span><b>120 h</b></li>
+            <li><span>Suplementación Deportiva</span><b>45 h</b></li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -358,7 +396,7 @@ html.intro-on body > *:not(#intro):not(#introRing) { visibility: hidden; }
         <span class="tag">Programa completo</span>
         <h3>Pack «Cambio Total» · 90 días</h3>
         <p>Tres meses de trabajo conjunto en entrenamiento y alimentación deportiva, con seguimiento continuo para que el cambio se note y se mantenga.</p>
-        <ul><li>Valoración inicial incluida</li><li>Entrenamiento y dieta</li><li>Revisiones mensuales</li><li>App Team Biscuit</li></ul>
+        <ul><li>Valoración inicial incluida</li><li>Entrenamiento y dieta</li><li>Seguimiento continuo</li><li>App Team Biscuit</li></ul>
       </div>
       <a class="btn primary" href="#contacto">Me interesa</a>
     </div>
@@ -388,7 +426,7 @@ html.intro-on body > *:not(#intro):not(#introRing) { visibility: hidden; }
     </div>
     <div class="faq rv">
       <details><summary>¿Necesito experiencia previa?</summary><p>No. El plan parte de tu nivel actual, aunque nunca hayas entrenado. Empezamos por lo que puedes hacer hoy y progresamos poco a poco.</p></details>
-      <details><summary>¿Cómo funciona el servicio online?</summary><p>Tras la valoración recibes tu plan en la app Team Biscuit. Allí ves tu entreno y tu dieta, registras lo que haces y yo sigo tu progreso. Cada mes revisamos y ajustamos.</p></details>
+      <details><summary>¿Cómo funciona el servicio online?</summary><p>Tras la valoración recibes tu plan en la app Team Biscuit. Allí ves tu entreno y tu dieta, registras lo que haces y yo sigo tu progreso al momento. Puedes escribirme siempre que lo necesites, y cada mes hacemos una revisión completa.</p></details>
       <details><summary>¿Tengo que ir a un gimnasio?</summary><p>No necesariamente. El entrenamiento se adapta a donde vayas a entrenar: gimnasio, casa o aire libre.</p></details>
       <details><summary>¿Y si una semana no puedo cumplir?</summary><p>No hay días fijos: entrenas cuando puedes dentro de la semana. Si algo cambia en tu vida, lo hablamos y ajustamos el plan.</p></details>
       <details><summary>¿Sirve si preparo una carrera?</summary><p>Sí. Puedo combinar tu plan de carrera con el trabajo de fuerza y la alimentación, por fases hasta el día de la prueba.</p></details>
@@ -462,47 +500,6 @@ document.querySelectorAll('[data-copy]').forEach(function (btn) {
     wa.classList.toggle('show', past && !inContact);
   }
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
-})();
-</script>
-<button type="button" class="intro" id="intro" aria-label="Entrar a la web de Tactical Biscuit Training">
-  <span class="intro-core">
-    <img id="introLogo" alt="Logo de Tactical Biscuit Training" width="260" height="260">
-    <span class="intro-hint">Toca para entrar</span>
-  </span>
-</button>
-<div id="introRing" aria-hidden="true"></div>
-
-<script>
-(function () {
-  var intro = document.getElementById('intro'), ring = document.getElementById('introRing'), h = document.documentElement;
-  if (!intro || !ring) { return; }
-  if (!h.classList.contains('intro-on')) { intro.remove(); ring.remove(); return; }
-  var logo = document.getElementById('introLogo'), big = document.querySelector('.hero-logo');
-  if (logo && big) { logo.src = big.src; }
-  window.__introReady = true;
-  var opened = false;
-  function done() { intro.remove(); ring.remove(); h.classList.remove('intro-lock'); }
-  function open() {
-    if (opened) { return; }
-    opened = true;
-    var R = Math.hypot(window.innerWidth, window.innerHeight) / 2 + 40, t0 = null, D = 1100;
-    intro.classList.add('opening');
-    h.classList.remove('intro-on');
-    ring.style.display = 'block';
-    function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
-    function step(ts) {
-      if (t0 === null) { t0 = ts; }
-      var p = Math.min(1, (ts - t0) / D), r = R * ease(p);
-      intro.style.setProperty('--r', r + 'px');
-      ring.style.width = ring.style.height = (2 * r) + 'px';
-      ring.style.opacity = String(1 - p * p);
-      if (p < 1) { window.requestAnimationFrame(step); } else { done(); }
-    }
-    window.requestAnimationFrame(step);
-  }
-  intro.addEventListener('click', open);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { open(); } });
-  try { intro.focus({ preventScroll: true }); } catch (e) {}
 })();
 </script>
 </body>

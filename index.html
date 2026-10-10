@@ -87,7 +87,7 @@ section { padding-block: 96px 0; }
 .story .eyebrow { margin-bottom: 10px; }
 .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 24px; }
 .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: grid; gap: 6px; align-content: start; }
-.stat b { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: 1; color: var(--teal-ink); }
+.stat b { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: 1; white-space: nowrap; color: var(--teal-ink); }
 .stat span { font-size: 13px; color: var(--muted); line-height: 1.4; }
 .edu { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 22px 8px; }
 .edu ul { list-style: none; padding: 0; margin: 12px 0 0; }
@@ -165,7 +165,7 @@ section { padding-block: 96px 0; }
 @media (max-width: 560px) {
   section { padding-block-start: 72px; }
   .app-band, .contact { margin-top: 72px; padding-block: 64px; }
-  .stat b { font-size: 40px; }
+  .stat b { font-size: 34px; }
   .phones { gap: 10px; }
   .phone { padding: 5px; border-radius: 22px; }
   .phone img { border-radius: 18px; }

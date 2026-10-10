@@ -1,0 +1,1392 @@
+[
+{
+"n": "Pechuga de pollo",
+"g": "p",
+"p": 22.5,
+"c": 0,
+"f": 1.9,
+"fib": 0,
+"src": "USDA: Chicken, breast, boneless, skinless, raw",
+"sw": true,
+"al": [
+"pechuga pollo",
+"pollo"
+]
+},
+{
+"n": "Muslo de pollo sin piel",
+"g": "p",
+"p": 21.4,
+"c": 0,
+"f": 3.1,
+"fib": 0.0,
+"src": "USDA: Chicken, broilers or fryers, meat only, raw",
+"sw": true,
+"al": [
+"contramuslo",
+"muslo"
+]
+},
+{
+"n": "Pechuga de pollo a la plancha (cocinada)",
+"g": "p",
+"p": 29.6,
+"c": 0,
+"f": 5.4,
+"fib": 0.0,
+"src": "USDA: Chicken breast, sauteed, skin not eaten",
+"sw": true,
+"al": [
+"pollo cocinado",
+"pollo cocido",
+"pechuga cocinada"
+]
+},
+{
+"n": "Pechuga de pavo",
+"g": "p",
+"p": 23.7,
+"c": 0.1,
+"f": 1.5,
+"fib": 0.0,
+"src": "USDA: Turkey, whole, breast, meat only, raw",
+"sw": true,
+"al": [
+"solomillo de pavo",
+"solomillo pavo",
+"pavo"
+]
+},
+{
+"n": "Carne picada de pavo",
+"g": "p",
+"p": 18.7,
+"c": 0,
+"f": 8.3,
+"fib": 0.0,
+"src": "USDA: Turkey, ground, 93% lean, 7% fat, raw",
+"sw": true,
+"al": [
+"picada de pavo",
+"picada pavo"
+]
+},
+{
+"n": "Carne picada de pollo",
+"g": "p",
+"p": 17.4,
+"c": 0.0,
+"f": 8.1,
+"fib": 0.0,
+"src": "USDA: Chicken, ground, raw",
+"sw": true,
+"al": [
+"picada de pollo",
+"picada pollo"
+]
+},
+{
+"n": "Ternera magra",
+"g": "p",
+"p": 22.0,
+"c": 0.2,
+"f": 5.7,
+"fib": 0,
+"src": "USDA: Beef, top sirloin steak, raw",
+"sw": true,
+"al": [
+"ternera",
+"filete de ternera",
+"solomillo de ternera"
+]
+},
+{
+"n": "Carne picada de ternera (5 % grasa)",
+"g": "p",
+"p": 21.4,
+"c": 0,
+"f": 5.0,
+"fib": 0.0,
+"src": "USDA: Beef, ground, 95% lean meat / 5% fat, raw",
+"sw": true,
+"al": [
+"picada de ternera",
+"picada ternera",
+"picada vacuno"
+]
+},
+{
+"n": "Lomo de cerdo",
+"g": "p",
+"p": 21.1,
+"c": 0,
+"f": 9.5,
+"fib": 0,
+"src": "USDA: Pork, loin, boneless, raw",
+"sw": true,
+"al": [
+"lomo cerdo",
+"lomo",
+"cerdo"
+]
+},
+{
+"n": "Solomillo de cerdo",
+"g": "p",
+"p": 21.6,
+"c": 0,
+"f": 3.9,
+"fib": 0,
+"src": "USDA: Pork, loin, tenderloin, boneless, raw",
+"sw": true,
+"al": [
+"solomillo cerdo"
+]
+},
+{
+"n": "Merluza",
+"g": "p",
+"p": 15.9,
+"c": 0,
+"f": 2.8,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": [
+"pescado blanco"
+]
+},
+{
+"n": "Bacalao fresco",
+"g": "p",
+"p": 17.7,
+"c": 0,
+"f": 0.4,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": [
+"bacalao"
+]
+},
+{
+"n": "Dorada",
+"g": "p",
+"p": 17,
+"c": 0,
+"f": 1,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": []
+},
+{
+"n": "Lubina",
+"g": "p",
+"p": 18,
+"c": 0,
+"f": 1.3,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": []
+},
+{
+"n": "Rape",
+"g": "p",
+"p": 14.5,
+"c": 0,
+"f": 1.5,
+"fib": 0.0,
+"src": "USDA: Fish, monkfish, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Salmón",
+"g": "p",
+"p": 20.4,
+"c": 0,
+"f": 13.4,
+"fib": 0.0,
+"src": "USDA: Fish, salmon, Atlantic, farmed, raw",
+"sw": true,
+"al": [
+"salmon"
+]
+},
+{
+"n": "Caballa",
+"g": "p",
+"p": 18.6,
+"c": 0,
+"f": 13.9,
+"fib": 0.0,
+"src": "USDA: Fish, mackerel, Atlantic, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Boquerón",
+"g": "p",
+"p": 17.6,
+"c": 0,
+"f": 6.3,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": [
+"boquerones",
+"anchoa fresca"
+]
+},
+{
+"n": "Atún fresco",
+"g": "p",
+"p": 24.4,
+"c": 0,
+"f": 0.5,
+"fib": 0.0,
+"src": "USDA: Fish, tuna, fresh, yellowfin, raw",
+"sw": true,
+"al": [
+"atún rojo",
+"bonito"
+]
+},
+{
+"n": "Atún al natural (escurrido)",
+"g": "p",
+"p": 23.5,
+"c": 0,
+"f": 0.8,
+"fib": 0,
+"src": "USDA: Fish, tuna, light, canned in water, drained solids (valor SR28: P 23,6 / G 0,8); etiquetas españolas 20–25 g",
+"sw": true,
+"al": [
+"atún al natural",
+"atun al natural",
+"atún",
+"atun",
+"lata de atún"
+]
+},
+{
+"n": "Sepia",
+"g": "p",
+"p": 16.1,
+"c": 0,
+"f": 0.7,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": [
+"calamar",
+"choco"
+]
+},
+{
+"n": "Pulpo",
+"g": "p",
+"p": 14.9,
+"c": 2.2,
+"f": 1.0,
+"fib": 0.0,
+"src": "USDA: Mollusks, octopus, common, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Gambas / langostinos",
+"g": "p",
+"p": 20.1,
+"c": 0,
+"f": 1.4,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": [
+"gamba",
+"langostino",
+"gambas",
+"langostinos"
+]
+},
+{
+"n": "Mejillones",
+"g": "p",
+"p": 10.8,
+"c": 0,
+"f": 1.9,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": [
+"mejillón"
+]
+},
+{
+"n": "Huevos",
+"g": "p",
+"p": 12.6,
+"c": 0.7,
+"f": 9.5,
+"fib": 0.0,
+"src": "USDA: Egg, whole, raw, fresh",
+"sw": true,
+"al": [
+"huevo",
+"huevos m"
+]
+},
+{
+"n": "Claras de huevo",
+"g": "p",
+"p": 10.9,
+"c": 0.7,
+"f": 0.2,
+"fib": 0.0,
+"src": "USDA: Egg, white, raw, fresh",
+"sw": true,
+"al": [
+"claras",
+"clara"
+]
+},
+{
+"n": "Jamón cocido extra",
+"g": "p",
+"p": 18.6,
+"c": 0.9,
+"f": 2.5,
+"fib": 0,
+"src": "Etiqueta Hacendado jamón cocido extra (Open Food Facts 8480000592484)",
+"sw": true,
+"al": [
+"jamón cocido",
+"jamon cocido",
+"jamón york"
+]
+},
+{
+"n": "Pechuga de pavo (fiambre)",
+"g": "p",
+"p": 17.8,
+"c": 0.6,
+"f": 0.5,
+"fib": 0,
+"src": "Etiqueta Hacendado pechuga de pavo finas lonchas",
+"sw": true,
+"al": [
+"pavo fiambre",
+"lonchas de pavo",
+"fiambre de pavo",
+"pechuga pavo fiambre"
+]
+},
+{
+"n": "Jamón serrano",
+"g": "p",
+"p": 31,
+"c": 0,
+"f": 13,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": [
+"jamon serrano",
+"jamon",
+"jamón"
+]
+},
+{
+"n": "Tofu firme",
+"g": "p",
+"p": 10.9,
+"c": 0.1,
+"f": 4.2,
+"fib": 0.9,
+"src": "USDA: HOUSE FOODS Premium Firm Tofu",
+"sw": true,
+"al": [
+"tofu"
+]
+},
+{
+"n": "Proteína whey",
+"g": "p",
+"p": 78.1,
+"c": 3.2,
+"f": 1.6,
+"fib": 3.1,
+"src": "USDA: Beverages, Protein powder whey based",
+"sw": false,
+"al": [
+"whey",
+"proteína en polvo",
+"batido de proteína"
+]
+},
+{
+"n": "Yogur griego 0%",
+"g": "kp",
+"p": 10.3,
+"c": 3.6,
+"f": 0.4,
+"fib": 0,
+"src": "USDA: Yogurt, Greek, plain, nonfat",
+"sw": true,
+"al": [
+"griego 0%",
+"yogur griego",
+"griego"
+]
+},
+{
+"n": "Yogur +Proteínas natural (Hacendado)",
+"g": "kp",
+"p": 10,
+"c": 3.1,
+"f": 0.2,
+"fib": 0,
+"src": "Etiqueta Hacendado +Proteínas natural 500 g (Open Food Facts 8480000210678: 52 kcal, P 10, azúcares 3,1, grasa <0,5)",
+"sw": true,
+"al": [
+"yogur de proteinas",
+"yogur proteico",
+"yogur +proteinas",
+"+proteinas",
+"yogur de proteínas",
+"yogur +proteínas",
+"+proteínas"
+]
+},
+{
+"n": "Yogur natural",
+"g": "k",
+"p": 3.5,
+"c": 4.7,
+"f": 3.2,
+"fib": 0.0,
+"src": "USDA: Yogurt, plain, whole milk",
+"sw": true,
+"al": [
+"yogur"
+]
+},
+{
+"n": "Yogur natural desnatado",
+"g": "k",
+"p": 5.7,
+"c": 7.7,
+"f": 0.2,
+"fib": 0.0,
+"src": "USDA: Yogurt, plain, skim milk",
+"sw": true,
+"al": [
+"yogur desnatado"
+]
+},
+{
+"n": "Queso fresco batido 0%",
+"g": "kp",
+"p": 8,
+"c": 3.5,
+"f": 0.5,
+"fib": 0,
+"src": "Etiqueta Hacendado queso fresco batido 0% (Open Food Facts 8480000510716)",
+"sw": true,
+"al": [
+"queso batido",
+"queso fresco batido"
+]
+},
+{
+"n": "Queso fresco de Burgos 0%",
+"g": "kp",
+"p": 12.3,
+"c": 4.4,
+"f": 0.2,
+"fib": 0,
+"src": "Etiqueta Hacendado Burgos 0% (Open Food Facts 8480000510747)",
+"sw": true,
+"al": [
+"burgos 0%",
+"queso burgos"
+]
+},
+{
+"n": "Skyr natural",
+"g": "kp",
+"p": 11,
+"c": 4,
+"f": 0.2,
+"fib": 0,
+"src": "Etiqueta skyr natural (Hacendado/Arla)",
+"sw": true,
+"al": [
+"skyr"
+]
+},
+{
+"n": "Queso fresco",
+"g": "kp",
+"p": 15,
+"c": 4,
+"f": 11,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": [
+"queso fresco tipo burgos"
+]
+},
+{
+"n": "Requesón",
+"g": "kp",
+"p": 12.4,
+"c": 2.7,
+"f": 1.0,
+"fib": 0.0,
+"src": "USDA: Cheese, cottage, lowfat, 1% milkfat",
+"sw": true,
+"al": [
+"cottage"
+]
+},
+{
+"n": "Leche semidesnatada",
+"g": "k",
+"p": 3.1,
+"c": 4.7,
+"f": 1.6,
+"fib": 0,
+"src": "Etiqueta Hacendado leche semidesnatada (Open Food Facts)",
+"sw": true,
+"al": [
+"leche"
+]
+},
+{
+"n": "Kéfir",
+"g": "k",
+"p": 3.8,
+"c": 4.8,
+"f": 1.0,
+"fib": 0.0,
+"src": "USDA: Kefir, lowfat, plain, LIFEWAY",
+"sw": true,
+"al": [
+"kefir"
+]
+},
+{
+"n": "Arroz (crudo)",
+"g": "c",
+"p": 7.0,
+"c": 80.2,
+"f": 1.0,
+"fib": 0.1,
+"src": "USDA: Rice, white, long grain, unenriched, raw",
+"sw": true,
+"al": [
+"arroz",
+"arroz blanco",
+"arroz basmati"
+]
+},
+{
+"n": "Arroz integral (crudo)",
+"g": "c",
+"p": 7.3,
+"c": 73.7,
+"f": 3.3,
+"fib": 3.0,
+"src": "USDA: Rice, brown, long grain, unenriched, raw",
+"sw": true,
+"al": [
+"arroz integral"
+]
+},
+{
+"n": "Arroz cocido",
+"g": "c",
+"p": 2.4,
+"c": 28.3,
+"f": 0.2,
+"fib": 0.3,
+"src": "USDA: Rice, white, medium-grain, enriched, cooked",
+"sw": true,
+"al": [
+"arroz hervido"
+]
+},
+{
+"n": "Pasta (cruda)",
+"g": "c",
+"p": 13.0,
+"c": 71.5,
+"f": 1.5,
+"fib": 3.2,
+"src": "USDA: Pasta, dry, enriched",
+"sw": true,
+"al": [
+"pasta",
+"macarrones",
+"espaguetis",
+"fideos"
+]
+},
+{
+"n": "Pasta integral (cruda)",
+"g": "c",
+"p": 13.9,
+"c": 60.6,
+"f": 2.5,
+"fib": 9.2,
+"src": "USDA SR28: Pasta, whole-wheat, dry (P 13,9 / HC 71,9 / fibra 9,2 / G 2,5)",
+"sw": true,
+"al": [
+"pasta integral"
+]
+},
+{
+"n": "Pasta cocida",
+"g": "c",
+"p": 5.8,
+"c": 29.1,
+"f": 0.9,
+"fib": 1.8,
+"src": "USDA: Pasta, cooked, enriched, without added salt",
+"sw": true,
+"al": []
+},
+{
+"n": "Patata (cruda)",
+"g": "c",
+"p": 2.0,
+"c": 15.4,
+"f": 0.1,
+"fib": 2.1,
+"src": "USDA: Potatoes, flesh and skin, raw",
+"sw": true,
+"al": [
+"patata",
+"patatas"
+]
+},
+{
+"n": "Patata cocida",
+"g": "c",
+"p": 2.0,
+"c": 20.0,
+"f": 0.1,
+"fib": 1.5,
+"src": "USDA: Potatoes, baked, flesh, without salt",
+"sw": true,
+"al": [
+"patata hervida",
+"patata asada"
+]
+},
+{
+"n": "Boniato (crudo)",
+"g": "c",
+"p": 1.6,
+"c": 17.1,
+"f": 0.1,
+"fib": 3,
+"src": "USDA SR28: Sweet potato, raw, unprepared (P 1,6 / HC 20,1 / fibra 3 / G 0,1)",
+"sw": true,
+"al": [
+"boniato",
+"batata"
+]
+},
+{
+"n": "Boniato asado",
+"g": "c",
+"p": 1.6,
+"c": 14.9,
+"f": 0.4,
+"fib": 3.1,
+"src": "USDA: Sweet potato, baked, no added fat",
+"sw": true,
+"al": [
+"boniato cocido"
+]
+},
+{
+"n": "Avena en copos",
+"g": "c",
+"p": 13.5,
+"c": 58.6,
+"f": 5.9,
+"fib": 10.1,
+"src": "USDA: Oats, whole grain, rolled, old fashioned (fibra 10,1 de SR28)",
+"sw": true,
+"al": [
+"avena",
+"copos de avena",
+"harina de avena"
+]
+},
+{
+"n": "Pan integral",
+"g": "c",
+"p": 11,
+"c": 37,
+"f": 3.2,
+"fib": 7.4,
+"src": "Etiqueta Hacendado pan de molde 100 % integral (Open Food Facts 8480000823281)",
+"sw": true,
+"al": [
+"pan de molde integral",
+"base integral",
+"base de pizza integral",
+"tostada integral"
+]
+},
+{
+"n": "Pan blanco (barra)",
+"g": "c",
+"p": 10.8,
+"c": 49.7,
+"f": 2.4,
+"fib": 2.2,
+"src": "USDA: Bread, french or vienna (includes sourdough)",
+"sw": true,
+"al": [
+"pan",
+"barra de pan",
+"pan de masa madre"
+]
+},
+{
+"n": "Pan tostado integral",
+"g": "c",
+"p": 12.8,
+"c": 72.2,
+"f": 5.8,
+"fib": 5.8,
+"src": "Etiqueta Hacendado pan tostado integral (Open Food Facts 8480000825650)",
+"sw": true,
+"al": [
+"tostadas",
+"tostada integral",
+"biscotes"
+]
+},
+{
+"n": "Tortitas de arroz",
+"g": "c",
+"p": 8.5,
+"c": 75,
+"f": 2.8,
+"fib": 1.7,
+"src": "Etiqueta Hacendado tortitas de arroz (Open Food Facts 8480000140135)",
+"sw": true,
+"al": [
+"tortitas",
+"tortita de arroz"
+]
+},
+{
+"n": "Quinoa (cruda)",
+"g": "c",
+"p": 14.1,
+"c": 57.2,
+"f": 6.1,
+"fib": 7.0,
+"src": "USDA: Quinoa, uncooked",
+"sw": true,
+"al": [
+"quinoa"
+]
+},
+{
+"n": "Cuscús (crudo)",
+"g": "c",
+"p": 12.8,
+"c": 72.4,
+"f": 0.6,
+"fib": 5.0,
+"src": "USDA: Couscous, dry",
+"sw": true,
+"al": [
+"cuscus",
+"cuscús"
+]
+},
+{
+"n": "Lentejas cocidas",
+"g": "c",
+"p": 9.0,
+"c": 12.1,
+"f": 0.4,
+"fib": 7.9,
+"src": "USDA: Lentils, from dried, no added fat",
+"sw": true,
+"al": [
+"lentejas",
+"legumbre"
+]
+},
+{
+"n": "Lentejas (crudas)",
+"g": "c",
+"p": 24.6,
+"c": 52.6,
+"f": 1.1,
+"fib": 10.7,
+"src": "USDA: Lentils, raw",
+"sw": true,
+"al": [
+"lentejas secas"
+]
+},
+{
+"n": "Garbanzos cocidos",
+"g": "c",
+"p": 8.8,
+"c": 19.7,
+"f": 2.6,
+"fib": 7.6,
+"src": "USDA: Chickpeas, from dried, no added fat",
+"sw": true,
+"al": [
+"garbanzos"
+]
+},
+{
+"n": "Alubias cocidas",
+"g": "c",
+"p": 7.3,
+"c": 16.4,
+"f": 0.3,
+"fib": 4.8,
+"src": "USDA: Beans, white, mature seeds, canned",
+"sw": true,
+"al": [
+"alubias",
+"judías blancas"
+]
+},
+{
+"n": "Aceite de oliva",
+"g": "f",
+"p": 0.0,
+"c": 0,
+"f": 100.0,
+"fib": 0.0,
+"src": "USDA: Oil, olive, salad or cooking",
+"sw": true,
+"al": [
+"aove",
+"aceite de oliva virgen extra",
+"aceite"
+]
+},
+{
+"n": "Nueces",
+"g": "f",
+"p": 15.2,
+"c": 7.0,
+"f": 65.2,
+"fib": 6.7,
+"src": "USDA: Nuts, walnuts, english",
+"sw": true,
+"al": [
+"nuez"
+]
+},
+{
+"n": "Almendras",
+"g": "f",
+"p": 21.2,
+"c": 9.0,
+"f": 49.9,
+"fib": 12.5,
+"src": "USDA: Nuts, almonds",
+"sw": true,
+"al": [
+"almendra",
+"frutos secos"
+]
+},
+{
+"n": "Avellanas",
+"g": "f",
+"p": 15.0,
+"c": 7.0,
+"f": 60.8,
+"fib": 9.7,
+"src": "USDA: Nuts, hazelnuts or filberts",
+"sw": true,
+"al": []
+},
+{
+"n": "Pistachos",
+"g": "f",
+"p": 20.2,
+"c": 16.6,
+"f": 45.3,
+"fib": 10.6,
+"src": "USDA: Nuts, pistachio nuts, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Cacahuetes",
+"g": "f",
+"p": 25.8,
+"c": 7.6,
+"f": 49.2,
+"fib": 8.5,
+"src": "USDA: Peanuts, all types, raw",
+"sw": true,
+"al": [
+"cacahuete"
+]
+},
+{
+"n": "Crema de cacahuete",
+"g": "f",
+"p": 22.2,
+"c": 17.3,
+"f": 51.4,
+"fib": 5.0,
+"src": "USDA: Peanut butter, smooth style, without salt",
+"sw": true,
+"al": [
+"mantequilla de cacahuete"
+]
+},
+{
+"n": "Aguacate",
+"g": "f",
+"p": 2.0,
+"c": 1.8,
+"f": 14.7,
+"fib": 6.7,
+"src": "USDA: Avocados, raw, all commercial varieties",
+"sw": true,
+"al": []
+},
+{
+"n": "Semillas de chía",
+"g": "f",
+"p": 16.5,
+"c": 7.7,
+"f": 30.7,
+"fib": 34.4,
+"src": "USDA: Seeds, chia seeds, dried",
+"sw": true,
+"al": [
+"chía",
+"chia"
+]
+},
+{
+"n": "Mozzarella",
+"g": "f",
+"p": 24.3,
+"c": 2.8,
+"f": 15.9,
+"fib": 0.0,
+"src": "USDA: Cheese, mozzarella, part skim milk",
+"sw": true,
+"al": [
+"mozarella"
+]
+},
+{
+"n": "Queso curado",
+"g": "f",
+"p": 23.3,
+"c": 2.4,
+"f": 34.0,
+"fib": 0,
+"src": "USDA: Cheese, cheddar",
+"sw": true,
+"al": [
+"queso viejo",
+"manchego curado"
+]
+},
+{
+"n": "Chocolate negro 70-85 %",
+"g": "f",
+"p": 7.8,
+"c": 35.0,
+"f": 42.6,
+"fib": 10.9,
+"src": "USDA: Chocolate, dark, 70-85% cacao solids",
+"sw": true,
+"al": [
+"chocolate negro"
+]
+},
+{
+"n": "Leche de coco ligera",
+"g": "f",
+"p": 0.5,
+"c": 2,
+"f": 3,
+"fib": 0,
+"src": "Valor medio de etiquetas «light» (revisar marca)",
+"sw": false,
+"al": [
+"leche de coco"
+]
+},
+{
+"n": "Plátano",
+"g": "fr",
+"p": 1.1,
+"c": 20.2,
+"f": 0.3,
+"fib": 2.6,
+"src": "USDA: Bananas, raw",
+"sw": true,
+"al": [
+"platano",
+"platanos",
+"plátanos",
+"banana"
+]
+},
+{
+"n": "Manzana",
+"g": "fr",
+"p": 0.3,
+"c": 11.2,
+"f": 0.2,
+"fib": 2.4,
+"src": "USDA: Apples, raw, golden delicious, with skin",
+"sw": true,
+"al": []
+},
+{
+"n": "Pera",
+"g": "fr",
+"p": 0.4,
+"c": 12.1,
+"f": 0.1,
+"fib": 3.1,
+"src": "USDA: Pears, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Kiwi",
+"g": "fr",
+"p": 1.1,
+"c": 11.7,
+"f": 0.5,
+"fib": 3.0,
+"src": "USDA: Kiwifruit, green, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Naranja",
+"g": "fr",
+"p": 0.9,
+"c": 9.4,
+"f": 0.1,
+"fib": 2.4,
+"src": "USDA: Oranges, raw, all commercial varieties",
+"sw": true,
+"al": []
+},
+{
+"n": "Fresas",
+"g": "fr",
+"p": 0.7,
+"c": 5.7,
+"f": 0.3,
+"fib": 2.0,
+"src": "USDA: Strawberries, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Arándanos",
+"g": "fr",
+"p": 0.7,
+"c": 12.1,
+"f": 0.3,
+"fib": 2.4,
+"src": "USDA: Blueberries, raw",
+"sw": true,
+"al": [
+"frutos rojos"
+]
+},
+{
+"n": "Melón",
+"g": "fr",
+"p": 0.8,
+"c": 7.3,
+"f": 0.2,
+"fib": 0.9,
+"src": "USDA: Melons, cantaloupe, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Sandía",
+"g": "fr",
+"p": 0.6,
+"c": 7.2,
+"f": 0.2,
+"fib": 0.4,
+"src": "USDA: Watermelon, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Piña",
+"g": "fr",
+"p": 0.5,
+"c": 11.7,
+"f": 0.1,
+"fib": 1.4,
+"src": "USDA: Pineapple, raw, all varieties",
+"sw": true,
+"al": []
+},
+{
+"n": "Mango",
+"g": "fr",
+"p": 0.8,
+"c": 13.4,
+"f": 0.4,
+"fib": 1.6,
+"src": "USDA: Mangos, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Uvas",
+"g": "fr",
+"p": 0.9,
+"c": 18.5,
+"f": 0.2,
+"fib": 0.9,
+"src": "USDA: Grapes, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Dátiles",
+"g": "fr",
+"p": 1.8,
+"c": 68.3,
+"f": 0.2,
+"fib": 6.7,
+"src": "USDA: Dates, medjool",
+"sw": true,
+"al": []
+},
+{
+"n": "Fruta variada",
+"g": "fr",
+"p": 0.8,
+"c": 11.7,
+"f": 0.3,
+"fib": 2.6,
+"src": "Media de manzana, pera, naranja, kiwi, plátano y fresas (USDA)",
+"sw": true,
+"al": [
+"fruta",
+"pieza de fruta"
+]
+},
+{
+"n": "Verdura variada",
+"g": "v",
+"p": 1.5,
+"c": 3.5,
+"f": 0.3,
+"fib": 2.2,
+"src": "Media de brócoli, calabacín, judía verde, pimiento, tomate y lechuga (USDA)",
+"sw": true,
+"al": [
+"verdura",
+"verduras",
+"verduras salteadas",
+"ensalada",
+"ensalada mixta"
+]
+},
+{
+"n": "Brócoli",
+"g": "v",
+"p": 2.8,
+"c": 4.0,
+"f": 0.4,
+"fib": 2.6,
+"src": "USDA: Broccoli, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Calabacín",
+"g": "v",
+"p": 1.2,
+"c": 2.1,
+"f": 0.3,
+"fib": 1.0,
+"src": "USDA: Squash, summer, zucchini, includes skin, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Judías verdes",
+"g": "v",
+"p": 1.8,
+"c": 4.3,
+"f": 0.2,
+"fib": 2.7,
+"src": "USDA: Beans, snap, green, raw",
+"sw": true,
+"al": [
+"judia verde",
+"judias verdes"
+]
+},
+{
+"n": "Tomate",
+"g": "v",
+"p": 0.9,
+"c": 2.7,
+"f": 0.2,
+"fib": 1.2,
+"src": "USDA: Tomatoes, red, ripe, raw, year round average",
+"sw": true,
+"al": []
+},
+{
+"n": "Lechuga",
+"g": "v",
+"p": 1.2,
+"c": 1.2,
+"f": 0.3,
+"fib": 2.1,
+"src": "USDA: Lettuce, cos or romaine, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Pimiento rojo",
+"g": "v",
+"p": 1.0,
+"c": 3.9,
+"f": 0.3,
+"fib": 2.1,
+"src": "USDA: Peppers, sweet, red, raw",
+"sw": true,
+"al": [
+"pimiento",
+"pimientos asados",
+"pimiento asado"
+]
+},
+{
+"n": "Espárragos",
+"g": "v",
+"p": 2.2,
+"c": 1.8,
+"f": 0.1,
+"fib": 2.1,
+"src": "USDA: Asparagus, raw",
+"sw": true,
+"al": [
+"esparrago",
+"esparragos trigueros",
+"esparrago triguero"
+]
+},
+{
+"n": "Calabaza",
+"g": "v",
+"p": 1.0,
+"c": 6.0,
+"f": 0.1,
+"fib": 0.5,
+"src": "USDA: Pumpkin, raw",
+"sw": true,
+"al": [
+"pure de calabaza",
+"crema de calabaza"
+]
+},
+{
+"n": "Espinacas",
+"g": "v",
+"p": 2.9,
+"c": 1.4,
+"f": 0.4,
+"fib": 2.2,
+"src": "USDA: Spinach, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Champiñones",
+"g": "v",
+"p": 3.1,
+"c": 2.3,
+"f": 0.3,
+"fib": 1.0,
+"src": "USDA: Mushrooms, white, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Coliflor",
+"g": "v",
+"p": 1.9,
+"c": 3.0,
+"f": 0.3,
+"fib": 2.0,
+"src": "USDA: Cauliflower, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Zanahoria",
+"g": "v",
+"p": 0.9,
+"c": 6.8,
+"f": 0.2,
+"fib": 2.8,
+"src": "USDA: Carrots, raw",
+"sw": true,
+"al": []
+},
+{
+"n": "Tomate triturado",
+"g": "v",
+"p": 1.3,
+"c": 4.5,
+"f": 0.2,
+"fib": 1.5,
+"src": "Etiqueta media de tomate triturado",
+"sw": false,
+"al": []
+},
+{
+"n": "Miel",
+"g": "x",
+"p": 0.3,
+"c": 82.2,
+"f": 0.0,
+"fib": 0.2,
+"src": "USDA: Honey",
+"sw": false,
+"al": []
+}
+]

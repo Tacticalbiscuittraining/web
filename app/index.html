@@ -4992,7 +4992,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261010220430';let verT=0;
+const APP_VER='20261010220859';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5104,7 +5104,7 @@ async function createAccount(cid,em,pw){
 }
 function welcomeMsg(c,pw){
   const B=RB.base[c.id]||{};
-  return '¡Hola '+first(c.name)+'! Ya tienes tu acceso a Team Biscuit 💪\n\nEntra aquí: '+location.origin+'\nEmail: '+(B.email||'')+'\nContraseña: '+pw+'\n\nConsejo: guárdala en la pantalla de inicio del móvil (en el navegador, «Añadir a pantalla de inicio») y la tendrás como una app.';
+  return '¡Hola '+first(c.name)+'! Ya tienes tu acceso a Team Biscuit 💪\n\nEntra aquí: '+location.origin+location.pathname.replace(/index\.html$/,'')+'\nEmail: '+(B.email||'')+'\nContraseña: '+pw+'\n\nConsejo: guárdala en la pantalla de inicio del móvil (en el navegador, «Añadir a pantalla de inicio») y la tendrás como una app.';
 }
 function accessCard(c){
   if(RB.role!=='coach')return '';

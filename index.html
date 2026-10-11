@@ -85,8 +85,9 @@ section { padding-block: 96px 0; }
 .about .txt p { max-width: 62ch; }
 .story { margin-top: 32px; padding: 26px 28px; border-radius: var(--radius); background: var(--teal-soft); border-left: 4px solid var(--teal); }
 .story .eyebrow { margin-bottom: 10px; }
-.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 24px; }
-.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: grid; gap: 6px; align-content: start; }
+.stats { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-bottom: 24px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 22px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; }
+.stat span { font-size: 15px !important; }
 .stat b { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: 1; white-space: nowrap; color: var(--teal-ink); }
 .stat span { font-size: 13px; color: var(--muted); line-height: 1.4; }
 .edu { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 22px 8px; }
@@ -385,14 +386,13 @@ html.intro, html.intro body { overflow: hidden; }
       <div class="rv">
         <div class="stats">
           <div class="stat"><b>+15 años</b><span>de experiencia en culturismo</span></div>
-          <div class="stat"><b>785 h</b><span>de formación en entrenamiento y nutrición deportiva</span></div>
         </div>
         <div class="edu">
           <p class="eyebrow">Formación</p>
           <ul>
-            <li><span>Entrenador Personal de Alto Rendimiento y Técnicas Avanzadas de Musculación</span><b>620 h</b></li>
-            <li><span>Nutrición Deportiva de Alto Rendimiento y Dietética Avanzada</span><b>120 h</b></li>
-            <li><span>Suplementación Deportiva</span><b>45 h</b></li>
+            <li><span>Entrenador Personal de Alto Rendimiento y Técnicas Avanzadas de Musculación</span></li>
+            <li><span>Nutrición Deportiva de Alto Rendimiento y Dietética Avanzada</span></li>
+            <li><span>Suplementación Deportiva</span></li>
           </ul>
         </div>
       </div>

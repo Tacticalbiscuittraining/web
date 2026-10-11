@@ -2380,6 +2380,20 @@ p.impbox-w{padding-left:0}
 @media (max-width:520px){.ph-i{flex-direction:column;align-items:stretch}.ph-a{justify-content:flex-end}}
 .lg-err.ok{background:var(--teal-soft);color:var(--teal-ink)}
 
+/* entrenamiento con el diseño del Excel */
+.xsheet{max-width:960px;margin:20px auto;background:#fff;color:#1F2D33;padding:22px;border-radius:10px;font:13px/1.35 Arial,Helvetica,sans-serif}
+.xs-h{display:flex;justify-content:space-between;align-items:center;background:#264653;color:#fff;padding:8px 10px}.xs-h b{font-size:19px}.xs-h img{height:38px;border-radius:4px}
+.xs-hs{background:#2A9D8F;color:#fff;font-style:italic;font-size:12px;padding:3px 10px;margin-bottom:14px}
+.xs-sec{background:#264653;color:#fff;font-weight:700;font-size:12px;padding:5px 12px;margin:16px 0 0;white-space:pre-wrap}.xs-sec.or{background:#F4A261}
+.xs-x{overflow-x:auto}
+.xs-t{width:100%;border-collapse:collapse;font-size:12px}.xs-t thead th{background:#2A9D8F;color:#fff;font-weight:700;text-transform:uppercase;font-size:10.5px;padding:8px 6px;border:1px solid #D5E2DF}
+.xs-t td,.xs-t tbody th{border:1px solid #D5E2DF;padding:5px 7px;text-align:center}.xs-t tbody tr:nth-child(even){background:#F6F9F8}.xs-t tbody th{font-weight:700;color:#264653}
+.xs-t td.b{color:#1F5FA8}.xs-t td.l{text-align:left}
+.xs-2{display:flex;gap:24px;flex-wrap:wrap}.xs-kv{border-collapse:collapse;flex:1 1 300px;font-size:12px}.xs-kv th{background:#E3F2EF;color:#264653;text-align:left;padding:5px 8px;border:1px solid #D5E2DF;width:120px}.xs-kv td{color:#1F5FA8;font-weight:700;padding:5px 8px;border:1px solid #D5E2DF}
+.xs-side{display:flex;flex-direction:column;gap:2px;padding-top:8px}.xs-side span{font-size:10px;color:#6B7C85;margin-top:8px}.xs-side b{color:#2A9D8F;font-size:16px}
+.xs-txt{border:1px solid #D5E2DF;padding:6px 10px;color:#1F5FA8}
+.xs-day{margin-top:34px}
+
 </style>
 
 </head>
@@ -4997,7 +5011,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261011083813';let verT=0;
+const APP_VER='20261011084540';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5266,10 +5280,13 @@ function histSum(o,k){const b=[];
   if(k==='diet'){const t=o.diet&&o.diet.types;if(t&&t.train)b.push('Entreno '+Math.round(t.train.kcal||0)+' kcal');if(t&&t.rest)b.push('descanso '+Math.round(t.rest.kcal||0)+' kcal')}
   else{if(o.training&&o.training.days)b.push(o.training.days.filter(d=>d.exs&&d.exs.length).length+' días de entreno');if(o.run&&o.run.weeks)b.push('carrera '+o.run.weeks.length+' sem.')}
   return b.join(' · ')}
+function histStart(h){const o=h.data||{},iso=(o.diet&&o.diet.inicio)||(o.training&&o.training.meso&&o.training.meso.start)||'';
+  if(h.from)return h.from;const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(iso);if(!m)return null;const t=new Date(+m[1],m[2]-1,+m[3]).getTime();return t<h.ts?t:null}
 function histWhen(h){
-  if(!h.from)return 'Hasta el '+hDate(h.ts);
-  if(new Date(h.from).toDateString()===new Date(h.ts).toDateString())return 'El '+hDate(h.ts)+', de '+hTime(h.from)+' a '+hTime(h.ts);
-  return 'Del '+hDate(h.from)+' al '+hDate(h.ts);
+  const f=histStart(h);
+  if(!f)return 'Usado hasta el '+hDate(h.ts);
+  if(new Date(f).toDateString()===new Date(h.ts).toDateString())return 'Usado solo el '+hDate(h.ts);
+  return 'Del '+hDate(f)+' al '+hDate(h.ts);
 }
 function histWhy(h){const l=h.label||'';
   return l==='cambios a mano'?'después lo cambiaste a mano':l==='versión recuperada'?'después volviste a un plan anterior':h.manual?'copia guardada a mano':l?'después subiste '+(/^plantilla/.test(l)?'la ':'')+l:''}
@@ -5288,15 +5305,34 @@ function histList(c,k){
     '<li class="ph-i now"><div><b>Plan actual'+(since?' · desde el '+esc(hDate(since)):'')+'</b><span>'+esc(histSum(kSnap(c,k),k))+'</span></div><div class="ph-a">'+btn('ver','cur','Ver')+btn('dl','cur','Descargar')+'</div></li>'+
     (H.length?H.map(h=>'<li class="ph-i"><div><b>'+esc(histWhen(h))+'</b><span>'+esc([histSum(h.data,k),histWhy(h)].filter(Boolean).join(' · '))+'</span></div><div class="ph-a">'+btn('ver',h.id,'Ver')+btn('dl',h.id,'Descargar')+btn('rec',h.id,'Volver a este plan')+btn('del',h.id,'Eliminar','danger-l')+'</div></li>').join(''):'<li class="muted" style="padding:6px 2px">Todavía no hay planes anteriores guardados. A partir de ahora, cada cambio guardará aquí el plan que había.</li>')+'</ul>';
 }
+/* entrenamiento con el diseño de tu Excel (Resumen + una hoja por día) */
 function trainSheet(c,o){
-  const T=o.training||{},days=(T.days||[]).filter(d=>d.exs&&d.exs.length);
-  return '<article class="psheet" style="background-image:url('+PS_WM+')"><header class="ps-run"><img src="'+PS_LOGO+'" alt=""><b>Plan de entrenamiento</b><em>Personalizado</em><span>Tactical Biscuit Training</span></header>'+
-   '<div class="ps-title"><h2>Plan de entrenamiento</h2><p>'+esc(c.name)+(T.meso&&T.meso.level?' · '+esc(T.meso.level):'')+'</p></div>'+
-   days.map((d,i)=>psSec(String(i+1).padStart(2,'0'),esc(d.name)+(d.focus?' · '+esc(d.focus):''))+(d.warm?'<p class="ps-ref"><b>Calentamiento:</b> '+esc(d.warm)+'</p>':'')+
-    '<div class="ps-x"><table class="ps-t ps-grid"><thead class="nv"><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Kg</th><th>Descanso</th><th>Tempo</th><th>Indicaciones</th></tr></thead><tbody>'+
-    d.exs.map(e=>'<tr><td><b>'+esc(e.name)+'</b></td><td>'+esc(e.sets||'')+'</td><td>'+esc(e.reps||'')+'</td><td>'+esc(e.kg||'')+'</td><td>'+esc(e.rest||'')+'</td><td>'+esc(e.tempo||'')+'</td><td>'+esc(e.tech||'')+'</td></tr>').join('')+'</tbody></table></div>'+
-    (d.note?'<p class="ps-ref">'+esc(d.note)+'</p>':'')).join('')+
-   '<footer class="ps-foot">Documento personal y confidencial</footer></article>';
+  const T=o.training||{},M=T.meso||{},days=(T.days||[]).filter(d=>d.exs&&d.exs.length),WDN=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  const st=/^\d{4}-\d\d-\d\d$/.test(M.start||'')?new Date(M.start+'T12:00:00'):null,dm=d=>String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
+  const add=(d,n)=>new Date(d.getTime()+n*864e5);
+  const head=(t,sub)=>'<div class="xs-h"><b>'+t+'</b><img src="'+PS_LOGO+'" alt=""></div><div class="xs-hs">Tactical Biscuit Training'+(sub?' · '+sub:'')+'</div>';
+  const sec=(t,cl)=>'<div class="xs-sec'+(cl?' '+cl:'')+'">'+t+'</div>';
+  const kv=(l,v)=>'<tr><th>'+l+'</th><td>'+esc(v==null?'':String(v))+'</td></tr>';
+  const W=(M.weeks&&M.weeks.length?M.weeks:[{phase:'Adaptación',rir:3},{phase:'Progresión',rir:2},{phase:'Intensificación',rir:1},{phase:'Descarga',rir:4}]).slice(0,4);
+  let h='<article class="xsheet">'+head('PLAN DE ENTRENAMIENTO · MESOCICLO','Bloque de 4 semanas')+sec('DATOS DEL CLIENTE')+
+   '<div class="xs-2"><table class="xs-kv">'+kv('Cliente',c.name)+kv('Objetivo',c.goal)+kv('Nivel',M.level||'')+kv('Fecha de inicio',st?st.toLocaleDateString('es-ES'):'')+kv('Días / semana',days.length)+kv('Mesociclo nº',M.n||1)+'</table>'+
+   '<div class="xs-side"><span>Entrenador</span><b>Robert</b>'+(st?'<span>Fin del mesociclo</span><b>'+add(st,27).toLocaleDateString('es-ES')+'</b>':'')+'</div></div>'+
+   sec('PLANIFICACIÓN DE LAS 4 SEMANAS')+'<div class="xs-x"><table class="xs-t"><thead><tr><th>Semana</th><th>Fechas</th><th>Fase</th><th>RIR objetivo</th><th>Volumen</th><th>Intensidad</th><th>Notas</th></tr></thead><tbody>'+
+   W.map((w,i)=>'<tr><th>Semana '+(i+1)+'</th><td>'+(st?dm(add(st,7*i))+' – '+dm(add(st,7*i+6)):'')+'</td><td class="b">'+esc(w.phase||'')+'</td><td class="b"><b>'+esc(w.rir!=null?String(w.rir):'')+'</b></td><td class="b">'+esc(w.vol||'')+'</td><td class="b">'+esc(w.int||'')+'</td><td>'+esc(w.notes||'')+'</td></tr>').join('')+'</tbody></table></div>'+
+   sec('ESTRUCTURA SEMANAL')+'<div class="xs-x"><table class="xs-t"><thead><tr><th>Sesión</th><th>Día de la semana</th><th>Enfoque / grupos musculares</th><th>Duración (min)</th><th>Material / lugar</th></tr></thead><tbody>'+
+   days.map(d=>'<tr><th>'+esc(d.name)+'</th><td class="b">'+(d.wd>=0&&d.wd<7?WDN[d.wd]:'')+'</td><td class="b l">'+esc(d.focus||'')+'</td><td class="b">'+esc(d.dur||'')+'</td><td class="b l">'+esc(d.place||'')+'</td></tr>').join('')+'</tbody></table></div>';
+  days.forEach(d=>{
+    const ex=d.exs;
+    h+='<div class="xs-day">'+head('PLAN DE ENTRENAMIENTO · '+esc(d.name).toUpperCase(),esc(c.name)+(d.focus?' · '+esc(d.focus):''))+sec('EJERCICIOS DEL DÍA')+
+     '<div class="xs-x"><table class="xs-t"><thead><tr><th>Nº</th><th>Ejercicio</th><th>Grupo</th><th>Tempo</th><th>Descanso</th><th>Indicaciones técnicas</th></tr></thead><tbody>'+
+     ex.map((e,i)=>'<tr><th>'+(i+1)+'</th><td class="b l"><b>'+esc(e.name)+'</b></td><td class="b">'+esc(e.group||'')+'</td><td class="b">'+esc(e.tempo||'')+'</td><td class="b">'+esc(e.rest||'')+'</td><td class="b l">'+esc(e.tech||'')+'</td></tr>').join('')+'</tbody></table></div>'+
+     (d.warm?sec('🔥 CALENTAMIENTO PREVIO','or')+'<div class="xs-txt">'+d.warm.split(/\s*·\s*/).map(esc).join('<br>')+'</div>':'')+
+     W.map((w,wi)=>sec('SEMANA '+(wi+1)+'  ·  '+esc(String(w.phase||'')).toUpperCase()+(w.rir!=null&&w.rir!==''?'  ·  RIR objetivo '+esc(String(w.rir)):''))+
+      '<div class="xs-x"><table class="xs-t"><thead><tr><th>Nº</th><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Kg obj.</th><th>RIR obj.</th></tr></thead><tbody>'+
+      ex.map((e,i)=>{const P=(e.wk||{})[wi]||{};const kg=P.kg!=null&&P.kg!==''?P.kg:e.kg;return '<tr><th>'+(i+1)+'</th><td class="l">'+esc(e.name)+'</td><td class="b">'+esc(String(P.sets||e.sets||''))+'</td><td class="b">'+esc(String(e.reps||''))+'</td><td class="b">'+esc(kg==null?'':String(kg))+'</td><td class="b">'+esc(w.rir!=null?String(w.rir):'')+'</td></tr>'}).join('')+'</tbody></table></div>').join('')+
+     (d.note?sec('NOTAS')+'<div class="xs-txt">'+esc(d.note).replace(/\n/g,'<br>')+'</div>':'')+'</div>';
+  });
+  return h+'</article>';
 }
 function histFs(c,h,k){
   const ib=$('#impbox');if(ib)ib.remove();let el=$('#histFs');if(el)el.remove();

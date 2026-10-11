@@ -4995,7 +4995,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261011080030';let verT=0;
+const APP_VER='20261011082200';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5261,7 +5261,7 @@ function histRow(c,k){
 function histList(c,k){
   const H=histOf(c,k),nowS=histSum(kSnap(c,k),k);
   const note=h=>h.manual?'guardada a mano':h.label?'sustituida por '+h.label:'';
-  return '<h3 style="margin:0 0 6px">Historial de '+HK[k]+' · '+esc(first(c.name))+'</h3><p class="muted" style="margin:0 0 10px">Se guarda una copia cada vez que subes un Word/Excel, aplicas una plantilla o pulsas «Guardar esta versión» (las '+HIST_N+' últimas). «Descargar» te la da en PDF.</p><ul class="ph-l">'+
+  return '<h3 style="margin:0 0 6px">Historial de '+HK[k]+' · '+esc(first(c.name))+'</h3><p class="muted" style="margin:0 0 10px">Se guarda una copia cada vez que subes un Word/Excel, aplicas una plantilla o pulsas «Guardar esta versión» (las '+HIST_N+' últimas). «Descargar» te la da en Word.</p><ul class="ph-l">'+
     '<li class="ph-i now"><div><b>Actual</b><span>'+esc(nowS)+'</span></div></li>'+
     (H.length?H.map(h=>'<li class="ph-i"><div><b>'+esc(hDate(h.ts))+' · '+esc(new Date(h.ts).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}))+'</b><span>'+esc([histSum(h.data,k),note(h)].filter(Boolean).join(' · '))+'</span></div><div class="ph-a"><button type="button" class="btn sm" data-ph="ver" data-k="'+k+'" data-id="'+h.id+'">Ver</button><button type="button" class="btn sm" data-ph="pdf" data-k="'+k+'" data-id="'+h.id+'">Descargar</button><button type="button" class="btn sm" data-ph="rec" data-k="'+k+'" data-id="'+h.id+'">Recuperar</button></div></li>').join(''):'<li class="muted" style="padding:6px 2px">Todavía no hay versiones anteriores.</li>')+'</ul>';
 }
@@ -5272,26 +5272,59 @@ function histView(h,k){
     (k==='diet'?day('train','Día de entreno')+day('rest','Día de descanso'):
     (tr.length?'<ul class="impbox-l">'+tr.filter(d=>d.exs&&d.exs.length).map(d=>'<li><b>'+esc(d.name)+'</b>'+(d.focus?' · '+esc(d.focus):'')+': '+d.exs.map(e=>esc(e.name)+(e.sets?' '+esc(e.sets)+'×'+esc(e.reps||''):'')).join(', ')+'</li>').join('')+'</ul>':''));
 }
-/* descargar una versión: la misma hoja que «Imprimir plan» (se guarda como PDF) */
-function trainSheet(c,o,ts){
-  const T=o.training||{},days=(T.days||[]).filter(d=>d.exs&&d.exs.length);
-  return '<article class="psheet" style="background-image:url('+PS_WM+')"><header class="ps-run"><img src="'+PS_LOGO+'" alt=""><b>Plan de entrenamiento</b><em>Personalizado</em><span>Tactical Biscuit Training</span></header>'+
-   '<div class="ps-title"><h2>Plan de entrenamiento</h2><p>'+esc(c.name)+' · versión del '+esc(hDate(ts,'long'))+'</p></div>'+
-   days.map((d,i)=>psSec(String(i+1).padStart(2,'0'),esc(d.name)+(d.focus?' · '+esc(d.focus):''))+(d.warm?'<p class="ps-ref"><b>Calentamiento:</b> '+esc(d.warm)+'</p>':'')+
-    '<div class="ps-x"><table class="ps-t ps-grid"><thead class="nv"><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Kg</th><th>Descanso</th><th>Tempo</th><th>Técnica</th></tr></thead><tbody>'+
-    d.exs.map(e=>'<tr><td><b>'+esc(e.name)+'</b></td><td>'+esc(e.sets||'')+'</td><td>'+esc(e.reps||'')+'</td><td>'+esc(e.kg||'')+'</td><td>'+(e.rest?esc(e.rest)+' s':'')+'</td><td>'+esc(e.tempo||'')+'</td><td>'+esc(e.tech||'')+'</td></tr>').join('')+'</tbody></table></div>'+
-    (d.note?'<p class="ps-ref">'+esc(d.note)+'</p>':'')).join('')+
-   '<footer class="ps-foot">Documento personal y confidencial</footer></article>';
+/* descargar una versión en Word (.docx hecho aquí mismo, sin librerías) */
+const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC_T[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function zipStore(files){
+  const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  const u16=v=>[v&255,(v>>>8)&255],u32=v=>[v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255];
+  files.forEach(([name,txt])=>{const n=enc.encode(name),d=enc.encode(txt),cr=crc32(d);
+    const h=[0x50,0x4b,3,4,...u16(20),...u16(0x800),...u16(0),...u16(0),...u16(0x21),...u32(cr),...u32(d.length),...u32(d.length),...u16(n.length),...u16(0)];
+    parts.push(new Uint8Array(h),n,d);
+    cen.push(new Uint8Array([0x50,0x4b,1,2,...u16(20),...u16(20),...u16(0x800),...u16(0),...u16(0),...u16(0x21),...u32(cr),...u32(d.length),...u32(d.length),...u16(n.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(off)]),n);
+    off+=h.length+n.length+d.length});
+  const cl=cen.reduce((a,x)=>a+x.length,0);
+  return new Blob([...parts,...cen,new Uint8Array([0x50,0x4b,5,6,0,0,0,0,...u16(files.length),...u16(files.length),...u32(cl),...u32(off),0,0])],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
 }
-function histPrint(c,h,k){
-  const ib=$('#impbox');if(ib)ib.remove();
-  let pr=$('#printroot');if(!pr){pr=document.createElement('div');pr.id='printroot';document.body.appendChild(pr)}
-  pr.innerHTML=k==='diet'?planSheet(Object.assign({},c,{diet:h.data.diet}),['01','02','03','04','05','06','07','09']):trainSheet(c,h.data,h.ts);
-  const t0=document.title;document.title=(k==='diet'?'Dieta':'Entrenamiento')+' '+first(c.name)+' '+isoD(h.ts);
-  document.body.classList.add('printing');
-  const done=()=>{document.body.classList.remove('printing');pr.innerHTML='';document.title=t0};
-  window.addEventListener('afterprint',done,{once:true});
-  try{window.print()}catch(_){done();toast('Usa Ctrl/Cmd + P para guardarlo en PDF')}
+const xq=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const wR=(t,o)=>'<w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>'+(o&&o.b?'<w:b/>':'')+(o&&o.c?'<w:color w:val="'+o.c+'"/>':'')+'<w:sz w:val="'+((o&&o.sz)||22)+'"/></w:rPr><w:t xml:space="preserve">'+xq(t)+'</w:t></w:r>';
+const wP=(t,o)=>'<w:p><w:pPr><w:spacing w:before="'+((o&&o.before)||0)+'" w:after="'+((o&&o.after)!=null?o.after:80)+'"/></w:pPr>'+(Array.isArray(t)?t.join(''):wR(t,o))+'</w:p>';
+const wH=(t,l)=>wP(t,{b:true,sz:l===1?36:28,c:'0E9188',before:l===1?0:240,after:120});
+function wT(head,rows){
+  const cell=(t,h)=>'<w:tc><w:tcPr>'+(h?'<w:shd w:val="clear" w:color="auto" w:fill="0E9188"/>':'')+'</w:tcPr>'+wP(String(t==null?'':t).split('\n').map((x,i)=>(i?'<w:r><w:br/></w:r>':'')+wR(x,h?{b:true,c:'FFFFFF',sz:20}:{sz:20})),{after:0})+'</w:tc>';
+  const b='<w:tblBorders>'+['top','left','bottom','right','insideH','insideV'].map(k=>'<w:'+k+' w:val="single" w:sz="4" w:space="0" w:color="BBBBBB"/>').join('')+'</w:tblBorders>';
+  return '<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/>'+b+'<w:tblCellMar><w:left w:w="80" w:type="dxa"/><w:right w:w="80" w:type="dxa"/></w:tblCellMar></w:tblPr>'+
+    '<w:tr>'+head.map(h=>cell(h,true)).join('')+'</w:tr>'+rows.map(r=>'<w:tr>'+r.map(x=>cell(x)).join('')+'</w:tr>').join('')+'</w:tbl>'+wP('',{after:60});
+}
+function docxBlob(body){
+  const doc='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+body+'<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="567" w:footer="567" w:gutter="0"/></w:sectPr></w:body></w:document>';
+  return zipStore([
+   ['[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>'],
+   ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>'],
+   ['word/document.xml',doc]]);
+}
+function histDocx(c,h,k){
+  const o=h.data,when=hDate(h.ts,'long');let b='';
+  if(k==='diet'){const d=o.diet||{},T=d.types||{};
+    b+=wH('Plan nutricional',1)+wP([wR(c.name,{b:true}),wR(' · versión del '+when)])+wP('Tactical Biscuit Training',{c:'666666',sz:20,after:200});
+    const lbl=x=>x==='train'?'Día de entreno':x==='rest'?'Día de descanso':/^d\d$/.test(x)?DAYS[+x.slice(1)]:x;
+    Object.keys(T).filter(x=>T[x]&&T[x].meals).forEach(x=>{const t=T[x];
+      b+=wH(lbl(x)+(t.kcal?' · '+Math.round(t.kcal)+' kcal':'')+(t.p?' · '+Math.round(t.p)+' g proteína':''),2);
+      b+=wT(['Comida','Hora','Alimentos','Notas'],t.meals.map(m=>[m.name,m.time||'',m.dish||(m.items||[]).map(i=>i.g+' g '+i.food+(i.alt?' (o '+i.alt+')':'')).join('\n'),m.note||'']))});
+    const sp=(d.supps||[]).filter(s=>s.name);
+    if(sp.length)b+=wH('Suplementación',2)+wT(['Suplemento','Dosis','Momento','Observaciones'],sp.map(s=>[s.name,s.dose,s.when,s.obs]));
+    if(d.water)b+=wP([wR('Agua diaria: ',{b:true}),wR(d.water+' litros')]);
+    if(d.notes)b+=wH('Notas',2)+String(d.notes).split(/\n+/).map(l=>wP(l)).join('');
+  }else{const T=o.training||{},days=(T.days||[]).filter(d=>d.exs&&d.exs.length);
+    b+=wH('Plan de entrenamiento',1)+wP([wR(c.name,{b:true}),wR(' · versión del '+when)])+wP('Tactical Biscuit Training',{c:'666666',sz:20,after:200});
+    days.forEach(d=>{b+=wH(d.name+(d.focus?' · '+d.focus:''),2);if(d.warm)b+=wP([wR('Calentamiento: ',{b:true}),wR(d.warm)]);
+      b+=wT(['Ejercicio','Series','Reps','Kg','Descanso','Tempo','Técnica'],d.exs.map(e=>[e.name,e.sets,e.reps,e.kg,e.rest?e.rest+' s':'',e.tempo,e.tech]));
+      if(d.note)b+=wP(d.note)});
+  }
+  b+=wP('Documento personal y confidencial',{c:'888888',sz:18,before:200});
+  const name=(k==='diet'?'Dieta':'Entrenamiento')+' '+first(c.name)+' '+isoD(h.ts)+'.docx';
+  const a=document.createElement('a'),u=URL.createObjectURL(docxBlob(b));a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+  toast('Descargado en Word ✓');
 }
 function histRecover(c,h,k){
   const d={};
@@ -5305,8 +5338,8 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
   if(a==='save'){if(histPush(c,k,'',true)){renderAll();markDirty();toast('Versión de '+HK[k]+' guardada ✓')}else toast('Esta versión ya está guardada');return}
   const h=(c.planHist||[]).find(x=>x.id===b.dataset.id);if(!h)return;
   const back='<button type="button" class="btn" data-ph="open" data-k="'+k+'">Volver</button>';
-  if(a==='pdf'){histPrint(c,h,k);return}
-  if(a==='ver'){impBox(histView(h,k),back+'<button type="button" class="btn" data-ph="pdf" data-k="'+k+'" data-id="'+h.id+'">Descargar PDF</button><button type="button" class="btn primary" data-ph="rec" data-k="'+k+'" data-id="'+h.id+'">Recuperar</button>');return}
+  if(a==='pdf'){histDocx(c,h,k);return}
+  if(a==='ver'){impBox(histView(h,k),back+'<button type="button" class="btn" data-ph="pdf" data-k="'+k+'" data-id="'+h.id+'">Descargar Word</button><button type="button" class="btn primary" data-ph="rec" data-k="'+k+'" data-id="'+h.id+'">Recuperar</button>');return}
   const box=impBox('<h3 style="margin:0 0 6px">¿Recuperar '+(k==='diet'?'esta dieta':'este entrenamiento')+'?</h3><p class="muted" style="margin:0">'+(k==='diet'?'Volverá a ser la dieta de '+esc(first(c.name))+'. Su entrenamiento no cambia.':'Volverá a ser el entrenamiento de '+esc(first(c.name))+(h.data.run?' (con la carrera)':'')+', empezando hoy por la semana 1. Su dieta no cambia.')+' Lo actual no se pierde: queda en el historial. Sus registros, mensajes y fotos no se tocan.</p>',back+'<button type="button" class="btn primary" data-ib="apply">Recuperar</button>');
   box._apply=()=>{histRecover(c,h,k);renderAll();markDirty();toast((k==='diet'?'Dieta recuperada':'Entrenamiento recuperado')+' ✓')}});
 function importCard(c){

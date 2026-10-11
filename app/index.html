@@ -2337,8 +2337,8 @@ body:has(.p-dock) .toast{bottom:calc(150px + env(safe-area-inset-bottom))}
 .pdfx .ps-t th,.pdfx .ps-t td{padding:4px 6px}
 .pdfx section>:last-child{margin-bottom:0}
 
-body.pv #main input,body.pv #main textarea,body.pv #main select,body.pv #main .whx{pointer-events:none}
-body.pv #main .whx,body.pv #main input,body.pv #main textarea,body.pv #main select{opacity:.85}
+body.pv #main input,body.pv #main textarea,body.pv #main .whx{pointer-events:none}
+body.pv #main .whx,body.pv #main input,body.pv #main textarea{opacity:.85}
 .app-ver{margin:18px 0 calc(18px + env(safe-area-inset-bottom));text-align:center;font-size:11px;color:var(--muted);opacity:.7}
 
 /* guía de instalación */
@@ -5017,7 +5017,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261011093849';let verT=0;
+const APP_VER='20261011094427';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

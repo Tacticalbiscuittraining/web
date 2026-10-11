@@ -2397,6 +2397,8 @@ p.impbox-w{padding-left:0}
 .ph-tag{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-right:4px;vertical-align:1px}
 .ph-diet{background:rgba(14,145,136,.15);color:#0E9188}
 .ph-training{background:rgba(224,122,30,.16);color:#C9671A}
+.ph-h{margin:16px 0 8px;font-size:15px;display:flex;align-items:center;gap:6px}
+.plan-bar{margin:0 0 12px}
 
 </style>
 
@@ -2826,7 +2828,7 @@ function dietPanel(c){
   const pills='<div class="pills" role="group" aria-label="Tipo de día"><button type="button" class="pill" data-act="dtype" data-t="train" aria-pressed="'+(t==='train')+'">Día de entrenamiento</button><button type="button" class="pill" data-act="dtype" data-t="rest" aria-pressed="'+(t==='rest')+'">Día de descanso</button>'+(perDay(c)?'<span class="pd-sep">Menú de cada día:</span>'+DAYS_S.map((s,i)=>'<button type="button" class="pill" data-act="dtype" data-t="d'+i+'" aria-pressed="'+(t==='d'+i)+'">'+s+'</button>').join(''):'')+'</div>'+(isD?'<p class="muted pd-note">Estás editando el menú del <b>'+dN.toLowerCase()+'</b>. Es lo que tu cliente ve ese día en «Mi día» y en el menú semanal.</p>':'');
   const other=t==='train'?'descanso':'entrenamiento';
   const inf=(f,l,u)=>'<label class="cell"><span class="lbl show">'+l+'</span><div class="tgt-in" style="margin:0"><input class="in num" inputmode="decimal" data-r="dinfo" data-f="'+f+'" value="'+esc(d[f]||'')+'"><span>'+u+'</span></div></label>';
-  return planCard(c)+'<div class="card"><p class="muted" style="margin:0"><b>Días de entreno y de descanso:</b> los marca tu cliente cada día en su app («¿Hoy entrenas o descansas?») y se marcan solos cuando envía sus series. Los días fijos de su plan de entrenamiento cuentan como entreno si no indica otra cosa.</p></div>'+
+  return '<div class="card"><p class="muted" style="margin:0"><b>Días de entreno y de descanso:</b> los marca tu cliente cada día en su app («¿Hoy entrenas o descansas?») y se marcan solos cuando envía sus series. Los días fijos de su plan de entrenamiento cuentan como entreno si no indica otra cosa.</p></div>'+
    '<div style="height:14px"></div>'+pills+
    '<div class="card targets"><div class="tgt"><label for="t-k">Objetivo · '+(isD?dN.toLowerCase():'día de '+(t==='train'?'entreno':'descanso'))+'</label><div class="tgt-in"><input id="t-k" class="in num" inputmode="numeric" data-r="target" data-f="kcal" value="'+esc(ty.kcal)+'"><span>kcal</span></div><div class="meter" id="bar-k"><i></i></div><p class="tgt-n"><b id="tot-k"></b> de <span id="tg-k"></span> kcal</p></div>'+
    '<div class="tgt"><label for="t-p">Proteína · '+(isD?dN.toLowerCase():'día de '+(t==='train'?'entreno':'descanso'))+'</label><div class="tgt-in"><input id="t-p" class="in num" inputmode="numeric" data-r="target" data-f="p" value="'+esc(ty.p)+'"><span>g</span></div><div class="meter" id="bar-p"><i></i></div><p class="tgt-n"><b id="tot-p"></b> de <span id="tg-p"></span> g</p></div></div>'+
@@ -2894,7 +2896,7 @@ function trainPanel(c){
   const di=Math.min(state.dayIdx,days.length-1),d=days[di],a=f=>'data-r="dayf" data-d="'+d.id+'" data-f="'+f+'"';
   const wdOpts='<option value="-1"'+(d.wd<0?' selected':'')+'>Sin día fijo</option>'+DAYS.map((n,i)=>'<option value="'+i+'"'+(d.wd===i?' selected':'')+'>'+n+'</option>').join('');
   const auto=c.training.auto!==false;
-  return planCard(c)+'<div class="card auto-bar"><div><b>Progresión automática de cargas</b><span class="muted">Según lo que registra '+esc(first(c.name))+' (reps y RIR), la app le indica si sube, mantiene o baja el peso cada sesión. Tus kg son el punto de partida.</span></div><button type="button" class="pf-tg" data-act="autoTg" aria-pressed="'+auto+'"><span class="pf-sw" aria-hidden="true"></span><span><b>'+(auto?'Activada':'Desactivada')+'</b></span></button></div>'+mc+'<div style="height:14px"></div><div class="pills">'+days.map((x,i)=>'<button type="button" class="pill" data-act="pickDay" data-i="'+i+'" aria-pressed="'+(i===di)+'">'+esc(dpill(x))+'</button>').join('')+'<button type="button" class="pill add" data-act="addDay">+ Día</button></div>'+
+  return '<div class="card auto-bar"><div><b>Progresión automática de cargas</b><span class="muted">Según lo que registra '+esc(first(c.name))+' (reps y RIR), la app le indica si sube, mantiene o baja el peso cada sesión. Tus kg son el punto de partida.</span></div><button type="button" class="pf-tg" data-act="autoTg" aria-pressed="'+auto+'"><span class="pf-sw" aria-hidden="true"></span><span><b>'+(auto?'Activada':'Desactivada')+'</b></span></button></div>'+mc+'<div style="height:14px"></div><div class="pills">'+days.map((x,i)=>'<button type="button" class="pill" data-act="pickDay" data-i="'+i+'" aria-pressed="'+(i===di)+'">'+esc(dpill(x))+'</button>').join('')+'<button type="button" class="pill add" data-act="addDay">+ Día</button></div>'+
    '<div class="card"><div class="form-grid g3"><label class="cell"><span class="lbl show">Sesión</span><input class="in" '+a('name')+' value="'+esc(d.name)+'"></label><label class="cell"><span class="lbl show">Enfoque / grupos musculares</span><input class="in" '+a('focus')+' placeholder="Ej.: Tren inferior" value="'+esc(d.focus)+'"></label><label class="cell"><span class="lbl show">Día de la semana</span><select class="in" data-r="daywd" data-d="'+d.id+'">'+wdOpts+'</select></label>'+
    '<label class="cell"><span class="lbl show">Duración (min)</span><input class="in num" inputmode="numeric" '+a('dur')+' value="'+esc(d.dur)+'"></label><label class="cell" style="grid-column:span 2"><span class="lbl show">Material / lugar</span><input class="in" '+a('place')+' value="'+esc(d.place)+'"></label></div>'+
    '<label class="cell" style="margin-top:12px"><span class="lbl show">Calentamiento previo</span><textarea class="in" rows="2" '+a('warm')+' placeholder="Ej.: 5 min de cinta, movilidad de cadera…">'+esc(d.warm)+'</textarea></label>'+
@@ -4366,7 +4368,7 @@ function tabsHtml(c){
   const m=coachMode();if(m==='edit')state.lastEdit=state.tab;else state.lastVer=state.tab;
   const vb=V.reduce((a,x)=>a+(x[2]||0),0);
   const T=m==='edit'?Ed:V;
-  return '<div class="cmode" role="tablist" aria-label="Modo"><button type="button" role="tab" class="es-b" data-act="cmode" data-v="ver" aria-selected="'+(m==='ver')+'">👁 Ver'+(m==='edit'&&vb?'<i class="es-hoy">'+vb+'</i>':'')+'</button><button type="button" role="tab" class="es-b" data-act="cmode" data-v="edit" aria-selected="'+(m==='edit')+'">✎ Editar plan</button></div>'+
+  return '<div class="cmode" role="tablist" aria-label="Modo"><button type="button" role="tab" class="es-b" data-act="cmode" data-v="ver" aria-selected="'+(m==='ver')+'">👁 Ver'+(m==='edit'&&vb?'<i class="es-hoy">'+vb+'</i>':'')+'</button><button type="button" role="tab" class="es-b" data-act="cmode" data-v="edit" aria-selected="'+(m==='edit')+'">✎ Editar plan</button></div>'+(m==='edit'?planCard(c):'')+
    '<div class="tabs" role="tablist">'+T.map(x=>'<button type="button" role="tab" class="tab" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(state.tab===x[0])+'">'+x[1]+(x[3]?'<span class="badge" id="'+x[3]+'"'+(x[2]?'':' hidden')+'>'+x[2]+'</span>':'')+'</button>').join('')+'</div>';
 }
 function datosPanel(c){return '<div class="stack"><div class="card"><h2>Datos del cliente</h2><div class="form-grid">'+
@@ -5015,7 +5017,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261011092545';let verT=0;
+const APP_VER='20261011093849';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5301,25 +5303,24 @@ const histCur=(c,k)=>({id:'cur',ts:Date.now(),data:kSnap(c,k)});
 const histGet=(c,k,id)=>id==='cur'?histCur(c,k):(c.planHist||[]).find(x=>x.id===id);
 /* tarjeta única del plan en Editar plan (solo el entrenador): descargar en tus plantillas, subir y el historial */
 function planCard(c){
-  if(RB.role!=='coach')return '';const n=histAll(c).length;
+  if(RB.role!=='coach')return '';
   return '<div class="card tpl-bar plan-bar"><div><b>Plan de '+esc(first(c.name))+'</b><span class="muted">Descarga el plan en tu plantilla, cámbialo y súbelo: se aplica todo de una vez. El plan que tenía queda en el historial.</span></div>'+
    '<div class="tpl-a"><button type="button" class="btn sm" data-ph="dl" data-k="diet" data-id="cur">⬇ Dieta (Word)</button><button type="button" class="btn sm" data-ph="dl" data-k="training" data-id="cur">⬇ Entreno (Excel)</button>'+
    '<label class="btn sm primary">⬆ Subir plan nuevo<input id="upImp" class="sr-file" type="file" accept=".docx,.xlsx,.xlsm,.json,application/json" multiple></label>'+
-   '<button type="button" class="btn sm" data-ph="open">Historial'+(n?' ('+n+')':'')+'</button></div></div>';
+   '<button type="button" class="btn sm" data-ph="open">Historial</button></div></div>';
 }
 function histList0(c,k){const cur=J(c[k]);return histOf(c,k).filter(h=>J(h.data[k])!==cur)}
 /* historial conjunto: dieta y entrenamiento en una sola lista, del más reciente al más antiguo */
-function histAll(c){const o=[];['diet','training'].forEach(k=>histList0(c,k).forEach(h=>o.push({h,k})));return o.sort((a,b)=>b.h.ts-a.h.ts||(a.k==='diet'?-1:1))}
 const HTAG={diet:'Dieta',training:'Entreno'};
 function histList(c){
-  const H=histAll(c),since=k=>(c.planSince||{})[k]||(c.planUpd&&c.planUpd.ts);
+  const since=k=>(c.planSince||{})[k]||(c.planUpd&&c.planUpd.ts);
   const btn=(a,k,id,t,cl)=>'<button type="button" class="btn sm'+(cl?' '+cl:'')+'" data-ph="'+a+'" data-k="'+k+'" data-id="'+id+'">'+t+'</button>';
-  const tag=k=>'<i class="ph-tag ph-'+k+'">'+HTAG[k]+'</i> ';
-  const now=k=>'<li class="ph-i now"><div><b>'+tag(k)+'Actual'+(since(k)?' · desde el '+esc(hDate(since(k))):'')+'</b><span>'+esc(histSum(kSnap(c,k),k))+'</span></div><div class="ph-a">'+btn('ver',k,'cur','Ver')+btn('dl',k,'cur','Descargar')+'</div></li>';
-  return '<h3 style="margin:0 0 6px">Historial de planes · '+esc(first(c.name))+'</h3><p class="muted" style="margin:0 0 10px">Dieta y entrenamiento juntos. Cada vez que cambias el plan (a mano o subiendo tu Word/Excel), el que tenía queda aquí con sus fechas. Solo lo ves tú.</p><ul class="ph-l">'+
-    now('diet')+now('training')+
-    (H.length?H.map(({h,k})=>'<li class="ph-i"><div><b>'+tag(k)+esc(histWhen(h))+'</b><span>'+esc([histSum(h.data,k),histWhy(h)].filter(Boolean).join(' · '))+'</span></div><div class="ph-a">'+btn('ver',k,h.id,'Ver')+btn('dl',k,h.id,'Descargar')+btn('rec',k,h.id,'Volver a este plan')+btn('del',k,h.id,'Eliminar','danger-l')+'</div></li>').join(''):'<li class="muted" style="padding:6px 2px">Todavía no hay planes anteriores. Se guardan solos cuando cambias el plan.</li>')+'</ul>'+
-    '<div class="actions" style="margin:12px 0 0"><label class="btn sm">Añadir un plan anterior (Word / Excel)<input class="sr-file" type="file" data-phadd="1" accept=".docx,.xlsx,.xlsm" multiple></label></div>';
+  const sec=k=>{const H=histList0(c,k);return '<h4 class="ph-h"><i class="ph-tag ph-'+k+'">'+HTAG[k]+'</i> '+(k==='diet'?'Dieta · tus Word':'Entrenamiento · tus Excel')+'</h4><ul class="ph-l" data-phsec="'+k+'">'+
+    '<li class="ph-i now"><div><b>Plan actual'+(since(k)?' · desde el '+esc(hDate(since(k))):'')+'</b><span>'+esc(histSum(kSnap(c,k),k))+'</span></div><div class="ph-a">'+btn('ver',k,'cur','Ver')+btn('dl',k,'cur','Descargar')+'</div></li>'+
+    (H.length?H.map(h=>'<li class="ph-i"><div><b>'+esc(histWhen(h))+'</b><span>'+esc([histSum(h.data,k),histWhy(h)].filter(Boolean).join(' · '))+'</span></div><div class="ph-a">'+btn('ver',k,h.id,'Ver')+btn('dl',k,h.id,'Descargar')+btn('rec',k,h.id,'Volver a este plan')+btn('del',k,h.id,'Eliminar','danger-l')+'</div></li>').join(''):'<li class="muted" style="padding:6px 2px">Todavía no hay planes anteriores.</li>')+'</ul>'};
+  return '<h3 style="margin:0 0 6px">Historial de planes · '+esc(first(c.name))+'</h3><p class="muted" style="margin:0 0 10px">Cada vez que cambias el plan (a mano o subiendo tu Word/Excel), el que tenía queda aquí con sus fechas. Solo lo ves tú.</p>'+
+    sec('diet')+sec('training')+
+    '<div class="actions" style="margin:14px 0 0"><label class="btn sm">Añadir un plan anterior (Word / Excel)<input class="sr-file" type="file" data-phadd="1" accept=".docx,.xlsx,.xlsm" multiple></label></div>';
 }
 /* entrenamiento con el diseño de tu Excel (Resumen + una hoja por día) */
 function trainSheet(c,o){

@@ -353,6 +353,14 @@ def fill_training(J):
                 kg = P.get('kg') if P.get('kg') not in (None, '') else e.get('kg')
                 if kg not in (None, ''):
                     ws.set('G%d' % rw, 'RIR' if kg == 'Según RIR' else 'BW' if kg == 'Peso corporal' else numish(kg))
+            ow = T.get('onlyWeek')
+            if isinstance(ow, int) and 0 < ow < 4:
+                rw = (28, 41, 54, 67)[ow] + i
+                ws.set('E%d' % rw, numish(e.get('sets'))); ws.set('F%d' % rw, numish(e.get('reps')))
+            D = e.get('done') or {}
+            if D:
+                rw = (28, 41, 54, 67)[ow if isinstance(ow, int) and 0 <= ow < 4 else 0] + i
+                for col, key in (('I', 'sets'), ('J', 'reps'), ('K', 'kg'), ('L', 'rir')): ws.set('%s%d' % (col, rw), numish(D.get(key)))
         for k, top in (('warm', 20), ('cool', 89)):
             for j, x in enumerate([x for x in re.split(r'\s*·\s*', d.get(k) or '') if x][:3]): ws.set('B%d' % (top + j), x)
         for j, x in enumerate([x for x in (d.get('note') or '').split('\n') if x.strip()][:3]): ws.set('B%d' % (99 + j), x)

@@ -326,7 +326,7 @@ def parse_plan(path):
             exch = []
             for r in t[1:]:
                 its = [re.sub(r'^[•·\s]+', '', x).strip() for x in r[1].split('\n') if x.strip()]
-                exch.append([r[0], r[2], its, r[3]])
+                exch.append([r[0], r[2] if len(r) > 2 else '', its, r[3] if len(r) > 3 else ''])
         elif h.startswith('⚠'):
             diet['avoid'] = t[0][1]
         elif h == 'PAUTA':
@@ -427,8 +427,49 @@ def parse_sets(series, reps, kg):
     K = [kv(ks[i] if i < len(ks) else ks[-1]) if ks else 0 for i in range(n)]
     return [[K[i], R[i]] for i in range(n)], ' · '.join(dict.fromkeys(note))
 
+def is_training_v1(wb):
+    return any(re.match(r'D[ií]a\s', n) for n in wb.sheetnames) and any(str(ws['D14'].value or '').upper().startswith('EJERCICIO') for ws in wb.worksheets)
+
+def parse_training_v1(wb):
+    """Formato antiguo: una hoja por día («Dia A - Fuerza Base») con una sola semana."""
+    WD = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo']
+    days, level, week = [], '', None
+    for ws in wb.worksheets:
+        if str(ws['D14'].value or '').upper()[:9] != 'EJERCICIO': continue
+        v = lambda a: ws[a].value
+        title = ws.title.strip()
+        m = re.match(r'(D[ií]a\s+\w+)\s*[-–]?\s*(.*)$', title)
+        dname = re.sub(r'^Dia', 'Día', m.group(1)) if m else title
+        ses = str(v('E7') or '')
+        wm = re.search(r'\(([^)]+)\)', ses)
+        wdn = (wm.group(1) if wm else '').strip().lower().replace('miercoles', 'miércoles').replace('sabado', 'sábado')
+        rest = norm_rest(str(v('F9') or '').split('(')[0].strip().replace(' seg', ' s'))
+        level = level or str(v('I9') or '').strip(' *')
+        exs = []
+        for r in range(15, 23):
+            name = v('D%d' % r)
+            if not name: continue
+            n = lambda x: (str(int(x)) if isinstance(x, float) and x.is_integer() else str(x)) if x not in (None, '') else ''
+            e = {'id': nid(), 'name': str(name).strip(), 'sets': n(v('E%d' % r)), 'reps': n(v('F%d' % r)), 'kg': n(v('G%d' % r)), 'rest': rest, 'tempo': '', 'tech': ''}
+            done = {k: n(v(c + str(r))) for k, c in (('sets', 'H'), ('reps', 'I'), ('kg', 'J'), ('rir', 'K'))}
+            if any(done.values()): e['done'] = done  # lo que hizo el cliente (solo para el historial)
+            exs.append(e)
+        if not exs: continue
+        wk = re.search(r'\d+', str(v('G7') or ''))
+        if wk: week = int(wk.group(0)) - 1
+        blk = lambda a, b: [str(v('B%d' % r)).strip() for r in range(a, b) if v('B%d' % r)]
+        note = blk(40, 43)
+        cli = blk(35, 38)
+        if cli: note += ['Notas del cliente: ' + ' · '.join(cli)]
+        days.append({'id': nid(), 'name': dname, 'focus': (m.group(2).strip() if m and m.group(2) else str(v('B9') or '')), 'wd': WD.index(wdn) if wdn in WD else -1,
+                     'dur': '60', 'place': 'Gimnasio', 'warm': ' · '.join(blk(25, 28)), 'cool': ' · '.join(blk(30, 33)), 'note': '\n'.join(note), 'exs': exs})
+    T = {'meso': {'n': 1, 'level': level, 'start': '', 'weeks': []}, 'auto': True, 'days': days}
+    if week is not None and 0 <= week < 4: T['onlyWeek'] = week
+    return {'training': T, 'log': [], 'chk': []}
+
 def parse_training(path):
     wb = openpyxl.load_workbook(path, data_only=True)
+    if 'Resumen' not in wb.sheetnames and is_training_v1(wb): return parse_training_v1(wb)
     res = wb['Resumen']
     cells = {c.coordinate: c.value for r in res.iter_rows() for c in r if c.value not in (None, '')}
     start = cells.get('C9')
@@ -477,6 +518,8 @@ def parse_training(path):
                 if dr not in (None, '') or dk not in (None, ''):
                     sets, extra = parse_sets(ds, dr, dk)
                     if not sets: continue
+                    if not isinstance(date, dt.datetime) and not meso['start']:
+                        warn('%s · %s: hay series hechas pero sin fecha de inicio; no las he pasado a sus registros' % (dname, e['name'])); continue
                     ts = int((date if isinstance(date, dt.datetime) else dt.datetime.strptime(meso['start'], '%Y-%m-%d') + dt.timedelta(days=7 * wi)).replace(hour=19).timestamp() * 1000)
                     logs.append({'id': nid(), 'ts': ts, 'day': dname + ' · S%d' % (wi + 1), 'ex': e['name'], 'sets': sets,
                                  'rir': int(dri) if isinstance(dri, (int, float)) else None,
@@ -855,6 +898,7 @@ def classify(path):
         names = wb.sheetnames
         if 'Resumen' in names and any(n.startswith('Día') for n in names): return 'entreno'
         wb.close()
+        if is_training_v1(openpyxl.load_workbook(path, data_only=True)): return 'entreno'
         try:
             if parse_run(path): return 'carrera'
         except Exception: pass

@@ -2393,6 +2393,7 @@ p.impbox-w{padding-left:0}
 .xs-side{display:flex;flex-direction:column;gap:2px;padding-top:8px}.xs-side span{font-size:10px;color:#6B7C85;margin-top:8px}.xs-side b{color:#2A9D8F;font-size:16px}
 .xs-txt{border:1px solid #D5E2DF;padding:6px 10px;color:#1F5FA8}
 .xs-day{margin-top:34px}
+.xs-t thead th.xs-y{background:#E9C46A;color:#264653}.xs-t td.xs-y{background:#FBF3DC}
 
 </style>
 
@@ -5011,7 +5012,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261011084540';let verT=0;
+const APP_VER='20261011085907';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5289,6 +5290,7 @@ function histWhen(h){
   return 'Del '+hDate(f)+' al '+hDate(h.ts);
 }
 function histWhy(h){const l=h.label||'';
+  if(h.added)return 'añadido desde tu archivo';
   return l==='cambios a mano'?'después lo cambiaste a mano':l==='versión recuperada'?'después volviste a un plan anterior':h.manual?'copia guardada a mano':l?'después subiste '+(/^plantilla/.test(l)?'la ':'')+l:''}
 const histCur=(c,k)=>({id:'cur',ts:Date.now(),data:kSnap(c,k)});
 const histGet=(c,k,id)=>id==='cur'?histCur(c,k):(c.planHist||[]).find(x=>x.id===id);
@@ -5303,7 +5305,8 @@ function histList(c,k){
   const btn=(a,id,t,cl)=>'<button type="button" class="btn sm'+(cl?' '+cl:'')+'" data-ph="'+a+'" data-k="'+k+'" data-id="'+id+'">'+t+'</button>';
   return '<h3 style="margin:0 0 6px">Historial de '+HK[k]+' · '+esc(first(c.name))+'</h3><p class="muted" style="margin:0 0 10px">Cada vez que cambias '+(k==='diet'?'la dieta':'el entrenamiento')+' (a mano, con una plantilla o subiendo un Word/Excel), el plan que tenía queda guardado aquí con sus fechas.</p><ul class="ph-l">'+
     '<li class="ph-i now"><div><b>Plan actual'+(since?' · desde el '+esc(hDate(since)):'')+'</b><span>'+esc(histSum(kSnap(c,k),k))+'</span></div><div class="ph-a">'+btn('ver','cur','Ver')+btn('dl','cur','Descargar')+'</div></li>'+
-    (H.length?H.map(h=>'<li class="ph-i"><div><b>'+esc(histWhen(h))+'</b><span>'+esc([histSum(h.data,k),histWhy(h)].filter(Boolean).join(' · '))+'</span></div><div class="ph-a">'+btn('ver',h.id,'Ver')+btn('dl',h.id,'Descargar')+btn('rec',h.id,'Volver a este plan')+btn('del',h.id,'Eliminar','danger-l')+'</div></li>').join(''):'<li class="muted" style="padding:6px 2px">Todavía no hay planes anteriores guardados. A partir de ahora, cada cambio guardará aquí el plan que había.</li>')+'</ul>';
+    (H.length?H.map(h=>'<li class="ph-i"><div><b>'+esc(histWhen(h))+'</b><span>'+esc([histSum(h.data,k),histWhy(h)].filter(Boolean).join(' · '))+'</span></div><div class="ph-a">'+btn('ver',h.id,'Ver')+btn('dl',h.id,'Descargar')+btn('rec',h.id,'Volver a este plan')+btn('del',h.id,'Eliminar','danger-l')+'</div></li>').join(''):'<li class="muted" style="padding:6px 2px">Todavía no hay planes anteriores guardados. A partir de ahora, cada cambio guardará aquí el plan que había.</li>')+'</ul>'+
+    '<div class="actions" style="margin:12px 0 0"><label class="btn sm">Añadir un plan anterior (Word / Excel)<input class="sr-file" type="file" data-phadd="'+k+'" accept=".docx,.xlsx,.xlsm" multiple></label></div>';
 }
 /* entrenamiento con el diseño de tu Excel (Resumen + una hoja por día) */
 function trainSheet(c,o){
@@ -5313,12 +5316,12 @@ function trainSheet(c,o){
   const head=(t,sub)=>'<div class="xs-h"><b>'+t+'</b><img src="'+PS_LOGO+'" alt=""></div><div class="xs-hs">Tactical Biscuit Training'+(sub?' · '+sub:'')+'</div>';
   const sec=(t,cl)=>'<div class="xs-sec'+(cl?' '+cl:'')+'">'+t+'</div>';
   const kv=(l,v)=>'<tr><th>'+l+'</th><td>'+esc(v==null?'':String(v))+'</td></tr>';
-  const W=(M.weeks&&M.weeks.length?M.weeks:[{phase:'Adaptación',rir:3},{phase:'Progresión',rir:2},{phase:'Intensificación',rir:1},{phase:'Descarga',rir:4}]).slice(0,4);
+  const W=(M.weeks&&M.weeks.length?M.weeks:T.onlyWeek!=null?[]:[{phase:'Adaptación',rir:3},{phase:'Progresión',rir:2},{phase:'Intensificación',rir:1},{phase:'Descarga',rir:4}]).slice(0,4);
   let h='<article class="xsheet">'+head('PLAN DE ENTRENAMIENTO · MESOCICLO','Bloque de 4 semanas')+sec('DATOS DEL CLIENTE')+
    '<div class="xs-2"><table class="xs-kv">'+kv('Cliente',c.name)+kv('Objetivo',c.goal)+kv('Nivel',M.level||'')+kv('Fecha de inicio',st?st.toLocaleDateString('es-ES'):'')+kv('Días / semana',days.length)+kv('Mesociclo nº',M.n||1)+'</table>'+
    '<div class="xs-side"><span>Entrenador</span><b>Robert</b>'+(st?'<span>Fin del mesociclo</span><b>'+add(st,27).toLocaleDateString('es-ES')+'</b>':'')+'</div></div>'+
-   sec('PLANIFICACIÓN DE LAS 4 SEMANAS')+'<div class="xs-x"><table class="xs-t"><thead><tr><th>Semana</th><th>Fechas</th><th>Fase</th><th>RIR objetivo</th><th>Volumen</th><th>Intensidad</th><th>Notas</th></tr></thead><tbody>'+
-   W.map((w,i)=>'<tr><th>Semana '+(i+1)+'</th><td>'+(st?dm(add(st,7*i))+' – '+dm(add(st,7*i+6)):'')+'</td><td class="b">'+esc(w.phase||'')+'</td><td class="b"><b>'+esc(w.rir!=null?String(w.rir):'')+'</b></td><td class="b">'+esc(w.vol||'')+'</td><td class="b">'+esc(w.int||'')+'</td><td>'+esc(w.notes||'')+'</td></tr>').join('')+'</tbody></table></div>'+
+   (W.length?sec('PLANIFICACIÓN DE LAS 4 SEMANAS')+'<div class="xs-x"><table class="xs-t"><thead><tr><th>Semana</th><th>Fechas</th><th>Fase</th><th>RIR objetivo</th><th>Volumen</th><th>Intensidad</th><th>Notas</th></tr></thead><tbody>'+
+   W.map((w,i)=>'<tr><th>Semana '+(i+1)+'</th><td>'+(st?dm(add(st,7*i))+' – '+dm(add(st,7*i+6)):'')+'</td><td class="b">'+esc(w.phase||'')+'</td><td class="b"><b>'+esc(w.rir!=null?String(w.rir):'')+'</b></td><td class="b">'+esc(w.vol||'')+'</td><td class="b">'+esc(w.int||'')+'</td><td>'+esc(w.notes||'')+'</td></tr>').join('')+'</tbody></table></div>':'')+
    sec('ESTRUCTURA SEMANAL')+'<div class="xs-x"><table class="xs-t"><thead><tr><th>Sesión</th><th>Día de la semana</th><th>Enfoque / grupos musculares</th><th>Duración (min)</th><th>Material / lugar</th></tr></thead><tbody>'+
    days.map(d=>'<tr><th>'+esc(d.name)+'</th><td class="b">'+(d.wd>=0&&d.wd<7?WDN[d.wd]:'')+'</td><td class="b l">'+esc(d.focus||'')+'</td><td class="b">'+esc(d.dur||'')+'</td><td class="b l">'+esc(d.place||'')+'</td></tr>').join('')+'</tbody></table></div>';
   days.forEach(d=>{
@@ -5327,9 +5330,9 @@ function trainSheet(c,o){
      '<div class="xs-x"><table class="xs-t"><thead><tr><th>Nº</th><th>Ejercicio</th><th>Grupo</th><th>Tempo</th><th>Descanso</th><th>Indicaciones técnicas</th></tr></thead><tbody>'+
      ex.map((e,i)=>'<tr><th>'+(i+1)+'</th><td class="b l"><b>'+esc(e.name)+'</b></td><td class="b">'+esc(e.group||'')+'</td><td class="b">'+esc(e.tempo||'')+'</td><td class="b">'+esc(e.rest||'')+'</td><td class="b l">'+esc(e.tech||'')+'</td></tr>').join('')+'</tbody></table></div>'+
      (d.warm?sec('🔥 CALENTAMIENTO PREVIO','or')+'<div class="xs-txt">'+d.warm.split(/\s*·\s*/).map(esc).join('<br>')+'</div>':'')+
-     W.map((w,wi)=>sec('SEMANA '+(wi+1)+'  ·  '+esc(String(w.phase||'')).toUpperCase()+(w.rir!=null&&w.rir!==''?'  ·  RIR objetivo '+esc(String(w.rir)):''))+
-      '<div class="xs-x"><table class="xs-t"><thead><tr><th>Nº</th><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Kg obj.</th><th>RIR obj.</th></tr></thead><tbody>'+
-      ex.map((e,i)=>{const P=(e.wk||{})[wi]||{};const kg=P.kg!=null&&P.kg!==''?P.kg:e.kg;return '<tr><th>'+(i+1)+'</th><td class="l">'+esc(e.name)+'</td><td class="b">'+esc(String(P.sets||e.sets||''))+'</td><td class="b">'+esc(String(e.reps||''))+'</td><td class="b">'+esc(kg==null?'':String(kg))+'</td><td class="b">'+esc(w.rir!=null?String(w.rir):'')+'</td></tr>'}).join('')+'</tbody></table></div>').join('')+
+     (T.onlyWeek!=null?[T.onlyWeek]:[0,1,2,3]).filter(wi=>T.onlyWeek!=null||W[wi]).map(wi=>{const w=W[wi]||{},dn=ex.some(e=>e.done);return sec('SEMANA '+(wi+1)+(w.phase?'  ·  '+esc(String(w.phase)).toUpperCase():'')+(w.rir!=null&&w.rir!==''?'  ·  RIR objetivo '+esc(String(w.rir)):''))+
+      '<div class="xs-x"><table class="xs-t"><thead><tr><th>Nº</th><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Kg obj.</th>'+(T.onlyWeek!=null?'':'<th>RIR obj.</th>')+(dn?'<th class="xs-y">Series ✍</th><th class="xs-y">Reps ✍</th><th class="xs-y">Kg ✍</th><th class="xs-y">RIR ✍</th>':'')+'</tr></thead><tbody>'+
+      ex.map((e,i)=>{const P=(e.wk||{})[wi]||{};const kg=P.kg!=null&&P.kg!==''?P.kg:e.kg,D=e.done||{};return '<tr><th>'+(i+1)+'</th><td class="l">'+esc(e.name)+'</td><td class="b">'+esc(String(P.sets||e.sets||''))+'</td><td class="b">'+esc(String(e.reps||''))+'</td><td class="b">'+esc(kg==null?'':String(kg))+'</td>'+(T.onlyWeek!=null?'':'<td class="b">'+esc(w.rir!=null?String(w.rir):'')+'</td>')+(dn?['sets','reps','kg','rir'].map(x=>'<td class="xs-y">'+esc(D[x]||'')+'</td>').join(''):'')+'</tr>'}).join('')+'</tbody></table></div>'}).join('')+
      (d.note?sec('NOTAS')+'<div class="xs-txt">'+esc(d.note).replace(/\n/g,'<br>')+'</div>':'')+'</div>';
   });
   return h+'</article>';
@@ -5343,7 +5346,20 @@ function histFs(c,h,k){
   document.body.appendChild(el);el.scrollTop=0;
 }
 /* descargar en tus plantillas: dieta → tu Word, entrenamiento → tu Excel (tools/exporter.py en el navegador) */
+async function fileURL(x){
+  if(typeof x!=='string'||x.indexOf('sb:')!==0)return x;
+  const m=RB.media[x];if(m&&m.exp>Date.now())return m.url;
+  const{data,error}=await sb.storage.from('media').createSignedUrls([x.slice(3)],600);
+  if(error||!data||!data[0]||!data[0].signedUrl)throw error||new Error('sin enlace');
+  RB.media[x]={url:data[0].signedUrl,exp:Date.now()+9*60e3};return data[0].signedUrl;
+}
 async function histDownload(c,h,k){
+  if(h.file){
+    try{const b=await (await fetch(await fileURL(h.file))).blob();
+      const a=document.createElement('a'),u=URL.createObjectURL(b);a.href=u;a.download=h.fname||('plan '+c.name);document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('Descargado ✓')}
+    catch(e){console.error(e);toast('No he podido descargar el archivo')}
+    return;
+  }
   toast('Preparando el archivo…');
   try{
     const py=await pyImporter();
@@ -5365,6 +5381,35 @@ async function histDownload(c,h,k){
     const w=JSON.parse(wj);toast(w.length?'Descargado · '+w[0]:'Descargado ✓');
   }catch(e){console.error(e);toast('No he podido preparar el archivo')}
 }
+/* añadir planes antiguos (tus Word / Excel) al historial sin cambiar el plan actual */
+const isoTs=s=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(s||'');return m?new Date(+m[1],m[2]-1,+m[3],12).getTime():null};
+function histFixEnds(c,k){
+  const L=histOf(c,k).map(h=>({h,s:histStart(h)})).filter(x=>x.s).sort((a,b)=>a.s-b.s);
+  L.forEach((x,i)=>{if(!x.h.added)return;const nx=L.slice(i+1).find(y=>y.s>x.s);x.h.ts=nx?nx.s:Math.max(x.s,(c.planSince||{})[k]||Date.now())});
+  c.planHist.sort((a,b)=>b.ts-a.ts);
+}
+async function histAddFiles(c,k,files){
+  const got=[];
+  for(const f of files){
+    try{const r=await readPlanFiles([f]),d=(r.j&&r.j.data)||{};
+      if(!d[k]){toast(f.name+': no es '+(k==='diet'?'un plan nutricional':'un entrenamiento'));continue}
+      const o={};o[k]=d[k];if(k==='training'&&d.run)o.run=d.run;
+      const fm=/(\d{4})-(\d\d)-(\d\d)/.exec(f.name),iso=fm?fm[0]:(k==='diet'?d.diet.inicio:(d.training.meso||{}).start)||'';
+      got.push({name:f.name,data:o,iso,rep:r.rep||[],file:f});
+    }catch(e){console.error(e);toast('No he podido leer '+f.name)}
+  }
+  if(!got.length)return;
+  const box=impBox('<h3 style="margin:0 0 6px">Añadir al historial de '+HK[k]+'</h3><p class="muted" style="margin:0 0 10px">Revisa la fecha en la que empezó cada plan. El plan actual de '+esc(first(c.name))+' no cambia.</p><ul class="ph-l">'+
+    got.map((g,i)=>'<li class="ph-i"><div><b>'+esc(g.name)+'</b><span>'+esc(histSum(g.data,k))+'</span></div><label class="muted" style="font-size:13px">Empezó el <input type="date" class="in" data-phd="'+i+'" value="'+esc(g.iso)+'"></label></li>').join('')+'</ul>',
+    '<button type="button" class="btn" data-ph="open" data-k="'+k+'">Cancelar</button><button type="button" class="btn primary" data-ib="apply">Añadir al historial</button>');
+  box._apply=()=>{
+    got.forEach((g,i)=>{const inp=box.querySelector('[data-phd="'+i+'"]'),s=isoTs(inp&&inp.value)||Date.now();
+      c.planHist=c.planHist||[];c.planHist.push({id:nid(),from:s,ts:s,kind:k,label:'',added:true,fname:g.name,file:URL.createObjectURL(g.file),data:JSON.parse(JSON.stringify(g.data))})});
+    histFixEnds(c,k);renderAll();markDirty();toast(got.length===1?'Plan añadido al historial ✓':got.length+' planes añadidos al historial ✓');
+    setTimeout(()=>impBox(histList(c,k),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>'),0);
+  };
+}
+document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset||!t.dataset.phadd||!t.files||!t.files.length)return;const c=cur();if(!c)return;const fl=Array.from(t.files);t.value='';histAddFiles(c,t.dataset.phadd,fl)});
 function histRecover(c,h,k){
   const d={};
   if(k==='diet'){d.diet=JSON.parse(JSON.stringify(h.data.diet));if(c.diet)['edad','altura','nivel','dur','inicio','trainDays'].forEach(x=>{if(c.diet[x]!==undefined)d.diet[x]=c.diet[x]})}
@@ -5373,7 +5418,8 @@ function histRecover(c,h,k){
 }
 function histDel(c,h,k){
   if(hasK(h,'diet')&&hasK(h,'training')){delete h.data[k];if(k==='training')delete h.data.run}
-  else c.planHist=(c.planHist||[]).filter(x=>x.id!==h.id);
+  else{c.planHist=(c.planHist||[]).filter(x=>x.id!==h.id);
+    if(typeof h.file==='string'&&h.file.indexOf('sb:')===0)sb.storage.from('media').remove([h.file.slice(3)]).catch(e=>console.warn(e))}
 }
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ph]');if(!b)return;const c=cur();if(!c||RB.role!=='coach')return;const k=b.dataset.k,a=b.dataset.ph;
   if(a==='open'){const f=$('#histFs');if(f)f.remove();impBox(histList(c,k),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>');return}

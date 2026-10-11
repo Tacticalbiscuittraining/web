@@ -2394,6 +2394,9 @@ p.impbox-w{padding-left:0}
 .xs-txt{border:1px solid #D5E2DF;padding:6px 10px;color:#1F5FA8}
 .xs-day{margin-top:34px}
 .xs-t thead th.xs-y{background:#E9C46A;color:#264653}.xs-t td.xs-y{background:#FBF3DC}
+.ph-tag{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-right:4px;vertical-align:1px}
+.ph-diet{background:rgba(14,145,136,.15);color:#0E9188}
+.ph-training{background:rgba(224,122,30,.16);color:#C9671A}
 
 </style>
 
@@ -2823,7 +2826,7 @@ function dietPanel(c){
   const pills='<div class="pills" role="group" aria-label="Tipo de día"><button type="button" class="pill" data-act="dtype" data-t="train" aria-pressed="'+(t==='train')+'">Día de entrenamiento</button><button type="button" class="pill" data-act="dtype" data-t="rest" aria-pressed="'+(t==='rest')+'">Día de descanso</button>'+(perDay(c)?'<span class="pd-sep">Menú de cada día:</span>'+DAYS_S.map((s,i)=>'<button type="button" class="pill" data-act="dtype" data-t="d'+i+'" aria-pressed="'+(t==='d'+i)+'">'+s+'</button>').join(''):'')+'</div>'+(isD?'<p class="muted pd-note">Estás editando el menú del <b>'+dN.toLowerCase()+'</b>. Es lo que tu cliente ve ese día en «Mi día» y en el menú semanal.</p>':'');
   const other=t==='train'?'descanso':'entrenamiento';
   const inf=(f,l,u)=>'<label class="cell"><span class="lbl show">'+l+'</span><div class="tgt-in" style="margin:0"><input class="in num" inputmode="decimal" data-r="dinfo" data-f="'+f+'" value="'+esc(d[f]||'')+'"><span>'+u+'</span></div></label>';
-  return tplCard(c,'diet')+'<div class="card"><p class="muted" style="margin:0"><b>Días de entreno y de descanso:</b> los marca tu cliente cada día en su app («¿Hoy entrenas o descansas?») y se marcan solos cuando envía sus series. Los días fijos de su plan de entrenamiento cuentan como entreno si no indica otra cosa.</p></div>'+
+  return planCard(c)+'<div class="card"><p class="muted" style="margin:0"><b>Días de entreno y de descanso:</b> los marca tu cliente cada día en su app («¿Hoy entrenas o descansas?») y se marcan solos cuando envía sus series. Los días fijos de su plan de entrenamiento cuentan como entreno si no indica otra cosa.</p></div>'+
    '<div style="height:14px"></div>'+pills+
    '<div class="card targets"><div class="tgt"><label for="t-k">Objetivo · '+(isD?dN.toLowerCase():'día de '+(t==='train'?'entreno':'descanso'))+'</label><div class="tgt-in"><input id="t-k" class="in num" inputmode="numeric" data-r="target" data-f="kcal" value="'+esc(ty.kcal)+'"><span>kcal</span></div><div class="meter" id="bar-k"><i></i></div><p class="tgt-n"><b id="tot-k"></b> de <span id="tg-k"></span> kcal</p></div>'+
    '<div class="tgt"><label for="t-p">Proteína · '+(isD?dN.toLowerCase():'día de '+(t==='train'?'entreno':'descanso'))+'</label><div class="tgt-in"><input id="t-p" class="in num" inputmode="numeric" data-r="target" data-f="p" value="'+esc(ty.p)+'"><span>g</span></div><div class="meter" id="bar-p"><i></i></div><p class="tgt-n"><b id="tot-p"></b> de <span id="tg-p"></span> g</p></div></div>'+
@@ -2891,7 +2894,7 @@ function trainPanel(c){
   const di=Math.min(state.dayIdx,days.length-1),d=days[di],a=f=>'data-r="dayf" data-d="'+d.id+'" data-f="'+f+'"';
   const wdOpts='<option value="-1"'+(d.wd<0?' selected':'')+'>Sin día fijo</option>'+DAYS.map((n,i)=>'<option value="'+i+'"'+(d.wd===i?' selected':'')+'>'+n+'</option>').join('');
   const auto=c.training.auto!==false;
-  return tplCard(c,'training')+'<div class="card auto-bar"><div><b>Progresión automática de cargas</b><span class="muted">Según lo que registra '+esc(first(c.name))+' (reps y RIR), la app le indica si sube, mantiene o baja el peso cada sesión. Tus kg son el punto de partida.</span></div><button type="button" class="pf-tg" data-act="autoTg" aria-pressed="'+auto+'"><span class="pf-sw" aria-hidden="true"></span><span><b>'+(auto?'Activada':'Desactivada')+'</b></span></button></div>'+mc+'<div style="height:14px"></div><div class="pills">'+days.map((x,i)=>'<button type="button" class="pill" data-act="pickDay" data-i="'+i+'" aria-pressed="'+(i===di)+'">'+esc(dpill(x))+'</button>').join('')+'<button type="button" class="pill add" data-act="addDay">+ Día</button></div>'+
+  return planCard(c)+'<div class="card auto-bar"><div><b>Progresión automática de cargas</b><span class="muted">Según lo que registra '+esc(first(c.name))+' (reps y RIR), la app le indica si sube, mantiene o baja el peso cada sesión. Tus kg son el punto de partida.</span></div><button type="button" class="pf-tg" data-act="autoTg" aria-pressed="'+auto+'"><span class="pf-sw" aria-hidden="true"></span><span><b>'+(auto?'Activada':'Desactivada')+'</b></span></button></div>'+mc+'<div style="height:14px"></div><div class="pills">'+days.map((x,i)=>'<button type="button" class="pill" data-act="pickDay" data-i="'+i+'" aria-pressed="'+(i===di)+'">'+esc(dpill(x))+'</button>').join('')+'<button type="button" class="pill add" data-act="addDay">+ Día</button></div>'+
    '<div class="card"><div class="form-grid g3"><label class="cell"><span class="lbl show">Sesión</span><input class="in" '+a('name')+' value="'+esc(d.name)+'"></label><label class="cell"><span class="lbl show">Enfoque / grupos musculares</span><input class="in" '+a('focus')+' placeholder="Ej.: Tren inferior" value="'+esc(d.focus)+'"></label><label class="cell"><span class="lbl show">Día de la semana</span><select class="in" data-r="daywd" data-d="'+d.id+'">'+wdOpts+'</select></label>'+
    '<label class="cell"><span class="lbl show">Duración (min)</span><input class="in num" inputmode="numeric" '+a('dur')+' value="'+esc(d.dur)+'"></label><label class="cell" style="grid-column:span 2"><span class="lbl show">Material / lugar</span><input class="in" '+a('place')+' value="'+esc(d.place)+'"></label></div>'+
    '<label class="cell" style="margin-top:12px"><span class="lbl show">Calentamiento previo</span><textarea class="in" rows="2" '+a('warm')+' placeholder="Ej.: 5 min de cinta, movilidad de cadera…">'+esc(d.warm)+'</textarea></label>'+
@@ -3368,7 +3371,7 @@ function cloneDiet(d){const x=JSON.parse(JSON.stringify(d));x.supps=(d.supps||[]
 function cloneTraining(t){return{meso:Object.assign({},JSON.parse(JSON.stringify(t.meso)),{start:isoD(Date.now())}),auto:t.auto,days:t.days.map(d=>Object.assign({},d,{id:nid(),exs:d.exs.map(e=>Object.assign({},e,{id:nid()}))}))}}
 function tplCard(c,kind){
   const T=state.tpls.filter(t=>t[kind]),lbl=kind==='diet'?'dieta':'entrenamiento';
-  return '<div class="card tpl-bar"><div><b>Plantillas de '+lbl+'</b><span class="muted">Guarda este plan para reutilizarlo o aplica uno guardado.</span></div><div class="tpl-a"><select class="in" id="tplSel-'+kind+'" aria-label="Plantilla"><option value="">Elegir plantilla…</option>'+T.map(t=>'<option value="'+t.id+'">'+esc(t.name)+'</option>').join('')+'</select><button type="button" class="btn" data-act="tplApply" data-k="'+kind+'" data-confirm>Aplicar a '+esc(first(c.name))+'</button><button type="button" class="btn primary" data-act="tplSave" data-k="'+kind+'">Guardar como plantilla</button></div>'+histRow(c,kind)+'</div>';
+  return '<div class="card tpl-bar"><div><b>Plantillas de '+lbl+'</b><span class="muted">Guarda este plan para reutilizarlo o aplica uno guardado.</span></div><div class="tpl-a"><select class="in" id="tplSel-'+kind+'" aria-label="Plantilla"><option value="">Elegir plantilla…</option>'+T.map(t=>'<option value="'+t.id+'">'+esc(t.name)+'</option>').join('')+'</select><button type="button" class="btn" data-act="tplApply" data-k="'+kind+'" data-confirm>Aplicar a '+esc(first(c.name))+'</button><button type="button" class="btn primary" data-act="tplSave" data-k="'+kind+'">Guardar como plantilla</button></div></div>';
 }
 /* ---------- panel general del entrenador ---------- */
 function lastLogTs(c){let t=c.log.reduce((a,l)=>Math.max(a,l.ts),0);if(c.run)(c.run.logs||[]).forEach(l=>{if(l.st!=='no'&&l.ts>t)t=l.ts});(c.acts||[]).forEach(a=>{const d=pIso(a.date);if(d&&d.getTime()+12*36e5>t)t=d.getTime()+12*36e5});return t}
@@ -4367,7 +4370,7 @@ function tabsHtml(c){
    '<div class="tabs" role="tablist">'+T.map(x=>'<button type="button" role="tab" class="tab" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(state.tab===x[0])+'">'+x[1]+(x[3]?'<span class="badge" id="'+x[3]+'"'+(x[2]?'':' hidden')+'>'+x[2]+'</span>':'')+'</button>').join('')+'</div>';
 }
 function datosPanel(c){return '<div class="stack"><div class="card"><h2>Datos del cliente</h2><div class="form-grid">'+
-  [['name','Nombre'],['goal','Objetivo'],['phase','Fase'],['review','Próxima revisión']].map(x=>'<label class="cell"><span class="lbl show">'+x[1]+'</span><input class="in" data-r="cinfo" data-f="'+x[0]+'" value="'+esc(c[x[0]]||'')+'"></label>').join('')+'</div></div>'+fichaCard(c)+accessCard(c)+importCard(c)+'</div>'}
+  [['name','Nombre'],['goal','Objetivo'],['phase','Fase'],['review','Próxima revisión']].map(x=>'<label class="cell"><span class="lbl show">'+x[1]+'</span><input class="in" data-r="cinfo" data-f="'+x[0]+'" value="'+esc(c[x[0]]||'')+'"></label>').join('')+'</div></div>'+fichaCard(c)+accessCard(c)+'</div>'}
 /* ---------- render ---------- */
 function renderMain(){
   const c=cur(),m=$('#main');
@@ -5012,7 +5015,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261011085907';let verT=0;
+const APP_VER='20261011092545';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5272,6 +5275,8 @@ function applyPlan(c,d,label){
   if(d.int&&!(c.int&&Object.keys(c.int).length>6))c.int=d.int;
   if(Array.isArray(d.weights)&&!(c.weights||[]).length)c.weights=d.weights;
   if(Array.isArray(d.chk)&&!(c.chk||[]).length)c.chk=d.chk;
+  // igual que al cargar (fixClient): así el primer cambio a mano no deja en el historial una copia idéntica
+  if(d.training!==undefined)try{noFixDays(c)}catch(e){console.warn(e)}
   if(touch.length)c.planUpd={ts:Date.now(),what:touch};
   try{foodSync(c)}catch(e){console.warn(e)}
 }
@@ -5294,19 +5299,27 @@ function histWhy(h){const l=h.label||'';
   return l==='cambios a mano'?'después lo cambiaste a mano':l==='versión recuperada'?'después volviste a un plan anterior':h.manual?'copia guardada a mano':l?'después subiste '+(/^plantilla/.test(l)?'la ':'')+l:''}
 const histCur=(c,k)=>({id:'cur',ts:Date.now(),data:kSnap(c,k)});
 const histGet=(c,k,id)=>id==='cur'?histCur(c,k):(c.planHist||[]).find(x=>x.id===id);
-/* acceso en Editar plan › Dieta / Entrenamiento (solo el entrenador) */
-function histRow(c,k){
-  if(RB.role!=='coach')return '';const n=histList0(c,k).length;
-  return '<div class="ph-row"><span class="muted">Planes anteriores de '+HK[k]+': '+(n?n:'ninguno todavía')+' · solo los ves tú</span><div class="ph-a"><button type="button" class="btn sm" data-ph="open" data-k="'+k+'">Historial de '+HK[k]+(n?' ('+n+')':'')+'</button></div></div>';
+/* tarjeta única del plan en Editar plan (solo el entrenador): descargar en tus plantillas, subir y el historial */
+function planCard(c){
+  if(RB.role!=='coach')return '';const n=histAll(c).length;
+  return '<div class="card tpl-bar plan-bar"><div><b>Plan de '+esc(first(c.name))+'</b><span class="muted">Descarga el plan en tu plantilla, cámbialo y súbelo: se aplica todo de una vez. El plan que tenía queda en el historial.</span></div>'+
+   '<div class="tpl-a"><button type="button" class="btn sm" data-ph="dl" data-k="diet" data-id="cur">⬇ Dieta (Word)</button><button type="button" class="btn sm" data-ph="dl" data-k="training" data-id="cur">⬇ Entreno (Excel)</button>'+
+   '<label class="btn sm primary">⬆ Subir plan nuevo<input id="upImp" class="sr-file" type="file" accept=".docx,.xlsx,.xlsm,.json,application/json" multiple></label>'+
+   '<button type="button" class="btn sm" data-ph="open">Historial'+(n?' ('+n+')':'')+'</button></div></div>';
 }
 function histList0(c,k){const cur=J(c[k]);return histOf(c,k).filter(h=>J(h.data[k])!==cur)}
-function histList(c,k){
-  const H=histList0(c,k),since=(c.planSince||{})[k]||(c.planUpd&&c.planUpd.ts);
-  const btn=(a,id,t,cl)=>'<button type="button" class="btn sm'+(cl?' '+cl:'')+'" data-ph="'+a+'" data-k="'+k+'" data-id="'+id+'">'+t+'</button>';
-  return '<h3 style="margin:0 0 6px">Historial de '+HK[k]+' · '+esc(first(c.name))+'</h3><p class="muted" style="margin:0 0 10px">Cada vez que cambias '+(k==='diet'?'la dieta':'el entrenamiento')+' (a mano, con una plantilla o subiendo un Word/Excel), el plan que tenía queda guardado aquí con sus fechas.</p><ul class="ph-l">'+
-    '<li class="ph-i now"><div><b>Plan actual'+(since?' · desde el '+esc(hDate(since)):'')+'</b><span>'+esc(histSum(kSnap(c,k),k))+'</span></div><div class="ph-a">'+btn('ver','cur','Ver')+btn('dl','cur','Descargar')+'</div></li>'+
-    (H.length?H.map(h=>'<li class="ph-i"><div><b>'+esc(histWhen(h))+'</b><span>'+esc([histSum(h.data,k),histWhy(h)].filter(Boolean).join(' · '))+'</span></div><div class="ph-a">'+btn('ver',h.id,'Ver')+btn('dl',h.id,'Descargar')+btn('rec',h.id,'Volver a este plan')+btn('del',h.id,'Eliminar','danger-l')+'</div></li>').join(''):'<li class="muted" style="padding:6px 2px">Todavía no hay planes anteriores guardados. A partir de ahora, cada cambio guardará aquí el plan que había.</li>')+'</ul>'+
-    '<div class="actions" style="margin:12px 0 0"><label class="btn sm">Añadir un plan anterior (Word / Excel)<input class="sr-file" type="file" data-phadd="'+k+'" accept=".docx,.xlsx,.xlsm" multiple></label></div>';
+/* historial conjunto: dieta y entrenamiento en una sola lista, del más reciente al más antiguo */
+function histAll(c){const o=[];['diet','training'].forEach(k=>histList0(c,k).forEach(h=>o.push({h,k})));return o.sort((a,b)=>b.h.ts-a.h.ts||(a.k==='diet'?-1:1))}
+const HTAG={diet:'Dieta',training:'Entreno'};
+function histList(c){
+  const H=histAll(c),since=k=>(c.planSince||{})[k]||(c.planUpd&&c.planUpd.ts);
+  const btn=(a,k,id,t,cl)=>'<button type="button" class="btn sm'+(cl?' '+cl:'')+'" data-ph="'+a+'" data-k="'+k+'" data-id="'+id+'">'+t+'</button>';
+  const tag=k=>'<i class="ph-tag ph-'+k+'">'+HTAG[k]+'</i> ';
+  const now=k=>'<li class="ph-i now"><div><b>'+tag(k)+'Actual'+(since(k)?' · desde el '+esc(hDate(since(k))):'')+'</b><span>'+esc(histSum(kSnap(c,k),k))+'</span></div><div class="ph-a">'+btn('ver',k,'cur','Ver')+btn('dl',k,'cur','Descargar')+'</div></li>';
+  return '<h3 style="margin:0 0 6px">Historial de planes · '+esc(first(c.name))+'</h3><p class="muted" style="margin:0 0 10px">Dieta y entrenamiento juntos. Cada vez que cambias el plan (a mano o subiendo tu Word/Excel), el que tenía queda aquí con sus fechas. Solo lo ves tú.</p><ul class="ph-l">'+
+    now('diet')+now('training')+
+    (H.length?H.map(({h,k})=>'<li class="ph-i"><div><b>'+tag(k)+esc(histWhen(h))+'</b><span>'+esc([histSum(h.data,k),histWhy(h)].filter(Boolean).join(' · '))+'</span></div><div class="ph-a">'+btn('ver',k,h.id,'Ver')+btn('dl',k,h.id,'Descargar')+btn('rec',k,h.id,'Volver a este plan')+btn('del',k,h.id,'Eliminar','danger-l')+'</div></li>').join(''):'<li class="muted" style="padding:6px 2px">Todavía no hay planes anteriores. Se guardan solos cuando cambias el plan.</li>')+'</ul>'+
+    '<div class="actions" style="margin:12px 0 0"><label class="btn sm">Añadir un plan anterior (Word / Excel)<input class="sr-file" type="file" data-phadd="1" accept=".docx,.xlsx,.xlsm" multiple></label></div>';
 }
 /* entrenamiento con el diseño de tu Excel (Resumen + una hoja por día) */
 function trainSheet(c,o){
@@ -5388,28 +5401,28 @@ function histFixEnds(c,k){
   L.forEach((x,i)=>{if(!x.h.added)return;const nx=L.slice(i+1).find(y=>y.s>x.s);x.h.ts=nx?nx.s:Math.max(x.s,(c.planSince||{})[k]||Date.now())});
   c.planHist.sort((a,b)=>b.ts-a.ts);
 }
-async function histAddFiles(c,k,files){
+async function histAddFiles(c,files){
   const got=[];
   for(const f of files){
-    try{const r=await readPlanFiles([f]),d=(r.j&&r.j.data)||{};
-      if(!d[k]){toast(f.name+': no es '+(k==='diet'?'un plan nutricional':'un entrenamiento'));continue}
+    try{const r=await readPlanFiles([f]),d=(r.j&&r.j.data)||{},k=d.diet?'diet':d.training?'training':'';
+      if(!k){toast(f.name+': no es un plan nutricional ni un entrenamiento');continue}
       const o={};o[k]=d[k];if(k==='training'&&d.run)o.run=d.run;
       const fm=/(\d{4})-(\d\d)-(\d\d)/.exec(f.name),iso=fm?fm[0]:(k==='diet'?d.diet.inicio:(d.training.meso||{}).start)||'';
-      got.push({name:f.name,data:o,iso,rep:r.rep||[],file:f});
+      got.push({name:f.name,k,data:o,iso,rep:r.rep||[],file:f});
     }catch(e){console.error(e);toast('No he podido leer '+f.name)}
   }
   if(!got.length)return;
-  const box=impBox('<h3 style="margin:0 0 6px">Añadir al historial de '+HK[k]+'</h3><p class="muted" style="margin:0 0 10px">Revisa la fecha en la que empezó cada plan. El plan actual de '+esc(first(c.name))+' no cambia.</p><ul class="ph-l">'+
-    got.map((g,i)=>'<li class="ph-i"><div><b>'+esc(g.name)+'</b><span>'+esc(histSum(g.data,k))+'</span></div><label class="muted" style="font-size:13px">Empezó el <input type="date" class="in" data-phd="'+i+'" value="'+esc(g.iso)+'"></label></li>').join('')+'</ul>',
-    '<button type="button" class="btn" data-ph="open" data-k="'+k+'">Cancelar</button><button type="button" class="btn primary" data-ib="apply">Añadir al historial</button>');
+  const box=impBox('<h3 style="margin:0 0 6px">Añadir al historial</h3><p class="muted" style="margin:0 0 10px">Revisa la fecha en la que empezó cada plan. El plan actual de '+esc(first(c.name))+' no cambia.</p><ul class="ph-l">'+
+    got.map((g,i)=>'<li class="ph-i"><div><b><i class="ph-tag ph-'+g.k+'">'+HTAG[g.k]+'</i> '+esc(g.name)+'</b><span>'+esc(histSum(g.data,g.k))+'</span></div><label class="muted" style="font-size:13px">Empezó el <input type="date" class="in" data-phd="'+i+'" value="'+esc(g.iso)+'"></label></li>').join('')+'</ul>',
+    '<button type="button" class="btn" data-ph="open">Cancelar</button><button type="button" class="btn primary" data-ib="apply">Añadir al historial</button>');
   box._apply=()=>{
     got.forEach((g,i)=>{const inp=box.querySelector('[data-phd="'+i+'"]'),s=isoTs(inp&&inp.value)||Date.now();
-      c.planHist=c.planHist||[];c.planHist.push({id:nid(),from:s,ts:s,kind:k,label:'',added:true,fname:g.name,file:URL.createObjectURL(g.file),data:JSON.parse(JSON.stringify(g.data))})});
-    histFixEnds(c,k);renderAll();markDirty();toast(got.length===1?'Plan añadido al historial ✓':got.length+' planes añadidos al historial ✓');
-    setTimeout(()=>impBox(histList(c,k),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>'),0);
+      c.planHist=c.planHist||[];c.planHist.push({id:nid(),from:s,ts:s,kind:g.k,label:'',added:true,fname:g.name,file:URL.createObjectURL(g.file),data:JSON.parse(JSON.stringify(g.data))})});
+    new Set(got.map(g=>g.k)).forEach(k=>histFixEnds(c,k));renderAll();markDirty();toast(got.length===1?'Plan añadido al historial ✓':got.length+' planes añadidos al historial ✓');
+    setTimeout(()=>impBox(histList(c),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>'),0);
   };
 }
-document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset||!t.dataset.phadd||!t.files||!t.files.length)return;const c=cur();if(!c)return;const fl=Array.from(t.files);t.value='';histAddFiles(c,t.dataset.phadd,fl)});
+document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset||!t.dataset.phadd||!t.files||!t.files.length)return;const c=cur();if(!c)return;const fl=Array.from(t.files);t.value='';histAddFiles(c,fl)});
 function histRecover(c,h,k){
   const d={};
   if(k==='diet'){d.diet=JSON.parse(JSON.stringify(h.data.diet));if(c.diet)['edad','altura','nivel','dur','inicio','trainDays'].forEach(x=>{if(c.diet[x]!==undefined)d.diet[x]=c.diet[x]})}
@@ -5422,21 +5435,16 @@ function histDel(c,h,k){
     if(typeof h.file==='string'&&h.file.indexOf('sb:')===0)sb.storage.from('media').remove([h.file.slice(3)]).catch(e=>console.warn(e))}
 }
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ph]');if(!b)return;const c=cur();if(!c||RB.role!=='coach')return;const k=b.dataset.k,a=b.dataset.ph;
-  if(a==='open'){const f=$('#histFs');if(f)f.remove();impBox(histList(c,k),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>');return}
+  if(a==='open'){const f=$('#histFs');if(f)f.remove();impBox(histList(c),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>');return}
   const h=histGet(c,k,b.dataset.id);if(!h)return;
   if(a==='ver'){histFs(c,h,k);return}
   if(a==='dl'){histDownload(c,h,k);return}
-  const back='<button type="button" class="btn" data-ph="open" data-k="'+k+'">Volver</button>',when=histWhen(h).replace(/^./,x=>x.toLowerCase());
+  const back='<button type="button" class="btn" data-ph="open">Volver</button>',when=histWhen(h).replace(/^./,x=>x.toLowerCase());
   if(a==='del'){
     const box=impBox('<h3 style="margin:0 0 6px">¿Eliminar este plan del historial?</h3><p class="muted" style="margin:0">'+(k==='diet'?'Dieta':'Entrenamiento')+' '+esc(when)+'. No se puede deshacer. El plan actual no cambia.</p>',back+'<button type="button" class="btn danger-l" data-ib="apply">Eliminar</button>');
-    box._apply=()=>{histDel(c,h,k);renderAll();markDirty();toast('Eliminado del historial');setTimeout(()=>impBox(histList(c,k),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>'),0)};return}
+    box._apply=()=>{histDel(c,h,k);renderAll();markDirty();toast('Eliminado del historial');setTimeout(()=>impBox(histList(c),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>'),0)};return}
   const box=impBox('<h3 style="margin:0 0 6px">¿Volver a '+(k==='diet'?'esta dieta':'este entrenamiento')+'?</h3><p class="muted" style="margin:0">'+(k==='diet'?'La dieta que usó '+esc(first(c.name))+' '+esc(when)+' vuelve a ser su dieta. Su entrenamiento no cambia.':'El entrenamiento que usó '+esc(first(c.name))+' '+esc(when)+' vuelve a ser el suyo'+(h.data.run?' (con la carrera)':'')+', empezando hoy por la semana 1. Su dieta no cambia.')+' El plan actual no se pierde: pasa al historial con la fecha de hoy.</p>',back+'<button type="button" class="btn primary" data-ib="apply">Volver a este plan</button>');
   box._apply=()=>{histRecover(c,h,k);renderAll();markDirty();toast((k==='diet'?'Dieta':'Entrenamiento')+' cambiado ✓')}});
-function importCard(c){
-  if(RB.role!=='coach')return '';
-  return '<section class="card acc-card"><h2>Plan desde Word / Excel</h2><p class="muted" style="margin:0 0 10px">Sube tus plantillas tal cual: el plan nutricional (Word), el entrenamiento (Excel) y, si los tienes, la carrera, la composición corporal o la ficha inicial. Puedes elegir varios a la vez. Se actualizan la dieta, el entrenamiento, el objetivo y la fase; sus registros, mensajes y fotos no se tocan. Antes de aplicar nada te enseño lo que he leído y los avisos.</p>'+
-   '<div class="actions"><label class="btn sm primary">Subir Word / Excel<input id="upImp" class="sr-file" type="file" accept=".docx,.xlsx,.json,application/json" multiple></label></div></section>';
-}
 /* ---------- leer Word / Excel en el navegador (mismo importador que uso yo: tools/importer.py) ---------- */
 let PYO=null;
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('No se pudo cargar '+src));document.head.appendChild(s)})}
@@ -5595,16 +5603,17 @@ if(IOS_PWA){window.print=function(){const pr=document.getElementById('printroot'
 
 /* ---------- «Ver como cliente»: solo lectura para el entrenador ---------- */
 const PV=()=>RB.role==='coach'&&state.mode==='client';
-const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop']);
+const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop','calTop','calGo','strPick','wgMeal','pickDay','cmp','mKind','esub']);
 function pvBlock(e){toast('Vista de cliente: solo lectura. No se cambia nada.');e.preventDefault();e.stopImmediatePropagation()}
 document.addEventListener('click',e=>{
   if(!PV())return;const m=$('#main');if(!m||!m.contains(e.target))return;
   const t=e.target.closest('[data-act]');
   if(t){if(!PV_OK.has(t.dataset.act))pvBlock(e);return}
-  if(e.target.closest('input,select,textarea,label,.whx,.wh'))pvBlock(e);
+  if(e.target.closest('input,textarea,label,.whx,.wh'))pvBlock(e);
 },true);
-['keydown','beforeinput','paste'].forEach(ev=>document.addEventListener(ev,e=>{if(!PV())return;const m=$('#main');if(m&&m.contains(e.target)&&e.target.matches('input,textarea,select,[contenteditable],.wh')&&!(ev==='keydown'&&/^(Tab|Shift|Escape)$/.test(e.key)))pvBlock(e)},true));
-['change','input'].forEach(ev=>document.addEventListener(ev,e=>{if(PV()){const m=$('#main');if(m&&m.contains(e.target)){e.stopImmediatePropagation()}}},true));
+['keydown','beforeinput','paste'].forEach(ev=>document.addEventListener(ev,e=>{if(!PV())return;const m=$('#main');if(m&&m.contains(e.target)&&e.target.matches('input,textarea,[contenteditable],.wh')&&!(ev==='keydown'&&/^(Tab|Shift|Escape)$/.test(e.key)))pvBlock(e)},true));
+['change','input'].forEach(ev=>document.addEventListener(ev,e=>{if(PV()){const m=$('#main'),t=e.target;if(m&&m.contains(t)){e.stopImmediatePropagation();
+  if(t.tagName==='SELECT'){const o=Array.from(t.options).find(x=>x.defaultSelected)||t.options[0];if(o)t.value=o.value;if(ev==='change')toast('Vista de cliente: solo lectura. No se cambia nada.')}}}},true));
 new MutationObserver(()=>{document.body.classList.toggle('pv',PV())}).observe(document.documentElement,{attributes:true,attributeFilter:['data-screen'],subtree:true});
 
 /* versión visible al pie de la página */

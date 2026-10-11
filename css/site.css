@@ -76,6 +76,11 @@ p { margin: 0; }
 .legal .back { display: inline-block; margin-top: 40px; font-weight: 600; color: var(--teal-ink); }
 .lang { display: flex; border: 1.5px solid var(--band-line); border-radius: 999px; padding: 2px; font-size: 12px; font-weight: 600; letter-spacing: .04em; }
 .lang a { text-decoration: none; color: var(--band-muted); padding: 5px 9px; border-radius: 999px; transition: color .2s, background .2s; }
+.lang a { display: inline-flex; align-items: center; gap: 5px; }
+.lang a::before { content: ""; width: 16px; height: 11px; border-radius: 2px; background: center / cover no-repeat; box-shadow: 0 0 0 1px rgba(255,255,255,.18); flex: none; }
+.lang a[lang="es"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='%23AA151B'/%3E%3Crect y='.5' width='3' height='1' fill='%23F1BF00'/%3E%3C/svg%3E"); }
+.lang a[lang="en"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3CclipPath id='c'%3E%3Cpath d='M0 0v30h60V0z'/%3E%3C/clipPath%3E%3CclipPath id='t'%3E%3Cpath d='M30 15h30v15zv15H0zH0V0zV0h30z'/%3E%3C/clipPath%3E%3Cg clip-path='url%28%23c%29'%3E%3Cpath d='M0 0v30h60V0z' fill='%23012169'/%3E%3Cpath d='M0 0l60 30m0-30L0 30' stroke='%23fff' stroke-width='6'/%3E%3Cpath d='M0 0l60 30m0-30L0 30' clip-path='url%28%23t%29' stroke='%23C8102E' stroke-width='4'/%3E%3Cpath d='M30 0v30M0 15h60' stroke='%23fff' stroke-width='10'/%3E%3Cpath d='M30 0v30M0 15h60' stroke='%23C8102E' stroke-width='6'/%3E%3C/g%3E%3C/svg%3E"); background-size: 100% 100%; }
 .lang a:hover { color: var(--band-fg); }
-.lang a[aria-current] { background: var(--teal); color: var(--on-accent); }
-@media (max-width: 560px) { .site-head .wrap { gap: 10px; } .lang a { padding: 5px 7px; } }
+.lang a[aria-current] { background: color-mix(in srgb, var(--teal) 28%, transparent); color: var(--band-fg); box-shadow: inset 0 0 0 1.5px var(--teal); }
+@media (max-width: 560px) { .site-head .wrap { gap: 10px; } .lang a { padding: 5px 6px; gap: 4px; } }
+@media (max-width: 400px) { .lang a { font-size: 0; gap: 0; padding: 6px 7px; } }

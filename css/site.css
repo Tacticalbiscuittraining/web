@@ -74,3 +74,8 @@ p { margin: 0; }
 .legal th, .legal td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .legal th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--teal-ink); font-weight: 500; }
 .legal .back { display: inline-block; margin-top: 40px; font-weight: 600; color: var(--teal-ink); }
+.lang { display: flex; border: 1.5px solid var(--band-line); border-radius: 999px; padding: 2px; font-size: 12px; font-weight: 600; letter-spacing: .04em; }
+.lang a { text-decoration: none; color: var(--band-muted); padding: 5px 9px; border-radius: 999px; transition: color .2s, background .2s; }
+.lang a:hover { color: var(--band-fg); }
+.lang a[aria-current] { background: var(--teal); color: var(--on-accent); }
+@media (max-width: 560px) { .site-head .wrap { gap: 10px; } .lang a { padding: 5px 7px; } }

@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tactical Biscuit Training · Personal training and sports nutrition in Valencia</title>
+<meta name="description" content="Personal training and sports nutrition in one plan, with ongoing support every step of the way. In person and online.">
+<meta name="theme-color" content="#0B1211">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tactical Biscuit Training">
+<meta property="og:description" content="Personal training and sports nutrition in one plan. In person and online.">
+<meta property="og:image" content="https://tacticalbiscuit.com/img/logo.jpg">
+<meta property="og:url" content="https://tacticalbiscuit.com/en/">
+<meta property="og:locale" content="en_GB">
+<link rel="canonical" href="https://tacticalbiscuit.com/en/">
+<link rel="alternate" hreflang="es" href="https://tacticalbiscuit.com/">
+<link rel="alternate" hreflang="en" href="https://tacticalbiscuit.com/en/">
+<link rel="alternate" hreflang="x-default" href="https://tacticalbiscuit.com/">
+<link rel="icon" type="image/png" href="../app/icons/icon-192.png">
+<link rel="apple-touch-icon" href="../app/icons/apple-touch-icon.png">
+<link rel="preload" href="../fonts/big-shoulders-display-latin-900-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/site.css">
+<style>
+section { padding-block: 96px 0; }
+.sec-head { display: grid; gap: 14px; max-width: 720px; margin-bottom: 40px; }
+.sec-head h2 { font-size: clamp(34px, 4.4vw, 50px); font-weight: 900; }
+.sec-head p { color: var(--muted); font-size: 17px; }
+.sec-head p.eyebrow { font-size: 12px; color: var(--teal-ink); }
+
+/* Portada */
+.hero-band { background: var(--band); color: var(--band-fg); overflow: hidden; position: relative; }
+.hero-band::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 70% at 85% 40%, color-mix(in srgb, var(--teal) 20%, transparent), transparent 70%); pointer-events: none; }
+.hero { position: relative; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, .8fr); gap: 56px; align-items: center; padding-block: 72px 80px; }
+.hero .eyebrow { color: var(--teal); }
+.hero h1 { font-size: clamp(42px, 6.6vw, 80px); font-weight: 900; margin-top: 18px; }
+.hero h1 em { font-style: normal; color: var(--teal); }
+.hero .lead { font-size: 18px; color: var(--band-muted); max-width: 54ch; margin-top: 24px; }
+.hero .lead strong { color: var(--band-fg); font-weight: 600; }
+.hero-logo { width: 100%; height: auto; max-width: 380px; aspect-ratio: 1; justify-self: end; border-radius: 50%; box-shadow: 0 0 0 2px var(--teal), 0 0 0 12px var(--band), 0 0 0 13px var(--band-line), 0 30px 80px -20px color-mix(in srgb, var(--teal) 45%, transparent); }
+.cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 15px; text-decoration: none; padding: 14px 24px; min-height: 50px; border-radius: 999px; border: 2px solid transparent; transition: filter .2s, background .2s, color .2s, transform .2s; }
+.btn:hover { transform: translateY(-1px); }
+.btn.primary { background: var(--coral); color: var(--on-accent); }
+.btn.primary:hover { filter: brightness(1.07); }
+.btn.ghost { border-color: color-mix(in srgb, var(--band-fg) 40%, transparent); color: var(--band-fg); }
+.btn.ghost:hover { background: var(--band-fg); color: var(--band); }
+.lema { position: relative; display: flex; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap; padding-block: 22px; border-top: 1px solid var(--band-line); font-family: var(--font-display); font-weight: 800; font-size: clamp(16px, 3vw, 26px); text-transform: uppercase; letter-spacing: .14em; color: var(--band-muted); }
+.lema span:nth-child(2) { color: var(--teal); }
+.lema span:nth-child(3) { color: var(--coral); }
+
+/* Qué hago */
+.pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.pillar { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; display: grid; gap: 12px; align-content: start; }
+.pillar .ico { width: 44px; height: 44px; border-radius: 12px; background: var(--teal-soft); color: var(--teal-ink); display: grid; place-items: center; }
+.pillar h3 { font-size: 26px; font-weight: 800; }
+.pillar p { color: var(--muted); font-size: 15px; }
+.goals { margin-top: 40px; display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 20px; align-items: start; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 16px; font-size: 15px; font-weight: 600; }
+
+/* Método: línea de pasos */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; position: relative; }
+.steps::before { content: ""; position: absolute; top: 27px; left: 28px; right: calc(33.33% - 28px); height: 2px; background: linear-gradient(90deg, var(--coral), var(--teal)); opacity: .55; }
+.step { position: relative; display: grid; gap: 8px; align-content: start; }
+.step .n { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); border: 2px solid var(--coral); color: var(--coral); font-family: var(--font-display); font-weight: 900; font-size: 26px; position: relative; z-index: 1; margin-bottom: 8px; }
+.step:nth-child(2) .n { border-color: color-mix(in srgb, var(--coral) 50%, var(--teal)); color: color-mix(in srgb, var(--coral) 50%, var(--teal)); }
+.step:nth-child(3) .n { border-color: var(--teal); color: var(--teal-ink); }
+.step h3 { font-size: 30px; font-weight: 800; }
+.step p { color: var(--muted); font-size: 15px; max-width: 30ch; }
+
+/* App */
+.app-band { background: var(--band); color: var(--band-fg); margin-top: 96px; padding-block: 88px; overflow: hidden; }
+.app-band section { padding: 0; }
+.app-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; align-items: center; }
+.app-band .sec-head p { color: var(--band-muted); }
+.app-band .eyebrow, .app-band .sec-head p.eyebrow { color: var(--teal); }
+.feats { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.feats li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 12px; color: var(--band-muted); }
+.feats li b { color: var(--band-fg); font-weight: 600; }
+.feats svg { color: var(--teal); margin-top: 3px; }
+.phones { display: flex; justify-content: center; align-items: flex-start; gap: 18px; }
+.phone { width: 34%; max-width: 220px; border-radius: 30px; padding: 7px; background: #1C2726; box-shadow: 0 0 0 1px #2C3A38, 0 40px 80px -30px #000; }
+.phone img { border-radius: 24px; width: 100%; height: auto; aspect-ratio: 390 / 650; object-fit: cover; object-position: top; }
+.phone:nth-child(2) { transform: translateY(-28px); }
+
+/* Sobre mí */
+.about { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: start; }
+.about .txt p + p { margin-top: 16px; }
+.about .txt p { max-width: 62ch; }
+.story { margin-top: 32px; padding: 26px 28px; border-radius: var(--radius); background: var(--teal-soft); border-left: 4px solid var(--teal); }
+.story .eyebrow { margin-bottom: 10px; }
+.stats { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-bottom: 24px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 22px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; }
+.stat span { font-size: 15px !important; }
+.stat b { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: 1; white-space: nowrap; color: var(--teal-ink); }
+.stat span { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.edu { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 22px 8px; }
+.edu ul { list-style: none; padding: 0; margin: 12px 0 0; }
+.edu li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; border-top: 1px solid var(--line); font-size: 15px; font-weight: 600; line-height: 1.4; }
+.edu li b { flex: none; font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; color: var(--teal-ink); background: var(--teal-soft); border-radius: 999px; padding: 4px 10px; }
+
+/* Servicios */
+.svc-feat { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px 40px; align-items: center; padding: 34px; border-radius: var(--radius); background: var(--band); color: var(--band-fg); position: relative; overflow: hidden; }
+.svc-feat::after { content: ""; position: absolute; right: -80px; top: -80px; width: 260px; height: 260px; border-radius: 50%; border: 40px solid color-mix(in srgb, var(--teal) 18%, transparent); }
+.svc-feat .tag { background: var(--teal); color: var(--on-accent); }
+.svc-feat h3 { font-size: clamp(30px, 3.6vw, 42px); font-weight: 900; margin-top: 12px; }
+.svc-feat p { color: var(--band-muted); margin-top: 10px; max-width: 58ch; }
+.svc-feat ul { list-style: none; padding: 0; margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--band-fg); }
+.svc-feat li::before { content: "✓ "; color: var(--teal); font-weight: 600; }
+.svc-feat .btn { position: relative; z-index: 1; }
+.tag { justify-self: start; display: inline-block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--teal-soft); color: var(--teal-ink); font-weight: 500; }
+.tag.coral { background: color-mix(in srgb, var(--coral) 16%, transparent); color: var(--coral); }
+.svc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.svc { cursor: pointer; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; transition: border-color .2s, transform .2s; }
+.svc:hover { border-color: var(--teal); transform: translateY(-2px); }
+.svc { text-decoration: none; color: inherit; }
+.svc-go { margin-top: auto; padding-top: 6px; font-size: 14px; font-weight: 600; color: var(--teal-ink); display: inline-flex; gap: 6px; }
+.svc:hover .svc-go span { transform: translateX(3px); }
+.svc-go span { transition: transform .2s; }
+.svc h3 { font-family: var(--font-body); text-transform: none; font-size: 20px; font-weight: 600; line-height: 1.3; letter-spacing: 0; }
+.svc p { color: var(--muted); font-size: 15px; }
+.svc-cta { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; padding: 26px 30px; border-radius: var(--radius); border: 1.5px dashed var(--line); }
+.svc-cta h3 { font-size: 28px; font-weight: 800; }
+.svc-cta p { color: var(--muted); margin-top: 4px; }
+
+/* Preguntas */
+.faq-groups { display: grid; gap: 36px; max-width: 860px; }
+.faq { display: grid; gap: 10px; }
+.faq-h { font-family: var(--font-mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--teal-ink); margin-bottom: 4px; }
+.faq details { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.faq summary { cursor: pointer; list-style: none; padding: 20px 24px; font-weight: 600; font-size: 17px; display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font-family: var(--font-display); font-size: 30px; line-height: 1; color: var(--teal-ink); transition: transform .25s; flex: none; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { padding: 0 24px 22px; color: var(--muted); max-width: 70ch; }
+
+/* Contacto */
+.contact { background: var(--band); color: var(--band-fg); margin-top: 96px; padding-block: 88px 64px; }
+.contact section { padding: 0; }
+.contact .sec-head p { color: var(--band-muted); }
+.contact .eyebrow, .contact .sec-head p.eyebrow { color: var(--teal); }
+.ct-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; align-items: center; }
+.ct-grid .sec-head { margin-bottom: 0; }
+.ct-list { display: grid; gap: 12px; }
+.ct { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 18px 22px; border-radius: var(--radius); background: var(--band-2); border: 1px solid var(--band-line); text-decoration: none; color: var(--band-fg); transition: border-color .2s, transform .2s, background .2s; }
+.ct:hover { border-color: var(--teal); transform: translateY(-2px); }
+.ct-ic { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--teal) 16%, transparent); color: var(--teal); }
+.ct-txt { display: grid; gap: 2px; min-width: 0; }
+.ct-txt b { font-size: 18px; font-weight: 600; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.ct-txt b em { font-style: normal; font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--on-accent); background: var(--teal); border-radius: 999px; padding: 3px 8px; }
+.ct-txt small { font-family: var(--font-mono); font-size: 13px; color: var(--band-muted); overflow-wrap: anywhere; }
+.ct-arr { font-size: 22px; color: var(--band-muted); transition: transform .2s, color .2s; }
+.ct:hover .ct-arr { transform: translateX(4px); color: var(--teal); }
+.ct-main { background: color-mix(in srgb, var(--teal) 12%, var(--band-2)); border-color: color-mix(in srgb, var(--teal) 45%, var(--band-line)); }
+.ct-main .ct-ic { background: #25D366; color: #fff; }
+
+/* WhatsApp flotante (móvil) */
+.wa-float { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 60; width: 58px; height: 58px; border-radius: 50%; background: #25D366; color: #fff; display: none; place-items: center; box-shadow: 0 10px 30px -6px rgba(0,0,0,.45); opacity: 0; transform: translateY(20px); transition: opacity .3s, transform .3s; pointer-events: none; }
+.wa-float.show { opacity: 1; transform: none; pointer-events: auto; }
+@media (max-width: 860px) { .wa-float { display: grid; } }
+
+/* Aparición suave al hacer scroll */
+.rv { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+.rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } }
+
+@media (max-width: 920px) {
+  .hero, .app-grid, .about { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .hero { padding-block: 40px 56px; }
+  .hero-logo { justify-self: start; max-width: 190px; order: -1; }
+  .svc-feat::after { display: none; }
+  .ct-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .pillars, .svc-grid { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .steps::before { top: 28px; bottom: 28px; left: 27px; right: auto; width: 2px; height: auto; background: linear-gradient(180deg, var(--coral), var(--teal)); }
+  .step { grid-template-columns: 56px minmax(0, 1fr); column-gap: 18px; row-gap: 4px; }
+  .step .n { grid-row: span 2; margin: 0; }
+  .step h3 { align-self: end; }
+  .svc-feat { grid-template-columns: minmax(0, 1fr); padding: 26px; }
+  .goals { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+}
+@media (max-width: 560px) {
+  section { padding-block-start: 72px; }
+  .app-band, .contact { margin-top: 72px; padding-block: 64px; }
+  .stat b { font-size: 34px; }
+  .phones { gap: 10px; }
+  .phone { padding: 5px; border-radius: 22px; }
+  .phone img { border-radius: 18px; }
+  .phone:nth-child(2) { transform: translateY(-16px); }
+  .brand b { font-size: 16px; }
+  .ct { grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; padding: 16px; }
+  .ct-ic { width: 44px; height: 44px; }
+  .ct-txt small { font-family: var(--font-body); font-size: 13px; }
+  .btn-client { padding: 7px 12px; }
+  .lema { letter-spacing: .08em; }
+}
+/* Entrada: Impacto + barrido */
+#intro { display: none; }
+html.intro #intro { display: block; }
+html.intro, html.intro body { overflow: hidden; }
+#intro { position: fixed; inset: 0; z-index: 9999; cursor: pointer; overflow: hidden; }
+#intro .i-bg { position: absolute; inset: 0; display: grid; place-items: center; background: var(--band); background-image: radial-gradient(circle at 50% 45%, #0F2B28 0%, var(--band) 62%); }
+#intro .i-core { position: relative; display: grid; justify-items: center; gap: 26px; }
+#intro .i-logo { width: min(46vw, 240px); height: auto; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 2px var(--teal); animation: iDrop .62s cubic-bezier(.55,0,.75,.2) both; }
+#intro .i-wave { position: absolute; left: 50%; top: calc(min(46vw, 240px) / 2); width: min(46vw, 240px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 3px solid var(--teal); opacity: 0; animation: iWave .9s cubic-bezier(.2,.7,.2,1) .62s; }
+#intro .i-wave.w2 { border-color: var(--coral); animation-delay: .78s; }
+#intro .i-words { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-family: var(--font-display); font-weight: 900; font-size: clamp(20px, 5vw, 32px); letter-spacing: .16em; text-transform: uppercase; color: var(--band-fg); }
+#intro .i-words span { opacity: 0; animation: iStamp .35s cubic-bezier(.2,.9,.3,1.3) forwards; }
+#intro .i-words span:nth-child(1) { animation-delay: 1.25s; }
+#intro .i-words span:nth-child(2) { color: var(--teal); animation-delay: 1.6s; }
+#intro .i-words span:nth-child(3) { color: var(--coral); animation-delay: 1.95s; }
+#intro .i-shake { animation: iShake .35s linear .62s; }
+#intro .i-skip { position: absolute; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--band-muted); opacity: .7; }
+#intro .i-wipe { position: absolute; top: -10%; bottom: -10%; left: -30%; right: -30%; transform: translateX(-130%) skewX(-14deg); z-index: 2; }
+#intro .i-wipe.w1 { background: var(--coral); } #intro .i-wipe.w2 { background: var(--teal); }
+#intro.out .i-wipe.w1 { animation: iWipe 1.1s cubic-bezier(.76,0,.24,1) forwards; }
+#intro.out .i-wipe.w2 { animation: iWipe 1.1s cubic-bezier(.76,0,.24,1) .15s forwards; }
+#intro.out .i-bg { animation: iHide .01s linear .55s forwards; }
+#intro.out { pointer-events: none; }
+@keyframes iDrop { 0% { transform: scale(3); opacity: 0; filter: blur(12px); } 100% { transform: none; opacity: 1; filter: none; } }
+@keyframes iWave { 0% { opacity: .9; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(2.6); } }
+@keyframes iStamp { 0% { opacity: 0; transform: scale(1.8); } 100% { opacity: 1; transform: none; } }
+@keyframes iShake { 0%,100% { transform: none; } 20% { transform: translate(-6px,4px); } 40% { transform: translate(6px,-4px); } 60% { transform: translate(-4px,-3px); } 80% { transform: translate(4px,3px); } }
+@keyframes iWipe { to { transform: translateX(130%) skewX(-14deg); } }
+@keyframes iHide { to { visibility: hidden; } }
+
+</style>
+<script>
+(function () { try {
+  var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, seen = false;
+  try { seen = sessionStorage.getItem('tbIntro') === '1'; } catch (e) {}
+  if (!rm && !seen) { document.documentElement.classList.add('intro'); }
+} catch (e) {} })();
+</script>
+
+</head>
+<body>
+<div id="intro" role="button" tabindex="0" aria-label="Skip the intro animation">
+  <div class="i-bg"><div class="i-shake"><div class="i-core">
+    <span class="i-wave"></span><span class="i-wave w2"></span>
+    <img class="i-logo" src="../img/logo.jpg" alt="Tactical Biscuit Training" width="240" height="240">
+    <div class="i-words"><span>Strength</span><span>Endurance</span><span>Discipline</span></div>
+  </div></div><span class="i-skip">Tap to skip</span></div>
+  <span class="i-wipe w1"></span><span class="i-wipe w2"></span>
+</div>
+<script>
+(function () {
+  var h = document.documentElement, el = document.getElementById('intro');
+  if (!el) return;
+  if (!h.classList.contains('intro')) { el.remove(); return; }
+  try { sessionStorage.setItem('tbIntro', '1'); } catch (e) {}
+  var out = false;
+  function done() { h.classList.remove('intro'); el.remove(); }
+  function exit() { if (out) return; out = true; el.classList.add('out'); setTimeout(function () { h.classList.remove('intro'); }, 560); setTimeout(done, 1350); }
+  setTimeout(exit, 2600);
+  setTimeout(done, 6000);
+  el.addEventListener('click', exit);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') exit(); });
+})();
+</script>
+
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="Tactical Biscuit Training, home">
+      <img src="../img/logo-s.jpg" alt="" width="40" height="40">
+      <b>Tactical Biscuit<br>Training</b>
+    </a>
+    <nav class="site-nav" aria-label="Sections">
+      <a href="#que-hago">What I do</a>
+      <a href="#metodo">Method</a>
+      <a href="#app">The app</a>
+      <a href="#sobre-mi">About me</a>
+      <a href="#servicios">Services</a>
+      <a href="#contacto">Contact</a>
+    </nav>
+    <nav class="lang" aria-label="Language"><a href="../" lang="es" hreflang="es">ES</a><a href="./" lang="en" aria-current="page">EN</a></nav>
+    <a class="btn-client" href="../app/">Client login</a>
+  </div>
+</header>
+
+<main id="inicio">
+<div class="hero-band">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Personal training · Sports nutrition coaching</p>
+        <h1>Training and sports nutrition <em>in one plan</em></h1>
+        <p class="lead">Individual training and sports nutrition plans, designed around your goal, with ongoing support and direct contact every step of the way.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#contacto">Get in touch</a>
+          <a class="btn ghost" href="#servicios">See services</a>
+        </div>
+      </div>
+      <img class="hero-logo" src="../img/logo.jpg" alt="Tactical Biscuit Training logo" width="380" height="380">
+    </div>
+    <div class="lema" aria-label="Motto"><span>Strength</span><span>Endurance</span><span>Discipline</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section id="que-hago">
+    <div class="sec-head rv">
+      <h2>What I do</h2>
+      <p>Training and nutrition in a single plan, built so that every part brings you closer to your goal.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar rv">
+        <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/></svg></span>
+        <h3>Personalised training</h3>
+        <p>A programme designed for your level and your goal, evolving in phases as you progress.</p>
+      </div>
+      <div class="pillar rv">
+        <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M17 3c-2 1-3 4-3 7h3v11"/></svg></span>
+        <h3>Sports nutrition</h3>
+        <p>A meal plan tailored to your sport and your goal, flexible enough for everyday life, with alternatives for every meal and a shopping list.</p>
+      </div>
+      <div class="pillar rv">
+        <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+        <h3>In person and online</h3>
+        <p>One-to-one sessions in person, or remote coaching from anywhere, with the same level of support.</p>
+      </div>
+    </div>
+    <div class="goals rv">
+      <p class="eyebrow" style="padding-top:10px">Who it’s for</p>
+      <div class="chips">
+        <span class="chip">Losing fat</span>
+        <span class="chip">Building strength and muscle</span>
+        <span class="chip">Preparing for a race or event</span>
+        <span class="chip">Starting from scratch</span>
+        <span class="chip">Getting back into a routine</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="metodo">
+    <div class="sec-head rv">
+      <h2>How we work</h2>
+      <p>Three steps, no generic templates.</p>
+    </div>
+    <ol class="steps rv">
+      <li class="step"><span class="n">1</span><h3>Assessment</h3><p>Interview, goals and a body composition measurement.</p></li>
+      <li class="step"><span class="n">2</span><h3>Plan</h3><p>Your training and your nutrition, ready in the app.</p></li>
+      <li class="step"><span class="n">3</span><h3>Follow-up</h3><p>Ongoing contact, a monthly review and adjustments based on your results.</p></li>
+    </ol>
+  </section>
+</div>
+
+<div class="app-band" id="app">
+  <div class="wrap">
+    <section class="app-grid">
+      <div>
+        <div class="sec-head rv" style="margin-bottom:28px">
+          <p class="eyebrow">Team Biscuit app</p>
+          <h2>Your plan, always on your phone</h2>
+          <p>Every client gets their own app with everything they need day to day, and I see your progress as it happens.</p>
+        </div>
+        <ul class="feats rv">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Today’s workout</b>, with sets, reps and the weight from your last session.</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Your diet in grams</b>, with alternatives to swap foods without leaving the plan.</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Shopping list</b> prepared from your plan.</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Runs and progress</b>: log your runs and follow your week at a glance.</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Direct contact</b> with me from within the app.</span></li>
+        </ul>
+      </div>
+      <div class="phones rv" aria-label="Team Biscuit app screenshots">
+        <div class="phone"><img src="../img/app-home.webp" alt="App home screen (sample client)" width="390" height="650"></div>
+        <div class="phone"><img src="../img/app-ent.webp" alt="Training screen" width="390" height="650"></div>
+        <div class="phone"><img src="../img/app-diet.webp" alt="Diet screen" width="390" height="650"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="wrap">
+  <section id="sobre-mi">
+    <div class="sec-head rv">
+      <p class="eyebrow">About me</p>
+      <h2>Behind every plan</h2>
+    </div>
+    <div class="about">
+      <div class="txt rv">
+        <p>I’ve been bodybuilding for more than 15 years and doing sport all my life: strength training, cycling, running and mountain sports. I know what it takes to build a physique and stay consistent.</p>
+        <p>As a personal trainer and sports nutrition coach, I bring both together in one plan so that training and nutrition work as a team.</p>
+        <p>My approach is based on scientific evidence and hands-on experience. Every plan is adapted to the person following it: I ask for commitment and, in return, I adjust the plan whenever your life calls for it.</p>
+        <div class="story">
+          <p class="eyebrow">My story</p>
+          <p>In 2016 I survived a serious road accident that left me in a coma and took a year of rehabilitation before I could walk again. That experience shapes how I understand training: consistency, gradual progression and respect for each person’s starting point.</p>
+        </div>
+      </div>
+      <div class="rv">
+        <div class="stats">
+          <div class="stat"><b>15+ years</b><span>of bodybuilding experience</span></div>
+        </div>
+        <div class="edu">
+          <p class="eyebrow">Qualifications</p>
+          <ul>
+            <li><span>High-Performance Personal Trainer and Advanced Bodybuilding Techniques</span></li>
+            <li><span>High-Performance Sports Nutrition and Advanced Dietetics</span></li>
+            <li><span>Sports Supplementation</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios">
+    <div class="sec-head rv">
+      <p class="eyebrow">Services</p>
+      <h2>Choose how you want to work</h2>
+      <p>In person, or online from anywhere. Every plan starts with an assessment. Tap the one you’re interested in and message me directly.</p>
+    </div>
+
+    <div class="svc-feat rv">
+      <div>
+        <span class="tag">Complete programme</span>
+        <h3>“Total Change” Pack · 90 days</h3>
+        <p>Three months of working together on training and sports nutrition, with continuous support so the change shows and lasts.</p>
+        <ul><li>Initial assessment included</li><li>Training and diet</li><li>Continuous support</li><li>Team Biscuit app</li></ul>
+      </div>
+      <a class="btn primary" href="https://wa.me/34642880408?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%2090-day%20%E2%80%9CTotal%20Change%E2%80%9D%20Pack.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener">I’m interested</a>
+    </div>
+
+    <div class="svc-grid">
+      <a class="svc rv" href="https://wa.me/34642880408?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%20Welcome%20Pack.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag coral">To get started</span><h3>Welcome Pack</h3><p>Interview, body composition analysis and setting up your client profile. The starting point for any plan.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+      <a class="svc rv" href="https://wa.me/34642880408?text=Hi%2C%20I%E2%80%99m%20interested%20in%20online%20Sports%20Nutrition%20Coaching.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">Online</span><h3>Sports Nutrition Coaching</h3><p>An eating plan tailored to your sport and your goal, with a monthly review.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+      <a class="svc rv" href="https://wa.me/34642880408?text=Hi%2C%20I%E2%80%99m%20interested%20in%20online%20Training%20Programming.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">Online</span><h3>Training Programming</h3><p>A personalised, phase-based training programme, with a monthly review.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+      <a class="svc rv" href="https://wa.me/34642880408?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%20Hybrid%20Monthly%20Subscription.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">Online + in person</span><h3>Hybrid Monthly Subscription</h3><p>Your online plan plus one in-person session a month. No minimum term.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+      <a class="svc rv" href="https://wa.me/34642880408?text=Hi%2C%20I%E2%80%99m%20interested%20in%20a%20one-to-one%20in-person%20session.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">In person</span><h3>Single session</h3><p>A one-to-one training session focused on technique and your goal.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+      <a class="svc rv" href="https://wa.me/34642880408?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%2010-session%20pass.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">In person</span><h3>10-session pass</h3><p>Ten one-to-one sessions to train with me on a regular basis.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+    </div>
+
+    <div class="svc-cta rv">
+      <div>
+        <h3>Not sure which to choose?</h3>
+        <p>Tell me your goal and I’ll tell you which option suits you.</p>
+      </div>
+      <a class="btn primary" href="https://wa.me/34642880408?text=Hi%2C%20I%E2%80%99d%20like%20to%20know%20which%20service%20best%20suits%20my%20goal." target="_blank" rel="noopener">Message me on WhatsApp</a>
+    </div>
+  </section>
+
+  <section id="preguntas">
+    <div class="sec-head rv">
+      <p class="eyebrow">FAQ</p>
+      <h2>Your questions answered</h2>
+    </div>
+    <div class="faq-groups">
+      <div class="faq rv">
+        <p class="faq-h">Before you start</p>
+        <details><summary>Do I need experience or to be in shape to start?</summary><p>No. The plan starts from where you really are: your level, your sporting background, your schedule and the equipment you have. We begin with what you can do today and the demands increase gradually, at your pace.</p></details>
+        <details><summary>What does the initial assessment involve?</summary><p>It’s an interview about your goal, your experience, your daily routine and your eating habits, together with a body composition analysis. With that information I set up your profile and design a plan made just for you.</p></details>
+        <details><summary>Do I have to train in a gym?</summary><p>Not necessarily. Your training is adapted to wherever you’ll be working out: the gym, at home with minimal equipment, or outdoors.</p></details>
+        <details><summary>Do you work with injuries or health conditions?</summary><p>My work is training and sports nutrition coaching, not clinical treatment. If you have an injury or a medical condition, or take medication, I adapt the plan following your doctor’s or physiotherapist’s advice, and for the clinical side of your diet I recommend seeing a registered dietitian.</p></details>
+      </div>
+      <div class="faq rv">
+        <p class="faq-h">The plan and follow-up</p>
+        <details><summary>How does online coaching work?</summary><p>You get your plan in the Team Biscuit app: there you see today’s workout, your diet and your progress, and you log what you do. I see your logs as they come in, you can message me whenever you need to, and every month we do a full review to adjust the plan.</p></details>
+        <details><summary>Is the diet very strict? Will I always have to eat the same thing?</summary><p>No. You get specific amounts for each meal, but also equivalent alternatives to swap foods without leaving the plan, plus a ready-made shopping list. The idea is that you can stick to it in everyday life.</p></details>
+        <details><summary>What if I can’t train as planned one week?</summary><p>There are no fixed days: you train when you can during the week. If your schedule changes, you travel or you have a tough week, we talk it through and adjust the plan.</p></details>
+        <details><summary>Do I have to take supplements?</summary><p>They’re not compulsory. The foundation is training, nutrition and rest. I’ll only recommend a supplement if it fits your goal and is backed by science.</p></details>
+        <details><summary>Is it suitable if I’m preparing for a race or other event?</summary><p>Yes. I combine your race plan with strength work and nutrition, organised in phases right up to race day.</p></details>
+      </div>
+      <div class="faq rv">
+        <p class="faq-h">Terms</p>
+        <details><summary>When will I start to see results?</summary><p>It depends on your starting point, your goal and your consistency. At every review we measure your progress, so you can see how you’re doing in the data and not just in the mirror.</p></details>
+        <details><summary>Is there a minimum commitment?</summary><p>The monthly options have no minimum term. The “Total Change” Pack is a fixed 90-day programme.</p></details>
+        <details><summary>How much does it cost?</summary><p>It depends on the service and how you want to work. Message me on WhatsApp, Instagram or email and I’ll send you all the details, with no obligation.</p></details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="contact" id="contacto">
+  <div class="wrap">
+    <section class="ct-grid">
+      <div class="sec-head rv">
+        <p class="eyebrow">Contact</p>
+        <h2>It starts with a message</h2>
+        <p>Tell me your goal and we’ll find the option that suits you. No obligation.</p>
+      </div>
+      <div class="ct-list rv">
+        <a class="ct ct-main" href="https://wa.me/34642880408?text=Hi%2C%20I%E2%80%99d%20like%20to%20receive%20some%20information." target="_blank" rel="noopener">
+          <span class="ct-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.85 9.85 0 0 0 12.04 2zm5.8 14.09c-.24.68-1.41 1.3-1.95 1.35-.5.05-.97.23-3.27-.68-2.76-1.09-4.5-3.91-4.64-4.09-.13-.18-1.1-1.47-1.1-2.8s.7-1.99.95-2.26c.24-.27.53-.34.71-.34l.51.01c.16.01.38-.06.6.46.24.55.79 1.88.86 2.02.07.13.11.29.02.47-.09.18-.13.29-.27.45-.13.16-.28.35-.4.47-.13.13-.27.28-.12.55.16.27.7 1.15 1.5 1.86 1.03.92 1.9 1.2 2.17 1.34.27.13.43.11.58-.07.16-.18.67-.78.85-1.05.18-.27.36-.22.6-.13.24.09 1.56.74 1.83.87.27.13.45.2.51.31.07.11.07.65-.17 1.33z"/></svg></span>
+          <span class="ct-txt"><b>WhatsApp <em>Fastest reply</em></b><small>+34 642 880 408</small></span>
+          <span class="ct-arr" aria-hidden="true">→</span>
+        </a>
+        <a class="ct" href="https://www.instagram.com/tacticalbiscuittraining/" target="_blank" rel="noopener">
+          <span class="ct-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="ct-txt"><b>Instagram</b><small>@tacticalbiscuittraining</small></span>
+          <span class="ct-arr" aria-hidden="true">→</span>
+        </a>
+        <a class="ct" href="mailto:contacto@tacticalbiscuit.com">
+          <span class="ct-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+          <span class="ct-txt"><b>Email</b><small>contacto@tacticalbiscuit.com</small></span>
+          <span class="ct-arr" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </div>
+</div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>© 2026 Tactical Biscuit Training</span>
+    <nav aria-label="Footer links">
+      <a href="../app/">Client login</a>
+      <a href="legal-notice.html">Legal notice</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="cookies.html">Cookies</a>
+    </nav>
+  </div>
+</footer>
+
+<a class="wa-float" id="waFloat" href="https://wa.me/34642880408" aria-label="Message on WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.85 9.85 0 0 0 12.04 2zm5.8 14.09c-.24.68-1.41 1.3-1.95 1.35-.5.05-.97.23-3.27-.68-2.76-1.09-4.5-3.91-4.64-4.09-.13-.18-1.1-1.47-1.1-2.8s.7-1.99.95-2.26c.24-.27.53-.34.71-.34l.51.01c.16.01.38-.06.6.46.24.55.79 1.88.86 2.02.07.13.11.29.02.47-.09.18-.13.29-.27.45-.13.16-.28.35-.4.47-.13.13-.27.28-.12.55.16.27.7 1.15 1.5 1.86 1.03.92 1.9 1.2 2.17 1.34.27.13.43.11.58-.07.16-.18.67-.78.85-1.05.18-.27.36-.22.6-.13.24.09 1.56.74 1.83.87.27.13.45.2.51.31.07.11.07.65-.17 1.33z"/></svg>
+</a>
+
+<script>
+(function () {
+  var els = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  els.forEach(function (e) { io.observe(e); });
+  var wa = document.getElementById('waFloat'), hero = document.querySelector('.hero-band'), ct = document.getElementById('contacto');
+  function onScroll() {
+    var past = hero.getBoundingClientRect().bottom < 0, inContact = ct.getBoundingClientRect().top < window.innerHeight * 0.6;
+    wa.classList.toggle('show', past && !inContact);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+})();
+</script>
+</body>
+</html>

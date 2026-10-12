@@ -4146,7 +4146,7 @@ function exoCard(e,idx,week,wi,c,e0){e0=e0||e;
   let rows='';
   const repsN=(/[^\d\s]/.test(String(e.reps||''))&&!(S.tag==='up'&&!(S.kg>0)))?NaN:(S.reps||parseInt(e.reps)),goalR=isNaN(repsN)?esc(e.reps):'<b>'+repsN+' reps</b>';
   const row=(i,blank)=>{const ex=i>=n,gl=e.x?'':goalR+(kgv?' · <b>'+esc(kgv)+(S.kgTxt?'':' kg')+'</b>':'');
-    return '<div class="setrow2'+(ex?' xtra':'')+'"><span class="sn">'+(i+1)+'</span><div class="sgoal"><small>Serie '+(i+1)+(e.x?'':ex?' · extra':' · objetivo')+'</small>'+gl+(i>=n&&!dis?'<button type="button" class="sx-del" data-act="delSet" aria-label="Quitar la serie '+(i+1)+'">✕ Quitar</button>':'')+'</div>'+(bw?'<label class="sin kgw bwl"><span>Peso</span><b class="bw-v">Corporal</b><input type="hidden" class="setkg" value="0"></label>':wheelKg(i,S.kgTxt?'':kgv,blank?null:dv(i,0),dis,pk(i),isDbEx(e.name)))+wheelReps(i,isNaN(repsN)?(parseInt(e.reps)||''):repsN,blank?null:dv(i,1),dis,isSecEx(e))+'<label class="sok"><input type="checkbox" class="setok" aria-label="Serie '+(i+1)+' hecha tal como está pautada"'+(!blank&&ds[i]&&ds[i][2]?' checked':'')+dis+'><span>Hecha</span></label></div>'};
+    return '<div class="setrow2'+(ex?' xtra':'')+'"><span class="sn">'+(i+1)+'</span><div class="sgoal"><small>Serie '+(i+1)+(e.x?'':ex?' · extra':' · objetivo')+'</small>'+gl+(i>=n&&!dis?'<button type="button" class="sx-del" data-act="delSet" aria-label="Quitar la serie '+(i+1)+'">✕ Quitar</button>':'')+'</div>'+(bw?'<label class="sin kgw bwl"><span>Peso</span><b class="bw-v">Corporal</b><input type="hidden" class="setkg" value="0"></label>':wheelKg(i,S.kgTxt?'':kgv,blank?null:dv(i,0),dis,pk(i),isDbEx(e.name)))+wheelReps(i,isNaN(repsN)?(parseInt(e.reps)||''):repsN,blank?null:dv(i,1),dis,isSecEx(e))+'<label class="sok"><input type="checkbox" class="setok" aria-label="Serie '+(i+1)+' hecha tal como está pautada"'+(!blank&&(ls[i]||ds[i]&&ds[i][2])?' checked':'')+dis+'><span>Hecha</span></label></div>'};
   const nR=Math.max(n,ls.length,ds.length);
   for(let i=0;i<nR;i++)rows+=row(i);
   if(!dis)rows+='<template class="set-t">'+row(nR,true)+'</template><button type="button" class="btn add-set" data-act="addSet">+ Añadir una serie</button>';
@@ -5156,7 +5156,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012160906';let verT=0;
+const APP_VER='20261012163455';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

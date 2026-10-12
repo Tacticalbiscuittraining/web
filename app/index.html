@@ -1279,6 +1279,7 @@ section>.ps-sub:first-child{margin-top:0}
 @media (max-width:620px){.chat{height:calc(100vh - 220px);min-height:420px}.bub{max-width:88%}.ch-hint{display:none}.bub-img img{max-width:200px}}
 .avatar.av-ph{padding:0;overflow:hidden;background:#ddd}
 .avatar.av-ph img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar.av-ph.coach-av{background:#111}
 .me-btn{display:flex;align-items:center;gap:8px;border:1px solid transparent;background:none;color:inherit;font:inherit;font-weight:600;padding:4px 10px 4px 4px;border-radius:999px;cursor:pointer}
 .me-btn:hover{border-color:var(--line);background:var(--surface)}
 .hub-me{position:absolute;top:16px;right:16px;z-index:2;display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;font:inherit;font-weight:700;font-size:13.5px;cursor:pointer}
@@ -4771,7 +4772,7 @@ function syncChrome(){
   const ac=$('#acct'),c=cur();
   if(ac){
     if(screen==='login')ac.innerHTML='';
-    else if(screen==='coach')ac.innerHTML='<span class="who"><span class="avatar sm">R</span><span>Robert</span></span><button type="button" class="btn" data-act="logout">Cerrar sesión</button>';
+    else if(screen==='coach')ac.innerHTML='<span class="who"><span class="avatar sm av-ph coach-av"><img src="'+PS_LOGO+'" alt=""></span><span>Robert</span></span><button type="button" class="btn" data-act="logout">Cerrar sesión</button>';
     else if(a.role==='coach')ac.innerHTML='<span class="who">Vista previa'+(c?' de '+esc(first(c.name)):'')+'</span><button type="button" class="btn primary" data-act="exitPreview">Volver al panel</button>';
     else ac.innerHTML='<button type="button" class="who me-btn" data-act="ctab" data-t="perfil" title="Mi perfil">'+avHtml(c,'sm')+'<span>'+esc(c?c.name:'')+'</span></button><button type="button" class="btn" data-act="logout">Cerrar sesión</button><button type="button" class="acct-set" data-act="pfTog" aria-label="Ajustes y perfil" title="Ajustes"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>';
   }
@@ -5091,7 +5092,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012111142';let verT=0;
+const APP_VER='20261012112451';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

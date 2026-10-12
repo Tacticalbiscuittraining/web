@@ -2387,6 +2387,10 @@ span.cal-like{cursor:default}
 .tx-b .var-l select{min-width:0;min-height:36px;font-size:14px}
 .tx-b .bw-t{margin:0;padding:2px 0;font-size:13.5px}
 .tx-b .prev{margin:0;padding:6px 10px;font-size:12.5px}
+
+/* segunda fila de pestañas en Entreno (Rutina · Plan · Pautas): no se pega arriba para no tapar la de Fuerza/Carrera */
+.esub.es2{position:static}
+.tgl-c .tgl{padding:0}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -2494,6 +2498,8 @@ p.impbox-w{padding-left:0}
 @media (max-width:620px){.k-v{font-size:min(23px,21cqi)}}
 
 @media print{#printroot .xsheet{max-width:none;margin:0;padding:0;border-radius:0;font-size:11px}#printroot .xs-day{break-before:page}#printroot .xs-t tr{break-inside:avoid}#printroot .xs-x{overflow:visible}}
+#app .xsheet{box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:8px 0 16px;padding:clamp(10px,3vw,22px)}
+#app .xs-h b{font-size:clamp(15px,4.4vw,19px)}
 
 </style>
 
@@ -3735,17 +3741,20 @@ function runView(c,who){
     list=(nx.length?'<p class="rn-lab rn-lab2">Próximas sesiones</p><div class="rn-days">'+nx.map(ses).join('')+'</div>':'')+
       (pv.length?'<details class="rn-d rn-prev"'+(pv.some(i=>state.rnEdit===w+'-'+i)?' open':'')+'><summary>Sesiones anteriores de esta semana ('+pv.length+')</summary><div class="rn-days">'+pv.map(ses).join('')+'</div></details>':'');
   }else list='<div class="rn-days">'+[0,1,2,3,4,5,6].filter(has).map(ses).join('')+'</div>';
-  const zones=R.zones&&R.zones.length?'<details class="rn-d"><summary>Tus zonas de pulso</summary>'+rTable(['Zona','Pulso (ppm)','Sensación','Para qué la usamos'],R.zones)+(R.zonesNote?'<p class="ps-ref">'+esc(R.zonesNote)+'</p>':'')+'</details>':'';
-  const rules=R.rules&&R.rules.length?'<details class="rn-d"><summary>Reglas del plan</summary><ol class="rn-rules">'+R.rules.map(r=>'<li>'+esc(r)+'</li>').join('')+'</ol>'+(R.legend&&R.legend.length?R.legend.map(x=>'<p class="ps-ref">'+esc(x)+'</p>').join(''):'')+'</details>':'';
+  const hist=R.hist&&R.hist.length?'<details class="rn-d"><summary>Lo que dicen tus últimos entrenos</summary>'+rTable(['Fecha','Sesión','Distancia','Ritmo','FC media / máx','Lectura'],R.hist)+(R.concl?'<p class="rn-concl">'+esc(R.concl)+'</p>':'')+'</details>':'';
+  const vol='<details class="rn-d"'+((c.run.logs||[]).some(l=>l.min)?' open':'')+'><summary>Tu volumen de carrera</summary>'+rVolChart(c)+'</details>';
+  return '<div class="rn">'+hero+wk+wkInfo+today+free+list+vol+(who==='client'?'':runGuide(R))+hist+'</div>';
+}
+/* zonas, reglas y estrategia: en el cliente van en la pestaña Pautas (abiertas) */
+function runGuide(R,open){const op=open?' open':'';
+  const zones=R.zones&&R.zones.length?'<details class="rn-d"'+op+'><summary>Tus zonas de pulso</summary>'+rTable(['Zona','Pulso (ppm)','Sensación','Para qué la usamos'],R.zones)+(R.zonesNote?'<p class="ps-ref">'+esc(R.zonesNote)+'</p>':'')+'</details>':'';
+  const rules=R.rules&&R.rules.length?'<details class="rn-d"'+op+'><summary>Reglas del plan</summary><ol class="rn-rules">'+R.rules.map(r=>'<li>'+esc(r)+'</li>').join('')+'</ol>'+(R.legend&&R.legend.length?R.legend.map(x=>'<p class="ps-ref">'+esc(x)+'</p>').join(''):'')+'</details>':'';
   const S=R.strat;
-  const strat=S&&(S.segs||[]).length?'<details class="rn-d"><summary>Estrategia de carrera</summary><p class="rn-sub">Tramo a tramo</p>'+rTable(['Km','Tramo','Desnivel','Pulso','Cómo','Cómo hacerlo','Tiempo','Acumulado'],S.segs)+(S.total?'<p class="ps-ref">'+esc(S.total)+'</p>':'')+
+  const strat=S&&(S.segs||[]).length?'<details class="rn-d"'+op+'><summary>Estrategia de carrera</summary><p class="rn-sub">Tramo a tramo</p>'+rTable(['Km','Tramo','Desnivel','Pulso','Cómo','Cómo hacerlo','Tiempo','Acumulado'],S.segs)+(S.total?'<p class="ps-ref">'+esc(S.total)+'</p>':'')+
     ((S.food||[]).length?'<p class="rn-sub">Comida y bebida durante la carrera</p>'+rTable(['Momento','Qué tomar','Notas'],S.food)+(S.foodNote?'<p class="ps-ref">'+esc(S.foodNote)+'</p>':''):'')+
     ((S.controls||[]).length?'<p class="rn-sub">Controles y tu paso estimado</p>'+rTable(['Km','Control','Horario','Tu paso','Qué hacer'],S.controls)+(S.controlsNote?'<p class="ps-ref">'+esc(S.controlsNote)+'</p>':''):'')+
     ((S.prev||[]).length?'<p class="rn-sub">Días previos y material</p>'+rTable(['Cuándo','Qué hacer'],S.prev):'')+'</details>':'';
-  const hist=R.hist&&R.hist.length?'<details class="rn-d"><summary>Lo que dicen tus últimos entrenos</summary>'+rTable(['Fecha','Sesión','Distancia','Ritmo','FC media / máx','Lectura'],R.hist)+(R.concl?'<p class="rn-concl">'+esc(R.concl)+'</p>':'')+'</details>':'';
-  const vol='<details class="rn-d"'+((c.run.logs||[]).some(l=>l.min)?' open':'')+'><summary>Tu volumen de carrera</summary>'+rVolChart(c)+'</details>';
-  return '<div class="rn">'+hero+wk+wkInfo+today+free+list+vol+zones+rules+strat+hist+(who==='client'&&typeof trFullBar==='function'?trFullBar('carrera'):'')+'</div>';
-}
+  return zones+rules+strat}
 function clientRun(c){return c.run?runView(c,'client'):'<div class="empty">Tu entrenador todavía no te ha preparado un plan de carrera.</div>'}
 function outTable(c){const A=(c.acts||[]).filter(isOut).sort((a,b)=>b.date<a.date?-1:1);if(!A.length)return '';
   return '<div class="card"><h2>Salidas por su cuenta</h2><div class="ps-x"><table class="ps-t rn-tb rn-log"><thead class="nv"><tr><th>Fecha</th><th>Tipo</th><th>Tiempo</th><th>Km</th><th>Ritmo</th><th>Pulso</th><th>Dolor</th><th>Notas</th></tr></thead><tbody>'+
@@ -4245,14 +4254,14 @@ function clientTrain(c,days,di,d){
   const libO=state.lib.slice().sort((a,b)=>String(a.group).localeCompare(b.group,'es')||String(a.name).localeCompare(b.name,'es')),grp=[...new Set(libO.map(x=>x.group||'Otros'))];
   const xadd=state.xAdd===okey?'<div class="xadd-f"><b>Añadir un ejercicio a esta sesión</b><p class="muted">Solo queda en tu registro de este día. Tu plan no cambia.</p><label><span>Elige de la lista</span><select class="in" id="xaSel"><option value="">Elige un ejercicio…</option>'+grp.map(g=>'<optgroup label="'+esc(g)+'">'+libO.filter(x=>(x.group||'Otros')===g).map(x=>'<option>'+esc(x.name)+'</option>').join('')+'</optgroup>').join('')+'</select></label><label><span>O escribe el nombre</span><input class="in" id="xaName" placeholder="Ej.: Curl martillo"></label><div class="actions"><button type="button" class="btn" data-act="xAddNo">Cancelar</button><button type="button" class="btn primary" data-act="xAddOk" data-d="'+d.id+'" data-w="'+w+'" data-k="'+okey+'">Añadir</button></div></div>':'<button type="button" class="btn add-ex" data-act="xAdd" data-k="'+okey+'">+ Añadir un ejercicio</button>';
   const list=(tot||xs.length?'<div class="tx-l">'+d.exs.map(art).join('')+xs.map((e0,i)=>art(e0,tot+i)).join('')+'</div>':'<div class="empty">Este día todavía no tiene ejercicios.</div>')+xadd;
-  const gl='<details class="tfold"><summary><b>Cómo usar este plan</b><span>RIR, tempo, progresión y cómo registrar</span></summary><dl class="tgl">'+GLOS.map(x=>'<div><dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd></div>').join('')+'</dl></details>';
+  const gl=0&&'<details class="tfold"><summary><b>Cómo usar este plan</b><span>RIR, tempo, progresión y cómo registrar</span></summary><dl class="tgl">'+GLOS.map(x=>'<div><dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd></div>').join('')+'</dl></details>';
   const lt=state.logTs?new Date(state.logTs):null;
   const oth=(lt?'<div class="wkban cal-log"><div><b>📅 Registrando el '+DAYS[(lt.getDay()+6)%7].toLowerCase()+' '+lt.getDate()+' de '+MESES[lt.getMonth()]+'</b><span>Lo que envíes quedará guardado en ese día.</span></div><div class="actions"><button type="button" class="btn" data-act="calLogX">Volver a hoy</button></div></div>':'')+(w===cw&&!lt?'<div class="act-top">'+trAsk(c,todayIdx(),0)+'</div>':'');
   {const ti=todayIdx(),mk=trMark(c,ti,0),acts=dayActs(c,ti,0),hasLog=dayLogs(c,ti,0).length>0,rdn=runDone(c,ti,0);
    if(!lt&&w===cw&&!hasLog&&(mk===false||acts.length)&&!state.showRut){
     const msg=rdn&&!acts.length?'':mk===false&&!acts.length?'<div class="rest-card"><span aria-hidden="true">😴</span><div><b>Hoy toca descansar</b><p>Recuperar también es entrenar: descansa, hidrátate y duerme bien.</p></div></div>':'<div class="rest-card act"><span aria-hidden="true">'+actIc(acts[0].type)+'</span><div><b>¡Buen trabajo! Hoy has hecho otra actividad</b><p>'+acts.map(a=>esc((a.type==='Otra'&&a.other?a.other:a.type)+(actSum(a)?' · '+actSum(a):''))).join('<br>')+'</p></div></div>';
-    return '<div class="tr2">'+wk+oth+msg+'<button type="button" class="linkbtn rut-show" data-act="showRut">Ver mi rutina de todas formas</button>'+trFullBar('fuerza')+'</div>'}}
-  return '<div class="tr2">'+wk+oth+(state.showRut&&w===cw?'<button type="button" class="linkbtn rut-show" data-act="showRut">Ocultar la rutina</button>':'')+pills+dh+fin+fold('note','Nota de tu entrenador',d.note)+fold('warm','Calentamiento previo',d.warm)+list+fold('warm','Vuelta a la calma',d.cool)+gl+trFullBar('fuerza')+'</div>';
+    return '<div class="tr2">'+wk+oth+msg+'<button type="button" class="linkbtn rut-show" data-act="showRut">Ver mi rutina de todas formas</button></div>'}}
+  return '<div class="tr2">'+wk+oth+(state.showRut&&w===cw?'<button type="button" class="linkbtn rut-show" data-act="showRut">Ocultar la rutina</button>':'')+pills+dh+fin+fold('note','Nota de tu entrenador',d.note)+fold('warm','Calentamiento previo',d.warm)+list+fold('warm','Vuelta a la calma',d.cool)+'</div>';
 }
 function dayRow(act,sel){const ti=todayIdx();
   return '<div class="drow" role="group" aria-label="Día de la semana">'+DAYS_S.map((n,i)=>'<button type="button" class="drb'+(i===ti?' td':'')+'" data-act="'+act+'" data-i="'+i+'" aria-pressed="'+(i===sel)+'" aria-label="'+DAYS[i]+(i===ti?' (hoy)':'')+'"><b>'+n+'</b><small>'+new Date(dayStart(0,i)).getDate()+'</small></button>').join('')+'</div>'}
@@ -4330,7 +4339,18 @@ function clientGuide(c){
 }
 /* plan entero (fuerza o carrera) en pantalla completa, como el plan nutricional */
 const trSheet=(c,k)=>k==='carrera'?runSheet(c):trainSheet(c,{training:c.training});
-function trFullBar(k){if(typeof trainSheet!=='function')return '';return '<div class="plan-bar"><p class="muted" style="margin:0">Tu plan '+(k==='carrera'?'de carrera':'de entrenamiento')+' entero en una sola hoja, para consultarlo o imprimirlo.</p><span><button type="button" class="btn" data-act="trFs" data-v="'+k+'">Ver plan completo</button> <button type="button" class="btn primary" data-act="trPrint" data-v="'+k+'">Imprimir</button></span></div>'}
+function trFullBar(k){return '<div class="plan-bar"><p class="muted" style="margin:0">Tu plan '+(k==='carrera'?'de carrera':'de entrenamiento')+' entero en una sola hoja, para consultarlo o imprimirlo.</p><span><button type="button" class="btn" data-act="trFs" data-v="'+k+'">Pantalla completa</button> <button type="button" class="btn primary" data-act="trPrint" data-v="'+k+'">Imprimir</button></span></div>'}
+/* pestañas de Entreno, como en Dieta: Rutina · Plan · Pautas */
+function trGuide(c,k){if(k==='carrera')return c.run?runGuide(c.run,1):'';return '<div class="card tgl-c"><h3 style="margin:0 0 8px">Cómo usar este plan</h3><dl class="tgl">'+GLOS.map(x=>'<div><dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd></div>').join('')+'</dl></div>'}
+function clientEntreno(c,days,di,d){
+  const k=c.run&&state.esub==='carrera'?'carrera':'fuerza',seg=trSeg(c);
+  if(state.cal||typeof trainSheet!=='function')return seg+(k==='carrera'&&!state.cal?clientRun(c):clientTrain(c,days,di,d));
+  const has=k==='carrera'?!!c.run:!!d,tabs=[['rutina','Rutina'],['plan','Plan']].concat(has&&trGuide(c,k)?[['pautas','Pautas']]:[]);
+  let v=state.tpsub||'rutina';if(!has||!tabs.some(x=>x[0]===v))v='rutina';
+  const sub=has?'<div class="esub es2" role="tablist" aria-label="Sección del entrenamiento">'+tabs.map(x=>'<button type="button" role="tab" class="es-b" data-act="tpsub" data-v="'+x[0]+'" aria-selected="'+(v===x[0])+'">'+x[1]+'</button>').join('')+'</div>':'';
+  if(v==='plan')return seg+sub+trFullBar(k)+trSheet(c,k);
+  if(v==='pautas')return seg+sub+trGuide(c,k);
+  return seg+sub+(k==='carrera'?clientRun(c):clientTrain(c,days,di,d))}
 function trFull(c){const k=state.trFs;return '<div class="fsov"><div class="fs-bar noprint"><b>Plan '+(k==='carrera'?'de carrera':'de entrenamiento')+' completo</b><span><button type="button" class="btn" data-act="trPrint" data-v="'+k+'">Imprimir</button> <button type="button" class="btn primary" data-act="trFs">Salir de pantalla completa</button></span></div>'+trSheet(c,k)+'</div>'}
 function trSeg(c){if(!c.run||state.cal)return '';const s=state.esub==='carrera'?'carrera':'fuerza',ti=todayIdx();
   const R=runOn(c,ti,0),runDue=!!(R&&RUN_OK.indexOf(R.S.t)>=0&&!R.L),d=c.training.days.find(x=>x.wd===ti&&x.exs.length),fDue=!!(d&&!trainDone(c,ti,0)&&trMark(c,ti,0)!==false);
@@ -4344,7 +4364,7 @@ function clientView(c){
   let body='';
   if(state.ctab==='perfil')body=clientProfile(c);
   else if(state.ctab==='entreno'&&state.trFs&&typeof trainSheet==='function')body=trFull(c);
-  else if(state.ctab==='entreno')body=trSeg(c)+(c.run&&state.esub==='carrera'&&!state.cal?clientRun(c):clientTrain(c,days,di,d));
+  else if(state.ctab==='entreno')body=clientEntreno(c,days,di,d);
   else if(state.ctab==='seguimiento')body=clientTrack(c);
   else if(state.ctab==='fotos')body=clientPhotos(c);
   else if(state.ctab==='mensajes')body=clientMsgs(c);
@@ -4750,7 +4770,7 @@ document.addEventListener('click',e=>{
     case 'bwT':{c.bw=c.bw||{};c.bw[t.dataset.n]=t.dataset.v==='1';renderMain();break}
     case 'strPick':state.strPick=state.strPick===t.dataset.k?'':t.dataset.k;state.actOpen='';renderMain();break;
     case 'esub':state.esub=t.dataset.v;state.trFs='';state.rw=null;state.rnEdit='';state.rpf=null;state.showRut=false;renderMain();break;
-    case 'ctab':if(t.dataset.t==='entreno'&&t.closest('.hc'))state.esub='fuerza';if(t.dataset.t==='dieta'&&t.closest('.hc'))state.cdsub='dia';state.ctab=t.dataset.t;state.cal=false;state.logTs=null;state.planFs=false;state.trFs='';state.tsub=t.dataset.s||'hoy';state.rw=null;state.rnEdit='';state.rpf=null;renderMain();window.scrollTo({top:0,behavior:'smooth'});break;
+    case 'ctab':if(t.dataset.t==='entreno'&&t.closest('.hc')){state.esub='fuerza';state.tpsub='rutina'}if(t.dataset.t==='dieta'&&t.closest('.hc'))state.cdsub='dia';state.ctab=t.dataset.t;state.cal=false;state.logTs=null;state.planFs=false;state.trFs='';state.tsub=t.dataset.s||'hoy';state.rw=null;state.rnEdit='';state.rpf=null;renderMain();window.scrollTo({top:0,behavior:'smooth'});break;
     case 'cdsub':state.cdsub=t.dataset.v;renderMain();break;
     case 'cddPick':state.cdd=+t.dataset.i;renderMain();break;
     case 'zoomEx':{const f=findEx(c,t.dataset.e),L=f&&libFor(f.e.name);if(L&&L.photo){$('#lb img').src=mURL(L.photo);$('#lb').hidden=false}break}
@@ -4765,6 +4785,7 @@ document.addEventListener('click',e=>{
     case 'delPhoto':{const p=c.photos.find(x=>x.id===t.dataset.p);if(p){try{URL.revokeObjectURL(p.url)}catch(_){}}c.photos=c.photos.filter(x=>x.id!==t.dataset.p);state.cmp=state.cmp.filter(x=>x!==t.dataset.p);renderMain();renderRail();break}
     case 'sendMsg':{const v=$('#mText').value.trim();if(!v){toast('Escribe tu mensaje');break}c.msgs.push({id:nid(),ts:Date.now(),from:'client',kind:$('#mKind').value,text:v,fresh:true});renderMain();renderRail();toast('Mensaje enviado a tu entrenador');break}
     case 'reply':{const v=$('#rText').value.trim();if(!v){toast('Escribe tu respuesta');break}c.msgs.push({id:nid(),ts:Date.now(),from:'coach',kind:'',text:v,fresh:false});renderMain();toast('Respuesta enviada');break}
+    case 'tpsub':state.tpsub=t.dataset.v;state.trFs='';renderMain();window.scrollTo({top:0});break;
     case 'tsub':state.tsub=t.dataset.v;renderMain();break;
     case 'exT':{const cur0=state.exO[t.dataset.k];const open=cur0===undefined?(()=>{const d0=c.training.days[cdayFor(c)],w0=state.vw!=null?state.vw:clientWeek(c),nx=d0&&d0.exs.find(e=>!doneEx(c,e,w0));return nx?nx.id:''})():cur0;state.exO[t.dataset.k]=open===t.dataset.e?'':t.dataset.e;renderMain();const o=$('#tx-'+t.dataset.e);if(o&&state.exO[t.dataset.k])o.scrollIntoView({block:'start'});break}
     case 'calDelStr':{const a=+t.dataset.ts,e=new Date(a);e.setDate(e.getDate()+1);const k=t.dataset.k,del=c.log.filter(l=>l.ts>=a&&l.ts<e.getTime()&&String(l.day||'Entreno').replace(/ · S\d+$/,'')===k);c.log=c.log.filter(l=>del.indexOf(l)<0);del.forEach(l=>{if(l.exId!=null)delete state.sent[l.exId+'@'+l.w]});renderRail();renderMain();toast(del.length+(del.length===1?' ejercicio borrado':' ejercicios borrados')+'. La carrera y otras actividades no se tocan');break}
@@ -5202,7 +5223,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012203758';let verT=0;
+const APP_VER='20261012210853';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5813,7 +5834,7 @@ if(IOS_PWA){window.print=function(){const pr=document.getElementById('printroot'
 
 /* ---------- «Ver como cliente»: solo lectura para el entrenador ---------- */
 const PV=()=>RB.role==='coach'&&state.mode==='client';
-const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','trFs','trPrint','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop','calTop','calGo','strPick','wgMeal','pickDay','cmp','mKind','esub']);
+const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','trFs','trPrint','tpsub','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop','calTop','calGo','strPick','wgMeal','pickDay','cmp','mKind','esub']);
 function pvBlock(e){toast('Vista de cliente: solo lectura. No se cambia nada.');e.preventDefault();e.stopImmediatePropagation()}
 document.addEventListener('click',e=>{
   if(!PV())return;const m=$('#main');if(!m||!m.contains(e.target))return;

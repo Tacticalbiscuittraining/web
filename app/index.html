@@ -2493,6 +2493,8 @@ p.impbox-w{padding-left:0}
 .k-v{font-size:min(28px,21cqi);overflow-wrap:anywhere}
 @media (max-width:620px){.k-v{font-size:min(23px,21cqi)}}
 
+@media print{#printroot .xsheet{max-width:none;margin:0;padding:0;border-radius:0;font-size:11px}#printroot .xs-day{break-before:page}#printroot .xs-t tr{break-inside:avoid}#printroot .xs-x{overflow:visible}}
+
 </style>
 
 </head>
@@ -3742,7 +3744,7 @@ function runView(c,who){
     ((S.prev||[]).length?'<p class="rn-sub">Días previos y material</p>'+rTable(['Cuándo','Qué hacer'],S.prev):'')+'</details>':'';
   const hist=R.hist&&R.hist.length?'<details class="rn-d"><summary>Lo que dicen tus últimos entrenos</summary>'+rTable(['Fecha','Sesión','Distancia','Ritmo','FC media / máx','Lectura'],R.hist)+(R.concl?'<p class="rn-concl">'+esc(R.concl)+'</p>':'')+'</details>':'';
   const vol='<details class="rn-d"'+((c.run.logs||[]).some(l=>l.min)?' open':'')+'><summary>Tu volumen de carrera</summary>'+rVolChart(c)+'</details>';
-  return '<div class="rn">'+hero+wk+wkInfo+today+free+list+vol+zones+rules+strat+hist+'</div>';
+  return '<div class="rn">'+hero+wk+wkInfo+today+free+list+vol+zones+rules+strat+hist+(who==='client'&&typeof trFullBar==='function'?trFullBar('carrera'):'')+'</div>';
 }
 function clientRun(c){return c.run?runView(c,'client'):'<div class="empty">Tu entrenador todavía no te ha preparado un plan de carrera.</div>'}
 function outTable(c){const A=(c.acts||[]).filter(isOut).sort((a,b)=>b.date<a.date?-1:1);if(!A.length)return '';
@@ -4249,8 +4251,8 @@ function clientTrain(c,days,di,d){
   {const ti=todayIdx(),mk=trMark(c,ti,0),acts=dayActs(c,ti,0),hasLog=dayLogs(c,ti,0).length>0,rdn=runDone(c,ti,0);
    if(!lt&&w===cw&&!hasLog&&(mk===false||acts.length)&&!state.showRut){
     const msg=rdn&&!acts.length?'':mk===false&&!acts.length?'<div class="rest-card"><span aria-hidden="true">😴</span><div><b>Hoy toca descansar</b><p>Recuperar también es entrenar: descansa, hidrátate y duerme bien.</p></div></div>':'<div class="rest-card act"><span aria-hidden="true">'+actIc(acts[0].type)+'</span><div><b>¡Buen trabajo! Hoy has hecho otra actividad</b><p>'+acts.map(a=>esc((a.type==='Otra'&&a.other?a.other:a.type)+(actSum(a)?' · '+actSum(a):''))).join('<br>')+'</p></div></div>';
-    return '<div class="tr2">'+wk+oth+msg+'<button type="button" class="linkbtn rut-show" data-act="showRut">Ver mi rutina de todas formas</button></div>'}}
-  return '<div class="tr2">'+wk+oth+(state.showRut&&w===cw?'<button type="button" class="linkbtn rut-show" data-act="showRut">Ocultar la rutina</button>':'')+pills+dh+fin+fold('note','Nota de tu entrenador',d.note)+fold('warm','Calentamiento previo',d.warm)+list+fold('warm','Vuelta a la calma',d.cool)+gl+'</div>';
+    return '<div class="tr2">'+wk+oth+msg+'<button type="button" class="linkbtn rut-show" data-act="showRut">Ver mi rutina de todas formas</button>'+trFullBar('fuerza')+'</div>'}}
+  return '<div class="tr2">'+wk+oth+(state.showRut&&w===cw?'<button type="button" class="linkbtn rut-show" data-act="showRut">Ocultar la rutina</button>':'')+pills+dh+fin+fold('note','Nota de tu entrenador',d.note)+fold('warm','Calentamiento previo',d.warm)+list+fold('warm','Vuelta a la calma',d.cool)+gl+trFullBar('fuerza')+'</div>';
 }
 function dayRow(act,sel){const ti=todayIdx();
   return '<div class="drow" role="group" aria-label="Día de la semana">'+DAYS_S.map((n,i)=>'<button type="button" class="drb'+(i===ti?' td':'')+'" data-act="'+act+'" data-i="'+i+'" aria-pressed="'+(i===sel)+'" aria-label="'+DAYS[i]+(i===ti?' (hoy)':'')+'"><b>'+n+'</b><small>'+new Date(dayStart(0,i)).getDate()+'</small></button>').join('')+'</div>'}
@@ -4326,6 +4328,10 @@ function clientGuide(c){
    '<section><h3 class="gh">Pautas generales</h3><dl class="pauta">'+pau+'</dl></section>'+
    '<p class="muted" style="margin:0">Consejo: prepara el lunes y el jueves las bases de la semana (proteína a la plancha/horno, arroz o patata cocidos y verdura lavada) para tenerlo todo listo en 10 minutos.</p>';
 }
+/* plan entero (fuerza o carrera) en pantalla completa, como el plan nutricional */
+const trSheet=(c,k)=>k==='carrera'?runSheet(c):trainSheet(c,{training:c.training});
+function trFullBar(k){if(typeof trainSheet!=='function')return '';return '<div class="plan-bar"><p class="muted" style="margin:0">Tu plan '+(k==='carrera'?'de carrera':'de entrenamiento')+' entero en una sola hoja, para consultarlo o imprimirlo.</p><span><button type="button" class="btn" data-act="trFs" data-v="'+k+'">Ver plan completo</button> <button type="button" class="btn primary" data-act="trPrint" data-v="'+k+'">Imprimir</button></span></div>'}
+function trFull(c){const k=state.trFs;return '<div class="fsov"><div class="fs-bar noprint"><b>Plan '+(k==='carrera'?'de carrera':'de entrenamiento')+' completo</b><span><button type="button" class="btn" data-act="trPrint" data-v="'+k+'">Imprimir</button> <button type="button" class="btn primary" data-act="trFs">Salir de pantalla completa</button></span></div>'+trSheet(c,k)+'</div>'}
 function trSeg(c){if(!c.run||state.cal)return '';const s=state.esub==='carrera'?'carrera':'fuerza',ti=todayIdx();
   const R=runOn(c,ti,0),runDue=!!(R&&RUN_OK.indexOf(R.S.t)>=0&&!R.L),d=c.training.days.find(x=>x.wd===ti&&x.exs.length),fDue=!!(d&&!trainDone(c,ti,0)&&trMark(c,ti,0)!==false);
   return '<div class="esub" role="tablist" aria-label="Tipo de entrenamiento">'+[['fuerza','🏋️','Fuerza',fDue],['carrera','🏃','Carrera',runDue]].map(x=>'<button type="button" role="tab" class="es-b" data-act="esub" data-v="'+x[0]+'" aria-selected="'+(s===x[0])+'"><span aria-hidden="true">'+x[1]+'</span>'+x[2]+(x[3]?'<i class="es-hoy">Hoy</i>':'')+'</button>').join('')+'</div>'}
@@ -4337,6 +4343,7 @@ function clientView(c){
   const days=c.training.days,di=cdayFor(c),d=days[di];
   let body='';
   if(state.ctab==='perfil')body=clientProfile(c);
+  else if(state.ctab==='entreno'&&state.trFs&&typeof trainSheet==='function')body=trFull(c);
   else if(state.ctab==='entreno')body=trSeg(c)+(c.run&&state.esub==='carrera'&&!state.cal?clientRun(c):clientTrain(c,days,di,d));
   else if(state.ctab==='seguimiento')body=clientTrack(c);
   else if(state.ctab==='fotos')body=clientPhotos(c);
@@ -4656,6 +4663,8 @@ document.addEventListener('click',e=>{
     case 'sim':simulate(c);break;
     case 'delClient':{delClient(c.id);state.clients=state.clients.filter(x=>x.id!==c.id);state.sel=state.clients.length?state.clients[0].id:'';renderAll();toast('Cliente eliminado');break}
     case 'planFs':state.planFs=!state.planFs;renderMain();break;
+    case 'trFs':state.trFs=state.trFs?'':t.dataset.v;renderMain();if(state.trFs){const f=$('.fsov');if(f)f.scrollTop=0}break;
+    case 'trPrint':{let pr=$('#printroot');if(!pr){pr=document.createElement('div');pr.id='printroot';document.body.appendChild(pr)}pr.innerHTML=trSheet(c,t.dataset.v);document.body.classList.add('printing');const done=()=>{document.body.classList.remove('printing');pr.innerHTML=''};window.addEventListener('afterprint',done,{once:true});try{window.print()}catch(_){done();toast('Usa Ctrl/Cmd + P para imprimir')}break}
     case 'planPrint':state.printOpen=true;renderMain();{const f=$('.pmod .psel');if(f)f.focus()}break;
     case 'printClose':state.printOpen=false;renderMain();break;
     case 'psAll':{const bx=$$('.psel'),all=bx.every(x=>x.checked);bx.forEach(x=>{x.checked=!all});break}
@@ -4740,8 +4749,8 @@ document.addEventListener('click',e=>{
     case 'pfTog':{state.ctab=state.ctab==='perfil'?'inicio':'perfil';state.cal=false;state.logTs=null;renderMain();window.scrollTo({top:0,behavior:'smooth'});break}
     case 'bwT':{c.bw=c.bw||{};c.bw[t.dataset.n]=t.dataset.v==='1';renderMain();break}
     case 'strPick':state.strPick=state.strPick===t.dataset.k?'':t.dataset.k;state.actOpen='';renderMain();break;
-    case 'esub':state.esub=t.dataset.v;state.rw=null;state.rnEdit='';state.rpf=null;state.showRut=false;renderMain();break;
-    case 'ctab':if(t.dataset.t==='entreno'&&t.closest('.hc'))state.esub='fuerza';if(t.dataset.t==='dieta'&&t.closest('.hc'))state.cdsub='dia';state.ctab=t.dataset.t;state.cal=false;state.logTs=null;state.planFs=false;state.tsub=t.dataset.s||'hoy';state.rw=null;state.rnEdit='';state.rpf=null;renderMain();window.scrollTo({top:0,behavior:'smooth'});break;
+    case 'esub':state.esub=t.dataset.v;state.trFs='';state.rw=null;state.rnEdit='';state.rpf=null;state.showRut=false;renderMain();break;
+    case 'ctab':if(t.dataset.t==='entreno'&&t.closest('.hc'))state.esub='fuerza';if(t.dataset.t==='dieta'&&t.closest('.hc'))state.cdsub='dia';state.ctab=t.dataset.t;state.cal=false;state.logTs=null;state.planFs=false;state.trFs='';state.tsub=t.dataset.s||'hoy';state.rw=null;state.rnEdit='';state.rpf=null;renderMain();window.scrollTo({top:0,behavior:'smooth'});break;
     case 'cdsub':state.cdsub=t.dataset.v;renderMain();break;
     case 'cddPick':state.cdd=+t.dataset.i;renderMain();break;
     case 'zoomEx':{const f=findEx(c,t.dataset.e),L=f&&libFor(f.e.name);if(L&&L.photo){$('#lb img').src=mURL(L.photo);$('#lb').hidden=false}break}
@@ -4853,6 +4862,7 @@ document.addEventListener('keydown',e=>{
   if(e.key!=='Escape')return;
   if(state.printOpen){state.printOpen=false;renderMain();return}
   if(state.planFs){state.planFs=false;renderMain();return}
+  if(state.trFs){state.trFs='';renderMain();return}
   const lb=$('#lb'),vm=$('#vm');
   if(vm&&!vm.hidden)closeVm();else if(lb&&!lb.hidden)lb.hidden=true;else if(state.bell){state.bell=false;renderBell()}
 });
@@ -5165,7 +5175,7 @@ function busy(){
   if(a&&a.id==='mText')return false;
   if(a&&a.closest&&a.closest('#app')&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;
   const lb=$('#lb'),vm=$('#vm');
-  return(lb&&!lb.hidden)||(vm&&!vm.hidden)||!!state.printOpen||!!state.planFs;
+  return(lb&&!lb.hidden)||(vm&&!vm.hidden)||!!state.printOpen||!!state.planFs||!!state.trFs;
 }
 function safeRender(fromSync){
   if(busy()){RB.needRender=true;return}
@@ -5192,7 +5202,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012195954';let verT=0;
+const APP_VER='20261012203758';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5526,6 +5536,30 @@ function trainSheet(c,o){
   });
   return h+'</article>';
 }
+/* plan de carrera entero en una hoja (mismo diseño que el entrenamiento) */
+function runSheet(c,R){
+  R=R||c.run;if(!R)return '';const race=R.race||{},WK=R.weeks||[];
+  const head=(t,sub)=>'<div class="xs-h"><b>'+t+'</b><img src="'+PS_LOGO+'" alt=""></div><div class="xs-hs">Tactical Biscuit Training'+(sub?' · '+sub:'')+'</div>';
+  const sec=(t,cl)=>'<div class="xs-sec'+(cl?' '+cl:'')+'">'+t+'</div>';
+  const kv=(l,v)=>'<tr><th>'+l+'</th><td>'+esc(v==null?'':String(v))+'</td></tr>';
+  const tb=(hd,rows)=>'<div class="xs-x"><table class="xs-t"><thead><tr>'+hd.map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map((x,j)=>j===0?'<th>'+esc(x==null?'':String(x))+'</th>':'<td class="b l">'+esc(x==null?'':String(x))+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
+  const ds=d=>{const x=rParse(d);return x?x.toLocaleDateString('es-ES'):(d||'')};
+  let h='<article class="xsheet">'+head('PLAN DE CARRERA',esc(race.name||''))+sec('DATOS DEL CLIENTE')+
+   '<div class="xs-2"><table class="xs-kv">'+kv('Cliente',c.name)+kv('Carrera',race.name||'')+kv('Fecha de la carrera',ds(race.date))+kv('Inicio del plan',ds(R.start))+kv('Semanas',WK.length)+'</table><div class="xs-side"><span>Entrenador</span><b>Robert</b></div></div>';
+  WK.forEach((W,w)=>{
+    const rows=[0,1,2,3,4,5,6].map(i=>{const S=(W.days||[])[i];if(!S||!S.txt)return null;const d=rDate(Object.assign({},c,{run:R}),w,i);return[DAYS[i]+(d?' '+d.getDate()+'/'+(d.getMonth()+1):''),(RUN_T[S.t]||RUN_T.suave)[0],S.txt]}).filter(Boolean);
+    h+=sec('SEMANA '+(w+1)+(W.phase?'  ·  '+esc(String(W.phase)).toUpperCase():'')+(W.dates?'  ·  '+esc(W.dates):'')+(W.vol?'  ·  ≈ '+esc(W.vol):''))+
+     (rows.length?tb(['Día','Tipo','Sesión'],rows):'<div class="xs-txt">Semana sin carreras.</div>')+(W.key?'<div class="xs-txt"><b>Clave de la semana:</b> '+esc(W.key)+'</div>':'');
+  });
+  if(R.zones&&R.zones.length)h+=sec('TUS ZONAS DE PULSO')+tb(['Zona','Pulso (ppm)','Sensación','Para qué la usamos'],R.zones)+(R.zonesNote?'<div class="xs-txt">'+esc(R.zonesNote)+'</div>':'');
+  if(R.rules&&R.rules.length)h+=sec('REGLAS DEL PLAN')+'<div class="xs-txt">'+R.rules.map((r,i)=>(i+1)+'. '+esc(r)).join('<br>')+((R.legend||[]).length?'<br><br>'+R.legend.map(esc).join('<br>'):'')+'</div>';
+  const S=R.strat;
+  if(S&&(S.segs||[]).length){h+=sec('ESTRATEGIA DE CARRERA · TRAMO A TRAMO')+tb(['Km','Tramo','Desnivel','Pulso','Cómo','Cómo hacerlo','Tiempo','Acumulado'],S.segs)+(S.total?'<div class="xs-txt">'+esc(S.total)+'</div>':'');
+    if((S.food||[]).length)h+=sec('COMIDA Y BEBIDA DURANTE LA CARRERA')+tb(['Momento','Qué tomar','Notas'],S.food)+(S.foodNote?'<div class="xs-txt">'+esc(S.foodNote)+'</div>':'');
+    if((S.controls||[]).length)h+=sec('CONTROLES Y TU PASO ESTIMADO')+tb(['Km','Control','Horario','Tu paso','Qué hacer'],S.controls)+(S.controlsNote?'<div class="xs-txt">'+esc(S.controlsNote)+'</div>':'');
+    if((S.prev||[]).length)h+=sec('DÍAS PREVIOS Y MATERIAL')+tb(['Cuándo','Qué hacer'],S.prev)}
+  return h+'</article>';
+}
 function histFs(c,h,k){
   const ib=$('#impbox');if(ib)ib.remove();let el=$('#histFs');if(el)el.remove();
   const title=(k==='diet'?'Dieta':'Entrenamiento')+' · '+(h.id==='cur'?'plan actual':histWhen(h).replace(/^./,x=>x.toLowerCase()));
@@ -5779,7 +5813,7 @@ if(IOS_PWA){window.print=function(){const pr=document.getElementById('printroot'
 
 /* ---------- «Ver como cliente»: solo lectura para el entrenador ---------- */
 const PV=()=>RB.role==='coach'&&state.mode==='client';
-const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop','calTop','calGo','strPick','wgMeal','pickDay','cmp','mKind','esub']);
+const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','trFs','trPrint','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop','calTop','calGo','strPick','wgMeal','pickDay','cmp','mKind','esub']);
 function pvBlock(e){toast('Vista de cliente: solo lectura. No se cambia nada.');e.preventDefault();e.stopImmediatePropagation()}
 document.addEventListener('click',e=>{
   if(!PV())return;const m=$('#main');if(!m||!m.contains(e.target))return;

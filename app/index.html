@@ -2399,6 +2399,10 @@ p.impbox-w{padding-left:0}
 .ph-training{background:rgba(224,122,30,.16);color:#C9671A}
 .ph-h{margin:16px 0 8px;font-size:15px;display:flex;align-items:center;gap:6px}
 .plan-bar{margin:0 0 12px}
+/* resumen: la fecha de próxima revisión no se sale de su tarjeta */
+.kpi{container-type:inline-size}
+.k-v{font-size:min(28px,21cqi);overflow-wrap:anywhere}
+@media (max-width:620px){.k-v{font-size:min(23px,21cqi)}}
 
 </style>
 
@@ -5017,7 +5021,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261011094427';let verT=0;
+const APP_VER='20261012102701';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

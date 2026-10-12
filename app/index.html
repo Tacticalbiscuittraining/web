@@ -2790,14 +2790,14 @@ function tabsHtml(c){
 function resumen(c){
   const w=c.weights,last=w.length?w[w.length-1]:null,d=w.length>1?last-w[0]:null;
   const week=new Set(c.log.filter(l=>Date.now()-l.ts<7*D).map(l=>l.day)).size;
-  const recent=c.log.slice().sort((a,b)=>b.ts-a.ts).slice(0,4);
+  const recent=feedItems(c).slice(0,4);
   const ds=d==null?'':(d>0?'+':'−')+Math.abs(d).toFixed(1).replace('.',',')+' kg desde el inicio';
   return '<div class="grid2"><div class="stack">'+
    '<div class="kpis"><div class="kpi"><div class="k-l">Sesiones 7 días</div><div class="k-v">'+week+' / '+c.training.days.length+'</div><div class="k-s">según el plan</div></div>'+
    '<div class="kpi"><div class="k-l">Peso actual</div><div class="k-v">'+(last==null?'—':last.toFixed(1).replace('.',',')+' kg')+'</div><div class="k-s">'+esc(ds||'Sin pesajes')+'</div></div>'+
    '<div class="kpi"><div class="k-l">Próxima revisión</div><div class="k-v">'+esc(c.review||'—')+'</div><div class="k-s">se cambia en «Editar plan»</div></div>'+'<div class="kpi"><div class="k-l">Adherencia semana</div><div class="k-v">'+adhPct(c)+' %</div><div class="k-s">hasta hoy</div></div></div>'+
    '<div class="card"><h2>Evolución del peso</h2>'+chartSvg(w)+'<div class="inline"><label class="cell"><span class="lbl show">Añadir pesaje (kg)</span><input id="newW" class="in num" inputmode="decimal" placeholder="Ej.: 66.7"></label><button type="button" class="btn primary" data-act="addW">Registrar peso</button></div></div>'+
-  '</div><div class="card"><h2>Actividad reciente</h2>'+(recent.length?recent.map(l=>entryHtml(c,l)).join(''):'<div class="empty">Aún no hay registros de este cliente.</div>')+'</div></div>';
+  '</div><div class="card"><h2>Actividad reciente</h2>'+(recent.length?recent.map(it=>feedHtml(c,it)).join(''):'<div class="empty">Aún no hay registros de este cliente.</div>')+'</div></div>';
 }
 function foodRow(m,it){
   const a=f=>'data-r="food" data-m="'+m.id+'" data-i="'+it.id+'" data-f="'+f+'"';
@@ -3915,10 +3915,10 @@ if(typeof MutationObserver!=='undefined'){new MutationObserver(()=>{dockFix();ke
 function wfShown(id){const inp=document.getElementById(id);if(!inp)return '';if(inp.value!=='')return inp.value;const f=inp.closest('.wf'),a=f&&f.querySelector('.wh[data-w="wfI"]'),b=f&&f.querySelector('.wh[data-w="wfD"]');return a?String(wfNum(f)):''}
 
 function registroPanel(c){
-  const list=c.log.slice().sort((a,b)=>b.ts-a.ts);
+  const list=feedItems(c);
   return '<div class="card"><div class="feed-bar"><span class="live"><i></i>En directo</span><div class="actions"><button type="button" class="btn" data-act="seen">Marcar todo como visto</button><button type="button" class="btn ghost" data-act="sim">Demo: simular envío del cliente</button></div></div>'+
    '<p class="muted" style="margin:0 0 6px">Lo que '+esc(first(c.name))+' anota en su móvil llega aquí al instante, comparado con tu pauta.</p>'+
-   (list.length?list.slice(0,40).map(l=>entryHtml(c,l)).join(''):'<div class="empty">Cuando '+esc(first(c.name))+' registre su primer entreno, aparecerá aquí.</div>')+'</div>';
+   (list.length?list.slice(0,40).map(it=>feedHtml(c,it)).join(''):'<div class="empty">Cuando '+esc(first(c.name))+' registre su primer entreno, aparecerá aquí.</div>')+'</div>';
 }
 
 function photoThumb(p,coach){
@@ -4377,6 +4377,26 @@ function tabsHtml(c){
 }
 function datosPanel(c){return '<div class="stack"><div class="card"><h2>Datos del cliente</h2><div class="form-grid">'+
   [['name','Nombre'],['goal','Objetivo'],['phase','Fase'],['review','Próxima revisión']].map(x=>'<label class="cell"><span class="lbl show">'+x[1]+'</span><input class="in" data-r="cinfo" data-f="'+x[0]+'" value="'+esc(c[x[0]]||'')+'"></label>').join('')+'</div></div>'+fichaCard(c)+accessCard(c)+'</div>'}
+/* ---------- actividad reciente: fuerza + carrera + otras actividades ---------- */
+function actTs(a){if(a.date){const d=rParse(a.date);if(d&&isoOf(a.ts||0)!==a.date)return d.getTime()+12*H}return a.ts||0}
+function feedItems(c){
+  const L=c.log.map(l=>({k:'log',ts:l.ts,l}));
+  const A=(c.acts||[]).map(a=>({k:'act',ts:actTs(a),l:a}));
+  const R=c.run?(c.run.logs||[]).filter(l=>l.st!=='no').map(l=>({k:'run',ts:l.ts,l})):[];
+  return L.concat(A,R).sort((a,b)=>b.ts-a.ts);
+}
+function feedRowHtml(ttl,ts,fresh,day,chips,note){
+  return '<article class="entry'+(fresh?' fresh':'')+'"><div class="e-time">'+esc(ago(ts))+'</div><div><div class="e-head"><strong>'+esc(ttl)+'</strong>'+(fresh?'<span class="badge">Nuevo</span>':'')+'</div><div class="e-day">'+esc(day)+'</div><div class="chips">'+chips.map(x=>'<span class="chip">'+esc(x)+'</span>').join('')+'</div>'+(note?'<p class="e-note">“'+esc(note)+'”</p>':'')+'</div></article>';
+}
+function feedHtml(c,it){
+  const l=it.l;
+  if(it.k==='log')return entryHtml(c,l);
+  if(it.k==='act'){const ic=(ACTS.find(x=>x[0]===l.type)||['','✨'])[1];
+    return feedRowHtml(ic+' '+(l.type==='Otra'&&l.other?l.other:l.type),it.ts,l.fresh,'Otra actividad · '+dshort(it.ts),actSum(l).split(' · ').filter(Boolean),l.note)}
+  const S=rSes(c,l.w,l.i),T=RUN_T[S&&S.t]||RUN_T.suave,b=[];
+  if(l.min)b.push(rHM(l.min));if(l.km)b.push(fmtKm(l.km)+' km');const pc=rPace(l.min,l.km);if(pc)b.push(pc);if(l.hr)b.push('♥ '+l.hr+(l.hrmax?' / '+l.hrmax:'')+' ppm');if(l.rpe)b.push('Sensación '+l.rpe+'/10');if(l.pain>=1)b.push('Dolor '+l.pain+'/10');
+  return feedRowHtml('🏃 Carrera · '+T[0],it.ts,l.fresh,RUN_ST[l.st][1]+' · '+dshort(it.ts),b,l.note);
+}
 /* ---------- render ---------- */
 function renderMain(){
   const c=cur(),m=$('#main');
@@ -5021,7 +5041,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012102701';let verT=0;
+const APP_VER='20261012110427';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

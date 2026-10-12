@@ -2360,6 +2360,33 @@ span.cal-like{cursor:default}
 .nb-h{color:var(--muted);font-size:12px}
 .nb-n textarea.cnote{width:100%;min-height:76px;resize:vertical;font:inherit;font-size:14.5px;line-height:1.4;padding:10px 12px;border-radius:10px;box-sizing:border-box}
 .btn.nb-save{justify-self:end}
+/* tarjeta de ejercicio abierta, versión compacta: foto pequeña junto al grupo y la técnica, descanso junto al tempo */
+.tx-b .exo-l{display:grid;grid-template-columns:60px minmax(0,1fr);gap:4px 12px;align-items:start;align-content:start;align-self:stretch}
+.tx-b .exo-l .exo-m{display:contents}
+.tx-b .exo-l .exo-ph{width:60px;height:60px;grid-row:1/3;border-radius:10px}
+.tx-b .exo-vid{grid-column:2;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:4px 10px;text-align:left}
+.tx-b .exo-vid .btn{min-height:32px;padding:4px 10px;font-size:13px}
+.tx-b .exo-l .tech{grid-column:2;margin:0;padding:0;background:none;font-size:13.5px;line-height:1.35}
+.tx-b .exo-l .tech b{display:inline;margin:0 6px 0 0;font-size:10.5px}
+.tx-b .exo-l:not(:has(.tech)) .exo-ph{grid-row:1}
+.tx-b .rx{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.tx-b .rx-g{grid-column:1/-1;grid-row:1}
+.tx-b .rx-m{grid-column:1;grid-row:2;display:flex;flex-wrap:wrap;gap:0 10px;padding:7px 12px;font-size:12.5px;border-top:1px solid var(--line)}
+.tx-b .rx-m span{margin:0;padding:0}
+.tx-b .rx-h{grid-column:2;grid-row:2;align-self:stretch;align-items:center;padding:6px 10px 6px 0;background:none;border-top:1px solid var(--line)}
+.tx-b .rx:has(.rt-go) .rx-m span:last-child:not(:first-child){display:none}
+.tx-b .rx:has(.rt-go) .rx-m:not(:has(span:nth-child(2))){visibility:hidden}
+.tx-b .rt-go{margin:0;padding:5px 10px;font-size:12.5px;white-space:nowrap;background:var(--teal);border-color:var(--teal);color:#fff}
+.tx-b .rx-why{grid-column:1/-1;padding:6px 12px;font-size:12.5px;line-height:1.35}
+.tx-b .rxt{padding:6px 4px}
+.tx-b .exo-r.todo{padding:10px 12px;gap:6px}
+.tx-b .todo-h{margin-bottom:0}
+.tx-b .todo-t{font-size:15px}
+.tx-b .var-l{flex-wrap:nowrap;margin:0}
+.tx-b .var-l span{flex:none;font-size:12px}
+.tx-b .var-l select{min-width:0;min-height:36px;font-size:14px}
+.tx-b .bw-t{margin:0;padding:2px 0;font-size:13.5px}
+.tx-b .prev{margin:0;padding:6px 10px;font-size:12.5px}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -5156,7 +5183,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012163455';let verT=0;
+const APP_VER='20261012164601';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

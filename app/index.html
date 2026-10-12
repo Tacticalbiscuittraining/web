@@ -722,8 +722,8 @@ body[data-screen="client"] .app{grid-template-columns:minmax(0,1fr)}
 .ps-h{display:flex;gap:16px;align-items:center;margin:0 0 16px;padding:0 0 14px;border-bottom:3px solid var(--teal)}
 .ps-h .emblem{width:64px;height:64px}
 .ps-h h2{margin:0;font-size:28px}
-.fsov{position:fixed;inset:0;z-index:70;overflow:auto;background:var(--surface);padding:0 clamp(16px,4vw,48px) 40px}
-.fs-bar{position:sticky;top:0;z-index:2;display:flex;gap:10px 16px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:12px 0;background:var(--surface);border-bottom:1px solid var(--line);margin-bottom:18px}
+.fsov{position:fixed;inset:0;z-index:70;overflow:auto;overscroll-behavior:contain;background:var(--surface);padding:0 clamp(16px,4vw,48px) 40px}
+.fs-bar{position:sticky;top:0;z-index:2;display:flex;gap:10px 16px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:calc(12px + env(safe-area-inset-top)) 0 12px;background:var(--surface);border-bottom:1px solid var(--line);margin-bottom:18px}
 .fs-bar b{font-family:var(--f-display);font-size:19px;letter-spacing:.1em;text-transform:uppercase}
 #printroot{display:none}
 @media (max-width:760px){
@@ -5192,7 +5192,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012165318';let verT=0;
+const APP_VER='20261012195954';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

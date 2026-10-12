@@ -2324,6 +2324,41 @@ span.cal-like{cursor:default}
 .cal-more .cal-pl{font-size:13.5px}
 .act-like{margin-left:4px}
 .pnew.like{border-color:color-mix(in srgb,#E5484D 55%,transparent);background:color-mix(in srgb,#E5484D 10%,var(--surface))}
+/* series y ejercicios extra · nota del ejercicio */
+.setrow2.xtra{border-style:dashed}
+.setrow2.xtra:has(.setok:checked){border-style:solid}
+.setrow2 .sgoal{position:relative}
+.sx-del{margin-left:auto;border:0;background:none;color:var(--muted);font:inherit;font-size:12.5px;font-weight:600;padding:2px 6px;border-radius:6px;cursor:pointer}
+.sx-del:hover{color:var(--coral-ink);background:var(--coral-soft)}
+.btn.add-set,.btn.add-ex{width:100%;justify-content:center;border-style:dashed;background:transparent;color:var(--teal-ink);min-height:42px;margin-top:2px}
+.btn.add-ex{margin-top:12px}
+.btn.add-set:hover,.btn.add-ex:hover{background:var(--teal-soft)}
+.xadd-f{margin-top:12px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:grid;gap:10px}
+.xadd-f p{margin:-6px 0 0;font-size:13px}
+.xadd-f label{display:grid;gap:4px;font-size:13px;font-weight:600}
+.xadd-f .actions{display:flex;gap:8px;justify-content:flex-end;margin:0}
+.rx.xnote{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.rx.xnote p{margin:0;font-size:13.5px;flex:1 1 220px}
+.exo-more.nb{margin-top:6px;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.exo-more.nb>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;color:var(--fg)}
+.exo-more.nb>summary::-webkit-details-marker{display:none}
+.exo-more.nb>summary::after{content:'';margin-left:auto;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .15s}
+.exo-more.nb[open]>summary::after{transform:rotate(-135deg)}
+.nb-ic{font-size:18px;line-height:1}
+.nb-t{display:grid;line-height:1.25}
+.nb-t b{font-size:14px}
+.nb-t small{color:var(--muted);font-size:12px;font-weight:400}
+.exo-f.nb-in{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding:4px 14px 14px;margin:0;border-top:1px solid var(--line)}
+.nb-rir,.nb-n{display:grid;gap:6px;margin-top:10px}
+.nb-n{margin-top:0}
+.nb-l{font-size:13px;font-weight:600}
+.nb-l small{color:var(--muted);font-weight:400}
+.nb-seg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.nb-b{min-height:40px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface);color:var(--fg);font:inherit;font-weight:700;font-size:15px;cursor:pointer}
+.nb-b[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.nb-b:disabled{opacity:.6;cursor:default}
+.nb-h{color:var(--muted);font-size:12px}
+.nb-n textarea.cnote{width:100%;min-height:76px;resize:vertical;font:inherit;font-size:14.5px;line-height:1.4;padding:10px 12px;border-radius:10px;box-sizing:border-box}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -2545,7 +2580,7 @@ const first=n=>String(n).trim().split(/\s+/)[0]||'';
 const initials=n=>String(n).trim().split(/\s+/).slice(0,2).map(s=>s[0]||'').join('').toUpperCase()||'?';
 function ago(ts){const s=Math.max(0,Date.now()-ts);const m=Math.round(s/M);if(m<1)return 'ahora mismo';if(m<60)return 'hace '+m+' min';const h=Math.round(s/H);if(h<24)return 'hace '+h+' h';const d=Math.round(s/D);return d===1?'ayer':'hace '+d+' días';}
 function findDay(c,id){return c.training.days.find(d=>d.id===id)}
-function findEx(c,id){for(const d of c.training.days){const e=d.exs.find(x=>x.id===id);if(e)return{d,e}}return null}
+function findEx(c,id){for(const d of c.training.days){const e=d.exs.find(x=>x.id===id);if(e)return{d,e}}const x=(c.xEx||[]).find(x=>x.id===id);if(x)return{d:c.training.days.find(d=>d.id===x.d)||{name:'Entreno'},e:{id:x.id,name:x.name,sets:'3',reps:'10',rest:'',x:1}};return null}
 function plannedFor(c,name){for(const d of c.training.days){const e=d.exs.find(x=>x.name.trim().toLowerCase()===String(name).trim().toLowerCase());if(e)return e}return null}
 function freshLogs(c){return c.log.filter(l=>l.fresh).length}
 function freshMsgs(c){return c.msgs.filter(m=>m.fresh&&m.from==='client').length}
@@ -4106,10 +4141,14 @@ function exoCard(e,idx,week,wi,c,e0){e0=e0||e;
   const pv0=c.log.filter(l=>l.ex===e.name&&l!==lg&&l.sets&&l.sets.length&&l.u!=='s').sort((a,b)=>b.ts-a.ts)[0],pk=i=>{if(!pv0)return '';const x=pv0.sets[i]||pv0.sets[pv0.sets.length-1];return x&&x[0]>0?x[0]:''};
   const bwK=String(e.name||'').toLowerCase().trim(),bwSaved=c.bw&&c.bw[bwK],pvBW=pv0&&pv0.sets.every(x=>!(x[0]>0)),noKg=!kgv||/^[\s\-—–]*$/.test(kgv),bwAuto=noKg&&(/dominad|flexion|fondos|chin.?up|pull.?up/i.test(e.name||'')||/peso corporal/i.test(L&&L.mat||'')||pvBW)&&!(pv0&&!pvBW),bw=!isSecEx(e)&&(bwSaved!=null?bwSaved:bwAuto)&&!(ls.some(x=>x[0]>0));
   const bwBtn=isSecEx(e)?'':'<button type="button" class="bw-t" data-act="bwT" data-n="'+esc(bwK)+'" data-v="'+(bw?0:1)+'" aria-pressed="'+bw+'"'+dis+'><span class="tsw" aria-hidden="true"><i></i></span>Con mi peso corporal</button>';
-  const VO=exVarOpts(e0),varSel=VO.length&&!lg?'<label class="var-l"><span>¿Haces una variante?</span><select class="in varsel" data-e="'+e0.id+'" aria-label="Cambiar '+esc(e0.name)+' por una variante"><option value="">'+esc(e0.name)+(e.orig?'':' (pautado)')+'</option>'+VO.map(n=>'<option value="'+esc(n)+'"'+(e.name===n?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select></label>'+(e.orig?'<p class="var-n">Cambiado por ti: el peso se ajusta a tu historial con esta variante.</p>':''):'';
+  const VO=e.x?[]:exVarOpts(e0),varSel=VO.length&&!lg?'<label class="var-l"><span>¿Haces una variante?</span><select class="in varsel" data-e="'+e0.id+'" aria-label="Cambiar '+esc(e0.name)+' por una variante"><option value="">'+esc(e0.name)+(e.orig?'':' (pautado)')+'</option>'+VO.map(n=>'<option value="'+esc(n)+'"'+(e.name===n?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select></label>'+(e.orig?'<p class="var-n">Cambiado por ti: el peso se ajusta a tu historial con esta variante.</p>':''):'';
   let rows='';
   const repsN=(/[^\d\s]/.test(String(e.reps||''))&&!(S.tag==='up'&&!(S.kg>0)))?NaN:(S.reps||parseInt(e.reps)),goalR=isNaN(repsN)?esc(e.reps):'<b>'+repsN+' reps</b>';
-  for(let i=0;i<Math.max(n,ls.length,ds.length);i++)rows+='<div class="setrow2"><span class="sn">'+(i+1)+'</span><div class="sgoal"><small>Serie '+(i+1)+' · objetivo</small>'+goalR+(kgv?' · <b>'+esc(kgv)+(S.kgTxt?'':' kg')+'</b>':'')+'</div>'+(bw?'<label class="sin kgw bwl"><span>Peso</span><b class="bw-v">Corporal</b><input type="hidden" class="setkg" value="0"></label>':wheelKg(i,S.kgTxt?'':kgv,dv(i,0),dis,pk(i),isDbEx(e.name)))+wheelReps(i,isNaN(repsN)?(parseInt(e.reps)||''):repsN,dv(i,1),dis,isSecEx(e))+'<label class="sok"><input type="checkbox" class="setok" aria-label="Serie '+(i+1)+' hecha tal como está pautada"'+(ds[i]&&ds[i][2]?' checked':'')+dis+'><span>Hecha</span></label></div>';
+  const row=(i,blank)=>{const ex=i>=n,gl=e.x?'':goalR+(kgv?' · <b>'+esc(kgv)+(S.kgTxt?'':' kg')+'</b>':'');
+    return '<div class="setrow2'+(ex?' xtra':'')+'"><span class="sn">'+(i+1)+'</span><div class="sgoal"><small>Serie '+(i+1)+(e.x?'':ex?' · extra':' · objetivo')+'</small>'+gl+(i>=n&&!dis?'<button type="button" class="sx-del" data-act="delSet" aria-label="Quitar la serie '+(i+1)+'">✕ Quitar</button>':'')+'</div>'+(bw?'<label class="sin kgw bwl"><span>Peso</span><b class="bw-v">Corporal</b><input type="hidden" class="setkg" value="0"></label>':wheelKg(i,S.kgTxt?'':kgv,blank?null:dv(i,0),dis,pk(i),isDbEx(e.name)))+wheelReps(i,isNaN(repsN)?(parseInt(e.reps)||''):repsN,blank?null:dv(i,1),dis,isSecEx(e))+'<label class="sok"><input type="checkbox" class="setok" aria-label="Serie '+(i+1)+' hecha tal como está pautada"'+(!blank&&ds[i]&&ds[i][2]?' checked':'')+dis+'><span>Hecha</span></label></div>'};
+  const nR=Math.max(n,ls.length,ds.length);
+  for(let i=0;i<nR;i++)rows+=row(i);
+  if(!dis)rows+='<template class="set-t">'+row(nR,true)+'</template><button type="button" class="btn add-set" data-act="addSet">+ Añadir una serie</button>';
   const rirT=week.rir;
   const rN=parseInt(e.rest),restTxt=(isNaN(rN)||/\d\s*[-–]\s*\d/.test(e.rest||''))?esc(e.rest||'—'):(rN>=60?(Math.floor(rN/60)+(rN%60?':'+String(rN%60).padStart(2,'0'):'')+'<small> min</small>'):rN+'<small> s</small>');
   const rirN=num(rirT),rirTxt=rirN===0?'hasta el fallo':rirN===1?'te sobra 1 rep':'te sobran '+rirN+' reps';
@@ -4119,10 +4158,14 @@ function exoCard(e,idx,week,wi,c,e0){e0=e0||e;
    tile('Series × '+(isSecEx(e)?'tiempo':'reps'),n+' × '+repV,S.tag==='deload'?'menos por descarga':S.tag==='up'&&!kgv?'▲ +1 rep por tu progreso':'',S.tag==='up'&&!kgv?'up':'')+tile('Peso',kgv?esc(kgv)+(S.kgTxt?'':'<small> kg</small>'):'<small>Libre</small>',kgv?({up:'▲ sube por tu progreso',keep:'= mantén el peso',down:'▼ baja un poco',deload:'▼ descarga',coach:'pautado'}[S.tag]||'orientativo'):'elige tu carga',kgv&&S.tag&&S.tag!=='coach'?S.tag:'')+
    tile('RIR',esc(rirT),rirTxt,'rir')+'</div><div class="rx-m">'+(e.tempo?'<span>Tempo <b>'+esc(e.tempo)+'</b> (bajar · pausa · subir · pausa)</span>':'')+'<span>Descanso <b>'+restTxt.replace(/<[^>]+>/g,'')+'</b> entre series</span></div>'+(S.why?'<p class="rx-why"><span aria-hidden="true">💡</span>'+esc(S.why)+'</p>':'')+'</div>';
   const prev=c.log.filter(l=>l.ex===e.name&&l!==lg&&l.sets&&l.sets.length).sort((a,b)=>b.ts-a.ts)[0];
+  const noteV=lg&&lg.note||DR&&DR.note||'',rirV=lg?lg.rir:DR&&DR.rir!==''?num(DR.rir):num(rirT),hasRir=rirV!=null&&!isNaN(rirV);
+  const noteBox=dis&&!noteV?'':'<details class="exo-more nb"'+(ed||noteV?' open':'')+'><summary><span class="nb-ic" aria-hidden="true">📝</span><span class="nb-t"><b>Nota y RIR real</b><small>Opcional · lo verá tu entrenador</small></span></summary><div class="exo-f nb-in">'+
+   '<div class="nb-rir"><span class="nb-l">¿Cuántas reps te sobraban al terminar? <small>(RIR)</small></span><div class="nb-seg" role="group" aria-label="RIR real, repeticiones en reserva">'+[0,1,2,3,4].map(v=>'<button type="button" class="nb-b" data-act="rirB" data-v="'+v+'" aria-pressed="'+(hasRir&&v===rirV)+'"'+dis+'>'+v+'</button>').join('')+'</div><small class="nb-h">0 = hasta el fallo · 4 = te sobraban 4 o más</small><input type="hidden" class="rirsel" value="'+(hasRir?rirV:'')+'"></div>'+
+   '<label class="nb-n"><span class="nb-l">Nota para tu entrenador</span><textarea class="in cnote" rows="3" placeholder="Sensaciones, molestias, técnica, si te ha costado más de lo normal…"'+dis+'>'+esc(noteV)+'</textarea></label></div></details>';
   return '<div class="exo'+(done&&!ed?' done':'')+(ed?' editing':'')+'" data-ex="'+e.id+'" data-w="'+wi+'" data-rest="'+(parseInt(e.rest)||0)+'"><div class="exo-h"><span class="exo-n">'+(idx+1)+'</span><div><h4>'+esc(e.name||'Ejercicio sin nombre')+'</h4>'+(L&&L.group?'<span class="exo-g">'+esc(L.group)+'</span>':'')+'</div></div>'+
-   '<div class="exo-body"><div class="exo-l">'+media+(e.tech?'<p class="tech"><b>Técnica</b>'+esc(e.tech)+'</p>':'')+'</div>'+rx+'<div class="exo-r todo"><div class="todo-h"><span class="todo-t">Tu turno</span><span class="todo-s">La rueda se abre en lo pautado: solo ajusta lo que hayas hecho. Se guarda sola mientras rellenas, aunque cierres la app.</span></div>'+varSel+bwBtn+(prev?'<div class="prev"><b>↺ La última vez</b> ('+dshort(prev.ts)+'): '+prev.sets.map(s=>prev.u==='s'?setTxt(s,'s'):s[0]>0?fmtN(s[0])+' kg × '+s[1]:s[1]+' reps').join(' · ')+'</div>':'')+rows+
-   (ed||(lg&&lg.note)||(DR&&DR.note)?'<div class="exo-f"><select class="in rirsel" aria-label="RIR real, repeticiones en reserva"'+dis+'><option value="">RIR</option>'+[0,1,2,3,4].map(v=>'<option value="'+v+'"'+(v===(lg&&lg.rir!=null?lg.rir:DR&&DR.rir!==''?num(DR.rir):num(rirT))?' selected':'')+'>RIR '+v+'</option>').join('')+'</select><input class="in cnote" placeholder="Nota o sensaciones (opcional)" value="'+esc(lg&&lg.note||DR&&DR.note||'')+'"'+dis+'></div>':'<details class="exo-more"><summary>+ Añadir RIR real o nota</summary><div class="exo-f"><select class="in rirsel" aria-label="RIR real, repeticiones en reserva"'+dis+'><option value="">RIR</option>'+[0,1,2,3,4].map(v=>'<option value="'+v+'"'+(v===(lg&&lg.rir!=null?lg.rir:DR&&DR.rir!==''?num(DR.rir):num(rirT))?' selected':'')+'>RIR '+v+'</option>').join('')+'</select><input class="in cnote" placeholder="Nota o sensaciones (opcional)" value="'+esc(lg&&lg.note||DR&&DR.note||'')+'"'+dis+'></div></details>')+
-   (ed?'<p class="ed-h">Corrige lo que necesites y guarda. Tu entrenador verá que lo has actualizado.</p><div class="ed-a"><button type="button" class="btn danger-l" data-act="clearEx" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Borrar todo</button><button type="button" class="btn" data-act="editEx" data-e="'+e.id+'" data-w="'+wi+'">Cancelar</button><button type="button" class="btn primary" data-act="send" data-e="'+e.id+'" data-w="'+wi+'">Guardar cambios</button></div>':done?'<div class="ed-a"><span class="sent-ok">✓ Enviado'+(lg?' el '+dmy(new Date(lg.ts))+(lg.edited?' · corregido':''):'')+'</span>'+(lg?'<button type="button" class="btn" data-act="editEx" data-e="'+e.id+'" data-w="'+wi+'">✎ Corregir datos</button><button type="button" class="btn danger-l" data-act="clearEx" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Borrar</button>':'')+'</div>':'<button type="button" class="btn fin-ex" data-act="send" data-e="'+e.id+'" data-w="'+wi+'">Terminar ejercicio</button><p class="fin-h">Al marcar la última serie se envía solo.</p>')+'</div></div></div>';
+   '<div class="exo-body"><div class="exo-l">'+media+(e.tech?'<p class="tech"><b>Técnica</b>'+esc(e.tech)+'</p>':'')+'</div>'+(e.x?'<div class="rx xnote"><p><span aria-hidden="true">➕</span> Ejercicio añadido por ti. Se guarda solo en tu registro de este día: tu plan no cambia.</p><button type="button" class="btn danger-l" data-act="xDel" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Quitar ejercicio</button></div>':rx)+'<div class="exo-r todo"><div class="todo-h"><span class="todo-t">Tu turno</span><span class="todo-s">La rueda se abre en lo pautado: solo ajusta lo que hayas hecho. Se guarda sola mientras rellenas, aunque cierres la app.</span></div>'+varSel+bwBtn+(prev?'<div class="prev"><b>↺ La última vez</b> ('+dshort(prev.ts)+'): '+prev.sets.map(s=>prev.u==='s'?setTxt(s,'s'):s[0]>0?fmtN(s[0])+' kg × '+s[1]:s[1]+' reps').join(' · ')+'</div>':'')+rows+
+   noteBox+
+   (ed?'<p class="ed-h">Corrige lo que necesites y guarda. Tu entrenador verá que lo has actualizado.</p><div class="ed-a"><button type="button" class="btn danger-l" data-act="clearEx" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Borrar todo</button><button type="button" class="btn" data-act="editEx" data-e="'+e.id+'" data-w="'+wi+'">Cancelar</button><button type="button" class="btn primary" data-act="send" data-e="'+e.id+'" data-w="'+wi+'">Guardar cambios</button></div>':done?'<div class="ed-a"><span class="sent-ok">✓ Enviado'+(lg?' el '+dmy(new Date(lg.ts))+(lg.edited?' · corregido':''):'')+'</span>'+(lg?'<button type="button" class="btn" data-act="setMore" data-e="'+e.id+'" data-w="'+wi+'">+ Añadir una serie</button><button type="button" class="btn" data-act="editEx" data-e="'+e.id+'" data-w="'+wi+'">✎ Corregir datos</button><button type="button" class="btn danger-l" data-act="clearEx" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Borrar</button>':'')+'</div>':'<button type="button" class="btn fin-ex" data-act="send" data-e="'+e.id+'" data-w="'+wi+'">Terminar ejercicio</button><p class="fin-h">Al marcar la última serie se envía solo.</p>')+'</div></div></div>';
 }
 function clientTrain(c,days,di,d){
   if(state.cal)return '<div class="tr2">'+calView(c,'client')+'</div>';
@@ -4151,12 +4194,16 @@ function clientTrain(c,days,di,d){
   const rs=r=>{const s=String(r||'').trim();let m2=/^(\d+)\s*[-–]\s*(\d+)\s*s$/.exec(s);if(m2&&+m2[1]%60===0&&+m2[2]%60===0)return (+m2[1]/60)+'-'+(+m2[2]/60)+' min';m2=/^(\d+)\s*s?$/.exec(s);if(m2){const v=+m2[1];return v>=60?(v%60?Math.floor(v/60)+':'+String(v%60).padStart(2,'0'):v/60)+' min':v+' s'}return s};
   const okey=d.id+'@'+w;let op=state.exO[okey];
   if(op===undefined){const nx=d.exs.find(e=>!doneEx(c,e,w));op=nx?nx.id:''}
-  const list=tot?'<div class="tx-l">'+d.exs.map((e0,idx)=>{
+  const xk=(r=>r?isoOf(r[0]):'')(ctxRange(c,w)),xs=(c.xEx||[]).filter(x=>x.d===d.id&&x.w===w&&(x.k||'')===xk).map(x=>({id:x.id,name:x.name,sets:'3',reps:'10',rest:'',x:1}));
+  const art=(e0,idx)=>{
     const lg=logFor(c,e0.id,w),e=exEff(c,e0,lg),S=suggest(c,e,w),done=doneEx(c,e,w),L=libFor(e.name),ph=L&&L.photo,isO=op===e.id;
     const kg=S.kgTxt?S.kgTxt:S.kg>0?fmtN(S.kg)+' kg':'',reps=/[^\d\s]/.test(String(e.reps||''))?e.reps:(S.reps||e.reps);
-    const line=[(S.sets||e.sets)+' × '+reps,kg,'RIR '+W.rir,e.rest?'⏱ '+rs(e.rest):''].filter(Boolean).join(' · ');
+    const line=e.x?'Añadido por ti':[(S.sets||e.sets)+' × '+reps,kg,'RIR '+W.rir,e.rest?'⏱ '+rs(e.rest):''].filter(Boolean).join(' · ');
     const dl=lg&&lg.sets?lg.sets.map(s=>setTxt(s,lg.u)).join(' · '):'';
-    return '<article class="tx'+(done?' done':'')+(isO?' open':'')+'" id="tx-'+e.id+'"><button type="button" class="tx-h" data-act="exT" data-k="'+okey+'" data-e="'+e.id+'" aria-expanded="'+isO+'">'+(ph?'<img class="tx-ph" src="'+esc(mURL(ph))+'\" alt="">':'<span class="tx-ph none" aria-hidden="true">'+(idx+1)+'</span>')+'<span class="tx-t"><b>'+(idx+1)+'. '+esc(e.name)+(e.orig?' <small class="tx-var">variante</small>':'')+'</b><span>'+esc(done&&dl?'Hecho: '+dl:line)+'</span></span>'+(done?'<span class="tx-ok" aria-label="Hecho">✓</span>':'')+'<span class="tx-ch" aria-hidden="true"></span></button>'+(isO?'<div class="tx-b">'+exoCard(e,idx,W,w,c,e0)+'</div>':'')+'</article>'}).join('')+'</div>':'<div class="empty">Este día todavía no tiene ejercicios.</div>';
+    return '<article class="tx'+(done?' done':'')+(isO?' open':'')+'" id="tx-'+e.id+'"><button type="button" class="tx-h" data-act="exT" data-k="'+okey+'" data-e="'+e.id+'" aria-expanded="'+isO+'">'+(ph?'<img class="tx-ph" src="'+esc(mURL(ph))+'\" alt="">':'<span class="tx-ph none" aria-hidden="true">'+(idx+1)+'</span>')+'<span class="tx-t"><b>'+(idx+1)+'. '+esc(e.name)+(e.orig?' <small class="tx-var">variante</small>':'')+'</b><span>'+esc(done&&dl?'Hecho: '+dl:line)+'</span></span>'+(done?'<span class="tx-ok" aria-label="Hecho">✓</span>':'')+'<span class="tx-ch" aria-hidden="true"></span></button>'+(isO?'<div class="tx-b">'+exoCard(e,idx,W,w,c,e0)+'</div>':'')+'</article>'};
+  const libO=state.lib.slice().sort((a,b)=>String(a.group).localeCompare(b.group,'es')||String(a.name).localeCompare(b.name,'es')),grp=[...new Set(libO.map(x=>x.group||'Otros'))];
+  const xadd=state.xAdd===okey?'<div class="xadd-f"><b>Añadir un ejercicio a esta sesión</b><p class="muted">Solo queda en tu registro de este día. Tu plan no cambia.</p><label><span>Elige de la lista</span><select class="in" id="xaSel"><option value="">Elige un ejercicio…</option>'+grp.map(g=>'<optgroup label="'+esc(g)+'">'+libO.filter(x=>(x.group||'Otros')===g).map(x=>'<option>'+esc(x.name)+'</option>').join('')+'</optgroup>').join('')+'</select></label><label><span>O escribe el nombre</span><input class="in" id="xaName" placeholder="Ej.: Curl martillo"></label><div class="actions"><button type="button" class="btn" data-act="xAddNo">Cancelar</button><button type="button" class="btn primary" data-act="xAddOk" data-d="'+d.id+'" data-w="'+w+'" data-k="'+okey+'">Añadir</button></div></div>':'<button type="button" class="btn add-ex" data-act="xAdd" data-k="'+okey+'">+ Añadir un ejercicio</button>';
+  const list=(tot||xs.length?'<div class="tx-l">'+d.exs.map(art).join('')+xs.map((e0,i)=>art(e0,tot+i)).join('')+'</div>':'<div class="empty">Este día todavía no tiene ejercicios.</div>')+xadd;
   const gl='<details class="tfold"><summary><b>Cómo usar este plan</b><span>RIR, tempo, progresión y cómo registrar</span></summary><dl class="tgl">'+GLOS.map(x=>'<div><dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd></div>').join('')+'</dl></details>';
   const lt=state.logTs?new Date(state.logTs):null;
   const oth=(lt?'<div class="wkban cal-log"><div><b>📅 Registrando el '+DAYS[(lt.getDay()+6)%7].toLowerCase()+' '+lt.getDate()+' de '+MESES[lt.getMonth()]+'</b><span>Lo que envíes quedará guardado en ese día.</span></div><div class="actions"><button type="button" class="btn" data-act="calLogX">Volver a hoy</button></div></div>':'')+(w===cw&&!lt?'<div class="act-top">'+trAsk(c,todayIdx(),0)+'</div>':'');
@@ -4508,6 +4555,11 @@ function draftSave(card){
   if(typeof markDirty==='function')markDirty();
 }
 
+/* series extra: renumerar tras añadir o quitar */
+function setRenum(ex){$$('.setrow2',ex).forEach((r,i)=>{const n=i+1,sn=r.querySelector('.sn'),sm=r.querySelector('.sgoal small');
+  if(sn)sn.textContent=n;if(sm)sm.textContent=sm.textContent.replace(/Serie \d+/,'Serie '+n);
+  r.querySelectorAll('[aria-label]').forEach(el=>el.setAttribute('aria-label',el.getAttribute('aria-label').replace(/serie \d+/i,m=>m.replace(/\d+/,n))))})}
+
 /* ---------- eventos ---------- */
 
 function blankDiet(){return{trainDays:[1,0,1,0,1,0,0],water:2.5,goalW:0,bmr:0,tdee:0,notes:'',supps:[],types:{train:{kcal:2200,p:150,meals:[meal('Desayuno',[]),meal('Comida',[]),meal('Pre-entreno',[]),meal('Post-entreno',[]),meal('Cena',[])]},rest:{kcal:2000,p:150,meals:[meal('Desayuno',[]),meal('Comida',[]),meal('Merienda',[]),meal('Cena',[])]}}}}
@@ -4673,8 +4725,18 @@ document.addEventListener('click',e=>{
     case 'runDel':{const w=+t.dataset.w,i=+t.dataset.i;if(!c.run)break;const n=(c.run.logs||[]).length;c.run.logs=(c.run.logs||[]).filter(l=>!(l.w===w&&l.i===i));state.rnEdit='';renderRail();renderMain();renderBell();toast(n>c.run.logs.length?'Salida borrada: vuelve a estar pendiente. El gimnasio no se toca':'No había nada que borrar');break}
     case 'planSeen':{if(c.planUpd)c.planSeen=c.planUpd.ts;if(t.dataset.t){state.ctab=t.dataset.t;state.cal=false;window.scrollTo({top:0})}renderMain();break}
     case 'clearEx':clearEx(c,t.dataset.e,+t.dataset.w);break;
+    case 'addSet':{const ex=t.closest('.exo'),tp=ex&&ex.querySelector('template.set-t');if(!tp)break;t.before(tp.content.cloneNode(true));setRenum(ex);draftSave(ex);const r=$$('.setrow2',ex).pop();if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'});break}
+    case 'delSet':{const ex=t.closest('.exo'),r=t.closest('.setrow2');if(r)r.remove();if(ex){setRenum(ex);draftSave(ex)}break}
+    case 'setMore':{state.editEx[t.dataset.e+'@'+t.dataset.w]=true;renderMain();const ex=$('[data-ex="'+t.dataset.e+'"]'),b=ex&&ex.querySelector('[data-act=addSet]');if(b)b.click();break}
+    case 'rirB':{const ex=t.closest('.exo'),h=ex&&ex.querySelector('.rirsel');if(!h)break;const on=t.getAttribute('aria-pressed')!=='true';h.value=on?t.dataset.v:'';$$('.nb-b',ex).forEach(b=>b.setAttribute('aria-pressed',String(on&&b===t)));draftSave(ex);break}
+    case 'xAdd':state.xAdd=t.dataset.k;renderMain();{const f=$('.xadd-f');if(f)f.scrollIntoView({block:'nearest',behavior:'smooth'})}break;
+    case 'xAddNo':state.xAdd=null;renderMain();break;
+    case 'xAddOk':{const nm=($('#xaName').value.trim()||$('#xaSel').value).slice(0,80);if(!nm){toast('Elige o escribe un ejercicio');break}
+      const w=+t.dataset.w,r=ctxRange(c,w),x={id:'x'+nid(),d:t.dataset.d,w,k:r?isoOf(r[0]):'',name:nm,ts:Date.now()};c.xEx=(c.xEx||[]).concat([x]);state.xAdd=null;state.exO[t.dataset.k]=x.id;renderMain();
+      const o=$('#tx-'+x.id);if(o)o.scrollIntoView({block:'start',behavior:'smooth'});toast('Ejercicio añadido a tu sesión');break}
+    case 'xDel':{const w=+t.dataset.w,L0=logFor(c,t.dataset.e,w);if(L0)c.log=c.log.filter(l=>l!==L0);draftDel(c,t.dataset.e,w);c.xEx=(c.xEx||[]).filter(x=>x.id!==t.dataset.e);if(!c.xEx.length)delete c.xEx;renderRail();renderMain();toast('Ejercicio quitado');break}
     case 'sendPlan':{const card=t.closest('[data-ex]');if(card)$$('.setrow2',card).forEach(r=>{const k=r.querySelector('.setkg'),rp=r.querySelector('.setreps'),ok=r.querySelector('.setok');if(!k.value&&k.dataset.t)k.value=k.dataset.t;if(!rp.value&&rp.dataset.t)rp.value=rp.dataset.t;if(ok)ok.checked=true});const b=card&&card.querySelector('[data-act=send]');if(b)b.click();break}
-    case 'send':{const k0=Object.keys(state.exO);sendEx(c,t.dataset.e,t);const d0=c.training.days[cdayFor(c)],w0=state.vw!=null?state.vw:clientWeek(c);if(d0&&doneEx(c,d0.exs.find(e=>e.id===t.dataset.e)||{},w0)){delete state.exO[d0.id+'@'+w0];renderMain();setTimeout(()=>{const o=$('.tx.open');if(o)o.scrollIntoView({behavior:'smooth',block:'start'})},60)}break}
+    case 'send':{const k0=Object.keys(state.exO);sendEx(c,t.dataset.e,t);const d0=c.training.days[cdayFor(c)],w0=state.vw!=null?state.vw:clientWeek(c);if(d0&&doneEx(c,(findEx(c,t.dataset.e)||{}).e||{},w0)){delete state.exO[d0.id+'@'+w0];renderMain();setTimeout(()=>{const o=$('.tx.open');if(o)o.scrollIntoView({behavior:'smooth',block:'start'})},60)}break}
     case 'sendChk':{const g=k=>num($('#ck-'+k).value),comm=$('#ck-comm').value.trim();const x={id:nid(),ts:Date.now(),week:curWeek(c)+1,peso:g('peso'),pasos:g('pasos'),sueno:g('sueno'),energia:g('energia'),estres:g('estres'),hambre:g('hambre'),dieta:g('dieta'),comm,fresh:true};
       if(!(x.peso||x.pasos||x.sueno||x.energia||x.estres||x.hambre||x.dieta||comm)){toast('Rellena al menos un dato');break}
       c.chk.push(x);if(x.peso>0)c.weights.push(x.peso);renderMain();renderRail();toast('Check-in enviado a tu entrenador');break}
@@ -5092,7 +5154,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012112451';let verT=0;
+const APP_VER='20261012155830';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

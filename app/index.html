@@ -2749,7 +2749,7 @@ const EXCH=[
 const PORC=[['Una palma','≈ 1 ración de proteína (carne, pescado, tofu)'],['Un puño','≈ 1 ración de hidratos cocidos (arroz, pasta, patata)'],['Un pulgar','≈ 1 ración de grasa (aceite, frutos secos, aguacate)'],['Dos manos','≈ 1 ración de verdura (ensalada, brócoli, hojas)']];
 const PAUTAS=[['Hidratación','Lleva siempre una botella contigo y bebe un vaso de agua con cada comida.'],['Proteína en cada toma','Incluye una fuente de proteína en todas las comidas principales para mejorar la saciedad y la recuperación.'],['Medio plato de verdura','En comida y cena, llena la mitad del plato con verdura u hortaliza.'],['Cocinado','Plancha, horno, vapor, air fryer o guisos con poco aceite. Mide el aceite con cuchara.'],['Comer fuera','Elige plato de proteína + verdura, pide salsas aparte y no te saltes la siguiente comida para «compensar».'],['Alcohol','Si bebes, que sea puntual y dentro de las kcal del día. Evita combinarlo con picoteo.'],['Planificación','Haz la compra con lista y cocina por lotes 2 veces por semana.'],['Flexibilidad','Un desliz no rompe el plan: vuelve a la siguiente comida con normalidad. Buscamos constancia, no perfección.']];
 const AVOID='Bollería y galletas · refrescos y zumos azucarados · ultraprocesados y snacks · embutidos grasos · fritos y rebozados habituales · salsas comerciales · alcohol.';
-const GLOS=[['RIR','Repeticiones en reserva: cuántas reps más podrías haber hecho. 0 = al fallo · 1 = quedaba 1 · 3 = cómodo.'],['Tempo (ej. 3-1-1-0)','Segundos de bajada – pausa abajo – subida – pausa arriba.'],['Progresión','Si completas todas las reps con el RIR pautado, sube la carga la semana siguiente (2,5 – 5 %).'],['Cómo registrar','Anota kg y reps reales de cada serie, tu RIR y pulsa «Enviar a mi entrenador»: él lo ve al momento.'],['Vídeo','Si el ejercicio tiene vídeo, púlsalo para ver cómo se hace.']];
+const GLOS=[['RIR','Repeticiones en reserva: cuántas reps más podrías haber hecho. 0 = al fallo · 1 = quedaba 1 · 3 = cómodo.'],['Tempo (ej. 3-1-1-0)','Segundos de bajada – pausa abajo – subida – pausa arriba.'],['Progresión','Si completas todas las reps con el RIR pautado, sube la carga la semana siguiente (2,5 – 5 %).'],['Cómo registrar','Anota kg y reps reales de cada serie, tu RIR y marca la serie como hecha: al marcar la última se envía sola y tu entrenador lo ve al momento.'],['Vídeo','Si el ejercicio tiene vídeo, púlsalo para ver cómo se hace.']];
 
 /* sustituciones: grupo, macro que se iguala (p,c,f,k=kcal,g=gramos) */
 const SWG=[['Proteínas','p','p'],['Hidratos','c','c'],['Grasas','f','f'],['Fruta','c','fr'],['Lácteos proteicos','p','kp'],['Lácteos','k','k'],['Verduras','g','v']].map(g=>[g[0],g[1],FOODDB.filter(x=>x.g===g[2]&&x.sw).map(x=>x.n)]);
@@ -2774,6 +2774,17 @@ function swGet(id){const S=state.swaps,k=swK(id);if(S[k])return S[k];
   return undefined}
 function swPrune(){const S=state.swaps,lim=isoOf(Date.now()-60*D);Object.keys(S).forEach(k=>{const d=k.split('|')[0];if(k.indexOf('|')>0&&d<lim)delete S[k]})}
 function swapSig(c,t){const L=[];c.diet.types[t].meals.forEach(m=>m.items.forEach(i=>{const s=swGet(i.id);if(s&&FOODS[s.food])L.push(i.id+'>'+s.food)}));return L.sort().join('|')}
+/* cambios de alimentos: llegan solos al entrenador, un único mensaje corto por día que se actualiza */
+function swAuto(c,t){
+  const cd=state.cdd!=null?state.cdd:todayIdx(),dt=new Date(dayStart(0,cd)),iso=isoOf(dt),L=[];
+  c.diet.types[t].meals.forEach(m=>{const X=[];m.items.forEach(i=>{const e=effItem(i);if(e.sw)X.push(i.food+' → '+e.food+' '+r1(e.g)+' g')});if(X.length)L.push(m.name+': '+X.join(' · '))});
+  const old=c.msgs.find(m=>m.swd===iso&&m.from==='client');
+  if(!c.swSent)c.swSent={};c.swSent[t]=swapSig(c,t);
+  if(!L.length){if(old){if(old.fresh)c.msgs=c.msgs.filter(m=>m!==old);else Object.assign(old,{text:'🍽 '+DAYS[cd]+' '+dt.getDate()+'/'+(dt.getMonth()+1)+': vuelve a su dieta del plan.',ts:Date.now(),fresh:true})}return}
+  const dk=Math.round(totalsSw(c,t).k-totalsT(c,t).k);
+  const text='🍽 Cambios de dieta · '+DAYS[cd]+' '+dt.getDate()+'/'+(dt.getMonth()+1)+'\n'+L.join('\n')+'\n'+(dk?(dk>0?'+':'−')+Math.abs(dk)+' kcal respecto al plan':'Mismas kcal que el plan');
+  if(old)Object.assign(old,{text,ts:Date.now(),fresh:true});else c.msgs.push({id:nid(),ts:Date.now(),from:'client',kind:'Mensaje',text,swd:iso,fresh:true});
+}
 function swapCount(c,t){let n=0;c.diet.types[t].meals.forEach(m=>m.items.forEach(i=>{const s=swGet(i.id);if(s&&FOODS[s.food])n++}));return n}
 const CONSENT_V='1.0';
 const CONSENT=[
@@ -4283,8 +4294,7 @@ function clientDiet(c){
       '<p class="mx-mac">P '+r(x.p)+' g · HC '+r(x.h)+' g · G '+r(x.g)+' g · <b>'+Math.round(x.k)+' kcal</b></p>'+eat+'</div></div>';
   };
   const dk=Math.round(ts.k-tt.k);
-  const sent=nsw&&c.swSent&&c.swSent[K]===swapSig(c,K);
-  const bar=sent?'<div class="swbar sent"><span>✓ Tu entrenador ya tiene '+(nsw===1?'tu cambio':'tus '+nsw+' cambios')+' de este día'+(dk?' ('+(dk>0?'+':'−')+Math.abs(dk)+' kcal)':'')+'.</span></div>':nsw?'<div class="swbar on"><div><b>Has cambiado '+nsw+(nsw===1?' alimento':' alimentos')+'</b><span>'+(dk===0?'Mismas kcal que el plan.':(dk>0?'+':'−')+Math.abs(dk)+' kcal respecto al plan.')+' Para deshacer uno, toca «↩ Volver a…» en ese alimento.</span></div><div class="actions"><button type="button" class="btn primary" data-act="swapSend">Enviar a mi entrenador</button></div></div>':'';
+  const bar=nsw?'<div class="swbar sent"><span>✓ Tu entrenador ve '+(nsw===1?'tu cambio':'tus '+nsw+' cambios')+' de este día'+(dk?' ('+(dk>0?'+':'−')+Math.abs(dk)+' kcal)':'')+'. Para deshacer uno, toca «↩ Volver a…» en ese alimento.</span></div>':'';
   const pct=(v,tg)=>tg>0?Math.round(v/tg*100):0;
   const ring=(v,tg)=>{const ratio=tg>0?v/tg:0,R=34,C=2*Math.PI*R;return '<div class="dh2-r"><svg viewBox="0 0 84 84" role="img" aria-label="Calorías: '+pct(v,tg)+'% del plan"><circle class="rg-bg" cx="42" cy="42" r="'+R+'"/>'+(ratio>0?'<circle class="rg-fg'+(ratio>1.05?' over':'')+'" cx="42" cy="42" r="'+R+'" stroke-dasharray="'+(C*Math.min(1,ratio)).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 42 42)"/>':'')+'</svg><div><b>'+Math.round(v)+'</b><small>/ '+Math.round(tg)+' kcal</small></div></div>'};
   const mb=(l,v,tg,col)=>'<div class="dh2-m"><span>'+l+'</span><div class="dh2-bar"><i style="width:'+Math.min(100,pct(v,tg))+'%;background:'+col+'"></i></div><b>'+r(v)+'<small> / '+r(tg)+' g</small></b></div>';
@@ -4713,8 +4723,7 @@ document.addEventListener('click',e=>{
     case 'cday':state.cday=+t.dataset.i;renderMain();break;
     case 'consentAccept':{c.consent={ts:Date.now(),v:CONSENT_V};renderMain();toast('Consentimiento registrado');break}
     case 'consentRevoke':{c.photos.forEach(p=>{try{URL.revokeObjectURL(p.url)}catch(_){}});c.photos=[];state.cmp=[];c.consent=null;renderMain();renderRail();toast('Consentimiento retirado y fotos borradas');break}
-    case 'swapReset':{const ty=dayKey(c,state.cdd);c.diet.types[ty].meals.forEach(m=>m.items.forEach(i=>{delete state.swaps[swK(i.id)]}));renderMain();toast('Plan original restablecido');break}
-    case 'swapSend':{const ty=dayKey(c,state.cdd),L=[];c.diet.types[ty].meals.forEach(m=>m.items.forEach(i=>{const e=effItem(i);if(e.sw)L.push(m.name+': '+i.food+' '+r1(i.g)+' g → '+e.food+' '+r1(e.g)+' g')}));if(!L.length){toast('No hay cambios que enviar');break}const a=totalsT(c,ty),b=totalsSw(c,ty);c.msgs.push({id:nid(),ts:Date.now(),from:'client',kind:'Otro',text:'Cambios en mi dieta ('+DAYS[state.cdd]+', '+(ty==='train'?'día de entreno':'día de descanso')+'):\n'+L.join('\n')+'\nTotal: '+Math.round(b.k)+' kcal (plan '+Math.round(a.k)+') · P '+r1(b.p)+' g · HC '+r1(b.h)+' g · G '+r1(b.g)+' g',fresh:true});if(!c.swSent)c.swSent={};c.swSent[ty]=swapSig(c,ty);renderMain();renderRail();toast('Cambios enviados a tu entrenador');break}
+    case 'swapReset':{const ty=dayKey(c,state.cdd);c.diet.types[ty].meals.forEach(m=>m.items.forEach(i=>{delete state.swaps[swK(i.id)]}));swAuto(c,ty);renderMain();toast('Plan original restablecido');break}
     case 'showRut':state.showRut=!state.showRut;renderMain();break;
     case 'calTop':if(state.cal&&state.ctab==='entreno'){state.cal=false;renderMain();break}state.ctab='entreno';state.cal=true;state.calD=null;state.calM=0;state.logTs=null;renderMain();window.scrollTo({top:0});break;
     case 'calOpen':state.cal=!state.cal;state.calD=null;state.calM=0;renderMain();window.scrollTo({top:0});break;
@@ -4820,7 +4829,7 @@ document.addEventListener('change',e=>{
   if(t.id==='wOdd'){const bx=t.closest('.wt-form').querySelector('#wCondBox');if(bx){bx.hidden=!t.checked;if(t.checked)bx.querySelector('input').focus()}return}
   if(t.classList&&t.classList.contains('cchk')){const bt=$('#cAccept');if(bt)bt.disabled=!$$('.cchk').every(x=>x.checked);return}
   if(t.classList&&t.classList.contains('varsel')&&c){c.exVar=c.exVar||{};if(t.value)c.exVar[t.dataset.e]=t.value;else delete c.exVar[t.dataset.e];renderMain();toast(t.value?'Cambiado por '+t.value:'Vuelves al ejercicio pautado');return}
-  if(t.classList&&t.classList.contains('swsel')&&c){const ty=dayKey(c,state.cdd);let it=null;c.diet.types[ty].meals.forEach(m=>m.items.forEach(i=>{if(i.id===t.dataset.i)it=i}));if(it){swGet(it.id);if(t.value)state.swaps[swK(it.id)]={food:t.value,g:swapG(it,t.value)};else delete state.swaps[swK(it.id)];swPrune()}renderMain();return}
+  if(t.classList&&t.classList.contains('swsel')&&c){const ty=dayKey(c,state.cdd);let it=null;c.diet.types[ty].meals.forEach(m=>m.items.forEach(i=>{if(i.id===t.dataset.i)it=i}));if(it){swGet(it.id);if(t.value)state.swaps[swK(it.id)]={food:t.value,g:swapG(it,t.value)};else delete state.swaps[swK(it.id)];swPrune();swAuto(c,ty)}renderMain();return}
   if(t.classList&&t.classList.contains('td')&&c){c.diet.trainDays[+t.dataset.i]=t.checked?1:0;updateReq();return}
   if(t.classList&&t.classList.contains('setok')){const row=t.closest('.setrow2'),ex=t.closest('.exo');if(t.checked)restLive(ex);if(row){const k=row.querySelector('.setkg'),rp=row.querySelector('.setreps');if(t.checked){if(!k.value&&k.dataset.t)k.value=String(num(k.dataset.t));if(!rp.value&&rp.dataset.t)rp.value=rp.dataset.t;wSync(row)}}draftSave(ex);
     if(t.checked&&ex&&!ex.classList.contains('editing')){const all=$$('.setok',ex);if(all.length&&all.every(x=>x.checked)){const b=ex.querySelector('[data-act=send]');if(b)setTimeout(()=>{if(b.isConnected)b.click()},350)}}return}
@@ -5183,7 +5192,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012164601';let verT=0;
+const APP_VER='20261012165318';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

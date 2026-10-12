@@ -2298,6 +2298,31 @@ body:has(.p-dock) .toast{bottom:calc(150px + env(safe-area-inset-bottom))}
 .cmode{display:flex;gap:4px;padding:4px;margin:14px 0 8px;border-radius:14px;background:color-mix(in srgb,var(--fg) 7%,transparent);max-width:420px}
 .cv.ver [data-act="delClient"]{display:none}
 .rn-log td:last-child{min-width:200px}
+/* v-likes · tarjetas del calendario: abrir detalle y me gusta */
+.cal-b>header{flex-wrap:nowrap}
+.cal-hd{all:unset;box-sizing:border-box;flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;cursor:pointer;border-radius:8px;padding:2px 0}
+.cal-hd:focus-visible{outline:2px solid var(--accent,#0E9188);outline-offset:3px}
+.cal-hd .muted{margin-left:auto;font-size:13px}
+.cal-hd .cal-tx{font-weight:600}
+.cal-chev{flex:none;font-size:20px;line-height:1;color:var(--muted);transition:transform .15s}
+.cal-hd[aria-expanded="true"] .cal-chev{transform:rotate(90deg)}
+.cal-hd>b+.cal-chev{margin-left:auto}
+.cal-like{flex:none;display:inline-grid;place-items:center;width:40px;height:40px;margin:-6px -8px -6px 0;border:0;border-radius:50%;background:none;color:var(--muted);cursor:pointer;padding:0}
+.cal-like svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
+.cal-like.on{color:#E5484D}
+.cal-like.on svg{fill:currentColor}
+button.cal-like:hover{background:color-mix(in srgb,#E5484D 10%,transparent)}
+button.cal-like:active svg{transform:scale(.85)}
+span.cal-like{cursor:default}
+.cal-b>header .muted+.cal-like{margin-left:0}
+.cal-b>header>b+.cal-like{margin-left:auto}
+.cal-dl{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px 14px;margin:10px 0 2px}
+.cal-dl div{display:flex;flex-direction:column;gap:1px;min-width:0}
+.cal-dl dt{font-size:12px;color:var(--muted)}
+.cal-dl dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.cal-more .cal-pl{font-size:13.5px}
+.act-like{margin-left:4px}
+.pnew.like{border-color:color-mix(in srgb,#E5484D 55%,transparent);background:color-mix(in srgb,#E5484D 10%,var(--surface))}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -2585,7 +2610,7 @@ function actForm(c,i,wo,only){const F=state.actF||{};return '<div class="act-f">
   '<label class="cell"><span class="lbl show">Nota (opcional)</span><input class="in" id="actNote" value="'+esc(F.note||'')+'" placeholder="'+(F.type==='Correr'||F.type==='Caminar / senderismo'?'Ej.: rodaje por el río con amigos':'Ej.: clase de reformer')+'"></label>'+
   '<div class="actions" style="margin:0"><button type="button" class="btn primary sm" data-act="actSave" data-i="'+i+'" data-w="'+(wo||0)+'">Guardar actividad</button><button type="button" class="btn sm" data-act="actCancel">Cancelar</button></div></div>'}
 function trAsk(c,i,wo,short){wo=wo||0;const m=trMark(c,i,wo),logs=dayLogs(c,i,wo).length,A=dayActs(c,i,wo),key=i+'@'+wo,open=state.actOpen===key,fut=wo*7+i>todayIdx();
-  const list=A.map(a=>'<span class="act-it"><span aria-hidden="true">'+actIc(a.type)+'</span>'+esc(a.type==='Otra'&&a.other?a.other:a.type)+(actSum(a)?' · '+esc(actSum(a)):'')+'<button type="button" class="act-x" data-act="actDel" data-id="'+a.id+'" aria-label="Quitar '+esc(a.type)+'">✕</button></span>').join('');
+  const list=A.map(a=>'<span class="act-it"><span aria-hidden="true">'+actIc(a.type)+'</span>'+esc(a.type==='Otra'&&a.other?a.other:a.type)+(actSum(a)?' · '+esc(actSum(a)):'')+(c.likes&&c.likes['a:'+a.id]?'<span class="act-like" role="img" aria-label="A tu entrenador le ha gustado" title="A tu entrenador le ha gustado">❤️</span>':'')+'<button type="button" class="act-x" data-act="actDel" data-id="'+a.id+'" aria-label="Quitar '+esc(a.type)+'">✕</button></span>').join('');
   const R=runOn(c,i,wo),rOk=R&&typeof RUN_OK!=='undefined'&&RUN_OK.indexOf(R.S.t)>=0&&!R.L;
   const runB=fut||!c.run?'':rOk?'<button type="button" class="tr-b" data-act="calRun" data-w="'+R.w+'" data-i="'+R.i+'"><i>🏃</i>Carrera</button>':'<button type="button" class="tr-b" data-act="actOpen" data-k="'+key+'" data-pre="Correr" aria-pressed="'+(open&&(state.actF||{}).type==='Correr')+'"><i>🏃</i>Carrera</button>';
   const othB=fut?'':'<button type="button" class="tr-b" data-act="actOpen" data-k="'+key+'" aria-pressed="'+(open&&(state.actF||{}).type!=='Correr')+'"><i>🧘</i>Otra</button>';
@@ -3742,26 +3767,43 @@ function calDayInfo(c,ts){
   const runPl=!!(run&&!run.moved&&RUN_OK.indexOf(run.S.t)>=0);
   return {ts,iso,wi,wo,logs,acts,run,mark,why,planned,str,rn,act,runPl,rest:mark===false&&!str&&!act&&!rn};
 }
+/* me gusta del entrenador (c.likes[clave]={ts,t,d}) y detalle desplegable */
+const HEART='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4h2c.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
+const likeOf=(c,k)=>c.likes&&c.likes[k];
+function likeBtn(c,k,who,lab,I){const on=!!likeOf(c,k);
+  if(who==='client')return on?'<span class="cal-like on" role="img" title="A tu entrenador le ha gustado" aria-label="A tu entrenador le ha gustado">'+HEART+'</span>':'';
+  return '<button type="button" class="cal-like'+(on?' on':'')+'" data-act="calLike" data-k="'+esc(k)+'" data-t="'+esc(lab)+'" data-d="'+I.ts+'" aria-pressed="'+on+'" aria-label="Me gusta: '+esc(lab)+'" title="'+(on?'Te gusta · el cliente lo ve':'Me gusta')+'">'+HEART+'</button>'}
+function calHd(k,inner,open){return '<button type="button" class="cal-hd" data-act="calX" data-k="'+esc(k)+'" aria-expanded="'+open+'">'+inner+'<span class="cal-chev" aria-hidden="true">›</span></button>'}
+function actDet(a){const r=[['Registrada',a.ts?new Date(a.ts).toLocaleString('es-ES',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}):''],['Duración',a.min?rHM(a.min):''],['Distancia',a.km?fmtKm(a.km)+' km':''],[ACT_DIST[a.type]==='kmh'?'Velocidad media':'Ritmo medio',actPace(a)],['Pulso medio',a.hr?a.hr+' ppm':''],['Pulso máximo',a.hrmax?a.hrmax+' ppm':''],['Intensidad',a.int||''],['Calorías',a.kcal?a.kcal+' kcal':''],['Efecto del entreno',a.te||''],['Molestias',a.pain!=null&&a.pain!==''?ACT_P[a.pain]||'':''],['Notas',a.note||'']].filter(x=>x[1]);
+  return '<dl class="cal-dl">'+r.map(x=>'<div><dt>'+x[0]+'</dt><dd>'+esc(x[1])+'</dd></div>').join('')+'</dl>'}
+function strPlanDet(c,I,txt){const d=c.training.days.find(x=>x.exs.length&&txt&&String(txt).toLowerCase().indexOf(String(x.name).toLowerCase())>=0)||I.planned;
+  const st=I.str?'Los ejercicios registrados están en la tarjeta de fuerza de este día.':I.mark===true?'Marcó la sesión como hecha, sin anotar ejercicios.':I.ts>dayStart(0,todayIdx())?'Sesión pautada.':'Aún no ha registrado esta sesión.';
+  return '<div class="cal-more"><p class="muted">'+st+'</p>'+(!I.str&&d?'<p class="cal-pl"><b>'+esc(d.name)+'</b> · lo pautado:</p><ul class="cal-ex">'+d.exs.map(e=>'<li><span><b>'+esc(e.name)+'</b><small>'+esc([e.sets?e.sets+' series':'',e.reps?e.reps+' reps':''].filter(Boolean).join(' × '))+'</small></span></li>').join('')+'</ul>':'')+'</div>'}
 function calDetail(c,I,who){
   const today=dayStart(0,todayIdx()),fut=I.ts>today,isT=I.ts===today,cli=who==='client';
   const dt=new Date(I.ts),tit=(isT?'Hoy · ':'')+DAYS[I.wi]+' '+dt.getDate()+' de '+MESES[dt.getMonth()];
   let h='';
+  const dl=DAYS[I.wi].toLowerCase()+' '+dt.getDate()+' de '+MESES[dt.getMonth()],X=k=>state.calX===I.iso+'|'+k;
+  const runF=!!(I.run&&!I.run.moved&&I.run.S.t==='fuerza');
   // fuerza
   if(I.str){
     const g={};I.logs.forEach(l=>{const k=String(l.day||'Entreno').replace(/ · S\d+$/,'');(g[k]=g[k]||[]).push(l)});
-    h+=Object.keys(g).map(k=>'<section class="cal-b str"><header><span class="cal-ic" aria-hidden="true">🏋️</span><b>'+esc(k)+'</b><span class="muted">'+g[k].length+(g[k].length===1?' ejercicio':' ejercicios')+'</span></header><ul class="cal-ex">'+g[k].map(l=>'<li><span><b>'+esc(l.ex)+'</b><small>'+esc((l.sets||[]).map(s=>setTxt(s,l.u)).join(' · '))+(l.rir!=null?' · RIR '+esc(l.rir):'')+(l.edited?' · corregido':'')+(l.pr?' · 🏆':'')+'</small>'+(l.note?'<em>'+esc(l.note)+'</em>':'')+'</span>'+(cli&&l.exId&&l.w!=null?'<button type="button" class="linkbtn" data-act="calGo" data-w="'+l.w+'" data-e="'+esc(l.exId)+'" data-ts="'+l.ts+'">Ver / corregir</button>':'')+'</li>').join('')+'</ul>'+(cli?'<div class="cal-del"><button type="button" class="btn sm danger-l" data-act="calDelStr" data-ts="'+I.ts+'" data-k="'+esc(k)+'" data-confirm>🗑 Borrar este entreno de gimnasio</button></div>':'')+'</section>').join('');
-  }else if((fut||isT||!cli)&&((I.planned&&I.mark!==false)||(I.mark===true&&!I.act)||(cli&&I.ts===dayStart(0,todayIdx())&&I.mark!==false))){
+    h+=Object.keys(g).map(k=>'<section class="cal-b str"><header><span class="cal-ic" aria-hidden="true">🏋️</span><b>'+esc(k)+'</b><span class="muted">'+g[k].length+(g[k].length===1?' ejercicio':' ejercicios')+'</span>'+likeBtn(c,'s:'+I.iso+':'+k,who,k+' · '+dl,I)+'</header><ul class="cal-ex">'+g[k].map(l=>'<li><span><b>'+esc(l.ex)+'</b><small>'+esc((l.sets||[]).map(s=>setTxt(s,l.u)).join(' · '))+(l.rir!=null?' · RIR '+esc(l.rir):'')+(l.edited?' · corregido':'')+(l.pr?' · 🏆':'')+'</small>'+(l.note?'<em>'+esc(l.note)+'</em>':'')+'</span>'+(cli&&l.exId&&l.w!=null?'<button type="button" class="linkbtn" data-act="calGo" data-w="'+l.w+'" data-e="'+esc(l.exId)+'" data-ts="'+l.ts+'">Ver / corregir</button>':'')+'</li>').join('')+'</ul>'+(cli?'<div class="cal-del"><button type="button" class="btn sm danger-l" data-act="calDelStr" data-ts="'+I.ts+'" data-k="'+esc(k)+'" data-confirm>🗑 Borrar este entreno de gimnasio</button></div>':'')+'</section>').join('');
+  }else if(!(runF&&!cli)&&(fut||isT||!cli)&&((I.planned&&I.mark!==false)||(I.mark===true&&(!I.act||!cli))||(cli&&I.ts===dayStart(0,todayIdx())&&I.mark!==false))){
     const pk=false?'<p class="cal-pq">¿Qué sesión de tu rutina hiciste?</p><div class="cal-pk">'+c.training.days.map((d,di)=>d.exs.length?'<button type="button" class="btn sm'+(I.planned===d?' primary':'')+'" data-act="calLog" data-ts="'+I.ts+'" data-d="'+di+'">'+esc(d.name)+(d.focus?'<small>'+esc(d.focus.split(/[·(]/)[0].trim())+'</small>':'')+'</button>':'').join('')+'</div>':'';
-    h+='<section class="cal-b '+(fut||isT?'plan':'miss')+'"><header><span class="cal-ic" aria-hidden="true">🏋️</span><b>'+(I.planned?esc(I.planned.name):'Entreno de fuerza')+'</b><span class="muted">'+(fut?'Pautado':isT?'Hoy toca':'Sin registrar')+'</span></header>'+(I.planned&&I.planned.focus?'<p class="muted">'+esc(I.planned.focus)+'</p>':'')+pk+
+    const mk=I.mark===true&&!fut;
+    h+='<section class="cal-b '+(fut||isT||mk?'plan':'miss')+'"><header><span class="cal-ic" aria-hidden="true">🏋️</span><b>'+(I.planned?esc(I.planned.name):'Entreno de fuerza')+'</b><span class="muted">'+(mk?'✓ Hecha · sin detalles':fut?'Pautado':isT?'Hoy toca':'Sin registrar')+'</span>'+(mk?likeBtn(c,'f:'+I.iso,who,(I.planned?I.planned.name:'Fuerza')+' · '+dl,I):'')+'</header>'+(I.planned&&I.planned.focus?'<p class="muted">'+esc(I.planned.focus)+'</p>':'')+pk+
       '</section>';
   }
   // carrera
   if(I.run&&I.run.moved){const R=I.run,md=rParse(R.moved);h+='<section class="cal-b run" style="--rt:'+(RUN_T[R.S.t]||RUN_T.suave)[1]+'"><header><span class="cal-ic" aria-hidden="true">🏃</span>'+rTypePill(R.S.t)+'<span class="muted">↩ Adelantada al '+(md?DAYS[(md.getDay()+6)%7].toLowerCase()+' '+md.getDate():'otro día')+'</span></header></section>'}
+  else if(runF&&!cli){const R=I.run,o=X('f'),done=I.str||I.mark===true;
+    h+='<section class="cal-b run" style="--rt:'+(RUN_T.fuerza)[1]+'"><header>'+calHd('f',rTypePill('fuerza')+'<b class="cal-tx">'+esc(R.S.txt)+'</b><span class="muted">'+(I.str?'✓ Registrada':I.mark===true?'✓ Hecha · sin detalles':fut?'Pautado':'Sin registrar')+'</span>',o)+(done&&!I.str?likeBtn(c,'f:'+I.iso,who,R.S.txt+' · '+dl,I):'')+'</header>'+(o?strPlanDet(c,I,R.S.txt):'')+'</section>'}
   else if(I.run){const R=I.run,ok=RUN_OK.indexOf(R.S.t)>=0;
-    h+='<section class="cal-b run" style="--rt:'+(RUN_T[R.S.t]||RUN_T.suave)[1]+'"><header><span class="cal-ic" aria-hidden="true">🏃</span>'+rTypePill(R.S.t)+'<span class="muted">'+(R.L?RUN_ST[R.L.st][0]+' '+RUN_ST[R.L.st][1]:fut?'Pautado':ok?'Sin registrar':'')+'</span></header><p class="rn-txt">'+esc(R.S.txt)+'</p>'+
+    h+='<section class="cal-b run" style="--rt:'+(RUN_T[R.S.t]||RUN_T.suave)[1]+'"><header><span class="cal-ic" aria-hidden="true">🏃</span>'+rTypePill(R.S.t)+'<span class="muted">'+(R.L?RUN_ST[R.L.st][0]+' '+RUN_ST[R.L.st][1]:fut?'Pautado':ok?'Sin registrar':'')+'</span>'+(R.L&&R.L.st!=='no'?likeBtn(c,'r:'+R.w+'-'+R.i,who,(RUN_T[R.S.t]||RUN_T.suave)[0]+' · '+dl,I):R.S.t==='fuerza'&&I.mark===true&&!I.str?likeBtn(c,'f:'+I.iso,who,R.S.txt+' · '+dl,I):'')+'</header><p class="rn-txt">'+esc(R.S.txt)+'</p>'+
       (R.L?rSummary(c,R.w,R.i,R.L,''):'')+(cli&&ok&&!fut?'<div class="actions"><button type="button" class="btn sm'+(R.L?'':' primary')+'" data-act="calRun" data-w="'+R.w+'" data-i="'+R.i+'">'+(R.L?'✎ Corregir':'✓ Registrar salida')+'</button>'+(R.L?'':'<button type="button" class="btn sm" data-act="calRunNo" data-w="'+R.w+'" data-i="'+R.i+'">✕ No la hice</button>')+'</div>'+(R.L?'<div class="cal-del"><button type="button" class="btn sm danger-l" data-act="runDel" data-w="'+R.w+'" data-i="'+R.i+'" data-confirm>🗑 Borrar esta salida</button></div>':''):'')+'</section>'}
   // otras actividades (el cliente las gestiona con el bloque de abajo)
-  if(I.act&&!cli)h+=I.acts.map(a=>'<section class="cal-b act"><header><span class="cal-ic" aria-hidden="true">'+actIc(a.type)+'</span><b>'+esc(a.type==='Otra'&&a.other?a.other:a.type)+'</b></header><p class="muted">'+esc(actSum(a))+(a.note?' · '+esc(a.note):'')+'</p></section>').join('');
+  if(I.act&&!cli)h+=I.acts.map(a=>{const nm=a.type==='Otra'&&a.other?a.other:a.type,o=X('a'+a.id);return '<section class="cal-b act"><header>'+calHd('a'+a.id,'<span class="cal-ic" aria-hidden="true">'+actIc(a.type)+'</span><b>'+esc(nm)+'</b>',o)+likeBtn(c,'a:'+a.id,who,nm+' · '+dl,I)+'</header>'+(o?actDet(a):'<p class="muted">'+esc(actSum(a))+(a.note?' · '+esc(a.note):'')+'</p>')+'</section>'}).join('');
   if(!h&&!(cli&&!fut))h='<p class="muted cal-none">'+(fut?'Nada pautado este día.':I.rest?'Día de descanso'+whyTxt(I)+'.':'Nada registrado este día.')+'</p>';
   if(!h&&I.rest)h='<p class="muted cal-none">Día de descanso'+whyTxt(I)+'.</p>';
   else if(I.why&&h.indexOf('cal-none')<0)h+='<p class="muted cal-none">Día de descanso'+whyTxt(I)+'.</p>';
@@ -4312,6 +4354,11 @@ function clientDock(c,tabs){
   return '<nav class="p-dock" aria-label="Secciones"><div class="pd-in"><div class="pd-s">'+tabs.map(x=>{const on=state.ctab===x[0]||(x[0]==='inicio'&&state.ctab==='perfil'&&false);const b=x[0]==='mensajes'&&un?'<i class="pd-b">'+un+'</i>':x[0]==='seguimiento'&&due?'<i class="pd-b dot"></i>':'';
     return '<button type="button" class="pd'+(on?' on':'')+'" data-act="ctab" data-t="'+x[0]+'"'+(on?' aria-current="page"':'')+'><span class="pd-ic" aria-hidden="true">'+HUB_IC[x[0]==='inicio'?'home':x[0]]+b+'</span><span class="pd-l">'+x[1]+'</span></button>'}).join('')+'</div></div></nav>';
 }
+function likeNews(c){
+  const L=Object.keys(c.likes||{}).map(k=>c.likes[k]).filter(x=>x&&x.ts>(c.likeSeen||0)).sort((a,b)=>b.ts-a.ts);if(!L.length)return '';
+  const tit=L.length===1?'A tu entrenador le ha gustado tu sesión':'A tu entrenador le han gustado '+L.length+' de tus sesiones';
+  return '<div class="pnew like" role="status"><span class="pnew-ic" aria-hidden="true">❤️</span><div><b>'+tit+'</b><span>'+esc(L.slice(0,3).map(x=>x.t).filter(Boolean).join(' · '))+'. ¡Sigue así!</span></div><div class="pnew-a">'+(L[0].d?'<button type="button" class="btn sm primary" data-act="likeSeen" data-d="'+L[0].d+'">Ver</button>':'')+'<button type="button" class="btn sm" data-act="likeSeen">Gracias</button></div></div>';
+}
 function planNews(c){
   const u=c.planUpd;if(!u||!(u.ts>(c.planSeen||0)))return '';
   const W={diet:'dieta',training:'entrenamiento',run:'plan de carrera'},w=(u.what||[]).map(x=>W[x]).filter(Boolean);
@@ -4358,7 +4405,7 @@ function clientHome(c){
     'Todo lo de tu plan para <b>esta semana</b>, con las cantidades ya calculadas.',meter(SI.length?sd/SI.length*100:0,'Productos comprados')+'<span class="hc-s">Márcalos al echarlos al carro</span>');
   return '<div class="hub"><header class="hub-hero"><img class="hub-wm" src="'+PS_LOGO+'" alt="" aria-hidden="true"><button type="button" class="hub-me" data-act="ctab" data-t="perfil">'+avHtml(c,'')+'<span>Mi perfil</span></button><div class="hub-id">'+EMBLEM+'<div><p class="hub-eye">'+esc(fecha)+'</p><h2>'+hi+', '+esc(first(c.name))+'</h2><p class="hub-goal">'+esc(c.phase)+'</p></div></div>'+
    '<dl class="hub-stats"><div><dt>Hoy</dt><dd>'+(t==='train'?'Entreno':'Descanso')+'</dd></div><div><dt>Kcal de hoy</dt><dd>'+fmtN(ty.kcal)+'</dd></div><div><dt>Tu semana</dt><dd>'+pct+' %</dd></div><div><dt>Próxima revisión</dt><dd>'+esc(c.review||'—')+'</dd></div></dl></header>'+
-   '<div class="hub-body">'+planNews(c)+'<div class="hub-qr"><p class="hub-q">¿Por dónde empezamos hoy?</p><button type="button" class="hub-cal" data-act="calTop" aria-label="Calendario de entrenos" title="Calendario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button></div><nav class="hub-grid" aria-label="Lo principal de tu plan">'+ent2+die+seg+'</nav>'+
+   '<div class="hub-body">'+planNews(c)+likeNews(c)+'<div class="hub-qr"><p class="hub-q">¿Por dónde empezamos hoy?</p><button type="button" class="hub-cal" data-act="calTop" aria-label="Calendario de entrenos" title="Calendario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button></div><nav class="hub-grid" aria-label="Lo principal de tu plan">'+ent2+die+seg+'</nav>'+
    '<nav class="hub-mini" aria-label="Más secciones">'+''+mini('compra','#E08E45','Compra')+mini('fotos','#7A9CC6','Fotos')+mini('mensajes','#E76F51','Mensajes',unread?String(unread):'')+'</nav></div></div>';
 }
 
@@ -4590,6 +4637,9 @@ document.addEventListener('click',e=>{
     case 'showRut':state.showRut=!state.showRut;renderMain();break;
     case 'calTop':if(state.cal&&state.ctab==='entreno'){state.cal=false;renderMain();break}state.ctab='entreno';state.cal=true;state.calD=null;state.calM=0;state.logTs=null;renderMain();window.scrollTo({top:0});break;
     case 'calOpen':state.cal=!state.cal;state.calD=null;state.calM=0;renderMain();window.scrollTo({top:0});break;
+    case 'calX':{const k=isoOf(state.calD!=null?state.calD:dayStart(0,todayIdx()));const v=k+'|'+t.dataset.k;state.calX=state.calX===v?'':v;renderMain();break}
+    case 'calLike':{if(!c)break;const k=t.dataset.k;if(!c.likes)c.likes={};if(c.likes[k]){delete c.likes[k];toast('Me gusta quitado')}else{c.likes[k]={ts:Date.now(),t:t.dataset.t||'',d:+t.dataset.d||0};toast('❤️ Me gusta enviado. '+first(c.name)+' lo verá en su app')}renderMain();break}
+    case 'likeSeen':{c.likeSeen=Date.now();if(t.dataset.d){const d=new Date(+t.dataset.d),n=new Date();state.ctab='entreno';state.cal=true;state.calD=+t.dataset.d;state.calM=(d.getFullYear()-n.getFullYear())*12+d.getMonth()-n.getMonth();window.scrollTo({top:0})}renderMain();break}
     case 'calM':state.calM=(state.calM||0)+(+t.dataset.v);renderMain();break;
     case 'calD':state.calD=+t.dataset.ts;state.actOpen='';renderMain();{const x=$('.cal-det');if(x&&window.innerWidth<900)x.scrollIntoView({behavior:'smooth',block:'start'})}break;
     case 'calGo':{const w=+t.dataset.w,ex=t.dataset.e,di=c.training.days.findIndex(d=>d.exs.some(e=>e.id===ex));state.cal=false;state.vw=w;if(t.dataset.ts){const d=new Date(+t.dataset.ts);state.logTs=new Date(d.getFullYear(),d.getMonth(),d.getDate(),12).getTime()}if(di>=0){state.cday=di;state.exO[c.training.days[di].id+'@'+w]=ex}renderMain();setTimeout(()=>{const o=$('#tx-'+ex);if(o)o.scrollIntoView({behavior:'smooth',block:'start'})},60);break}
@@ -4927,7 +4977,7 @@ async function saveClient(c){
   const B=RB.base[c.id];if(!B||B.creating)return false;
   autoVersion(c,B);
   let d=diff(c,B.s);if(!d.n)return false;
-  if(RB.role==='client'&&Object.keys(d.patch).concat(d.rem).some(k=>['actTs','cSeen','planSeen'].indexOf(k)<0)){c.actTs=Date.now();d=diff(c,B.s)}
+  if(RB.role==='client'&&Object.keys(d.patch).concat(d.rem).some(k=>['actTs','cSeen','planSeen','likeSeen'].indexOf(k)<0)){c.actTs=Date.now();d=diff(c,B.s)}
   setSync('saving');
   await uploadBlobs(c,c.id);
   for(let i=0;i<5;i++){
@@ -5041,7 +5091,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012110427';let verT=0;
+const APP_VER='20261012111142';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

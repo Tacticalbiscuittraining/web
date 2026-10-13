@@ -2686,6 +2686,8 @@ const isTrainDay=(c,i,wo)=>{const m=trMark(c,i,wo);return m!=null?m:c.training.d
 const dayStart=(wo,i)=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate()-todayIdx()+(wo||0)*7+i).getTime()};
 const dayLogs=(c,i,wo)=>{const a=dayStart(wo,i),b=dayStart(wo,i+1);return c.log.filter(l=>l.ts>=a&&l.ts<b)};
 const ACTS=[['Pilates','🧘‍♀️'],['Yoga','🧘'],['Natación','🏊'],['Bici','🚴'],['Correr','🏃'],['Caminar / senderismo','🥾'],['Pádel / tenis','🎾'],['Fútbol / deporte de equipo','⚽'],['Crossfit / funcional','🏋️'],['Otra','✨']];
+/* unilateral: devuelve 'pierna', 'brazo' o 'lado' */
+const uniSide=e=>{const t=(e.name||'')+' '+(e.reps||'');if(!/una pierna|un brazo|unilateral|un lado|por lado|cada lado|por pierna|cada pierna|por brazo|cada brazo|single.?(leg|arm)|plancha lateral|side plank|\b1 (pierna|brazo)/i.test(t))return '';return /pierna|leg/i.test(t)?'pierna':/brazo|arm/i.test(t)?'brazo':'lado'};
 const isSecEx=e=>/\d\s*("|”|''|s\b|seg)/i.test(String(e.reps||''))||/isom[eé]tric|plancha/i.test(e.name||'');
 const setTxt=(s,u)=>u==='s'?(s[0]>0?fmtN(s[0])+' kg × ':'')+s[1]+' s':(s[0]>0?fmtN(s[0])+'×'+s[1]:s[1]+' reps');
 const ACT_I=['Suave','Media','Intensa'];
@@ -3525,7 +3527,12 @@ function restStop(silent){if(RT){clearInterval(RT.int);RT=null}HOLD=null;const e
 let AC=null;
 function beep(n){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();for(let k=0;k<n;k++){const o=AC.createOscillator(),g=AC.createGain(),t0=AC.currentTime+k*.3;o.frequency.value=880;g.gain.setValueAtTime(.3,t0);g.gain.exponentialRampToValueAtTime(.001,t0+.22);o.connect(g).connect(AC.destination);o.start(t0);o.stop(t0+.25)}}catch(_){}}
 /* encadenar (isométricos): al acabar el descanso, aviso de 3 s y empieza solo la siguiente serie */
-function holdGo(row){const rp=row.querySelector('.setreps');restStart(parseInt(rp.value||rp.dataset.t)||30,'Aguanta','¡Tiempo! Serie hecha',1,row)}
+function holdGo(row){const rp=row.querySelector('.setreps'),sec=parseInt(rp.value||rp.dataset.t)||30,ex=row.closest('.exo'),u=ex&&ex.dataset.uni;
+  if(!u){restStart(sec,'Aguanta','¡Tiempo! Serie hecha',1,row);return}
+  /* unilateral: un lado, 5 s para cambiar y el otro lado; la serie se marca al acabar el segundo */
+  const L=u==='lado'?['Lado 1','Lado 2']:[u[0].toUpperCase()+u.slice(1)+' 1',u[0].toUpperCase()+u.slice(1)+' 2'];
+  restStart(sec,'Aguanta · '+L[0],0,0,null,()=>{beep(2);try{navigator.vibrate&&navigator.vibrate(200)}catch(_){}
+    restStart(5,'Cambia de '+u,0,0,null,()=>{if(row.isConnected){beep(1);restStart(sec,'Aguanta · '+L[1],'¡Tiempo! Serie hecha',1,row)}})})}
 function chainNext(sel){const ex=$(sel),row=ex&&$$('.setrow2',ex).find(r=>{const o=r.querySelector('.setok');return o&&!o.checked&&!o.disabled});if(!row)return;
   restStart(3,'Siguiente serie en',null,0,null,()=>{if(row.isConnected){beep(1);holdGo(row)}})}
 function restStart(sec,label,doneTxt,snd,row,then){
@@ -4312,7 +4319,7 @@ function exoCard(e,idx,week,wi,c,e0){e0=e0||e;
   const noteBox=dis&&!noteV&&!nOnly?'':'<details class="exo-more nb"'+(ed||noteV?' open':'')+'><summary><span class="nb-ic" aria-hidden="true">📝</span><span class="nb-t"><b>Nota y RIR real</b><small>Opcional · lo verá tu entrenador</small></span></summary><div class="exo-f nb-in">'+
    '<div class="nb-rir"><span class="nb-l">¿Cuántas reps te sobraban al terminar? <small>(RIR)</small></span><div class="nb-seg" role="group" aria-label="RIR real, repeticiones en reserva">'+[0,1,2,3,4].map(v=>'<button type="button" class="nb-b" data-act="rirB" data-v="'+v+'" aria-pressed="'+(hasRir&&v===rirV)+'"'+nd+'>'+v+'</button>').join('')+'</div><small class="nb-h">0 = hasta el fallo · 4 = te sobraban 4 o más</small><input type="hidden" class="rirsel" value="'+(hasRir?rirV:'')+'"></div>'+
    '<label class="nb-n"><span class="nb-l">Nota para tu entrenador</span><textarea class="in cnote" rows="3" placeholder="Sensaciones, molestias, técnica, si te ha costado más de lo normal…"'+nd+'>'+esc(noteV)+'</textarea></label>'+(nOnly?'<button type="button" class="btn primary nb-save" data-act="saveNote" data-e="'+e.id+'" data-w="'+wi+'">Guardar nota</button>':'')+'</div></details>';
-  return '<div class="exo'+(done&&!ed?' done':'')+(ed?' editing':'')+'" data-ex="'+e.id+'" data-w="'+wi+'" data-rest="'+(parseInt(e.rest)||0)+'"'+(eq?' data-eq="'+eq+'"':'')+(chain?' data-chain="1"':'')+'><div class="exo-h"><span class="exo-n">'+(idx+1)+'</span><div><h4>'+esc(e.name||'Ejercicio sin nombre')+'</h4>'+(L&&L.group?'<span class="exo-g">'+esc(L.group)+'</span>':'')+'</div></div>'+
+  return '<div class="exo'+(done&&!ed?' done':'')+(ed?' editing':'')+'" data-ex="'+e.id+'" data-w="'+wi+'" data-rest="'+(parseInt(e.rest)||0)+'"'+(eq?' data-eq="'+eq+'"':'')+(chain?' data-chain="1"':'')+(isSecEx(e)&&uniSide(e)?' data-uni="'+uniSide(e)+'"':'')+'><div class="exo-h"><span class="exo-n">'+(idx+1)+'</span><div><h4>'+esc(e.name||'Ejercicio sin nombre')+'</h4>'+(L&&L.group?'<span class="exo-g">'+esc(L.group)+'</span>':'')+'</div></div>'+
    '<div class="exo-body"><div class="exo-l">'+media+(e.tech?'<p class="tech"><b>Técnica</b>'+esc(e.tech)+'</p>':'')+'</div>'+(e.x?'<div class="rx xnote"><p><span aria-hidden="true">➕</span> Ejercicio añadido por ti. Se guarda solo en tu registro de este día: tu plan no cambia.</p><button type="button" class="btn danger-l" data-act="xDel" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Quitar ejercicio</button></div>':rx)+'<div class="exo-r todo"><div class="todo-h"><span class="todo-t">Tu turno</span><span class="todo-s">La rueda se abre en lo pautado: solo ajusta lo que hayas hecho. Se guarda sola mientras rellenas, aunque cierres la app.</span></div>'+varSel+eqSel+bwBtn+chainBtn+(prev?'<div class="prev"><b>↺ La última vez</b> ('+dshort(prev.ts)+'): '+prev.sets.map(s=>prev.u==='s'?setTxt(s,'s'):s[0]>0?fmtN(s[0])+' kg × '+s[1]:s[1]+' reps').join(' · ')+'</div>':'')+rows+
    noteBox+
    (ed?'<p class="ed-h">Corrige lo que necesites y guarda. Tu entrenador verá que lo has actualizado.</p><div class="ed-a"><button type="button" class="btn danger-l" data-act="clearEx" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Borrar todo</button><button type="button" class="btn" data-act="editEx" data-e="'+e.id+'" data-w="'+wi+'">Cancelar</button><button type="button" class="btn primary" data-act="send" data-e="'+e.id+'" data-w="'+wi+'">Guardar cambios</button></div>':done?'<div class="ed-a"><span class="sent-ok">✓ Enviado'+(lg?' el '+dmy(new Date(lg.ts))+(lg.edited?' · corregido':''):'')+'</span>'+(lg?'<button type="button" class="btn" data-act="setMore" data-e="'+e.id+'" data-w="'+wi+'">+ Añadir una serie</button><button type="button" class="btn" data-act="editEx" data-e="'+e.id+'" data-w="'+wi+'">✎ Corregir datos</button><button type="button" class="btn danger-l" data-act="clearEx" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Borrar</button>':'')+'</div>':'<button type="button" class="btn fin-ex" data-act="send" data-e="'+e.id+'" data-w="'+wi+'">Terminar ejercicio</button><p class="fin-h">Al marcar la última serie se envía solo.</p>')+'</div></div></div>';
@@ -5341,7 +5348,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013090657';let verT=0;
+const APP_VER='20261013091827';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

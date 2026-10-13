@@ -4268,8 +4268,8 @@ function exoCard(e,idx,week,wi,c,e0){e0=e0||e;
   const media='<div class="exo-m">'+(photo?'<button type="button" class="exo-ph" data-act="zoomEx" data-e="'+e.id+'" aria-label="Ampliar imagen de '+esc(e.name)+'"><img src="'+esc(mURL(photo))+'\" alt="Imagen de '+esc(e.name)+'"></button>':'<div class="exo-ph empty-ph" aria-hidden="true">Imagen pendiente</div>')+
    '<div class="exo-vid">'+(L?'<span class="muted" style="font-size:13px">'+esc(L.group)+(L.mat?' · '+esc(L.mat):'')+'</span>':'')+(video?'<button type="button" class="btn" data-act="playEx" data-e="'+e.id+'">'+play+' Ver vídeo explicativo</button>':'')+(okLink?'<a class="btn" href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">'+play+' Ver vídeo en otra pestaña</a>':'')+((!video&&!okLink)?'<span class="muted">Vídeo pendiente</span>':'')+'</div></div>';
   const pv0=c.log.filter(l=>l.ex===e.name&&l!==lg&&l.sets&&l.sets.length&&l.u!=='s').sort((a,b)=>b.ts-a.ts)[0],pk=i=>{if(!pv0)return '';const x=pv0.sets[i]||pv0.sets[pv0.sets.length-1];return x&&x[0]>0?x[0]:''};
-  const bwK=String(e.name||'').toLowerCase().trim(),bwSaved=c.bw&&c.bw[bwK],pvBW=pv0&&pv0.sets.every(x=>!(x[0]>0)),noKg=!kgv||/^[\s\-—–]*$/.test(kgv),bwAuto=noKg&&(/dominad|flexion|fondos|chin.?up|pull.?up/i.test(e.name||'')||/peso corporal/i.test(L&&L.mat||'')||pvBW)&&!(pv0&&!pvBW),bw=!isSecEx(e)&&(bwSaved!=null?bwSaved:bwAuto)&&!(ls.some(x=>x[0]>0));
-  const bwBtn=isSecEx(e)?'':'<button type="button" class="bw-t" data-act="bwT" data-n="'+esc(bwK)+'" data-v="'+(bw?0:1)+'" aria-pressed="'+bw+'"'+dis+'><span class="tsw" aria-hidden="true"><i></i></span>Con mi peso corporal</button>';
+  const bwK=String(e.name||'').toLowerCase().trim(),bwSaved=c.bw&&c.bw[bwK],pvBW=pv0&&pv0.sets.every(x=>!(x[0]>0)),noKg=!kgv||/^[\s\-—–]*$/.test(kgv),bwAuto=noKg&&(/dominad|flexion|fondos|chin.?up|pull.?up/i.test(e.name||'')||/peso corporal/i.test(L&&L.mat||'')||pvBW)&&!(pv0&&!pvBW),bw=(bwSaved!=null?bwSaved:bwAuto)&&!(ls.some(x=>x[0]>0));
+  const bwBtn='<button type="button" class="bw-t" data-act="bwT" data-n="'+esc(bwK)+'" data-v="'+(bw?0:1)+'" aria-pressed="'+bw+'"'+dis+'><span class="tsw" aria-hidden="true"><i></i></span>Con mi peso corporal</button>';
   const VO=e.x?[]:exVarOpts(e0),varSel=VO.length&&!lg?'<label class="var-l"><span>¿Haces una variante?</span><select class="in varsel" data-e="'+e0.id+'" aria-label="Cambiar '+esc(e0.name)+' por una variante"><option value="">'+esc(e0.name)+(e.orig?'':' (pautado)')+'</option>'+VO.map(n=>'<option value="'+esc(n)+'"'+(e.name===n?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select></label>'+(e.orig?'<p class="var-n">Cambiado por ti: el peso se ajusta a tu historial con esta variante.</p>':''):'';
   let rows='';
   const repsN=(/[^\d\s]/.test(String(e.reps||''))&&!(S.tag==='up'&&!(S.kg>0)))?NaN:(S.reps||parseInt(e.reps)),goalR=isNaN(repsN)?esc(e.reps):'<b>'+repsN+(isSecEx(e)?' s':' reps')+'</b>';
@@ -5317,7 +5317,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013073345';let verT=0;
+const APP_VER='20261013073817';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

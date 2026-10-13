@@ -2330,6 +2330,8 @@ span.cal-like{cursor:default}
 .setrow2 .sgoal{position:relative}
 .sx-del{margin-left:auto;border:0;background:none;color:var(--muted);font:inherit;font-size:12.5px;font-weight:600;padding:2px 6px;border-radius:6px;cursor:pointer}
 .sx-del:hover{color:var(--coral-ink);background:var(--coral-soft)}
+.hold-go{margin-left:auto;padding:4px 12px;border-radius:999px;border:1px solid var(--teal);background:var(--teal);color:#fff;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.hold-go+.sx-del{margin-left:6px}
 .btn.add-set,.btn.add-ex{width:100%;justify-content:center;border-style:dashed;background:transparent;color:var(--teal-ink);min-height:42px;margin-top:2px}
 .btn.add-ex{margin-top:12px}
 .btn.add-set:hover,.btn.add-ex:hover{background:var(--teal-soft)}
@@ -3508,7 +3510,10 @@ function fichaCard(c){
 let RT=null;
 const mmss=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
 function restStop(silent){if(RT){clearInterval(RT.int);RT=null}const el=$('#rt');if(el)el.hidden=true}
-function restStart(sec,label){
+/* pitido corto (iOS no vibra): el AudioContext se crea en el toque del botón */
+let AC=null;
+function beep(n){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();for(let k=0;k<n;k++){const o=AC.createOscillator(),g=AC.createGain(),t0=AC.currentTime+k*.3;o.frequency.value=880;g.gain.setValueAtTime(.3,t0);g.gain.exponentialRampToValueAtTime(.001,t0+.22);o.connect(g).connect(AC.destination);o.start(t0);o.stop(t0+.25)}}catch(_){}}
+function restStart(sec,label,doneTxt,snd){
   restStop();if(!(sec>0))return;
   let el=$('#rt');
   if(!el){el=document.createElement('div');el.id='rt';el.className='rt';el.setAttribute('role','timer');document.body.appendChild(el);
@@ -3516,7 +3521,7 @@ function restStart(sec,label){
   el.hidden=false;el.classList.remove('done');$('.rt-l',el).textContent=label||'Descanso';
   RT={end:Date.now()+sec*1000,tot:sec,int:0};
   const tick=()=>{if(!RT)return;const left=Math.max(0,Math.ceil((RT.end-Date.now())/1000));$('.rt-v',el).textContent=mmss(left);$('.rt-bar i',el).style.width=(100-left/RT.tot*100)+'%';
-    if(left<=0){clearInterval(RT.int);RT=null;el.classList.add('done');$('.rt-l',el).textContent='¡A por la siguiente!';
+    if(left<=0){clearInterval(RT.int);RT=null;el.classList.add('done');$('.rt-l',el).textContent=doneTxt||'¡A por la siguiente!';if(snd)beep(3);
       try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(_){}
       setTimeout(()=>{if(!RT){const e=$('#rt');if(e)e.hidden=true}},4000)}};
   RT.int=setInterval(tick,250);tick();
@@ -4267,9 +4272,9 @@ function exoCard(e,idx,week,wi,c,e0){e0=e0||e;
   const bwBtn=isSecEx(e)?'':'<button type="button" class="bw-t" data-act="bwT" data-n="'+esc(bwK)+'" data-v="'+(bw?0:1)+'" aria-pressed="'+bw+'"'+dis+'><span class="tsw" aria-hidden="true"><i></i></span>Con mi peso corporal</button>';
   const VO=e.x?[]:exVarOpts(e0),varSel=VO.length&&!lg?'<label class="var-l"><span>¿Haces una variante?</span><select class="in varsel" data-e="'+e0.id+'" aria-label="Cambiar '+esc(e0.name)+' por una variante"><option value="">'+esc(e0.name)+(e.orig?'':' (pautado)')+'</option>'+VO.map(n=>'<option value="'+esc(n)+'"'+(e.name===n?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select></label>'+(e.orig?'<p class="var-n">Cambiado por ti: el peso se ajusta a tu historial con esta variante.</p>':''):'';
   let rows='';
-  const repsN=(/[^\d\s]/.test(String(e.reps||''))&&!(S.tag==='up'&&!(S.kg>0)))?NaN:(S.reps||parseInt(e.reps)),goalR=isNaN(repsN)?esc(e.reps):'<b>'+repsN+' reps</b>';
+  const repsN=(/[^\d\s]/.test(String(e.reps||''))&&!(S.tag==='up'&&!(S.kg>0)))?NaN:(S.reps||parseInt(e.reps)),goalR=isNaN(repsN)?esc(e.reps):'<b>'+repsN+(isSecEx(e)?' s':' reps')+'</b>';
   const row=(i,blank)=>{const ex=i>=n,gl=e.x?'':goalR+(kgv?' · <b>'+esc(kgv)+(S.kgTxt?'':' kg')+'</b>':'');
-    return '<div class="setrow2'+(ex?' xtra':'')+'"><span class="sn">'+(i+1)+'</span><div class="sgoal"><small>Serie '+(i+1)+(e.x?'':ex?' · extra':' · objetivo')+'</small>'+gl+(i>=n&&!dis?'<button type="button" class="sx-del" data-act="delSet" aria-label="Quitar la serie '+(i+1)+'">✕ Quitar</button>':'')+'</div>'+(bw?'<label class="sin kgw bwl"><span>Peso</span><b class="bw-v">Corporal</b><input type="hidden" class="setkg" value="0"></label>':wheelKg(i,S.kgTxt?'':kgv,blank?null:dv(i,0),dis,pk(i),isDbEx(e.name)))+wheelReps(i,isNaN(repsN)?(parseInt(e.reps)||''):repsN,blank?null:dv(i,1),dis,isSecEx(e))+'<label class="sok"><input type="checkbox" class="setok" aria-label="Serie '+(i+1)+' hecha tal como está pautada"'+(!blank&&(ls[i]||ds[i]&&ds[i][2])?' checked':'')+dis+'><span>Hecha</span></label></div>'};
+    return '<div class="setrow2'+(ex?' xtra':'')+'"><span class="sn">'+(i+1)+'</span><div class="sgoal"><small>Serie '+(i+1)+(e.x?'':ex?' · extra':' · objetivo')+'</small>'+gl+(isSecEx(e)&&!dis?'<button type="button" class="hold-go" data-act="holdGo" aria-label="Empezar la cuenta atrás de la serie '+(i+1)+'">⏱ Empezar</button>':'')+(i>=n&&!dis?'<button type="button" class="sx-del" data-act="delSet" aria-label="Quitar la serie '+(i+1)+'">✕ Quitar</button>':'')+'</div>'+(bw?'<label class="sin kgw bwl"><span>Peso</span><b class="bw-v">Corporal</b><input type="hidden" class="setkg" value="0"></label>':wheelKg(i,S.kgTxt?'':kgv,blank?null:dv(i,0),dis,pk(i),isDbEx(e.name)))+wheelReps(i,isNaN(repsN)?(parseInt(e.reps)||''):repsN,blank?null:dv(i,1),dis,isSecEx(e))+'<label class="sok"><input type="checkbox" class="setok" aria-label="Serie '+(i+1)+' hecha tal como está pautada"'+(!blank&&(ls[i]||ds[i]&&ds[i][2])?' checked':'')+dis+'><span>Hecha</span></label></div>'};
   const nR=Math.max(n,ls.length,ds.length);
   for(let i=0;i<nR;i++)rows+=row(i);
   if(!dis)rows+='<template class="set-t">'+row(nR,true)+'</template><button type="button" class="btn add-set" data-act="addSet">+ Añadir una serie</button>';
@@ -4814,6 +4819,7 @@ document.addEventListener('click',e=>{
     case 'trWhy':{const W=weekObj(c,+t.dataset.w||0);W.why=W.why||{};if(W.why[t.dataset.i]===t.dataset.v)delete W.why[t.dataset.i];else W.why[t.dataset.i]=t.dataset.v;if(!Object.keys(W.why).length)delete W.why;renderMain();break}
     case 'trMark':{state.showRut=false;const W=weekObj(c,+t.dataset.w||0);if(!W.tr)W.tr={};const v=t.dataset.v==='1';if(W.tr[t.dataset.i]===v)delete W.tr[t.dataset.i];else W.tr[t.dataset.i]=v;if(W.tr[t.dataset.i]!==false&&W.why)delete W.why[t.dataset.i];renderMain();break}
     case 'restGo':restStart(+t.dataset.s);break;
+    case 'holdGo':{const rp=t.closest('.setrow2').querySelector('.setreps');beep(0);restStart(parseInt(rp.value||rp.dataset.t)||30,'Aguanta','¡Tiempo! Marca la serie',1);break}
     case 'rtAdd':if(RT){RT.end+=(+t.dataset.v)*1000;RT.tot=Math.max(RT.tot,Math.ceil((RT.end-Date.now())/1000))}break;
     case 'rtStop':restStop();break;
     case 'autoTg':c.training.auto=c.training.auto===false;renderMain();break;
@@ -5311,7 +5317,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013071412';let verT=0;
+const APP_VER='20261013073345';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

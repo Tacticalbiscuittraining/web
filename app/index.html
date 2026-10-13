@@ -2435,9 +2435,17 @@ body.wz-on{overflow:hidden}
 .eq-l .nb-seg{grid-template-columns:repeat(2,1fr);flex:1;min-width:180px}
 .bw-t[data-act=chainT]{text-align:left}
 .pm-top .cc-kpis{margin-bottom:10px}
-.pm-act{display:flex;gap:8px;margin-top:4px}
-.pm-act .btn{flex:1;max-width:320px}
-.pm-form{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+body[data-screen="client"] .pm{padding-bottom:64px}
+.fab{position:fixed;right:max(16px,calc(50vw - 560px));bottom:calc(98px + env(safe-area-inset-bottom));z-index:65;display:inline-flex;align-items:center;gap:6px;padding:11px 18px;border-radius:999px;font-weight:700;font-size:15px;min-height:46px;box-shadow:0 10px 26px rgba(0,0,0,.28);cursor:pointer}
+.fab span{font-size:20px;line-height:1}
+.fab:active{transform:scale(.97)}
+.wsheet-bg{position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.55);animation:wsf .18s ease-out}
+.wsheet{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(560px,100%);max-height:88vh;overflow:auto;overscroll-behavior:contain;z-index:99991;background:var(--surface);border-radius:20px 20px 0 0;padding:10px 18px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,0,.3);animation:wsu .22s ease-out}
+.wsheet-grip{display:block;width:42px;height:5px;border-radius:3px;background:var(--line-strong,var(--line));margin:0 auto 10px}
+.wsheet .actions .btn{width:100%}
+@keyframes wsu{from{transform:translate(-50%,40px);opacity:.4}to{transform:translate(-50%,0);opacity:1}}
+@keyframes wsf{from{opacity:0}to{opacity:1}}
+@media (min-width:700px){.wsheet{bottom:50%;transform:translate(-50%,50%);border-radius:20px;animation:none}}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -3245,7 +3253,7 @@ function clientTrack(c){
   const wks=weighsThisWeek(c);
   const how='<p class="muted wt-how">En ayunas, nada más levantarte y después de ir al baño. Misma báscula y misma ropa cada vez.</p>';
   const iso=x=>{const d=new Date(x);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-  const form=(main)=>'<div class="wt-form"><div class="wt-row"><label class="cell"><span class="lbl show">Peso</span>'+wheelField('id="wKg"',{min:30,max:250,dec:true,def:lastW(c)||70,unit:'kg',label:'Peso'})+'</label><label class="cell"><span class="lbl show">Fecha</span><input id="wDate" class="in" type="date" value="'+iso(Date.now())+'" min="'+iso(Date.now()-13*D)+'" max="'+iso(Date.now())+'"></label></div>'+
+  const form=(main)=>'<div class="wt-form"><div class="wt-row"><label class="cell"><span class="lbl show">Peso</span>'+wheelField('id="wKg"',{min:30,max:250,dec:true,def:(wPts(c).slice(-1)[0]||{}).y||lastW(c)||70,unit:'kg',label:'Peso'})+'</label><label class="cell"><span class="lbl show">Fecha</span><input id="wDate" class="in" type="date" value="'+iso(Date.now())+'" min="'+iso(Date.now()-13*D)+'" max="'+iso(Date.now())+'"></label></div>'+
     '<label class="wt-chk"><input type="checkbox" id="wOdd"><span>Me he pesado en condiciones distintas a las habituales</span></label><label class="cell wt-cond" id="wCondBox" hidden><span class="lbl show">¿Qué ha cambiado?</span><input id="wCond" class="in" placeholder="Ej.: por la tarde, después de desayunar, otra báscula…"></label>'+
     (main?'<div class="cell"><span class="lbl show">¿Qué tal la semana? (opcional)</span><div class="moods" role="group" aria-label="Cómo ha ido la semana">'+MOODS.map((m,i)=>'<button type="button" class="moodb" data-act="mood" data-v="'+(i+1)+'" aria-pressed="false" aria-label="'+m[1]+'" title="'+m[1]+'">'+m[0]+'</button>').join('')+'</div></div>'+ckMore():'')+
     '<label class="cell wt-c"><span class="lbl show">Algo que contar a tu entrenador (opcional)</span><input id="wComm" class="in" placeholder="Ej.: semana con mucho trabajo"></label><div class="actions" style="margin:0"><button type="button" class="btn primary" data-act="sendWeigh">'+(main?'Enviar mi peso':'Guardar peso')+'</button></div></div>';
@@ -3257,10 +3265,11 @@ function clientTrack(c){
     const tiles='<div class="kpi"><div class="k-l">Peso actual</div><div class="k-v">'+(L?fmtN(L.y)+' kg':'—')+'</div><div class="k-s">'+(d==null?(L&&L.ts?dmy(new Date(L.ts)):'Apunta tu primer peso'):'<span class="cc-kd '+dc+'">'+(d>0?'+':d<0?'−':'')+fmtN(Math.abs(d))+' kg</span> desde el inicio')+'</div></div>'+ccTiles(c,true);
     const nPes=weighRows(c).length;
     return '<section class="card pm-top"><div class="kpis cc-kpis">'+tiles+'</div>'+wBox(c,'Cuando tengas dos pesajes verás aquí tu gráfica.')+
-     '<div class="pm-act"><button type="button" class="btn primary" data-act="wForm" aria-expanded="'+!!state.wForm+'">'+(state.wForm?'✕ Cerrar':'+ Apuntar mi peso')+'</button></div>'+
-     (state.wForm?'<div class="pm-form">'+wbox+'</div>':'')+'</section>'+
+     '</section>'+
      ccSegCard(c,true)+
-     (nPes?'<section class="card"><details class="cc-more" style="margin:0"><summary>Todos mis pesajes ('+nPes+')</summary>'+chkTable(c,false)+'</details></section>':'');};
+     (nPes?'<section class="card"><details class="cc-more" style="margin:0"><summary>Todos mis pesajes ('+nPes+')</summary>'+chkTable(c,false)+'</details></section>':'')+
+     (state.wForm?'':'<button type="button" class="btn primary fab" data-act="wForm" aria-haspopup="dialog"><span aria-hidden="true">＋</span> Registrar peso</button>')+
+     (state.wForm?'<div class="wsheet-bg" data-act="wForm" aria-hidden="true"></div><div class="wsheet" role="dialog" aria-modal="true" aria-labelledby="wsh-t"><span class="wsheet-grip" aria-hidden="true"></span><div class="wz-h"><h2 id="wsh-t" style="margin:0">Registrar peso</h2><button type="button" class="icon-btn" data-act="wForm" aria-label="Cerrar">✕</button></div>'+wbox+'</div>':'');};
   const sb=state.tsub||'hoy';
   const sub='<div class="esub" role="tablist" aria-label="Sección del progreso">'+[['hoy','Hoy'],['peso','Peso y medidas'],['prog','Evolución']].map(x=>'<button type="button" role="tab" class="es-b" data-act="tsub" data-v="'+x[0]+'" aria-selected="'+(sb===x[0])+'">'+x[1]+'</button>').join('')+'</div>';
   if(sb==='peso')return sub+'<div class="stack pm">'+pm()+'</div>';
@@ -4863,7 +4872,7 @@ document.addEventListener('click',e=>{
     case 'wZoom':{let z=$('#wz');if(!z){z=document.createElement('div');z.id='wz';z.className='wz';document.body.appendChild(z)}z.innerHTML=wZoomHtml(c);z.hidden=false;document.body.classList.add('wz-on');break}
     case 'wRange':{state.wRange=t.dataset.v;const z=$('#wz');if(z)z.innerHTML=wZoomHtml(c);break}
     case 'wZoomClose':{const z=$('#wz');if(z)z.hidden=true;document.body.classList.remove('wz-on');break}
-    case 'wForm':state.wForm=!state.wForm;renderMain();if(state.wForm){const f=$('.pm-form');if(f)f.scrollIntoView({block:'nearest',behavior:'smooth'})}break;
+    case 'wForm':state.wForm=!state.wForm;document.body.classList.toggle('wz-on',!!state.wForm);renderMain();break;
     case 'goRevGraf':state.tab='revision';state.ccsub='graf';renderMain();break;
     case 'goSeg':state.tab='seguimiento';renderMain();break;
     case 'revStart':{const C=comp(c),i=C.revs.findIndex(r=>!r.fecha&&!Object.keys(r.v).length);if(i<0){toast('No quedan columnas libres');break}C.revs[i].fecha=isoT(Date.now());if(lastW(c))C.revs[i].v.peso=lastW(c);state.ccsub='reg';renderMain();const f=$('[data-r="comp"][data-i="'+i+'"][data-k="grasa"]');if(f){f.focus();const w=f.closest('.cc-wrap');if(w)w.scrollLeft=Math.max(0,f.closest('td').offsetLeft-240)}toast(i?'Revisión '+i+' abierta':'Medición inicial abierta');break}
@@ -4919,7 +4928,7 @@ document.addEventListener('click',e=>{
     case 'sendWeigh':{const box=t.closest('.wt-form'),q=s=>box.querySelector(s),wkI=q('#wKg'),kg=num(wkI.value||(()=>{const f=wkI.closest('.wf'),a=f&&f.querySelector('.wh[data-w="wfI"]'),b=f&&f.querySelector('.wh[data-w="wfD"]');return a?String(whVal(a)+(b?whVal(b)/10:0)):''})());if(!(kg>25&&kg<350)){toast('Escribe tu peso en kg');break}
       const dv=q('#wDate').value,m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(dv||''),now=new Date(),ts=m?new Date(+m[1],+m[2]-1,+m[3],now.getHours(),now.getMinutes()).getTime():Date.now();
       const odd=q('#wOdd').checked,cond=odd?(q('#wCond').value.trim()||'Condiciones distintas'):'';
-      c.chk.push({id:nid(),ts:Math.min(ts,Date.now()),week:clientWeek(c)+1,peso:kg,animo:state.mood||0,cond,comm:q('#wComm').value.trim(),...(state.ck&&Object.keys(state.ck).length?{ck:state.ck}:{}),fresh:true});c.weights.push(kg);state.mood=0;state.ck=null;state.wForm=false;renderMain();renderRail();toast('Peso enviado a tu entrenador');break}
+      c.chk.push({id:nid(),ts:Math.min(ts,Date.now()),week:clientWeek(c)+1,peso:kg,animo:state.mood||0,cond,comm:q('#wComm').value.trim(),...(state.ck&&Object.keys(state.ck).length?{ck:state.ck}:{}),fresh:true});c.weights.push(kg);state.mood=0;state.ck=null;state.wForm=false;document.body.classList.remove('wz-on');renderMain();renderRail();toast('Peso enviado a tu entrenador');break}
     case 'cday':state.cday=+t.dataset.i;renderMain();break;
     case 'consentAccept':{c.consent={ts:Date.now(),v:CONSENT_V};renderMain();toast('Consentimiento registrado');break}
     case 'consentRevoke':{c.photos.forEach(p=>{try{URL.revokeObjectURL(p.url)}catch(_){}});c.photos=[];state.cmp=[];c.consent=null;renderMain();renderRail();toast('Consentimiento retirado y fotos borradas');break}
@@ -5054,6 +5063,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&!e.shiftKey&&e.target&&e.target.id==='mText'){e.preventDefault();const s=$('[data-act="chatSend"]');if(s)s.click();return}
   if(e.key!=='Escape')return;
   {const z=$('#wz');if(z&&!z.hidden){z.hidden=true;document.body.classList.remove('wz-on');return}}
+  if(state.wForm){state.wForm=false;document.body.classList.remove('wz-on');renderMain();return}
   if(state.printOpen){state.printOpen=false;renderMain();return}
   if(state.planFs){state.planFs=false;renderMain();return}
   if(state.trFs){state.trFs='';renderMain();return}
@@ -5399,7 +5409,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013111023';let verT=0;
+const APP_VER='20261013111136';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

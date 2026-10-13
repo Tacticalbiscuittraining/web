@@ -2391,6 +2391,9 @@ span.cal-like{cursor:default}
 /* segunda fila de pestañas en Entreno (Rutina · Plan · Pautas): no se pega arriba para no tapar la de Fuerza/Carrera */
 .esub.es2{position:static}
 .tgl-c .tgl{padding:0}
+
+.tabs{scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -4165,7 +4168,7 @@ function dayPills(act,sel){
 
 function coachView(c){
   let p='';
-  if(state.tab==='resumen')p=resumen(c);else if(state.tab==='dieta')p=dietPanel(c);else if(state.tab==='entreno')p=trainPanel(c);else if(state.tab==='entrevista')p=intPanel(c);else if(state.tab==='datos')p=datosPanel(c);else if(state.tab==='carrera')p=runPanel(c);else if(state.tab==='seguimiento')p=segPanel(c);else if(state.tab==='revision')p=revPanel(c);else if(state.tab==='fotos')p=fotosPanel(c);else if(state.tab==='mensajes')p=msgsPanel(c);else p=calView(c,'coach')+registroPanel(c);
+  if(state.tab==='resumen')p=resumen(c);else if(state.tab==='dieta')p=dietPanel(c);else if(state.tab==='entreno')p=trainPanel(c);else if(state.tab==='entrevista')p=intPanel(c);else if(state.tab==='datos')p=datosPanel(c);else if(state.tab==='carrera')p=runPanel(c);else if(state.tab==='fuerza')p=fuerzaPanel(c);else if(state.tab==='seguimiento')p=segPanel(c);else if(state.tab==='revision')p=revPanel(c);else if(state.tab==='fotos')p=fotosPanel(c);else if(state.tab==='mensajes')p=msgsPanel(c);else p=calView(c,'coach')+registroPanel(c);
   return '<div class="cv '+coachMode()+'">'+headHtml(c)+tabsHtml(c)+'<section id="panel">'+p+'</section></div>';
 }
 
@@ -4527,13 +4530,17 @@ const CM_EDIT=['datos','dieta','entreno','entrevista'];
 function coachMode(){return CM_EDIT.indexOf(state.tab)>=0?'edit':'ver'}
 function tabsHtml(c){
   const outN=(c.acts||[]).filter(x=>x.fresh&&isOut(x)).length,hasRun=!!c.run||(c.acts||[]).some(isOut);
-  const V=[['resumen','Resumen',0,''],['registro','Registro',freshLogs(c),'reg-badge'],...(hasRun?[['carrera','Carrera',(c.run?rFresh(c):0)+outN,'run-badge']]:[]),['seguimiento','Seguimiento',freshChk(c),'chk-badge'],['revision',isRevToday(c)?'Revisión hoy':'Revisiones',0,''],['fotos','Fotos',freshPhotos(c),'photo-badge'],['mensajes','Mensajes',freshMsgs(c),'msg-badge']];
+  const V=[['resumen','Resumen',0,''],['registro','Registro',freshLogs(c),'reg-badge'],['fuerza','Fuerza',0,''],...(hasRun?[['carrera','Carrera',(c.run?rFresh(c):0)+outN,'run-badge']]:[]),['seguimiento','Seguimiento',freshChk(c),'chk-badge'],['revision',isRevToday(c)?'Revisión hoy':'Revisiones',0,''],['fotos','Fotos',freshPhotos(c),'photo-badge'],['mensajes','Mensajes',freshMsgs(c),'msg-badge']];
   const Ed=[['datos','Datos y archivos',0,''],['dieta','Dieta',0,''],['entreno','Entrenamiento',0,''],['entrevista','Ficha / entrevista',0,'']];
   const m=coachMode();if(m==='edit')state.lastEdit=state.tab;else state.lastVer=state.tab;
   const vb=V.reduce((a,x)=>a+(x[2]||0),0);
   const T=m==='edit'?Ed:V;
   return '<div class="cmode" role="tablist" aria-label="Modo"><button type="button" role="tab" class="es-b" data-act="cmode" data-v="ver" aria-selected="'+(m==='ver')+'">👁 Ver'+(m==='edit'&&vb?'<i class="es-hoy">'+vb+'</i>':'')+'</button><button type="button" role="tab" class="es-b" data-act="cmode" data-v="edit" aria-selected="'+(m==='edit')+'">✎ Editar plan</button></div>'+(m==='edit'?planCard(c):'')+
    '<div class="tabs" role="tablist">'+T.map(x=>'<button type="button" role="tab" class="tab" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(state.tab===x[0])+'">'+x[1]+(x[3]?'<span class="badge" id="'+x[3]+'"'+(x[2]?'':' hidden')+'>'+x[2]+'</span>':'')+'</button>').join('')+'</div>';
+}
+function fuerzaPanel(c){
+  if(!(c.training.days||[]).some(d=>d.exs&&d.exs.length))return '<div class="empty">Este cliente todavía no tiene plan de entrenamiento de fuerza. Puedes prepararlo en «Editar plan» → Entrenamiento.</div>';
+  return '<div class="plan-bar"><p class="muted" style="margin:0">Plan de fuerza de '+esc(first(c.name))+', tal como lo ve en su app.</p><span><button type="button" class="btn primary" data-act="trPrint" data-v="fuerza">Imprimir</button></span></div>'+trSheet(c,'fuerza');
 }
 function datosPanel(c){return '<div class="stack"><div class="card"><h2>Datos del cliente</h2><div class="form-grid">'+
   [['name','Nombre'],['goal','Objetivo'],['phase','Fase'],['review','Próxima revisión']].map(x=>'<label class="cell"><span class="lbl show">'+x[1]+'</span><input class="in" data-r="cinfo" data-f="'+x[0]+'" value="'+esc(c[x[0]]||'')+'"></label>').join('')+'</div></div>'+fichaCard(c)+accessCard(c)+'</div>'}
@@ -5223,7 +5230,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261012210853';let verT=0;
+const APP_VER='20261013062310';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

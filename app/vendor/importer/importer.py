@@ -551,6 +551,7 @@ def parse_training(path):
 
 # ---------------------------------------------------------------- composición corporal
 CC_MAP = [
+    (r'grasa subcut', 'subc'), (r'grasa visceral', 'visc'),  # antes que «porcentaje grasa» para no confundirlas con la grasa corporal
     (r'^peso', 'peso'), (r'porcentaje grasa|^masa grasa \(%\)|^grasa corporal \(%\)', 'grasa'), (r'porcentaje m[uú]sculo \(%\)|^m[uú]sculo \(%\)|^masa muscular \(%\)', 'musc'),
     (r'^masa [oó]sea \(%\)', 'osea'),
     (r'(porcentaje |poercentaje )?m[uú]sculo esquel[eé]tico \(%\)', 'esq'), (r'porcentaje [oó]seo', 'osea'),

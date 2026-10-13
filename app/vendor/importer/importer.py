@@ -585,6 +585,8 @@ def parse_comp(path):
                 if val in (None, ''): continue
                 if re.match(r'^\s*altura', lab, re.I): alt = val; continue
                 k = cc_key(lab)
+                if k in ('grasa', 'musc', 'esq', 'osea', 'prot', 'agua', 'subc') and isinstance(val, (int, float)) and 0 < val <= 1:
+                    val = round(val * 100, 1)  # celda con formato de porcentaje (0,253 = 25,3 %)
                 if k and k not in v: v[k] = str(val).replace('.', ',') if isinstance(val, float) else str(val)
                 elif not k: skipped.add(lab.strip())
             revs.append({'fecha': d.strftime('%Y-%m-%d'), 'v': v})

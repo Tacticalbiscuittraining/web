@@ -3313,9 +3313,11 @@ const CC_ROWS=[
  ['musD','Muslo derecho','in',0],['musI','Muslo izquierdo','in',0],['gemD','Gemelo derecho','in',0],['gemI','Gemelo izquierdo','in',0],
  ['h','Índices de salud (automáticos)'],['icc','Índice cintura-cadera (ICC)','calc',-1],['ica','Índice cintura-altura (ICA)','calc',-1]];
 const CC_N=12;
+// % que vienen de Excel con formato de porcentaje (0,253 = 25,3 %)
+const CC_PCT=['grasa','musc','esq','osea','prot','agua','subc'],ccPct=(k,x)=>x!=null&&x>0&&x<=1&&CC_PCT.indexOf(k)>=0?Math.round(x*1000)/10:x;
 function comp(c){if(!c.comp)c.comp={nac:'',sexo:'',altura:c.diet.altura||'',notas:'',revs:[]};while(c.comp.revs.length<CC_N)c.comp.revs.push({fecha:'',v:{}});return c.comp}
 function ccVal(c,i,k){
-  const C=comp(c),v=C.revs[i].v,alt=num(C.altura),p=num(v.peso),g=x=>v[x]===''||v[x]==null?null:num(v[x]);
+  const C=comp(c),v=C.revs[i].v,alt=num(C.altura),p=num(v.peso),g=x=>v[x]===''||v[x]==null?null:ccPct(x,num(v[x]));
   const pct=x=>p&&g(x)!=null?p*g(x)/100:null;
   switch(k){
     case 'altura':return p&&alt?alt:null;
@@ -3361,7 +3363,7 @@ function ccRegistro(c){
   const rows=CC_ROWS.map(R=>{
     if(R[0]==='h')return '<tr class="cc-h"><th colspan="'+(CC_N+3)+'" scope="colgroup">'+esc(R[1])+'</th></tr>';
     const k=R[0],dir=ccDir(c,R[3]),[d0,d1]=ccDeltas(c,k),a=ccDelta(c,k,d0,dir),b=ccDelta(c,k,d1,dir);
-    const cells=C.revs.map((r,i)=>R[2]==='in'?'<td><input class="cc-in num" inputmode="decimal" data-r="comp" data-i="'+i+'" data-k="'+k+'" value="'+esc(r.v[k]!=null?String(r.v[k]).replace('.',','):'')+'" aria-label="'+esc(R[1])+', '+(i?'revisión '+i:'inicial')+'"></td>':'<td class="cc-calc" id="cc-'+k+'-'+i+'">'+ccFmt(k,ccVal(c,i,k))+'</td>').join('');
+    const cells=C.revs.map((r,i)=>R[2]==='in'?'<td><input class="cc-in num" inputmode="decimal" data-r="comp" data-i="'+i+'" data-k="'+k+'" value="'+esc(r.v[k]!=null&&r.v[k]!==''?String(ccPct(k,num(r.v[k]))===num(r.v[k])?r.v[k]:ccPct(k,num(r.v[k]))).replace('.',','):'')+'" aria-label="'+esc(R[1])+', '+(i?'revisión '+i:'inicial')+'"></td>':'<td class="cc-calc" id="cc-'+k+'-'+i+'">'+ccFmt(k,ccVal(c,i,k))+'</td>').join('');
     return '<tr><th scope="row" class="cc-par">'+esc(R[1])+'</th>'+cells+'<td class="cc-d d1 '+a.cls+'" id="cd-'+k+'-o">'+a.t+'</td><td class="cc-d '+b.cls+'" id="cd-'+k+'-p">'+b.t+'</td></tr>';
   }).join('');
   const ev=ccEval(c);
@@ -5364,7 +5366,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013105757';let verT=0;
+const APP_VER='20261013110140';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

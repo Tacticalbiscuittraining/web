@@ -2687,7 +2687,7 @@ const dayStart=(wo,i)=>{const n=new Date();return new Date(n.getFullYear(),n.get
 const dayLogs=(c,i,wo)=>{const a=dayStart(wo,i),b=dayStart(wo,i+1);return c.log.filter(l=>l.ts>=a&&l.ts<b)};
 const ACTS=[['Pilates','🧘‍♀️'],['Yoga','🧘'],['Natación','🏊'],['Bici','🚴'],['Correr','🏃'],['Caminar / senderismo','🥾'],['Pádel / tenis','🎾'],['Fútbol / deporte de equipo','⚽'],['Crossfit / funcional','🏋️'],['Otra','✨']];
 /* unilateral: devuelve 'pierna', 'brazo' o 'lado' */
-const uniSide=e=>{const t=(e.name||'')+' '+(e.reps||'');if(!/una pierna|un brazo|unilateral|un lado|por lado|cada lado|por pierna|cada pierna|por brazo|cada brazo|single.?(leg|arm)|plancha lateral|side plank|\b1 (pierna|brazo)/i.test(t))return '';return /pierna|leg/i.test(t)?'pierna':/brazo|arm/i.test(t)?'brazo':'lado'};
+const uniSide=e=>{const m=(String(e.name||'')+' · '+String(e.reps||'')+' · '+String(e.tech||'')).match(/una pierna|un brazo|unilateral|un lado|por lado|cada lado|por pierna|cada pierna|por brazo|cada brazo|single.?(leg|arm)|plancha lateral|side plank|\b1 (pierna|brazo)/i);if(!m)return '';const t=/unilateral/i.test(m[0])?String(e.name||'')+' '+String(e.tech||''):m[0];return /pierna|leg/i.test(t)?'pierna':/brazo|arm/i.test(t)?'brazo':'lado'};
 const isSecEx=e=>/\d\s*("|”|''|s\b|seg)/i.test(String(e.reps||''))||/isom[eé]tric|plancha/i.test(e.name||'');
 const setTxt=(s,u)=>u==='s'?(s[0]>0?fmtN(s[0])+' kg × ':'')+s[1]+' s':(s[0]>0?fmtN(s[0])+'×'+s[1]:s[1]+' reps');
 const ACT_I=['Suave','Media','Intensa'];
@@ -5348,7 +5348,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013091827';let verT=0;
+const APP_VER='20261013092254';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

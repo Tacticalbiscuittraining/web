@@ -3522,10 +3522,19 @@ let RT=null;
 const mmss=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
 let HOLD=null,HOLDOK=null;/* serie del temporizador «Aguanta»; al cerrarlo ya terminado se marca hecha */
 function holdMark(){const r=HOLDOK;HOLDOK=null;const ok=r&&r.isConnected&&r.querySelector('.setok');if(ok&&!ok.checked&&!ok.disabled){ok.checked=true;ok.dispatchEvent(new Event('change',{bubbles:true}))}}
-function restStop(silent){if(RT){clearInterval(RT.int);RT=null}HOLD=null;const el=$('#rt');if(el)el.hidden=true;if(!silent)holdMark()}
+function restStop(silent){if(RT){clearInterval(RT.int);RT=null}wakeOff();HOLD=null;const el=$('#rt');if(el)el.hidden=true;if(!silent)holdMark()}
 /* pitido corto (iOS no vibra): el AudioContext se crea en el toque del botón */
 let AC=null;
-function beep(n){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();for(let k=0;k<n;k++){const o=AC.createOscillator(),g=AC.createGain(),t0=AC.currentTime+k*.3;o.frequency.value=880;g.gain.setValueAtTime(.3,t0);g.gain.exponentialRampToValueAtTime(.001,t0+.22);o.connect(g).connect(AC.destination);o.start(t0);o.stop(t0+.25)}}catch(_){}}
+function beep(n){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const play=()=>{for(let k=0;k<n;k++){const o=AC.createOscillator(),g=AC.createGain(),t0=AC.currentTime+.05+k*.3;o.frequency.value=880;g.gain.setValueAtTime(.4,t0);g.gain.exponentialRampToValueAtTime(.001,t0+.22);o.connect(g).connect(AC.destination);o.start(t0);o.stop(t0+.25)}};
+  /* iOS deja el audio «suspended»/«interrupted» tras bloquear o cambiar de app: se reanuda y luego suena */
+  if(AC.state!=='running')AC.resume().then(play,()=>{});else play()}catch(_){}}
+/* cualquier toque reactiva el audio, así el pitido final no depende de haber pulsado ⏱ */
+document.addEventListener('pointerdown',()=>{if(!AC||AC.state!=='running')beep(0)},{passive:true});
+/* pantalla encendida mientras corre un temporizador (si el móvil lo permite) */
+let WL=null;
+function wakeOn(){try{if(!WL&&navigator.wakeLock)navigator.wakeLock.request('screen').then(w=>{WL=w;w.addEventListener('release',()=>{if(WL===w)WL=null})},()=>{})}catch(_){}}
+function wakeOff(){try{if(WL){WL.release();WL=null}}catch(_){}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&RT)wakeOn()});
 /* encadenar (isométricos): al acabar el descanso, aviso de 3 s y empieza solo la siguiente serie */
 function holdGo(row){const rp=row.querySelector('.setreps'),sec=parseInt(rp.value||rp.dataset.t)||30,ex=row.closest('.exo'),u=ex&&ex.dataset.uni;
   if(!u){restStart(sec,'Aguanta','¡Tiempo! Serie hecha',1,row);return}
@@ -3534,16 +3543,16 @@ function holdGo(row){const rp=row.querySelector('.setreps'),sec=parseInt(rp.valu
   restStart(sec,'Aguanta · '+L[0],0,0,null,()=>{beep(2);try{navigator.vibrate&&navigator.vibrate(200)}catch(_){}
     restStart(5,'Cambia de '+u,0,0,null,()=>{if(row.isConnected){beep(1);restStart(sec,'Aguanta · '+L[1],'¡Tiempo! Serie hecha',1,row)}})})}
 function chainNext(sel){const ex=$(sel),row=ex&&$$('.setrow2',ex).find(r=>{const o=r.querySelector('.setok');return o&&!o.checked&&!o.disabled});if(!row)return;
-  restStart(3,'Siguiente serie en',null,0,null,()=>{if(row.isConnected){beep(1);holdGo(row)}})}
+  beep(1);restStart(3,'Siguiente serie en',null,0,null,()=>{if(row.isConnected){beep(1);holdGo(row)}})}
 function restStart(sec,label,doneTxt,snd,row,then){
   holdMark();restStop(1);HOLD=row||null;if(!(sec>0))return;
   let el=$('#rt');
   if(!el){el=document.createElement('div');el.id='rt';el.className='rt';el.setAttribute('role','timer');document.body.appendChild(el);
     el.innerHTML='<span class="rt-l">Descanso</span><b class="rt-v" aria-live="off"></b><button type="button" class="rt-b" data-act="rtAdd" data-v="-15" aria-label="Restar 15 segundos">−15</button><button type="button" class="rt-b" data-act="rtAdd" data-v="15" aria-label="Sumar 15 segundos">+15</button><button type="button" class="rt-b rt-x" data-act="rtStop" aria-label="Cerrar temporizador">✕</button><i class="rt-bar"><i></i></i>'}
   el.hidden=false;el.classList.remove('done');$('.rt-l',el).textContent=label||'Descanso';
-  RT={end:Date.now()+sec*1000,tot:sec,int:0};
+  RT={end:Date.now()+sec*1000,tot:sec,int:0};wakeOn();
   const tick=()=>{if(!RT)return;const left=Math.max(0,Math.ceil((RT.end-Date.now())/1000));$('.rt-v',el).textContent=mmss(left);$('.rt-bar i',el).style.width=(100-left/RT.tot*100)+'%';
-    if(left<=0){clearInterval(RT.int);RT=null;if(then){then();return}HOLDOK=HOLD;HOLD=null;el.classList.add('done');$('.rt-l',el).textContent=doneTxt||'¡A por la siguiente!';if(snd)beep(3);
+    if(left<=0){clearInterval(RT.int);RT=null;if(then){then();return}HOLDOK=HOLD;HOLD=null;el.classList.add('done');$('.rt-l',el).textContent=doneTxt||'¡A por la siguiente!';beep(3);wakeOff();
       try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(_){}
       setTimeout(()=>{if(!RT){const e=$('#rt');if(e)e.hidden=true;holdMark()}},HOLDOK&&HOLDOK.closest('[data-chain]')?1500:4000)}};
   RT.int=setInterval(tick,250);tick();
@@ -5348,7 +5357,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013092254';let verT=0;
+const APP_VER='20261013092638';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

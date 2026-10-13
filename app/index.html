@@ -5222,6 +5222,8 @@ function fixClient(c){
   try{cwFix(c)}catch(e){console.warn(e)}
   try{noFixDays(c)}catch(e){console.warn(e)}
   if(!c.swaps)c.swaps={};
+  // registros que quedaron sueltos al subir un plan antes de este arreglo
+  try{(c.planHist||[]).forEach(h=>relink(c,h.data))}catch(e){console.warn(e)}
   try{foodSync(c)}catch(e){console.warn(e)}
   return c;
 }
@@ -5450,7 +5452,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013150519';let verT=0;
+const APP_VER='20261013183301';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5833,7 +5835,27 @@ function autoVersion(c,B){
     const d={};d[k]=JSON.parse(old);if(k==='training'&&c.run){const r=Object.assign({},c.run);delete r.logs;d.run=JSON.parse(J(r))}
     histPush(c,k,'cambios a mano',{data:d})});
 }
+/* al subir un plan nuevo cambian los ids de comidas, alimentos y ejercicios: lo ya registrado (series, comidas hechas, cambios) pasa a los nuevos */
+const rlN=x=>String(x||'').normalize('NFC').toLowerCase().replace(/\s+/g,' ').trim();
+function rlKeys(o){const K={};
+  Object.keys((o&&o.diet&&o.diet.types)||{}).forEach(t=>((o.diet.types[t]||{}).meals||[]).forEach((m,k)=>{if(!m)return;
+    if(m.id)K[m.id]=['m|'+t+'|'+rlN(m.name),'m|'+t+'|#'+k];
+    (m.items||[]).forEach((it,j)=>{if(it&&it.id)K[it.id]=['f|'+t+'|'+rlN(m.name)+'|'+rlN(it.food),'f|'+t+'|#'+k+'|#'+j]})}));
+  ((o&&o.training&&o.training.days)||[]).forEach(d=>(d.exs||[]).forEach(e=>{if(e&&e.id)K[e.id]=['e|'+rlN(d.name)+'|'+rlN(e.name),'e||'+rlN(e.name)]}));
+  return K}
+function relink(c,old){
+  const cur=rlKeys(c),by={};Object.keys(cur).forEach(id=>cur[id].forEach(k=>{if(!(k in by))by[k]=id}));
+  const ol=rlKeys(old),M={};Object.keys(ol).forEach(id=>{if(cur[id])return;const n=ol[id].map(k=>by[k]).find(Boolean);if(n)M[id]=n});
+  if(!Object.keys(M).length)return 0;let n=0;const mp=id=>{if(M[id]){n++;return M[id]}return id};
+  (c.log||[]).forEach(l=>{if(l&&l.exId&&M[l.exId])l.exId=mp(l.exId)});
+  const eatFix=a=>Array.isArray(a)&&a.forEach((x,i)=>{if(Array.isArray(x))a[i]=x.map(mp).filter((v,k,z)=>z.indexOf(v)===k)});
+  const altFix=a=>Array.isArray(a)&&a.forEach(o=>o&&Object.keys(o).forEach(k=>{if(M[k]){if(!(M[k] in o))o[M[k]]=o[k];delete o[k];n++}}));
+  eatFix(c.eat);Object.values(c.hab||{}).forEach(H=>{if(H){if(H.eat!==c.eat)eatFix(H.eat);altFix(H.alt)}});
+  if(c.swaps)Object.keys(c.swaps).forEach(k=>{const i=k.lastIndexOf('|'),id=k.slice(i+1);if(i>0&&M[id]){const nk=k.slice(0,i+1)+M[id];if(!(nk in c.swaps))c.swaps[nk]=c.swaps[k];delete c.swaps[k];n++}});
+  if(c.exVar)Object.keys(c.exVar).forEach(k=>{if(M[k]){if(!(M[k] in c.exVar))c.exVar[M[k]]=c.exVar[k];delete c.exVar[k];n++}});
+  return n}
 function applyPlan(c,d,label){
+  const old0={diet:c.diet,training:c.training};
   if(d.diet!==undefined)histPush(c,'diet',label);
   if(d.training!==undefined||d.run!==undefined)histPush(c,'training',label);
   const touch=['diet','training','run'].filter(k=>d[k]!==undefined);
@@ -5850,6 +5872,7 @@ function applyPlan(c,d,label){
   // igual que al cargar (fixClient): así el primer cambio a mano no deja en el historial una copia idéntica
   if(d.training!==undefined)try{noFixDays(c)}catch(e){console.warn(e)}
   if(touch.length)c.planUpd={ts:Date.now(),what:touch};
+  try{relink(c,old0)}catch(e){console.warn(e)}
   try{foodSync(c)}catch(e){console.warn(e)}
 }
 const hDate=(ts,m)=>new Date(ts).toLocaleDateString('es-ES',{day:'numeric',month:m||'short',year:'numeric'});

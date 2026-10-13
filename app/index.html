@@ -2434,6 +2434,10 @@ body.wz-on{overflow:hidden}
 .eq-l>span{font-size:13px;font-weight:700;color:var(--muted)}
 .eq-l .nb-seg{grid-template-columns:repeat(2,1fr);flex:1;min-width:180px}
 .bw-t[data-act=chainT]{text-align:left}
+.pm-top .cc-kpis{margin-bottom:10px}
+.pm-act{display:flex;gap:8px;margin-top:4px}
+.pm-act .btn{flex:1;max-width:320px}
+.pm-form{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -3192,13 +3196,19 @@ function wZoomHtml(c){
    wChart(c,{W,H,big:true,days:R[2]})+'</div>';
 }
 const CC_KEY=[['peso','Peso','kg'],['grasa','Grasa corporal','%'],['mmusc','Masa muscular','kg'],['cintura','Cintura','cm']];
+function ccTiles(c,noPeso){
+  if(!c.comp||!Array.isArray(c.comp.revs)||!c.comp.revs.some(r=>r.fecha&&Object.keys(r.v||{}).length))return '';
+  const R=CC_ROWS.reduce((o,r)=>{o[r[0]]=r;return o},{});
+  return CC_KEY.filter(x=>!noPeso||x[0]!=='peso').map(([k,l,u])=>{const x=ccLast(c,k);if(x==null||isNaN(x))return '';const d=ccDelta(c,k,ccDeltas(c,k)[0],ccDir(c,R[k][3]));
+    return '<div class="kpi"><div class="k-l">'+l+'</div><div class="k-v">'+ccFmt(k,x)+(u?' '+u:'')+'</div><div class="k-s">'+(d.t?'<span class="cc-kd '+d.cls+'">'+d.t+(u?' '+u:'')+'</span> desde la inicial':'Primera medición')+'</div></div>'}).join('');
+}
 function ccSegCard(c,cli){
   if(!c.comp||!Array.isArray(c.comp.revs)||!c.comp.revs.some(r=>r.fecha&&Object.keys(r.v||{}).length))return '';
   const R=CC_ROWS.reduce((o,r)=>{o[r[0]]=r;return o},{});
   const tiles=CC_KEY.map(([k,l,u])=>{const x=ccLast(c,k);if(x==null||isNaN(x))return '';const d=ccDelta(c,k,ccDeltas(c,k)[0],ccDir(c,R[k][3]));
     return '<div class="kpi"><div class="k-l">'+l+'</div><div class="k-v">'+ccFmt(k,x)+(u?' '+u:'')+'</div><div class="k-s">'+(d.t?'<span class="cc-kd '+d.cls+'">'+d.t+(u?' '+u:'')+'</span> desde la inicial':'Primera medición')+'</div></div>'}).join('');
   const last=c.comp.revs.map(r=>r.fecha).filter(Boolean).sort().pop();
-  return '<div class="card"><div class="feed-bar"><h2 style="margin:0">'+(cli?'Mi composición corporal':'Composición corporal')+'</h2>'+(cli?'':'<button type="button" class="btn sm" data-act="goRevGraf">Ver todos los gráficos</button>')+'</div><p class="muted" style="margin:6px 0 10px;font-size:13.5px">Última revisión: '+dmy(pIso(last))+' · '+ccStats(c).n+' mediciones</p><div class="kpis cc-kpis">'+tiles+'</div>'+(cli?ccCliCharts(c):'')+'</div>';
+  return '<div class="card"><div class="feed-bar"><h2 style="margin:0">'+(cli?'Mi composición corporal':'Composición corporal')+'</h2>'+(cli?'':'<button type="button" class="btn sm" data-act="goRevGraf">Ver todos los gráficos</button>')+'</div><p class="muted" style="margin:6px 0 10px;font-size:13.5px">Última revisión: '+dmy(pIso(last))+' · '+ccStats(c).n+' mediciones</p>'+(cli?ccCliCharts(c):'<div class="kpis cc-kpis">'+tiles+'</div>')+'</div>';
 }
 function ccCliCharts(c){
   const C=comp(c),idx=C.revs.map((r,i)=>i).filter(i=>C.revs[i].fecha&&Object.keys(C.revs[i].v).length);
@@ -3242,9 +3252,17 @@ function clientTrack(c){
   const wbox='<p class="muted wt-how" style="margin-top:0">Tu entrenador te pesa en la revisión mensual. Si te pesas por tu cuenta, apúntalo aquí: en ayunas, después de ir al baño y en la misma báscula.</p>'+form(false)+(wks.length?'<p class="lbl show" style="margin:14px 0 6px">Esta semana</p>'+list:'');
   const weigh='<section class="card"><h2>Apuntar mi peso</h2>'+wbox+'</section>';
   const hist='<section class="card"><h2>Mi evolución</h2>'+wBox(c,'Cuando tengas dos pesajes verás aquí tu gráfica.')+chkTable(c,false)+'</section>';
+  const pm=()=>{const P=wPts(c),L=P.length?P[P.length-1]:null,d=P.length>1?Math.round((L.y-P[0].y)*10)/10:null,dir=ccDir(c,'goal'),dc=d==null||!d||!dir?'':(d*dir>0?'good':'bad');
+    const tiles='<div class="kpi"><div class="k-l">Peso actual</div><div class="k-v">'+(L?fmtN(L.y)+' kg':'—')+'</div><div class="k-s">'+(d==null?(L&&L.ts?dmy(new Date(L.ts)):'Apunta tu primer peso'):'<span class="cc-kd '+dc+'">'+(d>0?'+':d<0?'−':'')+fmtN(Math.abs(d))+' kg</span> desde el inicio')+'</div></div>'+ccTiles(c,true);
+    const nPes=weighRows(c).length;
+    return '<section class="card pm-top"><div class="kpis cc-kpis">'+tiles+'</div>'+wBox(c,'Cuando tengas dos pesajes verás aquí tu gráfica.')+
+     '<div class="pm-act"><button type="button" class="btn primary" data-act="wForm" aria-expanded="'+!!state.wForm+'">'+(state.wForm?'✕ Cerrar':'+ Apuntar mi peso')+'</button></div>'+
+     (state.wForm?'<div class="pm-form">'+wbox+'</div>':'')+'</section>'+
+     ccSegCard(c,true)+
+     (nPes?'<section class="card"><details class="cc-more" style="margin:0"><summary>Todos mis pesajes ('+nPes+')</summary>'+chkTable(c,false)+'</details></section>':'');};
   const sb=state.tsub||'hoy';
   const sub='<div class="esub" role="tablist" aria-label="Sección del progreso">'+[['hoy','Hoy'],['peso','Peso y medidas'],['prog','Evolución']].map(x=>'<button type="button" role="tab" class="es-b" data-act="tsub" data-v="'+x[0]+'" aria-selected="'+(sb===x[0])+'">'+x[1]+'</button>').join('')+'</div>';
-  if(sb==='peso')return sub+'<div class="trk2">'+weigh+hist+'</div>'+ccSegCard(c,true);
+  if(sb==='peso')return sub+'<div class="stack pm">'+pm()+'</div>';
   if(sb==='prog')return sub+progCard(c,false);
   return sub+today+'<section class="card"><h2>Mi semana</h2><p class="muted" style="margin:0 0 10px;font-size:13.5px">Toca una casilla para corregirla. En comidas eliges una a una.</p>'+weekGrid(c,true,state.tw)+'</section>';
 }
@@ -4844,6 +4862,7 @@ document.addEventListener('click',e=>{
     case 'wZoom':{let z=$('#wz');if(!z){z=document.createElement('div');z.id='wz';z.className='wz';document.body.appendChild(z)}z.innerHTML=wZoomHtml(c);z.hidden=false;document.body.classList.add('wz-on');break}
     case 'wRange':{state.wRange=t.dataset.v;const z=$('#wz');if(z)z.innerHTML=wZoomHtml(c);break}
     case 'wZoomClose':{const z=$('#wz');if(z)z.hidden=true;document.body.classList.remove('wz-on');break}
+    case 'wForm':state.wForm=!state.wForm;renderMain();if(state.wForm){const f=$('.pm-form');if(f)f.scrollIntoView({block:'nearest',behavior:'smooth'})}break;
     case 'goRevGraf':state.tab='revision';state.ccsub='graf';renderMain();break;
     case 'goSeg':state.tab='seguimiento';renderMain();break;
     case 'revStart':{const C=comp(c),i=C.revs.findIndex(r=>!r.fecha&&!Object.keys(r.v).length);if(i<0){toast('No quedan columnas libres');break}C.revs[i].fecha=isoT(Date.now());if(lastW(c))C.revs[i].v.peso=lastW(c);state.ccsub='reg';renderMain();const f=$('[data-r="comp"][data-i="'+i+'"][data-k="grasa"]');if(f){f.focus();const w=f.closest('.cc-wrap');if(w)w.scrollLeft=Math.max(0,f.closest('td').offsetLeft-240)}toast(i?'Revisión '+i+' abierta':'Medición inicial abierta');break}
@@ -4899,7 +4918,7 @@ document.addEventListener('click',e=>{
     case 'sendWeigh':{const box=t.closest('.wt-form'),q=s=>box.querySelector(s),wkI=q('#wKg'),kg=num(wkI.value||(()=>{const f=wkI.closest('.wf'),a=f&&f.querySelector('.wh[data-w="wfI"]'),b=f&&f.querySelector('.wh[data-w="wfD"]');return a?String(whVal(a)+(b?whVal(b)/10:0)):''})());if(!(kg>25&&kg<350)){toast('Escribe tu peso en kg');break}
       const dv=q('#wDate').value,m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(dv||''),now=new Date(),ts=m?new Date(+m[1],+m[2]-1,+m[3],now.getHours(),now.getMinutes()).getTime():Date.now();
       const odd=q('#wOdd').checked,cond=odd?(q('#wCond').value.trim()||'Condiciones distintas'):'';
-      c.chk.push({id:nid(),ts:Math.min(ts,Date.now()),week:clientWeek(c)+1,peso:kg,animo:state.mood||0,cond,comm:q('#wComm').value.trim(),...(state.ck&&Object.keys(state.ck).length?{ck:state.ck}:{}),fresh:true});c.weights.push(kg);state.mood=0;state.ck=null;renderMain();renderRail();toast('Peso enviado a tu entrenador');break}
+      c.chk.push({id:nid(),ts:Math.min(ts,Date.now()),week:clientWeek(c)+1,peso:kg,animo:state.mood||0,cond,comm:q('#wComm').value.trim(),...(state.ck&&Object.keys(state.ck).length?{ck:state.ck}:{}),fresh:true});c.weights.push(kg);state.mood=0;state.ck=null;state.wForm=false;renderMain();renderRail();toast('Peso enviado a tu entrenador');break}
     case 'cday':state.cday=+t.dataset.i;renderMain();break;
     case 'consentAccept':{c.consent={ts:Date.now(),v:CONSENT_V};renderMain();toast('Consentimiento registrado');break}
     case 'consentRevoke':{c.photos.forEach(p=>{try{URL.revokeObjectURL(p.url)}catch(_){}});c.photos=[];state.cmp=[];c.consent=null;renderMain();renderRail();toast('Consentimiento retirado y fotos borradas');break}
@@ -5379,7 +5398,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013110536';let verT=0;
+const APP_VER='20261013110745';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5990,7 +6009,7 @@ if(IOS_PWA){window.print=function(){const pr=document.getElementById('printroot'
 
 /* ---------- «Ver como cliente»: solo lectura para el entrenador ---------- */
 const PV=()=>RB.role==='coach'&&state.mode==='client';
-const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','trFs','trPrint','tpsub','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop','calTop','calGo','strPick','wgMeal','pickDay','cmp','mKind','esub','wZoom','wRange','wZoomClose']);
+const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','trFs','trPrint','tpsub','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop','calTop','calGo','strPick','wgMeal','pickDay','cmp','mKind','esub','wZoom','wRange','wZoomClose','wForm']);
 function pvBlock(e){toast('Vista de cliente: solo lectura. No se cambia nada.');e.preventDefault();e.stopImmediatePropagation()}
 document.addEventListener('click',e=>{
   if(!PV())return;const m=$('#main');if(!m||!m.contains(e.target))return;

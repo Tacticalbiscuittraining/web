@@ -3090,7 +3090,7 @@ function wgMealBox(c,wo){const k=state.wgM;if(!k)return '';const p=k.split('@'),
    ms.map(m=>{const st=eat.indexOf(m.id)>=0?'ok':al[m.id]||'';return '<div class="wgm-r"><span class="wgm-n">'+esc(m.name)+'</span><div class="wgm-o" role="group" aria-label="'+esc(m.name)+'">'+opts.map(o=>'<button type="button" class="wgm-b '+o[0]+'" data-act="wgEat" data-d="'+i+'" data-o="'+wo+'" data-m="'+m.id+'" data-v="'+o[0]+'" aria-pressed="'+(st===o[0])+'" title="'+o[2]+'"><span aria-hidden="true">'+o[1]+'</span><small>'+o[2]+'</small></button>').join('')+'</div></div>'}).join('')+
    '<div class="wgm-f"><button type="button" class="btn sm" data-act="eatAll" data-d="'+i+'" data-o="'+wo+'">'+(eat.length===ms.length?'Desmarcar todas':'Todas según el plan')+'</button></div></div>';
 }
-function weighRows(c){return c.chk.slice().sort((a,b)=>a.ts-b.ts).map((x,i,arr)=>{const pv=i?arr[i-1].peso:0,df=x.peso&&pv?Math.round((x.peso-pv)*10)/10:null;return{x,df}})}
+function weighRows(c){return wSeries(c).map(p=>p.rev?{ts:p.ts,peso:p.y,rev:true}:p.x).map((x,i,arr)=>{const pv=i?arr[i-1].peso:0,df=x.peso&&pv?Math.round((x.peso-pv)*10)/10:null;return{x,df}})}
 const CK=[['ene','⚡ Energía','Baja','Alta'],['sue','😴 Sueño','Malo','Muy bueno'],['est','🧠 Estrés','Bajo','Alto'],['ham','🍽️ Hambre','Poca','Mucha']];
 const CK_DIE=[[3,'Bien'],[2,'A medias'],[1,'Poco']];
 function ckMore(){const v=state.ck||{};return '<details class="ck-more"><summary>Más detalles para tu entrenador <small>(opcional · 20 s)</small></summary><div class="ck-g">'+
@@ -3101,28 +3101,29 @@ function chkTable(c,coach){
   const rows=weighRows(c);
   if(!rows.length)return '<div class="empty">Aún no hay pesajes registrados.</div>';
   return '<div class="tbl-wrap"><table class="dt wt"><thead><tr><th scope="col">Fecha</th><th scope="col" class="n">Peso</th><th scope="col" class="n">Cambio</th><th scope="col">Semana</th><th scope="col">Comentario</th></tr></thead><tbody>'+
-   rows.slice().reverse().map(({x,df})=>'<tr'+(coach&&x.fresh?' class="fresh"':'')+'><td>'+dshort(x.ts)+(coach&&x.fresh?' <span class="badge">Nuevo</span>':'')+'</td><td class="n"><b>'+fmtN(x.peso)+' kg</b></td><td class="n">'+(df==null?'—':'<span class="df '+(df<0?'dn':df>0?'up':'')+'">'+(df>0?'+':df<0?'−':'')+fmtN(Math.abs(df))+'</span>')+'</td><td>'+(x.animo?'<span class="mood" title="'+MOODS[x.animo-1][1]+'">'+MOODS[x.animo-1][0]+'</span> '+MOODS[x.animo-1][1]:ckTxt(x)?'':'—')+(ckTxt(x)?'<small class="ck-t">'+esc(ckTxt(x))+'</small>':'')+'</td><td class="cm">'+(x.cond?'<span class="cond">⚠ '+esc(x.cond)+'</span>':'')+esc(x.comm||'')+'</td></tr>').join('')+'</tbody></table></div>';
+   rows.slice().reverse().map(({x,df})=>'<tr'+(coach&&x.fresh?' class="fresh"':'')+'><td>'+dshort(x.ts)+(coach&&x.fresh?' <span class="badge">Nuevo</span>':'')+'</td><td class="n"><b>'+fmtN(x.peso)+' kg</b></td><td class="n">'+(df==null?'—':'<span class="df '+(df<0?'dn':df>0?'up':'')+'">'+(df>0?'+':df<0?'−':'')+fmtN(Math.abs(df))+'</span>')+'</td><td>'+(x.rev?'<span class="chip">📏 Revisión</span>':x.animo?'<span class="mood" title="'+MOODS[x.animo-1][1]+'">'+MOODS[x.animo-1][0]+'</span> '+MOODS[x.animo-1][1]:ckTxt(x)?'':'—')+(ckTxt(x)?'<small class="ck-t">'+esc(ckTxt(x))+'</small>':'')+'</td><td class="cm">'+(x.cond?'<span class="cond">⚠ '+esc(x.cond)+'</span>':'')+esc(x.comm||'')+'</td></tr>').join('')+'</tbody></table></div>';
 }
 function wSeries(c){
   const M={},day=ts=>isoT(ts);
-  (c.chk||[]).forEach(x=>{if(x.peso>0&&x.ts)M[day(x.ts)]={ts:x.ts,y:+x.peso,rev:false}});
+  (c.chk||[]).forEach(x=>{if(x.peso>0&&x.ts)M[day(x.ts)]={ts:x.ts,y:+x.peso,rev:false,x}});
   if(c.comp&&Array.isArray(c.comp.revs))c.comp.revs.forEach(r=>{const p=num(r.v&&r.v.peso);if(r.fecha&&p>0){const d=pIso(r.fecha);M[r.fecha]={ts:d.getTime()+12*36e5,y:p,rev:true}}});
   return Object.keys(M).sort().map(k=>M[k]);
 }
+function wUndated(c){return c.comp&&Array.isArray(c.comp.revs)?c.comp.revs.filter(r=>!r.fecha&&num(r.v&&r.v.peso)>0).length:0}
 function wChart(c){
-  const S=wSeries(c).slice(-16);
+  const S=wSeries(c);
   if(S.length<2){
     const w=c.weights.slice(-10);if(w.length<2)return '';
     S.length=0;w.forEach(v=>S.push({ts:0,y:v,rev:false}));
   }
   const w=S.map(x=>x.y),hasRev=S.some(x=>x.rev),hasChk=S.some(x=>!x.rev);
   const W=560,Hh=150,px=34,py=22,mn=Math.min.apply(null,w)-.4,mx=Math.max.apply(null,w)+.4;
-  const X=i=>px+i*(W-2*px)/(w.length-1),Y=v=>py+(mx-v)/(mx-mn)*(Hh-2*py);
+  const t0=S[0].ts,t1=S[S.length-1].ts,X=i=>t0&&t1>t0?px+(S[i].ts-t0)/(t1-t0)*(W-2*px):px+i*(W-2*px)/(w.length-1),Y=v=>py+(mx-v)/(mx-mn)*(Hh-2*py),rr=w.length>30?2.5:3.5;
   const pts=w.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
   const tip=x=>'<title>'+(x.ts?dmy(new Date(x.ts))+' · ':'')+(x.rev?'Revisión: ':'Pesaje: ')+fmtN(x.y)+' kg</title>';
   const lg=hasRev?'<div class="cc-lg wch-lg">'+(hasChk?'<span><i style="background:var(--teal);border-radius:50%"></i>Pesaje</span>':'')+'<span><i style="background:#264653"></i>Revisión (composición corporal)</span></div>':'';
   return lg+'<svg class="wch" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Evolución del peso: de '+fmtN(w[0])+' a '+fmtN(w[w.length-1])+' kg"><polyline points="'+pts+'" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>'+
-   S.map((x,i)=>{const cx=X(i),cy=Y(x.y),last=i===w.length-1;return x.rev?'<rect x="'+(cx-5).toFixed(1)+'" y="'+(cy-5).toFixed(1)+'" width="10" height="10" rx="2" fill="'+(last?'var(--coral)':'#264653')+'">'+tip(x)+'</rect>':'<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+(last?5:3.5)+'" fill="'+(last?'var(--coral)':'var(--teal)')+'">'+tip(x)+'</circle>'}).join('')+
+   S.map((x,i)=>{const cx=X(i),cy=Y(x.y),last=i===w.length-1;return x.rev?'<rect x="'+(cx-rr-1.5).toFixed(1)+'" y="'+(cy-rr-1.5).toFixed(1)+'" width="'+(2*rr+3)+'" height="'+(2*rr+3)+'" rx="2" fill="'+(last?'var(--coral)':'#264653')+'">'+tip(x)+'</rect>':'<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+(last?5:rr)+'" fill="'+(last?'var(--coral)':'var(--teal)')+'">'+tip(x)+'</circle>'}).join('')+
    '<text x="'+X(0)+'" y="'+(Y(w[0])-10)+'" text-anchor="start" class="wch-t">'+fmtN(w[0])+'</text><text x="'+X(w.length-1)+'" y="'+(Y(w[w.length-1])-10)+'" text-anchor="end" class="wch-t b">'+fmtN(w[w.length-1])+' kg</text>'+
    (S[0].ts?'<text x="'+X(0)+'" y="'+(Hh-4)+'" text-anchor="start" class="wch-t">'+dmy(new Date(S[0].ts))+'</text><text x="'+X(w.length-1)+'" y="'+(Hh-4)+'" text-anchor="end" class="wch-t">'+dmy(new Date(S[S.length-1].ts))+'</text>':'')+'</svg>';
 }
@@ -3145,7 +3146,7 @@ function ccCliCharts(c){
 }
 function segPanel(c){
   const T=trk(c);
-  return '<div class="stack"><div class="card"><h2>Peso</h2>'+(wChart(c)||'<p class="muted">Con dos pesajes o revisiones verás aquí la gráfica.</p>')+chkTable(c,true)+'</div>'+ccSegCard(c)+'<div class="card"><div class="feed-bar"><h2 style="margin:0">Adherencia</h2><span class="chip good" id="adh-pct">Esta semana: '+adhPct(c)+' %</span></div>'+weekGrid(c,false,state.tw)+'</div>'+progCard(c,true)+'<div class="card"><h2>Ajustes del seguimiento</h2><div class="form-grid"><label class="cell"><span class="lbl show">Pasos objetivo al día</span><input class="in num" inputmode="numeric" data-r="trk" data-f="pasos" value="'+esc(T.pasos)+'"></label></div><p class="muted" style="margin:10px 0 0;font-size:13.5px">El entreno se marca solo cuando '+esc(first(c.name))+' envía sus series, y las comidas cuando las marca en «Mi día». Agua, pasos y descanso los confirma con un toque.</p></div>'+'</div>';
+  return '<div class="stack"><div class="card"><h2>Peso</h2>'+(wUndated(c)?'<p class="chip warn" style="margin:0 0 8px">'+wUndated(c)+(wUndated(c)===1?' peso de Revisiones no tiene fecha':' pesos de Revisiones no tienen fecha')+': ponles fecha en Revisiones → Registro para que salgan en la gráfica.</p>':'')+(wChart(c)||'<p class="muted">Con dos pesajes o revisiones verás aquí la gráfica.</p>')+chkTable(c,true)+'</div>'+ccSegCard(c)+'<div class="card"><div class="feed-bar"><h2 style="margin:0">Adherencia</h2><span class="chip good" id="adh-pct">Esta semana: '+adhPct(c)+' %</span></div>'+weekGrid(c,false,state.tw)+'</div>'+progCard(c,true)+'<div class="card"><h2>Ajustes del seguimiento</h2><div class="form-grid"><label class="cell"><span class="lbl show">Pasos objetivo al día</span><input class="in num" inputmode="numeric" data-r="trk" data-f="pasos" value="'+esc(T.pasos)+'"></label></div><p class="muted" style="margin:10px 0 0;font-size:13.5px">El entreno se marca solo cuando '+esc(first(c.name))+' envía sus series, y las comidas cuando las marca en «Mi día». Agua, pasos y descanso los confirma con un toque.</p></div>'+'</div>';
 }
 function clientTrack(c){
   const ti=todayIdx(),T=trk(c),day=c.training.days.find(d=>d.wd===ti),ms=mealsFor(c,ti),ne=eatOf(c,ti).length,tDone=trainDone(c,ti),nLog=dayLogs(c,ti).length;
@@ -5269,7 +5270,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013065619';let verT=0;
+const APP_VER='20261013070334';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

@@ -276,6 +276,22 @@ class Sheet:
             if col_n(cc) > col_n(col):
                 nc = etree.Element(qs('c')); nc.set('r', ref); c.addprevious(nc); return nc
         nc = etree.SubElement(row, qs('c')); nc.set('r', ref); return nc
+    def cache(self, ref, v):
+        """Guarda el resultado de la fórmula de la celda (la fórmula se queda)."""
+        c = self.find_cell(ref)
+        if c is None or c.find(qs('f')) is None: return
+        for ch in list(c):
+            if ch.tag != qs('f'): c.remove(ch)
+        if isinstance(v, (int, float)): c.attrib.pop('t', None); etree.SubElement(c, qs('v')).text = str(v)
+        else: c.set('t', 'str'); etree.SubElement(c, qs('v')).text = v
+    def find_cell(self, ref):
+        _, rn = split_ref(ref)
+        for r in self.data.findall(qs('row')):
+            if int(r.get('r')) == rn:
+                for c in r.findall(qs('c')):
+                    if c.get('r') == ref: return c
+                return None
+        return None
     def set(self, ref, v):
         c = self.cell(ref)
         for ch in list(c): c.remove(ch)
@@ -293,6 +309,44 @@ class Sheet:
             t.set('{http://www.w3.org/XML/1998/namespace}space', 'preserve')
     def bytes(self):
         return etree.tostring(self.root, xml_declaration=True, encoding='UTF-8', standalone=True)
+
+# Las fórmulas de la plantilla no llevan resultado guardado: Excel las recalcula al abrir, pero la vista previa
+# del iPhone (y otros visores) las muestra vacías. Se guarda el resultado de las sencillas: =IF(X="","",Y)
+IF_EMPTY = re.compile(r'^IF\((?:([^!()]+)!)?\$?([A-Z]+)\$?(\d+)="","",(?:([^!()]+)!)?\$?([A-Z]+)\$?(\d+)\)$')
+def cache_formulas(get, names, shared):
+    done = {}
+    def val(sheet, ref):
+        if (sheet, ref) in done: return done[(sheet, ref)]
+        c = get(sheet).find_cell(ref)
+        if c is None: return ''
+        if c.find(qs('f')) is not None: return None  # fórmula aún sin resolver
+        v, t = c.find(qs('v')), c.get('t')
+        if t == 'inlineStr': return ''.join(x.text or '' for x in c.iter(qs('t')))
+        if v is None or v.text is None: return ''
+        if t == 's': return shared[int(v.text)]
+        return v.text if t in ('str', 'e') else float(v.text)
+    todo = []
+    for n in names:
+        for c in get(n).data.iter(qs('c')):
+            f = c.find(qs('f'))
+            m = IF_EMPTY.match((f.text or '').strip()) if f is not None else None
+            if m: todo.append((n, c, m))
+    sh_of = lambda n, g: g.strip("'") if g else n
+    for _ in range(6):  # cadenas: semana 4 ← semana 3 ← semana 2 ← semana 1
+        left = []
+        for n, c, m in todo:
+            x = val(sh_of(n, m.group(1)), m.group(2) + m.group(3))
+            y = '' if x == '' else val(sh_of(n, m.group(4)), m.group(5) + m.group(6))
+            if x is None or y is None: left.append((n, c, m)); continue
+            done[(n, c.get('r'))] = y
+            for ch in list(c):
+                if ch.tag != qs('f'): c.remove(ch)
+            if isinstance(y, float):
+                c.attrib.pop('t', None); etree.SubElement(c, qs('v')).text = str(int(y)) if y.is_integer() else repr(y)
+            else:
+                c.set('t', 'str'); etree.SubElement(c, qs('v')).text = y
+        if not left: break
+        todo = left
 
 def numish(v):
     """'8' → 8 · '60' → 60 · '8-10' → '8-10'"""
@@ -316,7 +370,7 @@ def fill_training(J):
         if name not in sheets: sheets[name] = Sheet(zin.read(path[name]))
         return sheets[name]
     meso = T.get('meso') or {}
-    days = [d for d in (T.get('days') or []) if d.get('exs')]
+    days = [d for d in (T.get('days') or []) if d.get('exs') and not d.get('of')]
     res = sh('Resumen')
     res.set('C6', J.get('name', '')); res.set('C7', J.get('goal', ''))
     res.set('C8', meso.get('level') or '')
@@ -329,14 +383,7 @@ def fill_training(J):
         res.set('F%d' % r, w.get('vol') or ''); res.set('G%d' % r, w.get('int') or ''); res.set('H%d' % r, w.get('notes') or '')
     day_sheets = [s.get('name') for s in wb.find(qs('sheets')) if s.get('name').startswith('Día')]
     left = []
-    for di, d in enumerate(days):
-        if di >= len(day_sheets): left.append(d.get('name', '')); continue
-        ws = sh(day_sheets[di]); rr = 22 + di
-        wd = d.get('wd')
-        res.set('C%d' % rr, WD[wd] if isinstance(wd, int) and 0 <= wd < 7 else '')
-        res.set('D%d' % rr, d.get('focus') or '')
-        res.set('G%d' % rr, numish(d.get('dur') or ''))
-        res.set('H%d' % rr, d.get('place') or '')
+    def fill_day(ws, d):
         exs = d['exs'][:8]
         if len(d['exs']) > 8: left.append('%s: %s' % (d.get('name', ''), ', '.join(e.get('name', '') for e in d['exs'][8:])))
         for i, e in enumerate(exs):
@@ -364,6 +411,74 @@ def fill_training(J):
         for k, top in (('warm', 20), ('cool', 89)):
             for j, x in enumerate([x for x in re.split(r'\s*·\s*', d.get(k) or '') if x][:3]): ws.set('B%d' % (top + j), x)
         for j, x in enumerate([x for x in (d.get('note') or '').split('\n') if x.strip()][:3]): ws.set('B%d' % (99 + j), x)
+    for di, d in enumerate(days):
+        if di >= len(day_sheets): left.append(d.get('name', '')); continue
+        ws = sh(day_sheets[di]); rr = 22 + di
+        wd = d.get('wd')
+        res.set('C%d' % rr, WD[wd] if isinstance(wd, int) and 0 <= wd < 7 else '')
+        res.set('D%d' % rr, d.get('focus') or '')
+        res.set('G%d' % rr, numish(d.get('dur') or ''))
+        res.set('H%d' % rr, d.get('place') or '')
+        fill_day(ws, d)
+    # variantes (p. ej. «Día B · Casa»): hoja propia «Día B (Casa)» copiada de la del día base, justo detrás
+    slot = {d['name']: day_sheets[i] for i, d in enumerate(days[:len(day_sheets)])}
+    extra, ct_add, rel_add, all_days = {}, [], [], list(zip(day_sheets, days))
+    nsheet = max(int(re.search(r'(\d+)\.xml$', v).group(1)) for v in path.values()) + 1
+    ndraw = 1 + max([int(m) for m in re.findall(r'xl/drawings/drawing(\d+)\.xml$', '\n'.join(zin.namelist()), re.M)] or [0])
+    rel_ids = [int(r.get('Id')[3:]) for r in rels if r.get('Id', '').startswith('rId')]
+    for v in [d for d in (T.get('days') or []) if d.get('exs') and d.get('of')]:
+        base = slot.get(v['of'])
+        if not base: left.append('%s (variante de %s)' % (v.get('name', ''), v['of'])); continue
+        label = v.get('place') or v['name'].split('·')[-1].strip()
+        name = '%s (%s)' % (v['of'], label)
+        part = 'xl/worksheets/sheet%d.xml' % nsheet
+        sheets[name] = Sheet(zin.read(path[base])); path[name] = part
+        brel = path[base].replace('worksheets/', 'worksheets/_rels/') + '.rels'
+        if brel in zin.namelist():
+            rx = zin.read(brel)
+            dm = re.search(rb'Target="../drawings/(drawing\d+)\.xml"', rx)
+            if dm:
+                dsrc = 'xl/drawings/%s.xml' % dm.group(1).decode()
+                extra['xl/drawings/drawing%d.xml' % ndraw] = zin.read(dsrc)
+                drel = dsrc.replace('drawings/', 'drawings/_rels/') + '.rels'
+                if drel in zin.namelist(): extra['xl/drawings/_rels/drawing%d.xml.rels' % ndraw] = zin.read(drel)
+                ct_add.append('<Override PartName="/xl/drawings/drawing%d.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/>' % ndraw)
+                rx = rx.replace(dm.group(0), b'Target="../drawings/drawing%d.xml"' % ndraw); ndraw += 1
+            extra[part.replace('worksheets/', 'worksheets/_rels/') + '.rels'] = rx
+        ct_add.append('<Override PartName="/%s" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' % part)
+        rid_new = 'rId%d' % (max(rel_ids) + 1); rel_ids.append(max(rel_ids) + 1)
+        rel_add.append('<Relationship Id="%s" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet%d.xml"/>' % (rid_new, nsheet))
+        S_ = wb.find(qs('sheets')); be = [s for s in S_ if s.get('name') == base][0]
+        while be.getnext() is not None and be.getnext().get('name', '').startswith(base + ' ('): be = be.getnext()
+        pos = list(S_).index(be) + 1
+        ne = etree.Element(qs('sheet')); ne.set('name', name); ne.set('sheetId', str(max(int(s.get('sheetId')) for s in S_) + 1)); ne.set('state', 'visible'); ne.set(R, rid_new)
+        be.addnext(ne)
+        dn = wb.find(qs('definedNames'))
+        for x in (dn if dn is not None else []):
+            if x.get('localSheetId') is not None and int(x.get('localSheetId')) >= pos: x.set('localSheetId', str(int(x.get('localSheetId')) + 1))
+        ws = sheets[name]
+        ws.set('B2', 'PLAN DE ENTRENAMIENTO · %s' % name.upper())
+        fill_day(ws, v); all_days.append((name, v)); nsheet += 1
+    # resultados que no son =IF(X="","",Y): fechas de las semanas, cabeceras y enlaces a vídeo
+    st = dt.date.fromisoformat(meso['start']) if re.match(r'\d{4}-\d\d-\d\d$', meso.get('start') or '') else None
+    rng = lambda i: '%s – %s' % ((st + dt.timedelta(7 * i)).strftime('%d/%m'), (st + dt.timedelta(7 * i + 6)).strftime('%d/%m')) if st else ''
+    if st: res.cache('G10', (st + dt.timedelta(27) - dt.date(1899, 12, 30)).days)
+    W = (meso.get('weeks') or [])[:4]
+    for i in range(4): res.cache('C%d' % (15 + i), rng(i))
+    if 'Check-in semanal' in path:
+        for r in range(6, 10): sh('Check-in semanal').cache('K%d' % r, '0 / %d' % (len(days) or 4))
+    used = dict(all_days)
+    for name in day_sheets + [n for n, _ in all_days if n not in day_sheets]:
+        ws = sh(name); d = used.get(name) or {'exs': []}
+        for i, top in enumerate((24, 37, 50, 63)):
+            w = W[i] if i < len(W) else {}
+            ws.cache('B%d' % top, 'SEMANA %d  ·  %s  ·  RIR objetivo %s' % (i + 1, str(w.get('phase') or '').upper(), w.get('rir') if w.get('rir') is not None else '') + ('  ·  ' + rng(i) if st else ''))
+        for i in range(len(d['exs'][:8])): ws.cache('M%d' % (10 + i), '▶ Ver vídeo')
+    shared = []
+    if 'xl/sharedStrings.xml' in zin.namelist():
+        ss = etree.fromstring(zin.read('xl/sharedStrings.xml'))
+        shared = [''.join(t.text or '' for t in si.iter(qs('t'))) for si in ss.findall(qs('si'))]
+    cache_formulas(sh, [n for n in path if n == 'Resumen' or n.startswith('Día')], shared)
     # Excel/LibreOffice recalculan las fórmulas al abrir
     cp = wb.find(qs('calcPr'))
     if cp is None: cp = etree.SubElement(wb, qs('calcPr'))
@@ -377,9 +492,16 @@ def fill_training(J):
             else:
                 for nm, s in sheets.items():
                     if path[nm] == it.filename: data = s.bytes()
-            if it.filename == '[Content_Types].xml': data = data.replace(b'<Override PartName="/xl/calcChain.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml"/>', b'')
-            if it.filename == 'xl/_rels/workbook.xml.rels': data = re.sub(rb'<Relationship [^>]*calcChain[^>]*/>', b'', data)
+            if it.filename == '[Content_Types].xml':
+                data = data.replace(b'<Override PartName="/xl/calcChain.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml"/>', b'')
+                data = data.replace(b'</Types>', ''.join(ct_add).encode() + b'</Types>')
+            if it.filename == 'xl/_rels/workbook.xml.rels':
+                data = re.sub(rb'<Relationship [^>]*calcChain[^>]*/>', b'', data)
+                data = data.replace(b'</Relationships>', ''.join(rel_add).encode() + b'</Relationships>')
             z.writestr(it, data)
+        for nm, s in sheets.items():
+            if path[nm] not in zin.namelist(): z.writestr(path[nm], s.bytes())
+        for k, b in extra.items(): z.writestr(k, b)
     return out.getvalue(), left
 
 def export(J):

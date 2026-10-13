@@ -493,6 +493,11 @@ def parse_training(path):
         cool = [str(v('B%d' % r)) for r in range(89, 92) if v('B%d' % r)]
         note = [str(v('B%d' % r)) for r in range(99, 102) if v('B%d' % r)]
         dname = ws.title.strip()
+        # variante de otro día: hoja «Día B (Casa)» → el cliente elige entre el Día B y esta
+        vm = re.match(r'^(D[ií]a\s+\S+)\s*(?:\((.+)\)|[·\-–]\s*(.+))$', dname)
+        if vm and not any(x.strip() == vm.group(1) for x in wb.sheetnames): vm = None  # «Día A - Pierna» sin hoja «Día A»: día propio
+        of = vm.group(1).replace('Dia', 'Día') if vm else ''
+        if vm: dname = '%s · %s' % (of, (vm.group(2) or vm.group(3)).strip())
         for wi, top in enumerate((28, 41, 54, 67)):
             date = v('D%d' % (top - 3))
             for r in range(top, top + 8):
@@ -527,13 +532,18 @@ def parse_training(path):
         for e in exs:
             e.pop('_n', None)
             if not e['wk']: del e['wk']
-        rr = next((r for r in range(22, 30) if str(cells.get('B%d' % r, '')).strip() == dname), 22 + len(days))
+        rr = next((r for r in range(22, 30) if str(cells.get('B%d' % r, '')).strip() in (dname, of)), 22 + len(days))
         wdn = str(cells.get('C%d' % rr, '') or '').strip().lower()
         WD = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo']
         dur = str(cells.get('G%d' % rr, '') or '')
         days.append({'id': nid(), 'name': dname, 'focus': str(v('F5') or cells.get('D%d' % rr, '') or ''), 'wd': -1,
                      'dur': (re.search(r'\d+\s*[-–]\s*\d+', dur).group(0).replace(' ', '') if re.search(r'\d+\s*[-–]\s*\d+', dur) else (re.findall(r'\d+', dur) or ['60'])[-1]),
-                     'place': str(cells.get('H%d' % rr, '') or 'Gimnasio'), 'warm': ' · '.join(warm), 'cool': ' · '.join(cool), 'note': '\n'.join(note), 'exs': exs})
+                     'place': (vm.group(2) or vm.group(3)).strip().capitalize() if vm else str(cells.get('H%d' % rr, '') or 'Gimnasio'), 'warm': ' · '.join(warm), 'cool': ' · '.join(cool), 'note': '\n'.join(note), 'exs': exs})
+        if of: days[-1]['of'] = of
+    names = {d['name'] for d in days if not d.get('of')}
+    for d in days:
+        if d.get('of') and d['of'] not in names:
+            warn('%s: no encuentro el día «%s» del que es variante; lo dejo como un día más' % (d['name'], d['of'])); del d['of']
     chk = []
     if 'Check-in' in wb.sheetnames or any(s.lower().startswith('check') for s in wb.sheetnames):
         ws = wb[[s for s in wb.sheetnames if s.lower().startswith('check')][0]]

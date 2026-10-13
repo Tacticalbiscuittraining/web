@@ -2398,6 +2398,21 @@ span.cal-like{cursor:default}
 .cc-kpis .k-s{font-size:12.5px}
 .cc-kd{font-weight:700}.cc-kd.good{color:var(--teal)}.cc-kd.bad{color:var(--coral)}
 .cc-more{margin-top:12px}.cc-more>summary{cursor:pointer;font-weight:700;color:var(--teal);padding:6px 0}
+.wch-box{position:relative;cursor:zoom-in;border-radius:12px;margin:4px 0 12px}
+.wch-box .wch{margin:0}.wch-box .wch-lg{padding-right:96px}
+.wch-zoom{position:absolute;top:0;right:0;font-size:12.5px;font-weight:700;color:var(--teal);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.wch .wch-p{fill:var(--teal);stroke:var(--surface);stroke-width:1.5}
+.wch .wch-r{fill:#E9A23B;stroke:var(--surface);stroke-width:1.5}
+.wch .last{stroke:var(--coral);stroke-width:3}
+.wch .wch-n{font-size:11px}
+.wch-lg i.wl-p{background:var(--teal);border-radius:50%}.wch-lg i.wl-r{background:#E9A23B}
+.wz{position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px}
+.wz[hidden]{display:none}
+.wz-card{background:var(--surface);border-radius:16px;padding:16px;width:100%;max-width:1140px;max-height:100%;overflow:auto}
+.wz-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.wz .subnav{margin-bottom:8px}
+.wch.big .pg-a{font-size:13px}.wch.big .pg-v{font-size:16px}
+body.wz-on{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -2911,7 +2926,7 @@ function resumen(c){
    '<div class="kpis"><div class="kpi"><div class="k-l">Sesiones 7 días</div><div class="k-v">'+week+' / '+c.training.days.length+'</div><div class="k-s">según el plan</div></div>'+
    '<div class="kpi"><div class="k-l">Peso actual</div><div class="k-v">'+(last==null?'—':last.toFixed(1).replace('.',',')+' kg')+'</div><div class="k-s">'+esc(ds||'Sin pesajes')+'</div></div>'+
    '<div class="kpi"><div class="k-l">Próxima revisión</div><div class="k-v">'+esc(c.review||'—')+'</div><div class="k-s">se cambia en «Editar plan»</div></div>'+'<div class="kpi"><div class="k-l">Adherencia semana</div><div class="k-v">'+adhPct(c)+' %</div><div class="k-s">hasta hoy</div></div></div>'+
-   '<div class="card"><div class="feed-bar"><h2 style="margin:0">Evolución del peso</h2><button type="button" class="btn sm" data-act="goSeg">Ver seguimiento</button></div>'+(wChart(c)||chartSvg(w))+'<div class="inline"><label class="cell"><span class="lbl show">Añadir pesaje (kg)</span><input id="newW" class="in num" inputmode="decimal" placeholder="Ej.: 66.7"></label><button type="button" class="btn primary" data-act="addW">Registrar peso</button></div></div>'+
+   '<div class="card"><div class="feed-bar"><h2 style="margin:0">Evolución del peso</h2><button type="button" class="btn sm" data-act="goSeg">Ver seguimiento</button></div>'+(wBox(c)||chartSvg(w))+'<div class="inline"><label class="cell"><span class="lbl show">Añadir pesaje (kg)</span><input id="newW" class="in num" inputmode="decimal" placeholder="Ej.: 66.7"></label><button type="button" class="btn primary" data-act="addW">Registrar peso</button></div></div>'+
   '</div><div class="card"><h2>Actividad reciente</h2>'+(recent.length?recent.map(it=>feedHtml(c,it)).join(''):'<div class="empty">Aún no hay registros de este cliente.</div>')+'</div></div>';
 }
 function foodRow(m,it){
@@ -3110,22 +3125,44 @@ function wSeries(c){
   return Object.keys(M).sort().map(k=>M[k]);
 }
 function wUndated(c){return c.comp&&Array.isArray(c.comp.revs)?c.comp.revs.filter(r=>!r.fecha&&num(r.v&&r.v.peso)>0).length:0}
-function wChart(c){
-  const S=wSeries(c);
-  if(S.length<2){
-    const w=c.weights.slice(-10);if(w.length<2)return '';
-    S.length=0;w.forEach(v=>S.push({ts:0,y:v,rev:false}));
-  }
-  const w=S.map(x=>x.y),hasRev=S.some(x=>x.rev),hasChk=S.some(x=>!x.rev);
-  const W=560,Hh=150,px=34,py=22,mn=Math.min.apply(null,w)-.4,mx=Math.max.apply(null,w)+.4;
-  const t0=S[0].ts,t1=S[S.length-1].ts,X=i=>t0&&t1>t0?px+(S[i].ts-t0)/(t1-t0)*(W-2*px):px+i*(W-2*px)/(w.length-1),Y=v=>py+(mx-v)/(mx-mn)*(Hh-2*py),rr=w.length>30?2.5:3.5;
-  const pts=w.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
+const W_RANGES=[['all','Todo',0],['6m','6 meses',183],['3m','3 meses',92],['1m','1 mes',31]];
+function wPts(c,days){
+  let S=wSeries(c);
+  if(S.length<2){const w=c.weights.slice(-10);if(w.length<2)return [];S=w.map(v=>({ts:0,y:v,rev:false}))}
+  if(days&&S[0].ts){const lim=S[S.length-1].ts-days*864e5,F=S.filter(x=>x.ts>=lim);if(F.length>=2)S=F}
+  return S;
+}
+function wChart(c,o){
+  o=o||{};const S=wPts(c,o.days);if(S.length<2)return '';
+  const w=S.map(x=>x.y),hasRev=S.some(x=>x.rev),hasChk=S.some(x=>!x.rev),big=!!o.big;
+  const W=o.W||Math.max(300,Math.min(640,(window.innerWidth||640)-64)),Hh=o.H||(W<480?220:240),l=42,r=big?26:20,t=26,b=30;
+  const mn0=Math.min.apply(null,w),mx0=Math.max.apply(null,w),pad=Math.max(.5,(mx0-mn0)*.18),mn=mn0-pad,mx=mx0+pad;
+  const t0=S[0].ts,t1=S[S.length-1].ts,X=i=>t0&&t1>t0?l+(S[i].ts-t0)/(t1-t0)*(W-l-r):l+i*(W-l-r)/(w.length-1),Y=v=>t+(mx-v)/(mx-mn)*(Hh-t-b);
+  const rr=w.length>40?3:big?5:4.5;
+  const grid=[0,.5,1].map(f=>{const v=mn+(mx-mn)*f;return '<line x1="'+l+'" x2="'+(W-r)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" class="pg-g"/><text x="'+(l-8)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" class="pg-a">'+fmtN(Math.round(v*10)/10)+'</text>'}).join('');
+  const xi=[0,Math.round((S.length-1)/2),S.length-1].filter((v,i,a)=>a.indexOf(v)===i);
+  const xs=t0?xi.map(i=>'<text x="'+X(i).toFixed(1)+'" y="'+(Hh-8)+'" text-anchor="'+(i===0?'start':i===S.length-1?'end':'middle')+'" class="pg-a">'+dmy(new Date(S[i].ts))+'</text>').join(''):'';
+  const pts=S.map((x,i)=>X(i).toFixed(1)+','+Y(x.y).toFixed(1));
+  const area='M'+X(0).toFixed(1)+','+(Hh-b)+' L'+pts.join(' L')+' L'+X(S.length-1).toFixed(1)+','+(Hh-b)+' Z';
   const tip=x=>'<title>'+(x.ts?dmy(new Date(x.ts))+' · ':'')+(x.rev?'Revisión: ':'Pesaje: ')+fmtN(x.y)+' kg</title>';
-  const lg=hasRev?'<div class="cc-lg wch-lg">'+(hasChk?'<span><i style="background:var(--teal);border-radius:50%"></i>Pesaje</span>':'')+'<span><i style="background:#264653"></i>Revisión (composición corporal)</span></div>':'';
-  return lg+'<svg class="wch" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Evolución del peso: de '+fmtN(w[0])+' a '+fmtN(w[w.length-1])+' kg"><polyline points="'+pts+'" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>'+
-   S.map((x,i)=>{const cx=X(i),cy=Y(x.y),last=i===w.length-1;return x.rev?'<rect x="'+(cx-rr-1.5).toFixed(1)+'" y="'+(cy-rr-1.5).toFixed(1)+'" width="'+(2*rr+3)+'" height="'+(2*rr+3)+'" rx="2" fill="'+(last?'var(--coral)':'#264653')+'">'+tip(x)+'</rect>':'<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+(last?5:rr)+'" fill="'+(last?'var(--coral)':'var(--teal)')+'">'+tip(x)+'</circle>'}).join('')+
-   '<text x="'+X(0)+'" y="'+(Y(w[0])-10)+'" text-anchor="start" class="wch-t">'+fmtN(w[0])+'</text><text x="'+X(w.length-1)+'" y="'+(Y(w[w.length-1])-10)+'" text-anchor="end" class="wch-t b">'+fmtN(w[w.length-1])+' kg</text>'+
-   (S[0].ts?'<text x="'+X(0)+'" y="'+(Hh-4)+'" text-anchor="start" class="wch-t">'+dmy(new Date(S[0].ts))+'</text><text x="'+X(w.length-1)+'" y="'+(Hh-4)+'" text-anchor="end" class="wch-t">'+dmy(new Date(S[S.length-1].ts))+'</text>':'')+'</svg>';
+  const vals=big&&S.length<=24?S.map((x,i)=>i===S.length-1?'':'<text x="'+X(i).toFixed(1)+'" y="'+(Y(x.y)-11).toFixed(1)+'" text-anchor="middle" class="pg-a wch-n">'+fmtN(x.y)+'</text>').join(''):'';
+  const dots=S.map((x,i)=>{const cx=X(i),cy=Y(x.y),last=i===S.length-1,R=last?rr+1.5:rr;return x.rev?'<rect x="'+(cx-R-1).toFixed(1)+'" y="'+(cy-R-1).toFixed(1)+'" width="'+(2*R+2)+'" height="'+(2*R+2)+'" rx="2" class="wch-r'+(last?' last':'')+'">'+tip(x)+'</rect>':'<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+R+'" class="wch-p'+(last?' last':'')+'">'+tip(x)+'</circle>'}).join('');
+  const L=S[S.length-1],lx=X(S.length-1),ly=Y(L.y);
+  const lg=hasRev?'<div class="cc-lg wch-lg">'+(hasChk?'<span><i class="wl-p"></i>Pesaje</span>':'')+'<span><i class="wl-r"></i>Revisión (composición corporal)</span></div>':'';
+  return lg+'<svg class="wch'+(big?' big':'')+'" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Evolución del peso: de '+fmtN(w[0])+' a '+fmtN(L.y)+' kg">'+grid+xs+
+   '<path d="'+area+'" class="pg-ar"/><polyline points="'+pts.join(' ')+'" fill="none" class="pg-l"/>'+vals+dots+
+   '<text x="'+(lx-10).toFixed(1)+'" y="'+(ly<t+24?ly+24:ly-12).toFixed(1)+'" text-anchor="end" class="pg-v">'+fmtN(L.y)+' kg</text></svg>';
+}
+function wBox(c,empty){
+  const ch=wChart(c);if(!ch)return empty?'<p class="muted">'+empty+'</p>':'';
+  return '<div class="wch-box" data-act="wZoom" role="button" tabindex="0" aria-label="Ampliar la gráfica de peso">'+ch+'<span class="wch-zoom" aria-hidden="true">⤢ Ampliar</span></div>';
+}
+function wZoomHtml(c){
+  const rg=state.wRange||'all',R=W_RANGES.find(x=>x[0]===rg)||W_RANGES[0];
+  const W=Math.min((window.innerWidth||800)-32,1100),H=Math.max(260,Math.min((window.innerHeight||700)-190,560,Math.round(W*.85)));
+  return '<div class="wz-card" role="dialog" aria-modal="true" aria-label="Gráfica de peso"><div class="wz-h"><h2 style="margin:0">Evolución del peso</h2><button type="button" class="icon-btn" data-act="wZoomClose" aria-label="Cerrar">✕</button></div>'+
+   '<div class="pills subnav" role="group" aria-label="Periodo">'+W_RANGES.map(x=>'<button type="button" class="pill" data-act="wRange" data-v="'+x[0]+'" aria-pressed="'+(x[0]===R[0])+'">'+x[1]+'</button>').join('')+'</div>'+
+   wChart(c,{W,H,big:true,days:R[2]})+'</div>';
 }
 const CC_KEY=[['peso','Peso','kg'],['grasa','Grasa corporal','%'],['mmusc','Masa muscular','kg'],['cintura','Cintura','cm']];
 function ccSegCard(c,cli){
@@ -3146,7 +3183,7 @@ function ccCliCharts(c){
 }
 function segPanel(c){
   const T=trk(c);
-  return '<div class="stack"><div class="card"><h2>Peso</h2>'+(wUndated(c)?'<p class="chip warn" style="margin:0 0 8px">'+wUndated(c)+(wUndated(c)===1?' peso de Revisiones no tiene fecha':' pesos de Revisiones no tienen fecha')+': ponles fecha en Revisiones → Registro para que salgan en la gráfica.</p>':'')+(wChart(c)||'<p class="muted">Con dos pesajes o revisiones verás aquí la gráfica.</p>')+chkTable(c,true)+'</div>'+ccSegCard(c)+'<div class="card"><div class="feed-bar"><h2 style="margin:0">Adherencia</h2><span class="chip good" id="adh-pct">Esta semana: '+adhPct(c)+' %</span></div>'+weekGrid(c,false,state.tw)+'</div>'+progCard(c,true)+'<div class="card"><h2>Ajustes del seguimiento</h2><div class="form-grid"><label class="cell"><span class="lbl show">Pasos objetivo al día</span><input class="in num" inputmode="numeric" data-r="trk" data-f="pasos" value="'+esc(T.pasos)+'"></label></div><p class="muted" style="margin:10px 0 0;font-size:13.5px">El entreno se marca solo cuando '+esc(first(c.name))+' envía sus series, y las comidas cuando las marca en «Mi día». Agua, pasos y descanso los confirma con un toque.</p></div>'+'</div>';
+  return '<div class="stack"><div class="card"><h2>Peso</h2>'+(wUndated(c)?'<p class="chip warn" style="margin:0 0 8px">'+wUndated(c)+(wUndated(c)===1?' peso de Revisiones no tiene fecha':' pesos de Revisiones no tienen fecha')+': ponles fecha en Revisiones → Registro para que salgan en la gráfica.</p>':'')+wBox(c,'Con dos pesajes o revisiones verás aquí la gráfica.')+chkTable(c,true)+'</div>'+ccSegCard(c)+'<div class="card"><div class="feed-bar"><h2 style="margin:0">Adherencia</h2><span class="chip good" id="adh-pct">Esta semana: '+adhPct(c)+' %</span></div>'+weekGrid(c,false,state.tw)+'</div>'+progCard(c,true)+'<div class="card"><h2>Ajustes del seguimiento</h2><div class="form-grid"><label class="cell"><span class="lbl show">Pasos objetivo al día</span><input class="in num" inputmode="numeric" data-r="trk" data-f="pasos" value="'+esc(T.pasos)+'"></label></div><p class="muted" style="margin:10px 0 0;font-size:13.5px">El entreno se marca solo cuando '+esc(first(c.name))+' envía sus series, y las comidas cuando las marca en «Mi día». Agua, pasos y descanso los confirma con un toque.</p></div>'+'</div>';
 }
 function clientTrack(c){
   const ti=todayIdx(),T=trk(c),day=c.training.days.find(d=>d.wd===ti),ms=mealsFor(c,ti),ne=eatOf(c,ti).length,tDone=trainDone(c,ti),nLog=dayLogs(c,ti).length;
@@ -3177,7 +3214,7 @@ function clientTrack(c){
   const list=wks.length?'<ul class="wt-list">'+wks.map(x=>'<li><span>'+DAYS[(new Date(x.ts).getDay()+6)%7]+' '+dmy(new Date(x.ts))+'</span><b>'+fmtN(x.peso)+' kg</b>'+(x.cond?'<em>⚠ '+esc(x.cond)+'</em>':'')+'</li>').join('')+'</ul>'+(wks.length>1?'<p class="wt-avg">Media de la semana: <b>'+fmtN(Math.round(wks.reduce((a,x)=>a+x.peso,0)/wks.length*10)/10)+' kg</b></p>':''):'';
   const wbox='<p class="muted wt-how" style="margin-top:0">Tu entrenador te pesa en la revisión mensual. Si te pesas por tu cuenta, apúntalo aquí: en ayunas, después de ir al baño y en la misma báscula.</p>'+form(false)+(wks.length?'<p class="lbl show" style="margin:14px 0 6px">Esta semana</p>'+list:'');
   const weigh='<section class="card"><h2>Apuntar mi peso</h2>'+wbox+'</section>';
-  const hist='<section class="card"><h2>Mi evolución</h2>'+(wChart(c)||'<p class="muted">Cuando tengas dos pesajes verás aquí tu gráfica.</p>')+chkTable(c,false)+'</section>';
+  const hist='<section class="card"><h2>Mi evolución</h2>'+wBox(c,'Cuando tengas dos pesajes verás aquí tu gráfica.')+chkTable(c,false)+'</section>';
   const sb=state.tsub||'hoy';
   const sub='<div class="esub" role="tablist" aria-label="Sección del progreso">'+[['hoy','Hoy'],['peso','Peso y medidas'],['prog','Evolución']].map(x=>'<button type="button" role="tab" class="es-b" data-act="tsub" data-v="'+x[0]+'" aria-selected="'+(sb===x[0])+'">'+x[1]+'</button>').join('')+'</div>';
   if(sb==='peso')return sub+'<div class="trk2">'+weigh+hist+'</div>'+ccSegCard(c,true);
@@ -4745,6 +4782,9 @@ document.addEventListener('click',e=>{
     case 'editEx':{const k=t.dataset.e+'@'+t.dataset.w;if(state.editEx[k])delete state.editEx[k];else state.editEx[k]=true;renderMain();const ex=$('[data-ex="'+t.dataset.e+'"]');if(ex)ex.scrollIntoView({block:'nearest',behavior:'smooth'});break}
     case 'progEx':state.progEx=t.dataset.n;renderMain();{const s=$('.pgcard');if(s)s.scrollIntoView({block:'start',behavior:'smooth'})}break;
     case 'ccsub':state.ccsub=t.dataset.v;renderMain();break;
+    case 'wZoom':{let z=$('#wz');if(!z){z=document.createElement('div');z.id='wz';z.className='wz';document.body.appendChild(z)}z.innerHTML=wZoomHtml(c);z.hidden=false;document.body.classList.add('wz-on');break}
+    case 'wRange':{state.wRange=t.dataset.v;const z=$('#wz');if(z)z.innerHTML=wZoomHtml(c);break}
+    case 'wZoomClose':{const z=$('#wz');if(z)z.hidden=true;document.body.classList.remove('wz-on');break}
     case 'goRevGraf':state.tab='revision';state.ccsub='graf';renderMain();break;
     case 'goSeg':state.tab='seguimiento';renderMain();break;
     case 'revStart':{const C=comp(c),i=C.revs.findIndex(r=>!r.fecha&&!Object.keys(r.v).length);if(i<0){toast('No quedan columnas libres');break}C.revs[i].fecha=isoT(Date.now());if(lastW(c))C.revs[i].v.peso=lastW(c);state.ccsub='reg';renderMain();const f=$('[data-r="comp"][data-i="'+i+'"][data-k="grasa"]');if(f){f.focus();const w=f.closest('.cc-wrap');if(w)w.scrollLeft=Math.max(0,f.closest('td').offsetLeft-240)}toast(i?'Revisión '+i+' abierta':'Medición inicial abierta');break}
@@ -4928,6 +4968,7 @@ document.addEventListener('change',e=>{
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&!e.shiftKey&&e.target&&e.target.id==='mText'){e.preventDefault();const s=$('[data-act="chatSend"]');if(s)s.click();return}
   if(e.key!=='Escape')return;
+  {const z=$('#wz');if(z&&!z.hidden){z.hidden=true;document.body.classList.remove('wz-on');return}}
   if(state.printOpen){state.printOpen=false;renderMain();return}
   if(state.planFs){state.planFs=false;renderMain();return}
   if(state.trFs){state.trFs='';renderMain();return}
@@ -4935,7 +4976,7 @@ document.addEventListener('keydown',e=>{
   if(vm&&!vm.hidden)closeVm();else if(lb&&!lb.hidden)lb.hidden=true;else if(state.bell){state.bell=false;renderBell()}
 });
 function closeVm(){const vm=$('#vm'),v=$('#vm video');if(v){try{v.pause()}catch(_){}v.removeAttribute('src');try{v.load()}catch(_){}}if(vm)vm.hidden=true}
-document.addEventListener('click',e=>{if(e.target&&e.target.id==='vm')closeVm()});
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='vm')closeVm();if(e.target&&e.target.id==='wz'){e.target.hidden=true;document.body.classList.remove('wz-on')}});
 document.addEventListener('toggle',e=>{const t=e.target;if(t&&t.classList&&(t.classList.contains('exm')||t.classList.contains('meso')))state.exOpen[t.dataset.ex]=t.open},true);
 
 /* el descanso arranca al marcar la serie como hecha (a mano o al elegir las repeticiones), solo en la sesión de hoy */
@@ -5270,7 +5311,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013070334';let verT=0;
+const APP_VER='20261013071412';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5881,7 +5922,7 @@ if(IOS_PWA){window.print=function(){const pr=document.getElementById('printroot'
 
 /* ---------- «Ver como cliente»: solo lectura para el entrenador ---------- */
 const PV=()=>RB.role==='coach'&&state.mode==='client';
-const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','trFs','trPrint','tpsub','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop','calTop','calGo','strPick','wgMeal','pickDay','cmp','mKind','esub']);
+const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','trFs','trPrint','tpsub','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop','calTop','calGo','strPick','wgMeal','pickDay','cmp','mKind','esub','wZoom','wRange','wZoomClose']);
 function pvBlock(e){toast('Vista de cliente: solo lectura. No se cambia nada.');e.preventDefault();e.stopImmediatePropagation()}
 document.addEventListener('click',e=>{
   if(!PV())return;const m=$('#main');if(!m||!m.contains(e.target))return;

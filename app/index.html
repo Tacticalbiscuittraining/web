@@ -1254,6 +1254,12 @@ section>.ps-sub:first-child{margin-top:0}
 .bub.me .bub-k{background:rgba(255,255,255,.2);color:#fff}
 .bub-t{display:block;text-align:right;font-size:11px;color:var(--muted);margin-top:2px}
 .bub.me .bub-t{color:rgba(255,255,255,.8)}
+.bub-lk{display:inline-grid;place-items:center;vertical-align:middle;width:30px;height:24px;margin:-4px 2px -4px -8px;padding:0;border:0;border-radius:12px;background:none;color:var(--muted);cursor:pointer}
+.bub-lk svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
+.bub-lk.on{color:#E5484D}.bub-lk.on svg{fill:currentColor}
+.bub.me .bub-lk.on{color:#fff}
+span.bub-lk{cursor:default;width:18px;margin:-4px 4px -4px 0}
+button.bub-lk:active svg{transform:scale(.85)}
 .tick{font-style:normal;letter-spacing:-2px;margin-left:2px}
 .tick.rd{color:#BDF3EA}
 .bub-img{display:block;padding:0;border:0;background:none;margin:2px 0 4px;cursor:zoom-in}
@@ -4206,7 +4212,7 @@ function chatHtml(c,viewer){
     const mine=m.from===viewer,read=m.from==='client'?!m.fresh:m.ts<=(c.cSeen||0),nx=list[i+1],grp=nx&&nx.from===m.from&&dayLbl(nx.ts)===dl;
     out+='<div class="bub'+(mine?' me':'')+(grp?' grp':'')+'">'+(m.from==='client'&&m.kind&&m.kind!=='Mensaje'?'<span class="bub-k">'+kIcon(m.kind)+' '+esc(m.kind)+'</span>':'')+
       (m.img?'<button type="button" class="bub-img" data-act="zoomMsg" data-m="'+m.id+'" aria-label="Ampliar imagen"><img src="'+esc(mURL(m.img))+'\" alt="Imagen adjunta"></button>':'')+
-      (m.text?'<p>'+esc(m.text).replace(/\n/g,'<br>')+'</p>':'')+'<span class="bub-t">'+hm(m.ts)+(mine?' <i class="tick'+(read?' rd':'')+'" aria-label="'+(read?'Leído':'Enviado')+'">'+(read?'✓✓':'✓')+'</i>':'')+'</span></div>';
+      (m.text?'<p>'+esc(m.text).replace(/\n/g,'<br>')+'</p>':'')+'<span class="bub-t">'+(mine?(m.lk?'<span class="bub-lk on" role="img" aria-label="Le ha gustado" title="Le ha gustado">'+HEART+'</span>':''):'<button type="button" class="bub-lk'+(m.lk?' on':'')+'" data-act="msgLike" data-m="'+m.id+'" aria-pressed="'+!!m.lk+'" aria-label="Me gusta" title="'+(m.lk?'Quitar me gusta':'Me gusta')+'">'+HEART+'</button>')+hm(m.ts)+(mine?' <i class="tick'+(read?' rd':'')+'" aria-label="'+(read?'Leído':'Enviado')+'">'+(read?'✓✓':'✓')+'</i>':'')+'</span></div>';
   });
   const other=viewer==='coach'?first(c.name):'Robert';
   if(!list.length)out='<div class="ch-empty"><span aria-hidden="true">💬</span><b>Aún no hay mensajes</b><span>'+(viewer==='coach'?'Escríbele a '+esc(first(c.name))+' cuando quieras.':'Cuéntale a tu entrenador dudas, objeciones o cómo te encuentras. Le llega al momento.')+'</span></div>';
@@ -4838,6 +4844,7 @@ document.addEventListener('click',e=>{
     case 'mKind':state.mKind=t.dataset.v;$$('.ch-kind').forEach(x=>x.setAttribute('aria-pressed',String(x===t)));break;
     case 'quick':{const ta=$('#mText');if(ta){ta.value=(ta.value?ta.value.trim()+' ':'')+t.dataset.v;state.mDraft=ta.value;ta.focus()}break}
     case 'mAttDel':state.mAtt='';renderMain();break;
+    case 'msgLike':{const m=c.msgs.find(x=>x.id===t.dataset.m);if(m){if(m.lk)delete m.lk;else m.lk=Date.now();t.classList.toggle('on',!!m.lk);t.setAttribute('aria-pressed',String(!!m.lk));t.title=m.lk?'Quitar me gusta':'Me gusta'}break}
     case 'zoomMsg':{const m=c.msgs.find(x=>x.id===t.dataset.m);if(m&&m.img){$('#lb img').src=mURL(m.img);$('#lb').hidden=false}break}
     case 'avDel':c.avatar='';renderAll();break;
     case 'pfDay':{const P=prof(c),i=+t.dataset.i,k=P.dias.indexOf(i);if(k>=0)P.dias.splice(k,1);else P.dias.push(i);t.setAttribute('aria-pressed',String(k<0));break}
@@ -5357,7 +5364,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013092638';let verT=0;
+const APP_VER='20261013105757';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

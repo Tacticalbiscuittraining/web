@@ -1276,6 +1276,14 @@ button.bub-lk:active svg{transform:scale(.85)}
 .ch-att img{width:52px;height:52px;object-fit:cover;border-radius:8px}
 .ch-att span{flex:1;font-size:13px;color:var(--muted)}
 .ch-row{display:flex;align-items:flex-end;gap:8px}
+.ch-row .ch-clip+.ch-clip{margin-left:-8px}
+.ch-clip.ch-emo-b{border:0;background:none;padding:0}
+.ch-emo-b[aria-expanded="true"]{color:var(--teal-ink);background:var(--surface-2)}
+.ch-emo{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));max-height:168px;overflow-y:auto;margin-bottom:8px;padding:4px;border-radius:12px;background:var(--surface-2)}
+.ch-emo[hidden]{display:none}
+.ch-emo button{height:40px;border:0;border-radius:10px;background:none;font-size:24px;line-height:1;cursor:pointer;padding:0}
+.ch-emo button:hover{background:var(--surface)}
+.ch-emo button:active{transform:scale(.88)}
 .ch-clip{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;color:var(--muted);cursor:pointer;flex:none}
 .ch-clip:hover{background:var(--surface-2);color:var(--teal-ink)}
 .ch-in{flex:1;resize:none;min-height:44px;max-height:160px;border-radius:22px;padding:11px 16px;line-height:1.35}
@@ -4204,6 +4212,7 @@ function clientPhotos(c){
 const avHtml=(c,cls)=>c&&c.avatar?'<span class="avatar '+(cls||'')+' av-ph"><img src="'+esc(mURL(c.avatar))+'\" alt=""></span>':'<span class="avatar '+(cls||'')+'">'+esc(initials(c?c.name:'?'))+'</span>';
 const MKINDS=[['Mensaje','💬'],['Duda','❓'],['Objeción','✋'],['Molestia o lesión','🩹'],['Técnica','🎥']];
 const QUICK=['¡Buen trabajo esta semana! 💪','Recibido, lo reviso y te digo algo hoy.','¿Qué tal te has encontrado con el cambio?','Mándame un vídeo de la técnica y lo vemos.'];
+const EMOJIS='😀 😂 😊 😍 🥰 😉 😅 🤔 😮 😢 😴 🤒 😤 🙏 👍 👏 💪 🙌 👌 ✌️ 🤝 🔥 ⭐ ✅ ❌ ❤️ 💯 🎉 🏆 🥇 🏋️ 🏃 🚴 🏊 🧘 ⚽ 🎾 🥵 💦 ⏱️ 📈 📉 ⚖️ 🍎 🍌 🥑 🥦 🥗 🍗 🥩 🐟 🥚 🍚 🍝 🍕 🍔 🍫 🍺 ☕ 💧 😋'.split(' ');
 const kIcon=k=>(MKINDS.find(x=>x[0]===k)||['','💬'])[1];
 function dayLbl(ts){const d=new Date(ts),n=new Date(),a=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime(),b=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime(),df=Math.round((a-b)/D);return df===0?'Hoy':df===1?'Ayer':df<7?DAYS[(d.getDay()+6)%7]:dshort(ts)}
 const hm=ts=>{const d=new Date(ts);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
@@ -4222,7 +4231,7 @@ function chatHtml(c,viewer){
   const kinds=viewer==='client'?'<div class="ch-kinds" role="group" aria-label="Tipo de mensaje">'+MKINDS.map(k=>'<button type="button" class="ch-kind" data-act="mKind" data-v="'+k[0]+'" aria-pressed="'+((state.mKind||'Mensaje')===k[0])+'">'+k[1]+' '+k[0]+'</button>').join('')+'</div>':'';
   const quick=viewer==='coach'?'<div class="ch-quick" aria-label="Respuestas rápidas">'+QUICK.map(q=>'<button type="button" class="ch-q" data-act="quick" data-v="'+esc(q)+'">'+esc(q)+'</button>').join('')+'</div>':'';
   const att=state.mAtt?'<div class="ch-att"><img src="'+esc(mURL(state.mAtt))+'\" alt="Imagen para enviar"><span>Imagen lista para enviar</span><button type="button" class="icon-btn" data-act="mAttDel" aria-label="Quitar imagen">×</button></div>':'';
-  const comp='<div class="ch-comp">'+att+'<div class="ch-row"><label class="ch-clip" title="Adjuntar foto"><input id="mFile" class="sr-file" type="file" accept="image/*" aria-label="Adjuntar foto"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.5l-8.5 8.5a6 6 0 0 1-8.5-8.5l9-9a4 4 0 0 1 5.7 5.7l-9 9a2 2 0 0 1-2.8-2.8l8.4-8.4"/></svg></label><textarea id="mText" class="in ch-in" rows="1" placeholder="Escribe a '+esc(other)+'…" aria-label="Mensaje">'+esc(state.mDraft||'')+'</textarea><button type="button" class="ch-send" data-act="chatSend" aria-label="Enviar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-3-7z"/></svg></button></div><p class="ch-hint">Intro para enviar · Mayús + Intro para nueva línea</p></div>';
+  const comp='<div class="ch-comp">'+att+'<div class="ch-emo" id="chEmo" role="group" aria-label="Emojis"'+(state.mEmo?'':' hidden')+'>'+EMOJIS.map(e=>'<button type="button" data-act="emoAdd" data-v="'+e+'" aria-label="'+e+'">'+e+'</button>').join('')+'</div><div class="ch-row"><label class="ch-clip" title="Adjuntar foto"><input id="mFile" class="sr-file" type="file" accept="image/*" aria-label="Adjuntar foto"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.5l-8.5 8.5a6 6 0 0 1-8.5-8.5l9-9a4 4 0 0 1 5.7 5.7l-9 9a2 2 0 0 1-2.8-2.8l8.4-8.4"/></svg></label><button type="button" class="ch-clip ch-emo-b" data-act="emoTog" aria-expanded="'+!!state.mEmo+'" aria-controls="chEmo" aria-label="Emojis" title="Emojis"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9.5h.01M15 9.5h.01"/></svg></button><textarea id="mText" class="in ch-in" rows="1" placeholder="Escribe a '+esc(other)+'…" aria-label="Mensaje">'+esc(state.mDraft||'')+'</textarea><button type="button" class="ch-send" data-act="chatSend" aria-label="Enviar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-3-7z"/></svg></button></div><p class="ch-hint">Intro para enviar · Mayús + Intro para nueva línea</p></div>';
   return '<div class="chat">'+head+'<div class="ch-body" id="chBody">'+out+'</div>'+quick+kinds+comp+'</div>';
 }
 function msgsPanel(c){return '<div class="card chat-card">'+chatHtml(c,'coach')+'</div>'}
@@ -4844,9 +4853,11 @@ document.addEventListener('click',e=>{
     case 'shopPrint':{let pr=$('#printroot');if(!pr){pr=document.createElement('div');pr.id='printroot';document.body.appendChild(pr)}pr.innerHTML=shopSheet(c);document.body.classList.add('printing');const done=()=>{document.body.classList.remove('printing');pr.innerHTML=''};window.addEventListener('afterprint',done,{once:true});try{window.print()}catch(_){done();toast('Usa Ctrl/Cmd + P para imprimir')}break}
     case 'chatSend':{const ta=$('#mText'),v=(ta?ta.value:'').trim();if(!v&&!state.mAtt){toast('Escribe un mensaje');break}const who=state.mode==='client'?'client':'coach';c.msgs.push({id:nid(),ts:Date.now(),from:who,kind:who==='client'?(state.mKind||'Mensaje'):'',text:v,img:state.mAtt||'',fresh:who==='client'});state.mAtt='';state.mDraft='';state.mKind='Mensaje';renderMain();renderRail();renderBell();{const t2=$('#mText');if(t2)t2.focus()}break}
     case 'mKind':state.mKind=t.dataset.v;$$('.ch-kind').forEach(x=>x.setAttribute('aria-pressed',String(x===t)));break;
-    case 'quick':{const ta=$('#mText');if(ta){ta.value=(ta.value?ta.value.trim()+' ':'')+t.dataset.v;state.mDraft=ta.value;ta.focus()}break}
+    case 'quick':{const ta=$('#mText');if(ta){ta.value=(ta.value?ta.value.trim()+' ':'')+t.dataset.v;state.mDraft=ta.value;state.mCur=state.mCurE=null;ta.focus()}break}
     case 'mAttDel':state.mAtt='';renderMain();break;
     case 'msgLike':{const m=c.msgs.find(x=>x.id===t.dataset.m);if(m){if(m.lk)delete m.lk;else m.lk=Date.now();t.classList.toggle('on',!!m.lk);t.setAttribute('aria-pressed',String(!!m.lk));t.title=m.lk?'Quitar me gusta':'Me gusta'}break}
+    case 'emoTog':{state.mEmo=!state.mEmo;const p=$('#chEmo');if(p)p.hidden=!state.mEmo;t.setAttribute('aria-expanded',String(state.mEmo));break}
+    case 'emoAdd':{const ta=$('#mText');if(ta){const L=ta.value.length,f=document.activeElement===ta,a=Math.min(L,f?ta.selectionStart:state.mCur??L),b=Math.max(a,Math.min(L,f?ta.selectionEnd:state.mCurE??a)),v=t.dataset.v;ta.value=ta.value.slice(0,a)+v+ta.value.slice(b);state.mCur=state.mCurE=a+v.length;state.mDraft=ta.value}break}
     case 'zoomMsg':{const m=c.msgs.find(x=>x.id===t.dataset.m);if(m&&m.img){$('#lb img').src=mURL(m.img);$('#lb').hidden=false}break}
     case 'avDel':c.avatar='';renderAll();break;
     case 'pfDay':{const P=prof(c),i=+t.dataset.i,k=P.dias.indexOf(i);if(k>=0)P.dias.splice(k,1);else P.dias.push(i);t.setAttribute('aria-pressed',String(k<0));break}
@@ -4954,7 +4965,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('input',e=>{
   if(e.target.id==='actMin'||e.target.id==='actKm'){const F=state.actF||(state.actF={}),p=$('#actPace');F.min=($('#actMin')||{}).value;F.km=($('#actKm')||{}).value;if(p)p.textContent=actPace({type:F.type,min:F.min,km:F.km})||'Se calcula solo'}
   const t=e.target,r=t.dataset.r;
-  if(t.id==='mText'){state.mDraft=t.value;t.style.height='auto';t.style.height=Math.min(160,t.scrollHeight)+'px';return}
+  if(t.id==='mText'){state.mDraft=t.value;state.mCur=state.mCurE=null;t.style.height='auto';t.style.height=Math.min(160,t.scrollHeight)+'px';return}
   if(t.id==='libq'){state.libQ=t.value;const l=$('#libList');if(l)l.innerHTML=libListHtml();return}
   if(!r)return;const c=cur();const f=t.dataset.f;
   if(r==='lib'){const L=state.lib.find(l=>l.id===t.dataset.l);if(L){L[f]=f==='link'?t.value.trim():t.value;if(f==='name'||f==='group')refreshLists()}return}
@@ -5036,6 +5047,8 @@ document.addEventListener('toggle',e=>{const t=e.target;if(t&&t.classList&&(t.cl
 /* el descanso arranca al marcar la serie como hecha (a mano o al elegir las repeticiones), solo en la sesión de hoy */
 function restLive(ex){const c=cur();if(!c||!ex)return;const live=!state.logTs&&(state.vw==null||state.vw===clientWeek(c));if(!(live&&+ex.dataset.rest>0))return;
   const sel='.exo[data-ex="'+ex.dataset.ex+'"][data-w="'+ex.dataset.w+'"]';if(ex.dataset.chain){beep(0);restStart(+ex.dataset.rest,0,0,0,null,()=>chainNext(sel))}else restStart(+ex.dataset.rest)}
+
+document.addEventListener('focusout',e=>{const t=e.target;if(t&&t.id==='mText'){state.mCur=t.selectionStart;state.mCurE=t.selectionEnd}});
 /* ---------- acceso (maqueta) ---------- */
 const slug=s=>String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 function accts(){return [{u:'robert',p:'tactical',role:'coach',name:'Robert'}].concat(state.clients.map(c=>({u:slug(first(c.name)),p:'biscuit',role:'client',cid:c.id,name:c.name})))}
@@ -5366,7 +5379,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013110140';let verT=0;
+const APP_VER='20261013110536';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

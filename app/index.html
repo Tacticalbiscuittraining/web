@@ -2394,6 +2394,9 @@ span.cal-like{cursor:default}
 
 .tabs{scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
+.wch-lg{margin:2px 0 0}
+.cc-kpis .k-s{font-size:12.5px}
+.cc-kd{font-weight:700}.cc-kd.good{color:var(--teal)}.cc-kd.bad{color:var(--coral)}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -2899,7 +2902,7 @@ function tabsHtml(c){
   return '<div class="tabs" role="tablist">'+t.map(x=>'<button type="button" role="tab" class="tab" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(state.tab===x[0])+'">'+x[1]+(x[3]?'<span class="badge" id="'+x[3]+'"'+(x[2]?'':' hidden')+'>'+x[2]+'</span>':'')+'</button>').join('')+'</div>';
 }
 function resumen(c){
-  const w=c.weights,last=w.length?w[w.length-1]:null,d=w.length>1?last-w[0]:null;
+  const ws=wSeries(c),w=ws.length>1?ws.map(x=>x.y):c.weights,last=w.length?w[w.length-1]:null,d=w.length>1?last-w[0]:null;
   const week=new Set(c.log.filter(l=>Date.now()-l.ts<7*D).map(l=>l.day)).size;
   const recent=feedItems(c).slice(0,4);
   const ds=d==null?'':(d>0?'+':'−')+Math.abs(d).toFixed(1).replace('.',',')+' kg desde el inicio';
@@ -2907,7 +2910,7 @@ function resumen(c){
    '<div class="kpis"><div class="kpi"><div class="k-l">Sesiones 7 días</div><div class="k-v">'+week+' / '+c.training.days.length+'</div><div class="k-s">según el plan</div></div>'+
    '<div class="kpi"><div class="k-l">Peso actual</div><div class="k-v">'+(last==null?'—':last.toFixed(1).replace('.',',')+' kg')+'</div><div class="k-s">'+esc(ds||'Sin pesajes')+'</div></div>'+
    '<div class="kpi"><div class="k-l">Próxima revisión</div><div class="k-v">'+esc(c.review||'—')+'</div><div class="k-s">se cambia en «Editar plan»</div></div>'+'<div class="kpi"><div class="k-l">Adherencia semana</div><div class="k-v">'+adhPct(c)+' %</div><div class="k-s">hasta hoy</div></div></div>'+
-   '<div class="card"><h2>Evolución del peso</h2>'+chartSvg(w)+'<div class="inline"><label class="cell"><span class="lbl show">Añadir pesaje (kg)</span><input id="newW" class="in num" inputmode="decimal" placeholder="Ej.: 66.7"></label><button type="button" class="btn primary" data-act="addW">Registrar peso</button></div></div>'+
+   '<div class="card"><div class="feed-bar"><h2 style="margin:0">Evolución del peso</h2><button type="button" class="btn sm" data-act="goSeg">Ver seguimiento</button></div>'+(wChart(c)||chartSvg(w))+'<div class="inline"><label class="cell"><span class="lbl show">Añadir pesaje (kg)</span><input id="newW" class="in num" inputmode="decimal" placeholder="Ej.: 66.7"></label><button type="button" class="btn primary" data-act="addW">Registrar peso</button></div></div>'+
   '</div><div class="card"><h2>Actividad reciente</h2>'+(recent.length?recent.map(it=>feedHtml(c,it)).join(''):'<div class="empty">Aún no hay registros de este cliente.</div>')+'</div></div>';
 }
 function foodRow(m,it){
@@ -3099,20 +3102,41 @@ function chkTable(c,coach){
   return '<div class="tbl-wrap"><table class="dt wt"><thead><tr><th scope="col">Fecha</th><th scope="col" class="n">Peso</th><th scope="col" class="n">Cambio</th><th scope="col">Semana</th><th scope="col">Comentario</th></tr></thead><tbody>'+
    rows.slice().reverse().map(({x,df})=>'<tr'+(coach&&x.fresh?' class="fresh"':'')+'><td>'+dshort(x.ts)+(coach&&x.fresh?' <span class="badge">Nuevo</span>':'')+'</td><td class="n"><b>'+fmtN(x.peso)+' kg</b></td><td class="n">'+(df==null?'—':'<span class="df '+(df<0?'dn':df>0?'up':'')+'">'+(df>0?'+':df<0?'−':'')+fmtN(Math.abs(df))+'</span>')+'</td><td>'+(x.animo?'<span class="mood" title="'+MOODS[x.animo-1][1]+'">'+MOODS[x.animo-1][0]+'</span> '+MOODS[x.animo-1][1]:ckTxt(x)?'':'—')+(ckTxt(x)?'<small class="ck-t">'+esc(ckTxt(x))+'</small>':'')+'</td><td class="cm">'+(x.cond?'<span class="cond">⚠ '+esc(x.cond)+'</span>':'')+esc(x.comm||'')+'</td></tr>').join('')+'</tbody></table></div>';
 }
+function wSeries(c){
+  const M={},day=ts=>isoT(ts);
+  (c.chk||[]).forEach(x=>{if(x.peso>0&&x.ts)M[day(x.ts)]={ts:x.ts,y:+x.peso,rev:false}});
+  if(c.comp&&Array.isArray(c.comp.revs))c.comp.revs.forEach(r=>{const p=num(r.v&&r.v.peso);if(r.fecha&&p>0){const d=pIso(r.fecha);M[r.fecha]={ts:d.getTime()+12*36e5,y:p,rev:true}}});
+  return Object.keys(M).sort().map(k=>M[k]);
+}
 function wChart(c){
-  const w=c.weights.slice(-10);if(w.length<2)return '';
+  const S=wSeries(c).slice(-16);
+  if(S.length<2){
+    const w=c.weights.slice(-10);if(w.length<2)return '';
+    S.length=0;w.forEach(v=>S.push({ts:0,y:v,rev:false}));
+  }
+  const w=S.map(x=>x.y),hasRev=S.some(x=>x.rev),hasChk=S.some(x=>!x.rev);
   const W=560,Hh=150,px=34,py=22,mn=Math.min.apply(null,w)-.4,mx=Math.max.apply(null,w)+.4;
   const X=i=>px+i*(W-2*px)/(w.length-1),Y=v=>py+(mx-v)/(mx-mn)*(Hh-2*py);
   const pts=w.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
-  return '<svg class="wch" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Evolución del peso: de '+fmtN(w[0])+' a '+fmtN(w[w.length-1])+' kg"><polyline points="'+pts+'" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>'+
-   w.map((v,i)=>'<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="'+(i===w.length-1?5:3.5)+'" fill="'+(i===w.length-1?'var(--coral)':'var(--teal)')+'"/>').join('')+
-   '<text x="'+X(0)+'" y="'+(Y(w[0])-10)+'" text-anchor="start" class="wch-t">'+fmtN(w[0])+'</text><text x="'+X(w.length-1)+'" y="'+(Y(w[w.length-1])-10)+'" text-anchor="end" class="wch-t b">'+fmtN(w[w.length-1])+' kg</text></svg>';
+  const tip=x=>'<title>'+(x.ts?dmy(new Date(x.ts))+' · ':'')+(x.rev?'Revisión: ':'Pesaje: ')+fmtN(x.y)+' kg</title>';
+  const lg=hasRev?'<div class="cc-lg wch-lg">'+(hasChk?'<span><i style="background:var(--teal);border-radius:50%"></i>Pesaje</span>':'')+'<span><i style="background:#264653"></i>Revisión (composición corporal)</span></div>':'';
+  return lg+'<svg class="wch" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Evolución del peso: de '+fmtN(w[0])+' a '+fmtN(w[w.length-1])+' kg"><polyline points="'+pts+'" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>'+
+   S.map((x,i)=>{const cx=X(i),cy=Y(x.y),last=i===w.length-1;return x.rev?'<rect x="'+(cx-5).toFixed(1)+'" y="'+(cy-5).toFixed(1)+'" width="10" height="10" rx="2" fill="'+(last?'var(--coral)':'#264653')+'">'+tip(x)+'</rect>':'<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+(last?5:3.5)+'" fill="'+(last?'var(--coral)':'var(--teal)')+'">'+tip(x)+'</circle>'}).join('')+
+   '<text x="'+X(0)+'" y="'+(Y(w[0])-10)+'" text-anchor="start" class="wch-t">'+fmtN(w[0])+'</text><text x="'+X(w.length-1)+'" y="'+(Y(w[w.length-1])-10)+'" text-anchor="end" class="wch-t b">'+fmtN(w[w.length-1])+' kg</text>'+
+   (S[0].ts?'<text x="'+X(0)+'" y="'+(Hh-4)+'" text-anchor="start" class="wch-t">'+dmy(new Date(S[0].ts))+'</text><text x="'+X(w.length-1)+'" y="'+(Hh-4)+'" text-anchor="end" class="wch-t">'+dmy(new Date(S[S.length-1].ts))+'</text>':'')+'</svg>';
+}
+const CC_KEY=[['peso','Peso','kg'],['grasa','Grasa corporal','%'],['mmusc','Masa muscular','kg'],['cintura','Cintura','cm']];
+function ccSegCard(c){
+  if(!c.comp||!Array.isArray(c.comp.revs)||!c.comp.revs.some(r=>r.fecha&&Object.keys(r.v||{}).length))return '';
+  const R=CC_ROWS.reduce((o,r)=>{o[r[0]]=r;return o},{});
+  const tiles=CC_KEY.map(([k,l,u])=>{const x=ccLast(c,k);if(x==null||isNaN(x))return '';const d=ccDelta(c,k,ccDeltas(c,k)[0],ccDir(c,R[k][3]));
+    return '<div class="kpi"><div class="k-l">'+l+'</div><div class="k-v">'+ccFmt(k,x)+(u?' '+u:'')+'</div><div class="k-s">'+(d.t?'<span class="cc-kd '+d.cls+'">'+d.t+(u?' '+u:'')+'</span> desde la inicial':'Primera medición')+'</div></div>'}).join('');
+  const last=c.comp.revs.map(r=>r.fecha).filter(Boolean).sort().pop();
+  return '<div class="card"><div class="feed-bar"><h2 style="margin:0">Composición corporal</h2><button type="button" class="btn sm" data-act="goRevGraf">Ver todos los gráficos</button></div><p class="muted" style="margin:6px 0 10px;font-size:13.5px">Última revisión: '+dmy(pIso(last))+' · '+ccStats(c).n+' mediciones</p><div class="kpis cc-kpis">'+tiles+'</div></div>';
 }
 function segPanel(c){
   const T=trk(c);
-  return '<div class="stack"><div class="card"><h2>Ajustes del seguimiento</h2><div class="form-grid"><label class="cell"><span class="lbl show">Pasos objetivo al día</span><input class="in num" inputmode="numeric" data-r="trk" data-f="pasos" value="'+esc(T.pasos)+'"></label></div><p class="muted" style="margin:10px 0 0;font-size:13.5px">El entreno se marca solo cuando '+esc(first(c.name))+' envía sus series, y las comidas cuando las marca en «Mi día». Agua, pasos y descanso los confirma con un toque.</p></div>'+
-   '<div class="card"><div class="feed-bar"><h2 style="margin:0">Adherencia</h2><span class="chip good" id="adh-pct">Esta semana: '+adhPct(c)+' %</span></div>'+weekGrid(c,false,state.tw)+'</div>'+
-   '<div class="card"><h2>Pesajes semanales</h2>'+wChart(c)+chkTable(c,true)+'</div>'+progCard(c,true)+'</div>';
+  return '<div class="stack"><div class="card"><h2>Peso</h2>'+(wChart(c)||'<p class="muted">Con dos pesajes o revisiones verás aquí la gráfica.</p>')+chkTable(c,true)+'</div>'+ccSegCard(c)+'<div class="card"><div class="feed-bar"><h2 style="margin:0">Adherencia</h2><span class="chip good" id="adh-pct">Esta semana: '+adhPct(c)+' %</span></div>'+weekGrid(c,false,state.tw)+'</div>'+progCard(c,true)+'<div class="card"><h2>Ajustes del seguimiento</h2><div class="form-grid"><label class="cell"><span class="lbl show">Pasos objetivo al día</span><input class="in num" inputmode="numeric" data-r="trk" data-f="pasos" value="'+esc(T.pasos)+'"></label></div><p class="muted" style="margin:10px 0 0;font-size:13.5px">El entreno se marca solo cuando '+esc(first(c.name))+' envía sus series, y las comidas cuando las marca en «Mi día». Agua, pasos y descanso los confirma con un toque.</p></div>'+'</div>';
 }
 function clientTrack(c){
   const ti=todayIdx(),T=trk(c),day=c.training.days.find(d=>d.wd===ti),ms=mealsFor(c,ti),ne=eatOf(c,ti).length,tDone=trainDone(c,ti),nLog=dayLogs(c,ti).length;
@@ -4689,7 +4713,7 @@ document.addEventListener('click',e=>{
     case 'libNew':{const n=$('#nlName').value.trim();if(!n){toast('Escribe el nombre del ejercicio');break}if(libFor(n)){toast('Ya existe en la biblioteca');break}const L={id:nid(),group:$('#nlGroup').value.trim()||'Otros',name:n,mat:$('#nlMat').value.trim(),photo:'',video:'',link:''};state.lib.push(L);state.libQ=n;state.libG='';state.exOpen[L.id]=true;renderMain();toast('Ejercicio añadido');break}
     case 'libDel':{state.lib=state.lib.filter(l=>l.id!==t.dataset.l);renderMain();break}
     case 'libClear':{const L=state.lib.find(l=>l.id===t.dataset.l);if(L){const k=t.dataset.k==='photo'?'photo':'video';try{URL.revokeObjectURL(L[k])}catch(_){}L[k]='';state.exOpen[L.id]=true;renderMain()}break}
-    case 'addW':{const v=num($('#newW').value);if(v>0){c.weights.push(v);renderMain();toast('Peso registrado')}else toast('Escribe un peso válido');break}
+    case 'addW':{const v=num($('#newW').value);if(v>0){c.weights.push(v);c.chk.push({id:nid(),ts:Date.now(),week:clientWeek(c)+1,peso:v,animo:0,cond:'',comm:'Apuntado por el entrenador'});renderMain();toast('Peso registrado')}else toast('Escribe un peso válido');break}
     case 'seen':c.log.forEach(l=>{l.fresh=false});renderAll();break;
     case 'sim':simulate(c);break;
     case 'delClient':{delClient(c.id);state.clients=state.clients.filter(x=>x.id!==c.id);state.sel=state.clients.length?state.clients[0].id:'';renderAll();toast('Cliente eliminado');break}
@@ -4711,6 +4735,8 @@ document.addEventListener('click',e=>{
     case 'editEx':{const k=t.dataset.e+'@'+t.dataset.w;if(state.editEx[k])delete state.editEx[k];else state.editEx[k]=true;renderMain();const ex=$('[data-ex="'+t.dataset.e+'"]');if(ex)ex.scrollIntoView({block:'nearest',behavior:'smooth'});break}
     case 'progEx':state.progEx=t.dataset.n;renderMain();{const s=$('.pgcard');if(s)s.scrollIntoView({block:'start',behavior:'smooth'})}break;
     case 'ccsub':state.ccsub=t.dataset.v;renderMain();break;
+    case 'goRevGraf':state.tab='revision';state.ccsub='graf';renderMain();break;
+    case 'goSeg':state.tab='seguimiento';renderMain();break;
     case 'revStart':{const C=comp(c),i=C.revs.findIndex(r=>!r.fecha&&!Object.keys(r.v).length);if(i<0){toast('No quedan columnas libres');break}C.revs[i].fecha=isoT(Date.now());if(lastW(c))C.revs[i].v.peso=lastW(c);state.ccsub='reg';renderMain();const f=$('[data-r="comp"][data-i="'+i+'"][data-k="grasa"]');if(f){f.focus();const w=f.closest('.cc-wrap');if(w)w.scrollLeft=Math.max(0,f.closest('td').offsetLeft-240)}toast(i?'Revisión '+i+' abierta':'Medición inicial abierta');break}
     case 'addShopX':shop(c).extra.push({id:nid(),cat:'veg',prod:'',qty:''});renderMain();{const l=$$('[data-r="shopx"][data-f="prod"]');if(l.length)l[l.length-1].focus()}break;
     case 'delShopX':shop(c).extra=shop(c).extra.filter(x=>x.id!==t.dataset.id);renderMain();break;
@@ -5234,7 +5260,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013063408';let verT=0;
+const APP_VER='20261013063731';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

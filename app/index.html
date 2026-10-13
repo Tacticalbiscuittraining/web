@@ -2397,6 +2397,7 @@ span.cal-like{cursor:default}
 .wch-lg{margin:2px 0 0}
 .cc-kpis .k-s{font-size:12.5px}
 .cc-kd{font-weight:700}.cc-kd.good{color:var(--teal)}.cc-kd.bad{color:var(--coral)}
+.cc-more{margin-top:12px}.cc-more>summary{cursor:pointer;font-weight:700;color:var(--teal);padding:6px 0}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -3126,13 +3127,21 @@ function wChart(c){
    (S[0].ts?'<text x="'+X(0)+'" y="'+(Hh-4)+'" text-anchor="start" class="wch-t">'+dmy(new Date(S[0].ts))+'</text><text x="'+X(w.length-1)+'" y="'+(Hh-4)+'" text-anchor="end" class="wch-t">'+dmy(new Date(S[S.length-1].ts))+'</text>':'')+'</svg>';
 }
 const CC_KEY=[['peso','Peso','kg'],['grasa','Grasa corporal','%'],['mmusc','Masa muscular','kg'],['cintura','Cintura','cm']];
-function ccSegCard(c){
+function ccSegCard(c,cli){
   if(!c.comp||!Array.isArray(c.comp.revs)||!c.comp.revs.some(r=>r.fecha&&Object.keys(r.v||{}).length))return '';
   const R=CC_ROWS.reduce((o,r)=>{o[r[0]]=r;return o},{});
   const tiles=CC_KEY.map(([k,l,u])=>{const x=ccLast(c,k);if(x==null||isNaN(x))return '';const d=ccDelta(c,k,ccDeltas(c,k)[0],ccDir(c,R[k][3]));
     return '<div class="kpi"><div class="k-l">'+l+'</div><div class="k-v">'+ccFmt(k,x)+(u?' '+u:'')+'</div><div class="k-s">'+(d.t?'<span class="cc-kd '+d.cls+'">'+d.t+(u?' '+u:'')+'</span> desde la inicial':'Primera medición')+'</div></div>'}).join('');
   const last=c.comp.revs.map(r=>r.fecha).filter(Boolean).sort().pop();
-  return '<div class="card"><div class="feed-bar"><h2 style="margin:0">Composición corporal</h2><button type="button" class="btn sm" data-act="goRevGraf">Ver todos los gráficos</button></div><p class="muted" style="margin:6px 0 10px;font-size:13.5px">Última revisión: '+dmy(pIso(last))+' · '+ccStats(c).n+' mediciones</p><div class="kpis cc-kpis">'+tiles+'</div></div>';
+  return '<div class="card"><div class="feed-bar"><h2 style="margin:0">'+(cli?'Mi composición corporal':'Composición corporal')+'</h2>'+(cli?'':'<button type="button" class="btn sm" data-act="goRevGraf">Ver todos los gráficos</button>')+'</div><p class="muted" style="margin:6px 0 10px;font-size:13.5px">Última revisión: '+dmy(pIso(last))+' · '+ccStats(c).n+' mediciones</p><div class="kpis cc-kpis">'+tiles+'</div>'+(cli?ccCliCharts(c):'')+'</div>';
+}
+function ccCliCharts(c){
+  const C=comp(c),idx=C.revs.map((r,i)=>i).filter(i=>C.revs[i].fecha&&Object.keys(C.revs[i].v).length);
+  const labels=idx.map(i=>dmy(pIso(C.revs[i].fecha)));
+  const S=(k,name,col)=>({name,col,v:idx.map(i=>{const x=ccVal(c,i,k);return x==null||isNaN(x)?null:Math.round(x*10)/10})});
+  const ch=[['peso','Peso','kg','#264653'],['grasa','Grasa corporal','%','#E76F51'],['mmusc','Masa muscular','kg','#2A9D8F'],['cintura','Cintura','cm','#E08E45'],['cadera','Cadera','cm','#7A9CC6']].filter(x=>S(x[0],'','').v.filter(v=>v!=null).length>1);
+  if(!ch.length)return '';
+  return '<details class="cc-more"><summary>Ver mis gráficos de las revisiones</summary><div class="cc-charts">'+ch.map(x=>multiLine(x[1]+' ('+x[2]+')',x[2],[S(x[0],x[1],x[3])],labels)).join('')+'</div></details>';
 }
 function segPanel(c){
   const T=trk(c);
@@ -3169,8 +3178,8 @@ function clientTrack(c){
   const weigh='<section class="card"><h2>Apuntar mi peso</h2>'+wbox+'</section>';
   const hist='<section class="card"><h2>Mi evolución</h2>'+(wChart(c)||'<p class="muted">Cuando tengas dos pesajes verás aquí tu gráfica.</p>')+chkTable(c,false)+'</section>';
   const sb=state.tsub||'hoy';
-  const sub='<div class="esub" role="tablist" aria-label="Sección del progreso">'+[['hoy','Hoy'],['peso','Peso'],['prog','Evolución']].map(x=>'<button type="button" role="tab" class="es-b" data-act="tsub" data-v="'+x[0]+'" aria-selected="'+(sb===x[0])+'">'+x[1]+'</button>').join('')+'</div>';
-  if(sb==='peso')return sub+'<div class="trk2">'+weigh+hist+'</div>';
+  const sub='<div class="esub" role="tablist" aria-label="Sección del progreso">'+[['hoy','Hoy'],['peso','Peso y medidas'],['prog','Evolución']].map(x=>'<button type="button" role="tab" class="es-b" data-act="tsub" data-v="'+x[0]+'" aria-selected="'+(sb===x[0])+'">'+x[1]+'</button>').join('')+'</div>';
+  if(sb==='peso')return sub+'<div class="trk2">'+weigh+hist+'</div>'+ccSegCard(c,true);
   if(sb==='prog')return sub+progCard(c,false);
   return sub+today+'<section class="card"><h2>Mi semana</h2><p class="muted" style="margin:0 0 10px;font-size:13.5px">Toca una casilla para corregirla. En comidas eliges una a una.</p>'+weekGrid(c,true,state.tw)+'</section>';
 }
@@ -5260,7 +5269,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013063731';let verT=0;
+const APP_VER='20261013065619';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

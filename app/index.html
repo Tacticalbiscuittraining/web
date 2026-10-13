@@ -4020,7 +4020,7 @@ function whCommit(el){
   const k=row.querySelector('.setkg'),rp=row.querySelector('.setreps'),ok=row.querySelector('.setok');
   if(k&&a)k.value=a.parentNode.classList.contains('unset')?'':String(whVal(a)+(b?whVal(b)/10:0));
   if(rp&&r)rp.value=r.parentNode.classList.contains('unset')?'':String(whVal(r));
-  const was=ok&&ok.checked;if(ok&&rp)ok.checked=!!rp.value;
+  const was=ok&&ok.checked;if(ok&&rp&&!rp.classList.contains('secs'))ok.checked=!!rp.value;/* en ejercicios por tiempo cambiar los segundos no marca la serie */
   if(ok&&!was&&ok.checked&&typeof restLive==='function')restLive(row.closest('.exo'));
   if(typeof draftSave==='function')draftSave(row.closest('.exo'));
 }
@@ -5317,7 +5317,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261013073817';let verT=0;
+const APP_VER='20261013074135';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

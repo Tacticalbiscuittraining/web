@@ -4396,6 +4396,7 @@ function notifItems(){
     if(c.run){const rl=(c.run.logs||[]).filter(x=>x.fresh);if(rl.length){const z=rl.slice().sort((a,b)=>b.ts-a.ts)[0],pn=rl.filter(x=>x.pain>=3);out.push({c,ts:z.ts,t:'carrera',title:pn.length?'⚠️ Dolor en carrera':'Salida registrada',text:pn.length?'Dolor '+pn[0].pain+'/10'+(pn[0].painZ?' · '+pn[0].painZ:''):(z.st==='no'?'No ha podido hacer la sesión':[z.min?rHM(z.min):'',z.km?fmtN(z.km)+' km':'',rPace(z.min,z.km)].filter(Boolean).join(' · ')||RUN_ST[z.st][1])})}}
     const ck=c.chk.filter(x=>x.fresh);if(ck.length)out.push({c,ts:Math.max.apply(null,ck.map(x=>x.ts)),t:'seguimiento',title:'Pesaje semanal',text:'Ha registrado '+fmtN(ck[ck.length-1].peso)+' kg'+(ck[ck.length-1].comm?' · '+ck[ck.length-1].comm:'')});
   });
+  out.forEach(i=>{const g={registro:['🏋️','Fuerza'],carrera:['🏃','Carrera']}[i.t];if(g){i.title=g[0]+' '+i.title;i.text=g[1]+' · '+i.text}});
   return out.sort((a,b)=>b.ts-a.ts);
 }
 function setBadge(sel,n){const b=$(sel);if(b){b.textContent=n;b.hidden=!n}}
@@ -4815,10 +4816,10 @@ function tabsHtml(c){
   const T=m==='edit'?Ed:V;
   const trT=state.tab==='carrera'&&hasRun?'carrera':'fuerza';
   return '<div class="cmode" role="tablist" aria-label="Modo"><button type="button" role="tab" class="es-b" data-act="cmode" data-v="ver" aria-selected="'+(m==='ver')+'">👁 Ver'+(m==='edit'&&vb?'<i class="es-hoy">'+vb+'</i>':'')+'</button><button type="button" role="tab" class="es-b" data-act="cmode" data-v="edit" aria-selected="'+(m==='edit')+'">✎ Editar plan</button></div>'+(m==='edit'?planCard(c):'')+
-   '<div class="tabs" role="tablist">'+T.map(x=>{const tr=x[0]==='tr',k=tr?(state.tab==='carrera'||state.tab==='fuerza'?trT:(state.lastTr==='carrera'&&hasRun?'carrera':'fuerza')):x[0];return '<button type="button" role="tab" class="tab" data-act="tab" data-t="'+k+'" aria-selected="'+(tr?state.tab===trT:state.tab===x[0])+'">'+x[1]+(x[3]?'<span class="badge" id="'+x[3]+'"'+(x[2]?'':' hidden')+'>'+x[2]+'</span>':'')+'</button>'}).join('')+'</div>';
+   '<div class="tabs" role="tablist">'+T.map(x=>{const tr=x[0]==='tr',k=tr?(state.tab==='carrera'||state.tab==='fuerza'?trT:(state.lastTr==='carrera'&&hasRun?'carrera':'fuerza')):x[0];return '<button type="button" role="tab" class="tab" data-act="tab" data-t="'+(tr&&x[2]&&state.tab!=='fuerza'&&state.tab!=='carrera'?'carrera':k)+'" aria-selected="'+(tr?state.tab===trT:state.tab===x[0])+'">'+x[1]+(x[3]?'<span class="badge" id="'+x[3]+'"'+(x[2]?'':' hidden')+'>'+x[2]+'</span>':'')+'</button>'}).join('')+'</div>';
 }
-function trSub(c){state.lastTr=state.tab;if(!c.run&&!(c.acts||[]).some(isOut))return '';
-  return '<div class="esub es2" role="tablist" aria-label="Tipo de entrenamiento">'+[['fuerza','🏋️','Fuerza'],['carrera','🏃','Carrera']].map(x=>'<button type="button" role="tab" class="es-b" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(state.tab===x[0])+'"><span aria-hidden="true">'+x[1]+'</span>'+x[2]+'</button>').join('')+'</div>'}
+function trSub(c){state.lastTr=state.tab;if(!c.run&&!(c.acts||[]).some(isOut))return '';const rn=(c.run?rFresh(c):0)+(c.acts||[]).filter(x=>x.fresh&&isOut(x)).length;
+  return '<div class="esub es2" role="tablist" aria-label="Tipo de entrenamiento">'+[['fuerza','🏋️','Fuerza'],['carrera','🏃','Carrera']].map(x=>'<button type="button" role="tab" class="es-b" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(state.tab===x[0])+'"><span aria-hidden="true">'+x[1]+'</span>'+x[2]+(x[0]==='carrera'&&rn&&state.tab!=='carrera'?'<i class="es-hoy">'+rn+'</i>':'')+'</button>').join('')+'</div>'}
 function fuerzaPanel(c){return trSub(c)+fuerzaBody(c)}
 function fuerzaBody(c){
   if(!(c.training.days||[]).some(d=>d.exs&&d.exs.length))return '<div class="empty">Este cliente todavía no tiene plan de entrenamiento de fuerza. Puedes prepararlo en «Editar plan» → Entrenamiento.</div>';
@@ -5608,7 +5609,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014182112';let verT=0;
+const APP_VER='20261014182857';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

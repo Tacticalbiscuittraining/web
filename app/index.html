@@ -3871,7 +3871,7 @@ function dashView(){
   const st=c=>{const d=todayDay(c),done=trainDone(c,ti);if(done)return '<span class="dt-ok">✓ '+esc(d?d.name:(dayActs(c,ti).length&&!dayLogs(c,ti).length?dayActs(c,ti).map(a=>a.type==='Otra'&&a.other?a.other:a.type).join(', '):'Ha entrenado'))+'</span>';return d?'<span class="dt-p">'+esc(d.name)+' · pendiente</span>':'<span class="muted">'+(trMark(c,ti)===false?'Descanso':'Sin entreno hoy')+'</span>'};
   const rows=C.map(c=>{const w=lastW(c),w0=c.weights.length>1?c.weights[c.weights.length-2]:null,dw=w&&w0!=null?Math.round((w-w0)*10)/10:null;
     return '<button type="button" class="dh-r" data-act="goto" data-c="'+c.id+'" data-t="resumen">'+avHtml(c,'sm')+'<span class="dh-n"><b>'+esc(c.name)+'</b>'+st(c)+'</span><span class="dh-w">'+(w?'<b>'+fmtN(w)+' kg</b>'+(dw?'<small class="'+(dw<0?'dn':'up')+'">'+(dw>0?'+':'−')+fmtN(Math.abs(dw))+'</small>':''):'<small class="muted">sin peso</small>')+'</span><i aria-hidden="true">›</i></button>'}).join('');
-  const agenda=revAgenda(C),dk=state.dk||{},op=(k,d)=>(dk[k]==null?d:dk[k])?' open':'';
+  const agenda=revAgenda(C),dk=state.dk||{},op=(k,d)=>(k==='att'&&!grp.length?false:dk[k]==null?d:dk[k])?' open':'';
   const sec=(k,ttl,n,body,d,hot)=>'<details class="card dsec" id="ds-'+k+'" data-dk="'+k+'"'+op(k,d)+'><summary><h2>'+ttl+'</h2>'+(n?'<span class="dsn'+(hot?' hot':'')+'">'+n+'</span>':'')+'<i aria-hidden="true"></i></summary><div class="dsb">'+body+'</div></details>';
   const doneT=C.filter(c=>trainDone(c,ti)).length;
   return '<div class="dash"><header class="dash-h"><div><p class="dh-e">'+esc(now.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}))+'</p><h2>'+hi+', Robert</h2></div><button type="button" class="btn primary" data-act="toggleNew">+ Nuevo cliente</button></header>'+
@@ -5761,7 +5761,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014221446';let verT=0;
+const APP_VER='20261014221654';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

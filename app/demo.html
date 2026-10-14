@@ -3,10 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="robots" content="noindex">
 <meta name="theme-color" content="#000000">
-<title>Demo · Team Biscuit</title>
+<meta name="description" content="Team Biscuit · Tactical Biscuit Training">
+<meta name="robots" content="noindex">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Demo · Team Biscuit</title>
+<title>Team Biscuit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
@@ -2624,8 +2630,123 @@ body[data-screen="client"] .pm{padding-bottom:64px}
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
 }
+/* ---------- versión real ---------- */
+.sync{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:var(--surface);color:var(--muted);border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.12);transition:opacity .3s;pointer-events:none}
+.sync[data-st="idle"]{opacity:0}
+.sync[data-st="ok"]{color:var(--teal-ink,#0f766e)}
+.sync[data-st="err"],.sync[data-st="off"]{color:#b42318;border-color:#f4b5ab}
+.lg-help{margin:12px 0 0;font-size:13px;text-align:center}
+.lg-load{text-align:center}
+.lg-spin{width:34px;height:34px;margin:22px auto 6px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--teal,#14907f);animation:lgspin .8s linear infinite}
+@keyframes lgspin{to{transform:rotate(360deg)}}
+#newform .nf-acc{display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px dashed var(--line)}
+#newform .nf-row{display:flex;gap:6px}
+#newform .nf-row .in{flex:1;min-width:0}
+.acc-card .acc-l{list-style:none;margin:8px 0 12px;padding:0}
+.acc-card .acc-l li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.acc-card .acc-l span{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.acc-card .acc-l b{font-weight:600;word-break:break-all;text-align:right}
+.acc-card b.ok{color:var(--teal-ink,#0f766e)}
+.acc-card b.warn{color:#b42318}
+.acc-card .acc-new{margin:0 0 12px;padding:12px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line)}
+.acc-card .acc-new p{margin:0 0 8px;font-size:14px}
+.acc-card pre{white-space:pre-wrap;word-break:break-word;margin:0 0 10px;font:13px/1.5 inherit;font-family:inherit;color:var(--fg)}
+.acc-card .acc-pw{display:flex;flex-direction:column;gap:8px}
+.acc-card .actions{margin:0;flex-wrap:wrap}
+.newver{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top));transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-radius:12px;background:#1f2a28;color:#fff;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:calc(100% - 24px)}
+.pdfov{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg,#eef3f2)}
+.pdf-box{width:min(380px,100%);text-align:center;padding:22px 18px;border-radius:16px;background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 40px rgba(0,0,0,.15)}
+.pdf-box p{margin:6px 0}
+.pdf-box .actions{justify-content:center;margin-top:14px;gap:10px;display:flex;flex-wrap:wrap}
+.pdf-ic{font-size:34px}
+#pdfroot{position:absolute;left:0;top:0;width:794px;z-index:150;background:#fff;color:#1b2b2f}
+.pdfx .noprint{display:none!important}
+.pdfx{background:#fff}
+.pdfx .ps-t th,.pdfx .ps-t td{padding:4px 6px}
+.pdfx section>:last-child{margin-bottom:0}
+
+body.pv #main input,body.pv #main textarea,body.pv #main .whx{pointer-events:none}
+body.pv #main .whx,body.pv #main input,body.pv #main textarea{opacity:.85}
+.app-ver{margin:18px 0 calc(18px + env(safe-area-inset-bottom));text-align:center;font-size:11px;color:var(--muted);opacity:.7}
+
+/* guía de instalación */
+.inst{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:80;background:var(--surface,#fff);color:var(--ink,#111);border:1px solid var(--line,#ddd);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.22);padding:14px;max-width:460px;margin:0 auto;animation:instUp .25s ease-out}
+@keyframes instUp{from{transform:translateY(20px);opacity:0}}
+.inst-c{display:flex;gap:12px;align-items:flex-start}
+.inst-c img{border-radius:10px;flex:none}
+.inst-c b{font-size:15px}
+.inst-c ol{margin:6px 0 4px;padding-left:18px;font-size:14px;line-height:1.5}
+.inst-c p{margin:6px 0 4px;font-size:14px}
+.inst-c small{color:var(--muted,#666);font-size:12.5px}
+.inst-a{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+@media (prefers-reduced-motion:reduce){.inst{animation:none}}
+/* iPhone (app en pantalla de inicio): que el logo no quede debajo de la hora y la batería */
+.shell{padding-top:calc(18px + env(safe-area-inset-top))}
+
+/* importar Word / Excel */
+.impbox{position:fixed;inset:0;z-index:95;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.45)}
+.impbox-c{width:100%;max-width:520px;max-height:85vh;overflow:auto;background:var(--surface,#fff);color:var(--fg,#111);border:1px solid var(--line,#ddd);border-radius:16px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.impbox-l{margin:6px 0 0;padding-left:18px;line-height:1.6}
+.impbox-w{margin:6px 0 0;padding-left:18px;color:#b45309;line-height:1.5;font-size:14px}
+p.impbox-w{padding-left:0}
+.impbox-ok{margin:12px 0 0;color:#0f766e;font-weight:600}
+.impbox-sp{width:34px;height:34px;margin:14px auto 0;border-radius:50%;border:3px solid var(--line,#ddd);border-top-color:#0E9188;animation:ibsp 1s linear infinite}
+@keyframes ibsp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.impbox-sp{animation:none}}
+
+.ph>summary{cursor:pointer;list-style:none}
+.ph>summary::-webkit-details-marker{display:none}
+.ph-l{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ph-i{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line,#ddd);border-radius:12px}
+.ph-i.now{border-color:#0E9188}
+.ph-i>div:first-child{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ph-i span{font-size:13px;color:var(--muted,#666)}
+.ph-a{display:flex;gap:6px;flex:none;flex-wrap:wrap}
+.ph-l .ph-i{flex-direction:column;align-items:stretch}
+.ph-row{flex:1 1 100%;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line,#ddd)}
+.ph-row>span{font-size:13px}
+@media (max-width:520px){.ph-i{flex-direction:column;align-items:stretch}.ph-a{justify-content:flex-end}}
+.lg-err.ok{background:var(--teal-soft);color:var(--teal-ink)}
+
+/* entrenamiento con el diseño del Excel */
+.xsheet{max-width:960px;margin:20px auto;background:#fff;color:#1F2D33;padding:22px;border-radius:10px;font:13px/1.35 Arial,Helvetica,sans-serif}
+.xs-h{display:flex;justify-content:space-between;align-items:center;background:#264653;color:#fff;padding:8px 10px}.xs-h b{font-size:19px}.xs-h img{height:38px;border-radius:4px}
+.xs-hs{background:#2A9D8F;color:#fff;font-style:italic;font-size:12px;padding:3px 10px;margin-bottom:14px}
+.xs-sec{background:#264653;color:#fff;font-weight:700;font-size:12px;padding:5px 12px;margin:16px 0 0;white-space:pre-wrap}.xs-sec.or{background:#F4A261}
+.xs-x{overflow-x:auto}
+.xs-t{width:100%;border-collapse:collapse;font-size:12px}.xs-t thead th{background:#2A9D8F;color:#fff;font-weight:700;text-transform:uppercase;font-size:10.5px;padding:8px 6px;border:1px solid #D5E2DF}
+.xs-t td,.xs-t tbody th{border:1px solid #D5E2DF;padding:5px 7px;text-align:center}.xs-t tbody tr:nth-child(even){background:#F6F9F8}.xs-t tbody th{font-weight:700;color:#264653}
+.xs-t td.b{color:#1F5FA8}.xs-t td.l{text-align:left}
+.xs-2{display:flex;gap:24px;flex-wrap:wrap}.xs-kv{border-collapse:collapse;flex:1 1 300px;font-size:12px}.xs-kv th{background:#E3F2EF;color:#264653;text-align:left;padding:5px 8px;border:1px solid #D5E2DF;width:120px}.xs-kv td{color:#1F5FA8;font-weight:700;padding:5px 8px;border:1px solid #D5E2DF}
+.xs-side{display:flex;flex-direction:column;gap:2px;padding-top:8px}.xs-side span{font-size:10px;color:#6B7C85;margin-top:8px}.xs-side b{color:#2A9D8F;font-size:16px}
+.xs-txt{border:1px solid #D5E2DF;padding:6px 10px;color:#1F5FA8}
+.xs-day{margin-top:34px}
+.xs-t thead th.xs-y{background:#E9C46A;color:#264653}.xs-t td.xs-y{background:#FBF3DC}
+.ph-tag{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-right:4px;vertical-align:1px}
+.ph-diet{background:rgba(14,145,136,.15);color:#0E9188}
+.ph-training{background:rgba(224,122,30,.16);color:#C9671A}
+.ph-h{margin:16px 0 8px;font-size:15px;display:flex;align-items:center;gap:6px}
+.plan-bar{margin:0 0 12px}
+/* resumen: la fecha de próxima revisión no se sale de su tarjeta */
+.kpi{container-type:inline-size}
+.k-v{font-size:min(28px,21cqi);overflow-wrap:anywhere}
+@media (max-width:620px){.k-v{font-size:min(23px,21cqi)}}
+
+@media print{#printroot .xsheet{max-width:none;margin:0;padding:0;border-radius:0;font-size:11px}#printroot .xs-day{break-before:page}#printroot .xs-t tr{break-inside:avoid}#printroot .xs-x{overflow:visible}}
+#app .xsheet{box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:8px 0 16px;padding:clamp(10px,3vw,22px)}
+#app .xs-h b{font-size:clamp(15px,4.4vw,19px)}
+.del-doc{padding:12px;border:1px solid var(--line,#ddd);border-radius:12px;background:rgba(42,157,143,.06)}
+.lg-card .lg-try{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 26px;background:var(--ink);color:#fff;text-decoration:none}
+.lg-card .lg-try b{display:block;font-size:15.5px}
+.lgd-s{display:block;font-size:13px;color:#A9C4C0;margin-top:2px}
+.lgd-go{flex:none;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:999px;background:var(--teal);color:#fff;font-weight:600;font-size:14.5px;transition:transform .15s}
+.lg-card .lg-try:hover .lgd-go{transform:translateX(2px)}
+.lg-card .lg-try:focus-visible{outline:3px solid var(--teal);outline-offset:-3px}
+
 </style>
 
+</head>
+<body>
 <div class="shell">
   <header class="top">
     <div class="brand">
@@ -2634,7 +2755,7 @@ body[data-screen="client"] .pm{padding-bottom:64px}
     </div>
     <div class="top-r"><div class="notifwrap" id="nw"><button type="button" class="bell" id="bell" data-act="bell" aria-label="Notificaciones" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6.5 2 6.5H4S6 14 6 9"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="badge" id="bell-n" hidden>0</span></button><div id="notif" class="notif" hidden></div></div><div class="acct" id="acct"></div></div>
   </header>
-  <p class="notice" id="notice" hidden><b>Maqueta.</b> Clientes y datos de ejemplo. Todo se puede tocar y editar, pero todavía no se guarda al salir. Prueba la vista del cliente: lo que envía (entrenos, fotos y mensajes) llega al momento al panel del entrenador y a la campana de avisos.</p>
+  <p class="notice" id="notice" hidden></p>
   <div id="app"></div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <div id="lb" class="lb" hidden data-act="closeLb"><img alt="Foto ampliada"></div>
@@ -2642,12 +2763,61 @@ body[data-screen="client"] .pm{padding-bottom:64px}
 </div>
 
 <script>
+/* Supabase de la DEMO: todo en memoria, nada sale del navegador.
+   Sesión fija de una clienta de ejemplo; sus datos los da window.__tbSeed() (definido en la app). */
+(function(){
+  const DB={clients:null,files:{}},USER={id:'demo-user',email:'demo@tacticalbiscuit.com'};
+  const session={access_token:'demo',user:USER};
+  const cp=x=>JSON.parse(JSON.stringify(x));
+  const rows=()=>DB.clients||(DB.clients=window.__tbSeed());
+  const pick=(r,cols)=>{if(!cols||cols==='*')return cp(r);const o={};cols.split(',').forEach(k=>{k=k.trim();o[k]=cp(r[k]===undefined?null:r[k])});return o};
+  const ok=data=>Promise.resolve({data,error:null});
+  function from(table){
+    const q={action:'select',cols:'*',f:[]};
+    const b={
+      select(c){if(q.action==='select')q.cols=c||'*';else q.ret=true;return b},
+      insert(d){q.action='insert';q.data=d;return b},update(d){q.action='update';q.data=d;return b},delete(){q.action='delete';return b},
+      eq(c,v){q.f.push(r=>r[c]===v);return b},in(c,v){q.f.push(r=>v.indexOf(r[c])>=0);return b},order(){return b},
+      maybeSingle(){q.single=true;return b},
+      then(res,rej){
+        let out=null;
+        if(table==='clients'&&q.action==='select'){out=rows().filter(r=>q.f.every(f=>f(r))).map(r=>pick(r,q.cols));if(q.single)out=out[0]||null}
+        else if(table==='app_state'&&q.action==='select')out=q.single?null:[];
+        return ok(out).then(res,rej)},
+    };
+    return b;
+  }
+  function rpc(name,a){
+    if(name==='is_coach')return ok(false);
+    if(name==='save_client'){const r=rows().find(x=>x.id===a.p_id);if(!r||r.ver!==a.p_ver)return ok(null);
+      Object.assign(r.data,cp(a.p_patch||{}));(a.p_remove||[]).forEach(k=>delete r.data[k]);r.ver++;return ok(r.ver)}
+    return Promise.resolve({data:null,error:{message:'No disponible en la demo'}});
+  }
+  const toURL=b=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(b)});
+  const storage={from(){return{
+    async upload(path,blob){DB.files[path]=await toURL(blob);return{data:{path},error:null}},
+    async createSignedUrls(paths){return{data:paths.map(p=>({path:p,signedUrl:DB.files[p]||null,error:DB.files[p]?null:'not found'})),error:null}},
+    async list(folder){return{data:Object.keys(DB.files).filter(p=>p.indexOf(folder+'/')===0).map(p=>({name:p.slice(folder.length+1)})),error:null}},
+    async remove(paths){paths.forEach(p=>delete DB.files[p]);return{data:[],error:null}},
+  }}};
+  const auth={
+    async getSession(){return{data:{session},error:null}},
+    async signOut(){return{error:null}},
+    async updateUser(){return{data:{},error:{message:'En la demo no se cambia la contraseña'}}},
+    async signInWithPassword(){return{data:{},error:{message:'demo'}}},
+    async resetPasswordForEmail(){return{data:{},error:null}},
+    onAuthStateChange(){return{data:{subscription:{unsubscribe(){}}}}},
+  };
+  window.TB_SUPABASE={createClient(){return{auth,from,rpc,storage}}};
+})();
+</script>
+<script>
 (function(){
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?0:n};
-let uid=1; const nid=()=>'i'+(uid++);
+let uid=1; const nid=()=>'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const M=60000,H=3600000,D=86400000,T0=Date.now();
 
 const EMBLEM='<img class="emblem" src="data:image/jpeg;base64,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" alt="" width="56" height="56">';
@@ -3021,7 +3191,7 @@ function chartSvg(w){
   return '<svg class="chart" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Evolución del peso en kilos">'+grid+'<path class="ar" d="'+area+'"/><polyline class="ln" points="'+pts+'"/>'+dots+'<text class="lastv" x="'+lx+'" y="'+(ly-11)+'" text-anchor="end">'+w[w.length-1].toFixed(1).replace('.',',')+' kg</text><text class="ax" x="'+pl+'" y="'+(Hh-8)+'">Inicio</text><text class="ax" x="'+(W-pr)+'" y="'+(Hh-8)+'" text-anchor="end">Último</text></svg>';
 }
 function headHtml(c){
-  return '<div class="chead"><div><p class="eyebrow" id="h-phase">'+esc(c.phase)+'</p><h1 id="h-name">'+esc(c.name)+'</h1><p class="goal" id="h-goal">'+esc(c.goal)+'</p>'+'<div class="ch-row">'+revChip(c,{all:1,head:1})+'<button type="button" class="ch-cal" data-act="ccal" aria-expanded="'+!!state.ccal+'" aria-label="'+(state.ccal?'Cerrar calendario':'Abrir calendario')+'" title="'+(state.ccal?'Cerrar calendario':'Calendario')+'"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 17.5h.01M12 17.5h.01"/></svg></button></div></div><div class="actions" style="margin:0"><button type="button" class="btn" data-act="preview">Ver como cliente</button><button type="button" class="btn danger" data-act="delClient" data-confirm>Eliminar cliente</button></div></div>';
+  return '<div class="chead"><div><p class="eyebrow" id="h-phase">'+esc(c.phase)+'</p><h1 id="h-name">'+esc(c.name)+'</h1><p class="goal" id="h-goal">'+esc(c.goal)+'</p>'+'<div class="ch-row">'+revChip(c,{all:1,head:1})+'<button type="button" class="ch-cal" data-act="ccal" aria-expanded="'+!!state.ccal+'" aria-label="'+(state.ccal?'Cerrar calendario':'Abrir calendario')+'" title="'+(state.ccal?'Cerrar calendario':'Calendario')+'"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 17.5h.01M12 17.5h.01"/></svg></button></div></div><div class="actions" style="margin:0"><button type="button" class="btn" data-act="preview">Ver como cliente</button><button type="button" class="btn danger" data-act="delClient">Eliminar cliente</button></div></div>';
 }
 function tabsHtml(c){
   const t=[['resumen','Resumen',0,''],['entrevista','Entrevista',0,''],['dieta','Dieta',0,''],['entreno','Entrenamiento',0,''],['registro','Registro',freshLogs(c),'reg-badge'],['seguimiento','Seguimiento',freshChk(c),'chk-badge'],...(c.run?[['carrera','Carrera',rFresh(c),'run-badge']]:[]),['revision',{today:'Revisión hoy',late:'Revisión vencida',soon:'Revisión en '+revSt(c).d+' d'}[revSt(c).k]||'Revisiones',0,''],['fotos','Fotos',freshPhotos(c),'photo-badge'],['mensajes','Mensajes',freshMsgs(c),'msg-badge']];
@@ -3071,7 +3241,7 @@ function dietPanel(c){
   const pills='<div class="pills" role="group" aria-label="Tipo de día"><button type="button" class="pill" data-act="dtype" data-t="train" aria-pressed="'+(t==='train')+'">Día de entrenamiento</button><button type="button" class="pill" data-act="dtype" data-t="rest" aria-pressed="'+(t==='rest')+'">Día de descanso</button>'+(perDay(c)?'<span class="pd-sep">Menú de cada día:</span>'+DAYS_S.map((s,i)=>'<button type="button" class="pill" data-act="dtype" data-t="d'+i+'" aria-pressed="'+(t==='d'+i)+'">'+s+'</button>').join(''):'')+'</div>'+(isD?'<p class="muted pd-note">Estás editando el menú del <b>'+dN.toLowerCase()+'</b>. Es lo que tu cliente ve ese día en «Mi día» y en el menú semanal.</p>':'');
   const other=t==='train'?'descanso':'entrenamiento';
   const inf=(f,l,u)=>'<label class="cell"><span class="lbl show">'+l+'</span><div class="tgt-in" style="margin:0"><input class="in num" inputmode="decimal" data-r="dinfo" data-f="'+f+'" value="'+esc(d[f]||'')+'"><span>'+u+'</span></div></label>';
-  return tplCard(c,'diet')+'<div class="card"><p class="muted" style="margin:0"><b>Días de entreno y de descanso:</b> los marca tu cliente cada día en su app («¿Hoy entrenas o descansas?») y se marcan solos cuando envía sus series. Los días fijos de su plan de entrenamiento cuentan como entreno si no indica otra cosa.</p></div>'+
+  return '<div class="card"><p class="muted" style="margin:0"><b>Días de entreno y de descanso:</b> los marca tu cliente cada día en su app («¿Hoy entrenas o descansas?») y se marcan solos cuando envía sus series. Los días fijos de su plan de entrenamiento cuentan como entreno si no indica otra cosa.</p></div>'+
    '<div style="height:14px"></div>'+pills+
    '<div class="card targets"><div class="tgt"><label for="t-k">Objetivo · '+(isD?dN.toLowerCase():'día de '+(t==='train'?'entreno':'descanso'))+'</label><div class="tgt-in"><input id="t-k" class="in num" inputmode="numeric" data-r="target" data-f="kcal" value="'+esc(ty.kcal)+'"><span>kcal</span></div><div class="meter" id="bar-k"><i></i></div><p class="tgt-n"><b id="tot-k"></b> de <span id="tg-k"></span> kcal</p></div>'+
    '<div class="tgt"><label for="t-p">Proteína · '+(isD?dN.toLowerCase():'día de '+(t==='train'?'entreno':'descanso'))+'</label><div class="tgt-in"><input id="t-p" class="in num" inputmode="numeric" data-r="target" data-f="p" value="'+esc(ty.p)+'"><span>g</span></div><div class="meter" id="bar-p"><i></i></div><p class="tgt-n"><b id="tot-p"></b> de <span id="tg-p"></span> g</p></div></div>'+
@@ -3139,7 +3309,7 @@ function trainPanel(c){
   const di=Math.min(state.dayIdx,days.length-1),d=days[di],a=f=>'data-r="dayf" data-d="'+d.id+'" data-f="'+f+'"';
   const wdOpts='<option value="-1"'+(d.wd<0?' selected':'')+'>Sin día fijo</option>'+DAYS.map((n,i)=>'<option value="'+i+'"'+(d.wd===i?' selected':'')+'>'+n+'</option>').join('');
   const auto=c.training.auto!==false;
-  return tplCard(c,'training')+'<div class="card auto-bar"><div><b>Progresión automática de cargas</b><span class="muted">Según lo que registra '+esc(first(c.name))+' (reps y RIR), la app le indica si sube, mantiene o baja el peso cada sesión. Tus kg son el punto de partida.</span></div><button type="button" class="pf-tg" data-act="autoTg" aria-pressed="'+auto+'"><span class="pf-sw" aria-hidden="true"></span><span><b>'+(auto?'Activada':'Desactivada')+'</b></span></button></div>'+mc+'<div style="height:14px"></div><div class="pills">'+days.map((x,i)=>'<button type="button" class="pill" data-act="pickDay" data-i="'+i+'" aria-pressed="'+(i===di)+'">'+esc(dpill(x))+'</button>').join('')+'<button type="button" class="pill add" data-act="addDay">+ Día</button></div>'+
+  return '<div class="card auto-bar"><div><b>Progresión automática de cargas</b><span class="muted">Según lo que registra '+esc(first(c.name))+' (reps y RIR), la app le indica si sube, mantiene o baja el peso cada sesión. Tus kg son el punto de partida.</span></div><button type="button" class="pf-tg" data-act="autoTg" aria-pressed="'+auto+'"><span class="pf-sw" aria-hidden="true"></span><span><b>'+(auto?'Activada':'Desactivada')+'</b></span></button></div>'+mc+'<div style="height:14px"></div><div class="pills">'+days.map((x,i)=>'<button type="button" class="pill" data-act="pickDay" data-i="'+i+'" aria-pressed="'+(i===di)+'">'+esc(dpill(x))+'</button>').join('')+'<button type="button" class="pill add" data-act="addDay">+ Día</button></div>'+
    '<div class="card"><div class="form-grid g3"><label class="cell"><span class="lbl show">Sesión</span><input class="in" '+a('name')+' value="'+esc(d.name)+'"></label><label class="cell"><span class="lbl show">Enfoque / grupos musculares</span><input class="in" '+a('focus')+' placeholder="Ej.: Tren inferior" value="'+esc(d.focus)+'"></label><label class="cell"><span class="lbl show">Día de la semana</span><select class="in" data-r="daywd" data-d="'+d.id+'">'+wdOpts+'</select></label>'+
    '<label class="cell"><span class="lbl show">Duración (min)</span><input class="in num" inputmode="numeric" '+a('dur')+' value="'+esc(d.dur)+'"></label><label class="cell"><span class="lbl show">Material / lugar</span><input class="in" '+a('place')+' placeholder="Ej.: Gimnasio, Casa" value="'+esc(d.place)+'"></label><label class="cell"><span class="lbl show">Variante de</span><select class="in" '+a('of')+'><option value="">— Es un día propio —</option>'+days.filter(x=>x!==d&&!x.of).map(x=>'<option value="'+esc(x.name)+'"'+(libN(d.of)===libN(x.name)?' selected':'')+'>'+esc(x.name)+' (tu cliente elige cuál hace)</option>').join('')+'</select></label></div>'+
    '<label class="cell" style="margin-top:12px"><span class="lbl show">Calentamiento previo</span><textarea class="in" rows="2" '+a('warm')+' placeholder="Ej.: 5 min de cinta, movilidad de cadera…">'+esc(d.warm)+'</textarea></label>'+
@@ -3151,10 +3321,10 @@ function trainPanel(c){
 function libRow(L){
   const a=f=>'data-r="lib" data-l="'+L.id+'" data-f="'+f+'"',b='data-l="'+L.id+'"';
   const st=(L.photo?'Imagen ✓':'Sin imagen')+' · '+((L.video||L.link)?'Vídeo ✓':'Vídeo pendiente');
-  return '<details class="exm lib" data-ex="'+L.id+'"'+(state.exOpen[L.id]?' open':'')+'><summary><span class="lt">'+(L.photo?'<img src="'+esc(L.photo)+'" alt="">':'')+'</span><span class="ln">'+esc(L.name)+'</span><span class="lg">'+esc(L.group)+(L.mat?' · '+esc(L.mat):'')+'</span><span class="ls">'+st+'</span></summary>'+
-   '<div class="exm-b"><div class="exm-c"><span class="lbl show">Imagen del ejercicio</span>'+(L.photo?'<img class="exm-img contain" src="'+esc(L.photo)+'" alt="Imagen de '+esc(L.name)+'">':'<div class="exm-ph">Sin imagen</div>')+
+  return '<details class="exm lib" data-ex="'+L.id+'"'+(state.exOpen[L.id]?' open':'')+'><summary><span class="lt">'+(L.photo?'<img src="'+esc(mURL(L.photo))+'\" alt="">':'')+'</span><span class="ln">'+esc(L.name)+'</span><span class="lg">'+esc(L.group)+(L.mat?' · '+esc(L.mat):'')+'</span><span class="ls">'+st+'</span></summary>'+
+   '<div class="exm-b"><div class="exm-c"><span class="lbl show">Imagen del ejercicio</span>'+(L.photo?'<img class="exm-img contain" src="'+esc(mURL(L.photo))+'\" alt="Imagen de '+esc(L.name)+'">':'<div class="exm-ph">Sin imagen</div>')+
    '<div class="actions" style="margin:8px 0 0"><label class="btn sm filebtn">'+(L.photo?'Cambiar imagen':'Subir imagen')+'<input class="sr-file" type="file" accept="image/*" data-r="libph" '+b+'></label>'+(L.photo?'<button type="button" class="btn sm" data-act="libClear" data-k="photo" '+b+'>Quitar</button>':'')+'</div></div>'+
-   '<div class="exm-c"><span class="lbl show">Vídeo explicativo</span>'+(L.video?'<video class="exm-img" src="'+esc(L.video)+'" controls playsinline preload="metadata"></video>':'<div class="exm-ph">Sin vídeo</div>')+
+   '<div class="exm-c"><span class="lbl show">Vídeo explicativo</span>'+(L.video?'<video class="exm-img" src="'+esc(mURL(L.video))+'\" controls playsinline preload="metadata"></video>':'<div class="exm-ph">Sin vídeo</div>')+
    '<div class="actions" style="margin:8px 0 0"><label class="btn sm filebtn">'+(L.video?'Cambiar vídeo':'Subir vídeo')+'<input class="sr-file" type="file" accept="video/*" data-r="libvid" '+b+'></label>'+(L.video?'<button type="button" class="btn sm" data-act="libClear" data-k="video" '+b+'>Quitar</button>':'')+'</div>'+
    '<label class="cell" style="margin-top:10px"><span class="lbl show">O enlace al vídeo (se abre en otra pestaña)</span><input class="in" '+a('link')+' placeholder="https://..." value="'+esc(L.link)+'"></label></div></div>'+
    '<div class="form-grid g3" style="padding-bottom:14px"><label class="cell"><span class="lbl show">Nombre</span><input class="in" '+a('name')+' value="'+esc(L.name)+'"></label><label class="cell"><span class="lbl show">Grupo</span><input class="in" list="grouplist" '+a('group')+' value="'+esc(L.group)+'"></label><label class="cell"><span class="lbl show">Material</span><input class="in" '+a('mat')+' value="'+esc(L.mat)+'"></label></div>'+
@@ -3612,7 +3782,7 @@ const PARQ=['¿Te ha dicho alguna vez un médico que tienes un problema de coraz
 function prof(c){if(!c.prof)c.prof={email:'',tel:'',ciudad:'',lugar:'Gimnasio',material:'',dias:[],horario:'',lesiones:'',dieta:'Omnívora',alergias:'',noGusta:'',comidas:'',cocina:'',rem:{entreno:true,comidas:false,agua:true,pesaje:true},remHora:'09:00',parq:{},parqTs:0,emNom:'',emTel:'',emRel:'',since:Date.now()-60*D};return c.prof}
 function clientProfile(c){
   const P=prof(c),I=intD(c);
-  const hero='<section class="pf-hero"><div class="pf-av">'+(c.avatar?'<img src="'+esc(c.avatar)+'" alt="Tu foto de perfil">':'<span>'+esc(initials(c.name))+'</span>')+'<label class="pf-cam" title="Cambiar foto"><input id="avFile" class="sr-file" type="file" accept="image/*" aria-label="Cambiar foto de perfil"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></label></div>'+
+  const hero='<section class="pf-hero"><div class="pf-av">'+(c.avatar?'<img src="'+esc(mURL(c.avatar))+'\" alt="Tu foto de perfil">':'<span>'+esc(initials(c.name))+'</span>')+'<label class="pf-cam" title="Cambiar foto"><input id="avFile" class="sr-file" type="file" accept="image/*" aria-label="Cambiar foto de perfil"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></label></div>'+
    '<div class="pf-id"><p class="dh-e">Mi perfil</p><h2>'+esc(c.name)+'</h2><p class="muted">'+esc(c.phase)+' · En Team Biscuit desde '+dshort(P.since)+'</p><div class="actions" style="margin:8px 0 0"><label class="btn sm">'+(c.avatar?'Cambiar foto':'Subir foto de perfil')+'<input id="avFile2" class="sr-file" type="file" accept="image/*"></label>'+(c.avatar?'<button type="button" class="btn sm" data-act="avDel">Quitar foto</button>':'')+'</div></div><p class="pf-save">✓ Los cambios se guardan solos</p></section>';
   const pfO=state.pfO||{};
   const card=(ic,t,sub,body,cls)=>{const k=t,o=!!pfO[k];return '<section class="card pf-card fold'+(o?' open':'')+(cls?' '+cls:'')+'"><button type="button" class="pf-hb" data-act="pfO" data-k="'+esc(k)+'" aria-expanded="'+o+'"><span class="pf-ic" aria-hidden="true">'+ic+'</span><span class="pf-ht"><b>'+t+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</span><span class="tx-ch" aria-hidden="true"></span></button>'+(o?'<div class="pf-cb">'+body+'</div>':'')+'</section>'};
@@ -3628,7 +3798,7 @@ function clientProfile(c){
   const acc=card('🔒','Privacidad y cuenta','Fotos, contraseña, tus datos y sesión','<ul class="pf-list"><li><span>Fotos de progreso</span><b>'+(c.consent?'Consentimiento aceptado ('+dshort(c.consent.ts)+')':'Sin aceptar')+'</b><button type="button" class="btn sm" data-act="ctab" data-t="fotos">Ver</button></li>'+
     '<li><span>Contraseña</span><b>••••••••</b><button type="button" class="btn sm" data-act="pwOpen">Cambiar</button></li>'+(state.pwOpen?'<li class="pf-pw"><input class="in" type="password" placeholder="Contraseña actual" autocomplete="current-password"><input class="in" type="password" placeholder="Nueva contraseña" autocomplete="new-password"><button type="button" class="btn primary sm" data-act="pwSave">Guardar</button></li>':'')+
     '<li><span>Mis datos</span><b>Copia de todo tu plan y registros</b><button type="button" class="btn sm" data-act="dlData">Descargar</button></li>'+
-    '<li><span>Sesión</span><b>'+esc(c.name)+'</b><button type="button" class="btn sm" data-act="logout">Cerrar sesión</button></li></ul>');
+    '<li><span>Sesión</span><b>'+esc(c.name)+'</b><button type="button" class="btn sm" data-act="logout">Salir de la demo</button></li></ul>');
   return '<div class="pf">'+hero+'<div class="pf-cols">'+mf+contacto+rem+em+acc+'</div></div>';
 }
 function fichaCard(c){
@@ -4337,14 +4507,14 @@ function wfShown(id){const inp=document.getElementById(id);if(!inp)return '';if(
 
 function registroPanel(c){
   const list=feedItems(c);
-  return '<div class="card"><div class="feed-bar"><span class="live"><i></i>En directo</span><div class="actions">'+(list.some(it=>it.l.fresh)?'<button type="button" class="btn" data-act="seen">Marcar todo como visto</button>':'')+'<button type="button" class="btn ghost" data-act="sim">Demo: simular envío del cliente</button></div></div>'+
+  return '<div class="card"><div class="feed-bar"><span class="live"><i></i>En directo</span><div class="actions">'+(list.some(it=>it.l.fresh)?'<button type="button" class="btn" data-act="seen">Marcar todo como visto</button>':'')+'</div></div>'+
    '<p class="muted" style="margin:0 0 6px">Lo que '+esc(first(c.name))+' anota en su móvil llega aquí al instante, comparado con tu pauta.</p>'+
    (list.length?list.slice(0,40).map(it=>feedHtml(c,it)).join(''):'<div class="empty">Cuando '+esc(first(c.name))+' registre su primer entreno, aparecerá aquí.</div>')+'</div>';
 }
 
 function photoThumb(p,coach){
   const sel=state.cmp.indexOf(p.id)>=0;
-  return '<figure class="ph'+(sel?' sel':'')+'"><button type="button" class="phimg" data-act="zoom" data-p="'+p.id+'" aria-label="Ampliar foto"><img src="'+esc(p.url)+'" alt="Foto '+esc(p.label)+' del '+dshort(p.ts)+'"></button><figcaption><span>'+esc(p.label)+' · '+dshort(p.ts)+(p.fresh&&coach?' <span class="badge">Nuevo</span>':'')+'</span>'+(coach?'<button type="button" class="btn sm" data-act="cmp" data-p="'+p.id+'" aria-pressed="'+sel+'">'+(sel?'Quitar de comparar':'Comparar')+'</button>':'<button type="button" class="btn sm" data-act="delPhoto" data-p="'+p.id+'">Quitar</button>')+'</figcaption></figure>';
+  return '<figure class="ph'+(sel?' sel':'')+'"><button type="button" class="phimg" data-act="zoom" data-p="'+p.id+'" aria-label="Ampliar foto"><img src="'+esc(mURL(p.url))+'\" alt="Foto '+esc(p.label)+' del '+dshort(p.ts)+'"></button><figcaption><span>'+esc(p.label)+' · '+dshort(p.ts)+(p.fresh&&coach?' <span class="badge">Nuevo</span>':'')+'</span>'+(coach?'<button type="button" class="btn sm" data-act="cmp" data-p="'+p.id+'" aria-pressed="'+sel+'">'+(sel?'Quitar de comparar':'Comparar')+'</button>':'<button type="button" class="btn sm" data-act="delPhoto" data-p="'+p.id+'">Quitar</button>')+'</figcaption></figure>';
 }
 const cDate=ts=>new Date(ts).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
 function fotosPanel(c){
@@ -4352,7 +4522,7 @@ function fotosPanel(c){
   const list=c.photos.slice().sort((a,b)=>b.ts-a.ts);
   const sel=state.cmp.map(id=>c.photos.find(p=>p.id===id)).filter(Boolean).sort((a,b)=>a.ts-b.ts);
   let cmp='';
-  if(sel.length===2)cmp='<div class="card" style="margin-bottom:16px"><h2>Comparación</h2><div class="cmp">'+sel.map(p=>'<figure><button type="button" class="phimg" data-act="zoom" data-p="'+p.id+'" aria-label="Ampliar foto"><img src="'+esc(p.url)+'" alt="Foto '+esc(p.label)+'"></button><figcaption>'+esc(p.label)+' · '+dshort(p.ts)+'</figcaption></figure>').join('')+'</div></div>';
+  if(sel.length===2)cmp='<div class="card" style="margin-bottom:16px"><h2>Comparación</h2><div class="cmp">'+sel.map(p=>'<figure><button type="button" class="phimg" data-act="zoom" data-p="'+p.id+'" aria-label="Ampliar foto"><img src="'+esc(mURL(p.url))+'\" alt="Foto '+esc(p.label)+'"></button><figcaption>'+esc(p.label)+' · '+dshort(p.ts)+'</figcaption></figure>').join('')+'</div></div>';
   else if(sel.length===1)cmp='<p class="muted" style="margin:0 0 12px">Elige otra foto para compararla con la del '+dshort(sel[0].ts)+'.</p>';
   return cmp+'<div class="card"><h2>Fotos de '+esc(first(c.name))+'</h2><p class="consent-ok">Consentimiento de privacidad aceptado el '+cDate(c.consent.ts)+' (versión '+esc(c.consent.v)+'). Solo tú y '+esc(first(c.name))+' veis estas fotos.</p>'+(list.length?'<div class="pgrid">'+list.map(p=>photoThumb(p,true)).join('')+'</div>':'<div class="empty">Cuando '+esc(first(c.name))+' suba fotos de progreso, las verás aquí y podrás compararlas. Pruébalo desde la vista del cliente.</div>')+'</div>';
 }
@@ -4374,7 +4544,7 @@ function clientPhotos(c){
 }
 
 /* ---------- mensajes: chat entrenador ⇄ cliente ---------- */
-const avHtml=(c,cls)=>c&&c.avatar?'<span class="avatar '+(cls||'')+' av-ph"><img src="'+esc(c.avatar)+'" alt=""></span>':'<span class="avatar '+(cls||'')+'">'+esc(initials(c?c.name:'?'))+'</span>';
+const avHtml=(c,cls)=>c&&c.avatar?'<span class="avatar '+(cls||'')+' av-ph"><img src="'+esc(mURL(c.avatar))+'\" alt=""></span>':'<span class="avatar '+(cls||'')+'">'+esc(initials(c?c.name:'?'))+'</span>';
 const MKINDS=[['Mensaje','💬'],['Duda','❓'],['Objeción','✋'],['Molestia o lesión','🩹'],['Técnica','🎥']];
 const QUICK=['¡Buen trabajo esta semana! 💪','Recibido, lo reviso y te digo algo hoy.','¿Qué tal te has encontrado con el cambio?','Mándame un vídeo de la técnica y lo vemos.'];
 const EMOJIS='😀 😂 😊 😍 🥰 😉 😅 🤔 😮 😢 😴 🤒 😤 🙏 👍 👏 💪 🙌 👌 ✌️ 🤝 🔥 ⭐ ✅ ❌ ❤️ 💯 🎉 🏆 🥇 🏋️ 🏃 🚴 🏊 🧘 ⚽ 🎾 🥵 💦 ⏱️ 📈 📉 ⚖️ 🍎 🍌 🥑 🥦 🥗 🍗 🥩 🐟 🥚 🍚 🍝 🍕 🍔 🍫 🍺 ☕ 💧 😋'.split(' ');
@@ -4387,7 +4557,7 @@ function chatHtml(c,viewer){
     const dl=dayLbl(m.ts);if(dl!==ld){out+='<div class="ch-day"><span>'+dl+'</span></div>';ld=dl}
     const mine=m.from===viewer,read=m.from==='client'?!m.fresh:m.ts<=(c.cSeen||0),nx=list[i+1],grp=nx&&nx.from===m.from&&dayLbl(nx.ts)===dl;
     out+='<div class="bub'+(mine?' me':'')+(grp?' grp':'')+'">'+(m.from==='client'&&m.kind&&m.kind!=='Mensaje'?'<span class="bub-k">'+kIcon(m.kind)+' '+esc(m.kind)+'</span>':'')+
-      (m.img?'<button type="button" class="bub-img" data-act="zoomMsg" data-m="'+m.id+'" aria-label="Ampliar imagen"><img src="'+esc(m.img)+'" alt="Imagen adjunta"></button>':'')+
+      (m.img?'<button type="button" class="bub-img" data-act="zoomMsg" data-m="'+m.id+'" aria-label="Ampliar imagen"><img src="'+esc(mURL(m.img))+'\" alt="Imagen adjunta"></button>':'')+
       (m.text?'<p>'+esc(m.text).replace(/\n/g,'<br>')+'</p>':'')+'<span class="bub-t">'+(mine?(m.lk?'<span class="bub-lk on" role="img" aria-label="Le ha gustado" title="Le ha gustado">'+HEART+'</span>':''):'<button type="button" class="bub-lk'+(m.lk?' on':'')+'" data-act="msgLike" data-m="'+m.id+'" aria-pressed="'+!!m.lk+'" aria-label="Me gusta" title="'+(m.lk?'Quitar me gusta':'Me gusta')+'">'+HEART+'</button>')+hm(m.ts)+(mine?' <i class="tick'+(read?' rd':'')+'" aria-label="'+(read?'Leído':'Enviado')+'">'+(read?'✓✓':'✓')+'</i>':'')+'</span></div>';
   });
   const other=viewer==='coach'?first(c.name):'Robert';
@@ -4395,7 +4565,7 @@ function chatHtml(c,viewer){
   const head='<header class="ch-h">'+(viewer==='coach'?avHtml(c,''):'<img class="ch-coach" src="'+PS_LOGO+'" alt="">')+'<div><b>'+esc(viewer==='coach'?c.name:'Robert · Tu entrenador')+'</b><span>'+(viewer==='coach'?'Cliente · '+esc(c.phase):'Tactical Biscuit Training · suele responder en el día')+'</span></div></header>';
   const kinds=viewer==='client'?'<div class="ch-kinds" role="group" aria-label="Tipo de mensaje">'+MKINDS.map(k=>'<button type="button" class="ch-kind" data-act="mKind" data-v="'+k[0]+'" aria-pressed="'+((state.mKind||'Mensaje')===k[0])+'">'+k[1]+' '+k[0]+'</button>').join('')+'</div>':'';
   const quick=viewer==='coach'?'<div class="ch-quick" aria-label="Respuestas rápidas">'+QUICK.map(q=>'<button type="button" class="ch-q" data-act="quick" data-v="'+esc(q)+'">'+esc(q)+'</button>').join('')+'</div>':'';
-  const att=state.mAtt?'<div class="ch-att"><img src="'+esc(state.mAtt)+'" alt="Imagen para enviar"><span>Imagen lista para enviar</span><button type="button" class="icon-btn" data-act="mAttDel" aria-label="Quitar imagen">×</button></div>':'';
+  const att=state.mAtt?'<div class="ch-att"><img src="'+esc(mURL(state.mAtt))+'\" alt="Imagen para enviar"><span>Imagen lista para enviar</span><button type="button" class="icon-btn" data-act="mAttDel" aria-label="Quitar imagen">×</button></div>':'';
   const comp='<div class="ch-comp">'+att+'<div class="ch-emo" id="chEmo" role="group" aria-label="Emojis"'+(state.mEmo?'':' hidden')+'>'+EMOJIS.map(e=>'<button type="button" data-act="emoAdd" data-v="'+e+'" aria-label="'+e+'">'+e+'</button>').join('')+'</div><div class="ch-row"><label class="ch-clip" title="Adjuntar foto"><input id="mFile" class="sr-file" type="file" accept="image/*" aria-label="Adjuntar foto"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.5l-8.5 8.5a6 6 0 0 1-8.5-8.5l9-9a4 4 0 0 1 5.7 5.7l-9 9a2 2 0 0 1-2.8-2.8l8.4-8.4"/></svg></label><button type="button" class="ch-clip ch-emo-b" data-act="emoTog" aria-expanded="'+!!state.mEmo+'" aria-controls="chEmo" aria-label="Emojis" title="Emojis"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9.5h.01M15 9.5h.01"/></svg></button><textarea id="mText" class="in ch-in" rows="1" placeholder="Escribe a '+esc(other)+'…" aria-label="Mensaje">'+esc(state.mDraft||'')+'</textarea><button type="button" class="ch-send" data-act="chatSend" aria-label="Enviar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-3-7z"/></svg></button></div><p class="ch-hint">Intro para enviar · Mayús + Intro para nueva línea</p></div>';
   return '<div class="chat">'+head+'<div class="ch-body" id="chBody">'+out+'</div>'+quick+kinds+comp+'</div>';
 }
@@ -4481,7 +4651,7 @@ function exoCard(e,idx,week,wi,c,e0){e0=e0||e;
   const L=libFor(e.name),photo=L&&L.photo,video=L&&L.video,link=L&&L.link;
   const okLink=/^https?:\/\//i.test(link||'');
   const play='<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
-  const media='<div class="exo-m">'+(photo?'<button type="button" class="exo-ph" data-act="zoomEx" data-e="'+e.id+'" aria-label="Ampliar imagen de '+esc(e.name)+'"><img src="'+esc(photo)+'" alt="Imagen de '+esc(e.name)+'"></button>':'<div class="exo-ph empty-ph" aria-hidden="true">Imagen pendiente</div>')+
+  const media='<div class="exo-m">'+(photo?'<button type="button" class="exo-ph" data-act="zoomEx" data-e="'+e.id+'" aria-label="Ampliar imagen de '+esc(e.name)+'"><img src="'+esc(mURL(photo))+'\" alt="Imagen de '+esc(e.name)+'"></button>':'<div class="exo-ph empty-ph" aria-hidden="true">Imagen pendiente</div>')+
    '<div class="exo-vid">'+(L?'<span class="muted" style="font-size:13px">'+esc(L.group)+(L.mat?' · '+esc(L.mat):'')+'</span>':'')+(video?'<button type="button" class="btn" data-act="playEx" data-e="'+e.id+'">'+play+' Ver vídeo explicativo</button>':'')+(okLink?'<a class="btn" href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">'+play+' Ver vídeo en otra pestaña</a>':'')+((!video&&!okLink)?'<span class="muted">Vídeo pendiente</span>':'')+'</div></div>';
   const EQ0=eqOpts(e.name),eq0=EQ0.length?(lg&&lg.eq||eqCur(c,e.name)):'';
   const pv0=c.log.filter(l=>l.ex===e.name&&l!==lg&&(!eq0||(l.eq||eqDef(e.name))===eq0)&&l.sets&&l.sets.length&&l.u!=='s').sort((a,b)=>b.ts-a.ts)[0],pk=i=>{if(!pv0)return '';const x=pv0.sets[i]||pv0.sets[pv0.sets.length-1];return x&&x[0]>0?x[0]:''};
@@ -4551,7 +4721,7 @@ function clientTrain(c,days,di,d){
     const kg=S.kgTxt?S.kgTxt:S.kg>0?fmtN(S.kg)+' kg':'',reps=/[^\d\s]/.test(String(e.reps||''))?e.reps:(S.reps||e.reps);
     const line=e.x?'Añadido por ti':[(S.sets||e.sets)+' × '+reps,kg,'RIR '+W.rir,e.rest?'⏱ '+rs(e.rest):''].filter(Boolean).join(' · ');
     const dl=lg&&lg.sets?lg.sets.map(s=>setTxt(s,lg.u)).join(' · '):'';
-    return '<article class="tx'+(done?' done':'')+(isO?' open':'')+'" id="tx-'+e.id+'"><button type="button" class="tx-h" data-act="exT" data-k="'+okey+'" data-e="'+e.id+'" aria-expanded="'+isO+'">'+(ph?'<img class="tx-ph" src="'+esc(ph)+'" alt="">':'<span class="tx-ph none" aria-hidden="true">'+(idx+1)+'</span>')+'<span class="tx-t"><b>'+(idx+1)+'. '+esc(e.name)+(e.orig?' <small class="tx-var">variante</small>':'')+'</b><span>'+esc(done&&dl?'Hecho: '+dl:line)+'</span></span>'+(done?'<span class="tx-ok" aria-label="Hecho">✓</span>':'')+'<span class="tx-ch" aria-hidden="true"></span></button>'+(isO?'<div class="tx-b">'+exoCard(e,idx,W,w,c,e0)+'</div>':'')+'</article>'};
+    return '<article class="tx'+(done?' done':'')+(isO?' open':'')+'" id="tx-'+e.id+'"><button type="button" class="tx-h" data-act="exT" data-k="'+okey+'" data-e="'+e.id+'" aria-expanded="'+isO+'">'+(ph?'<img class="tx-ph" src="'+esc(mURL(ph))+'\" alt="">':'<span class="tx-ph none" aria-hidden="true">'+(idx+1)+'</span>')+'<span class="tx-t"><b>'+(idx+1)+'. '+esc(e.name)+(e.orig?' <small class="tx-var">variante</small>':'')+'</b><span>'+esc(done&&dl?'Hecho: '+dl:line)+'</span></span>'+(done?'<span class="tx-ok" aria-label="Hecho">✓</span>':'')+'<span class="tx-ch" aria-hidden="true"></span></button>'+(isO?'<div class="tx-b">'+exoCard(e,idx,W,w,c,e0)+'</div>':'')+'</article>'};
   const libO=state.lib.slice().sort((a,b)=>String(a.group).localeCompare(b.group,'es')||String(a.name).localeCompare(b.name,'es')),grp=[...new Set(libO.map(x=>x.group||'Otros'))];
   const xadd=state.xAdd===okey?'<div class="xadd-f"><b>Añadir un ejercicio a esta sesión</b><p class="muted">Solo queda en tu registro de este día. Tu plan no cambia.</p><label><span>Elige de la lista</span><select class="in" id="xaSel"><option value="">Elige un ejercicio…</option>'+grp.map(g=>'<optgroup label="'+esc(g)+'">'+libO.filter(x=>(x.group||'Otros')===g).map(x=>'<option>'+esc(x.name)+'</option>').join('')+'</optgroup>').join('')+'</select></label><label><span>O escribe el nombre</span><input class="in" id="xaName" placeholder="Ej.: Curl martillo"></label><div class="actions"><button type="button" class="btn" data-act="xAddNo">Cancelar</button><button type="button" class="btn primary" data-act="xAddOk" data-d="'+d.id+'" data-w="'+w+'" data-k="'+okey+'">Añadir</button></div></div>':'<button type="button" class="btn add-ex" data-act="xAdd" data-k="'+okey+'">+ Añadir un ejercicio</button>';
   const list=(tot||xs.length?'<div class="tx-l">'+d.exs.map(art).join('')+xs.map((e0,i)=>art(e0,tot+i)).join('')+'</div>':'<div class="empty">Este día todavía no tiene ejercicios.</div>')+xadd;
@@ -4839,7 +5009,7 @@ function tabsHtml(c){
   const m=coachMode();if(m==='edit')state.lastEdit=state.tab;else state.lastVer=state.tab;
   const vb=V.reduce((a,x)=>a+(x[2]||0),0);
   const T=m==='edit'?Ed:V;
-  return '<div class="cmode" role="tablist" aria-label="Modo"><button type="button" role="tab" class="es-b" data-act="cmode" data-v="ver" aria-selected="'+(m==='ver')+'">👁 Ver'+(m==='edit'&&vb?'<i class="es-hoy">'+vb+'</i>':'')+'</button><button type="button" role="tab" class="es-b" data-act="cmode" data-v="edit" aria-selected="'+(m==='edit')+'">✎ Editar plan</button></div>'+
+  return '<div class="cmode" role="tablist" aria-label="Modo"><button type="button" role="tab" class="es-b" data-act="cmode" data-v="ver" aria-selected="'+(m==='ver')+'">👁 Ver'+(m==='edit'&&vb?'<i class="es-hoy">'+vb+'</i>':'')+'</button><button type="button" role="tab" class="es-b" data-act="cmode" data-v="edit" aria-selected="'+(m==='edit')+'">✎ Editar plan</button></div>'+(m==='edit'?planCard(c):'')+
    '<div class="tabs" role="tablist">'+T.map(x=>'<button type="button" role="tab" class="tab" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(x[4].indexOf(state.tab)>=0)+'">'+x[1]+(x[3]?'<span class="badge" id="'+x[3]+'"'+(x[2]?'':' hidden')+'>'+x[2]+'</span>':'')+'</button>').join('')+'</div>';
 }
 /* barra de segundo nivel (mismo diseño en las dos pestañas agrupadas) */
@@ -4855,7 +5025,7 @@ function fuerzaBody(c){
   return strTable(c)+'<h2 class="rn-plan-t">Plan de fuerza</h2>'+'<div class="plan-bar"><p class="muted" style="margin:0">Plan de fuerza de '+esc(first(c.name))+', tal como lo ve en su app.</p><span><button type="button" class="btn primary" data-act="trPrint" data-v="fuerza">Imprimir</button></span></div>'+trSheet(c,'fuerza');
 }
 function datosPanel(c){return '<div class="stack"><div class="card"><h2>Datos del cliente</h2><div class="form-grid">'+
-  [['name','Nombre'],['goal','Objetivo'],['phase','Fase']].map(x=>'<label class="cell"><span class="lbl show">'+x[1]+'</span><input class="in" data-r="cinfo" data-f="'+x[0]+'" value="'+esc(c[x[0]]||'')+'"></label>').join('')+'<label class="cell"><span class="lbl show">Próxima revisión</span><input class="in" type="date" data-r="revd" value="'+esc(revIso(c))+'"></label>'+'</div></div>'+fichaCard(c)+'</div>'}
+  [['name','Nombre'],['goal','Objetivo'],['phase','Fase']].map(x=>'<label class="cell"><span class="lbl show">'+x[1]+'</span><input class="in" data-r="cinfo" data-f="'+x[0]+'" value="'+esc(c[x[0]]||'')+'"></label>').join('')+'<label class="cell"><span class="lbl show">Próxima revisión</span><input class="in" type="date" data-r="revd" value="'+esc(revIso(c))+'"></label>'+'</div></div>'+fichaCard(c)+accessCard(c)+'</div>'}
 /* ---------- actividad reciente: fuerza + carrera + otras actividades ---------- */
 function actTs(a){if(a.date){const d=rParse(a.date);if(d&&isoOf(a.ts||0)!==a.date)return d.getTime()+12*H}return a.ts||0}
 function feedItems(c){
@@ -5024,16 +5194,16 @@ function setRenum(ex){$$('.setrow2',ex).forEach((r,i)=>{const n=i+1,sn=r.querySe
 function blankDiet(){return{trainDays:[1,0,1,0,1,0,0],water:2.5,goalW:0,bmr:0,tdee:0,notes:'',supps:[],types:{train:{kcal:2200,p:150,meals:[meal('Desayuno',[]),meal('Comida',[]),meal('Pre-entreno',[]),meal('Post-entreno',[]),meal('Cena',[])]},rest:{kcal:2000,p:150,meals:[meal('Desayuno',[]),meal('Comida',[]),meal('Merienda',[]),meal('Cena',[])]}}}}
 function buildApp(){
   $('#app').innerHTML='<div class="app"><aside class="rail" aria-label="Clientes"><div class="seg" role="group" aria-label="Sección"><button type="button" data-act="view" data-v="dash" aria-pressed="false">Panel</button><button type="button" data-act="view" data-v="clients" aria-pressed="true">Clientes</button><button type="button" data-act="view" data-v="lib" aria-pressed="false">Biblioteca</button></div><div class="rail-head"><input id="q" class="in search" type="search" placeholder="Buscar cliente" aria-label="Buscar cliente"><button type="button" class="btn primary" data-act="toggleNew" aria-controls="newform">+ Cliente</button></div>'+
-   '<form id="newform" hidden><input id="nn" class="in" placeholder="Nombre y apellidos" aria-label="Nombre del cliente" required><input id="ng" class="in" placeholder="Objetivo (ej.: pérdida de grasa)" aria-label="Objetivo del cliente"><label class="cell"><span class="lbl show">Dieta de partida</span><select id="ntD" class="in"></select></label><label class="cell"><span class="lbl show">Entreno de partida</span><select id="ntT" class="in"></select></label><div class="actions" style="margin:0"><button type="submit" class="btn primary">Crear cliente</button><button type="button" class="btn" data-act="cancelNew">Cancelar</button></div></form>'+
+   '<form id="newform" hidden><input id="nn" class="in" placeholder="Nombre y apellidos" aria-label="Nombre del cliente" required><input id="ng" class="in" placeholder="Objetivo (ej.: pérdida de grasa)" aria-label="Objetivo del cliente"><div class="nf-acc"><span class="lbl show">Acceso del cliente</span><input id="nEm" class="in" type="email" placeholder="Email del cliente" autocomplete="off" autocapitalize="none" spellcheck="false"><div class="nf-row"><input id="nPw" class="in" placeholder="Contraseña inicial" autocomplete="off" aria-label="Contraseña inicial"><button type="button" class="btn sm" data-act="nGen">Generar</button></div></div><div class="nf-acc"><span class="lbl show">¿Tienes su plan en Word / Excel?</span><label class="btn sm">Subir Word / Excel<input id="nImp" class="sr-file" type="file" accept=".json,.docx,.xlsx,application/json" multiple></label><span id="nImpT" class="muted" style="font-size:13px"></span></div><label class="cell"><span class="lbl show">Dieta de partida</span><select id="ntD" class="in"></select></label><label class="cell"><span class="lbl show">Entreno de partida</span><select id="ntT" class="in"></select></label><div class="actions" style="margin:0"><button type="submit" class="btn primary">Crear cliente</button><button type="button" class="btn" data-act="cancelNew">Cancelar</button></div></form>'+
    '<div id="clist" class="clist"></div></aside><main id="main" class="main"></main></div><datalist id="foodlist"></datalist><datalist id="exlist"></datalist><datalist id="grouplist"></datalist>';
   refreshLists();
   $('#q').addEventListener('input',e=>{state.q=e.target.value;renderRail()});
   $('#newform').addEventListener('submit',e=>{
-    e.preventDefault();const n=$('#nn').value.trim();if(!n)return;
+    e.preventDefault();const n=$('#nn').value.trim();if(!n)return;if(!newCheck())return;
     const id='c'+nid();
     state.clients.push({id,name:n,goal:$('#ng').value.trim()||'Objetivo por definir',phase:'Fase 1',review:'—',weights:[],diet:(()=>{const tp=state.tpls.find(x=>x.id===$('#ntD').value);return tp?cloneDiet(tp.diet):blankDiet()})(),training:(()=>{const tp=state.tpls.find(x=>x.id===$('#ntT').value);return tp?cloneTraining(tp.training):{meso:mesoOf(1,'Intermedio',0),days:[dy('Día A','',0,[],'','','60','Gimnasio')]}})(),log:[],photos:[],consent:null,eat:Array.from({length:7},()=>[]),track:{wday:0,pasos:8000},msgs:[],chk:[],adh:adhOf(0,-1)});
     state.sel=id;state.tab='resumen';state.dayIdx=0;state.cday=null;state.sent={};state.view='clients';state.clients[state.clients.length-1].revDate='';
-    e.target.reset();e.target.hidden=true;renderAll();toast('Cliente creado');
+    const nc=state.clients[state.clients.length-1];e.target.reset();e.target.hidden=true;renderAll();newClient(nc);
   });
 }
 function syncFood(it,skip){['g','p','c','f'].forEach(f=>{if(f===skip)return;const el=$('input[data-r="food"][data-i="'+it.id+'"][data-f="'+f+'"]');if(el)el.value=it[f]});const o=$('[data-kc="'+it.id+'"]');if(o)o.textContent=Math.round(kc(it))}
@@ -5055,7 +5225,7 @@ document.addEventListener('click',e=>{
     case 'dashGo':{const k=t.dataset.k,d=$('#ds-'+k);if(d){d.open=true;state.dk=Object.assign(state.dk||{},{[k]:true});const y=d.getBoundingClientRect().top+window.scrollY-12;window.scrollTo({top:Math.max(0,y),behavior:'smooth'})}break}
     case 'toggleNew2':break;
     case 'tab':state.tab=t.dataset.t;state.rnDet='';state.rnEdit='';renderMain();break;
-    case 'toggleNew':{const f=$('#newform');f.hidden=!f.hidden;if(!f.hidden)$('#nn').focus();break}
+    case 'toggleNew':{const f=$('#newform');f.hidden=!f.hidden;if(!f.hidden){$('#nn').focus();$('#nPw').value=genPw()}break}
     case 'cancelNew':$('#newform').hidden=true;break;
     case 'addFood':{const m=findMeal(c,t.dataset.m);m.items.push(fd('',0));renderMain();focusLast('[data-r="food"][data-f="food"][data-m="'+m.id+'"]');break}
     case 'delFood':{const m=findMeal(c,t.dataset.m);m.items=m.items.filter(i=>i.id!==t.dataset.i);renderMain();break}
@@ -5078,7 +5248,7 @@ document.addEventListener('click',e=>{
     case 'addW':{const v=num($('#newW').value);if(v>0){c.weights.push(v);c.chk.push({id:nid(),ts:Date.now(),week:clientWeek(c)+1,peso:v,animo:0,cond:'',comm:'Apuntado por el entrenador'});renderMain();toast('Peso registrado')}else toast('Escribe un peso válido');break}
     case 'seen':c.log.forEach(l=>{l.fresh=false});(c.acts||[]).forEach(x=>{x.fresh=false});if(c.run)(c.run.logs||[]).forEach(x=>{x.fresh=false});renderAll();break;
     case 'sim':simulate(c);break;
-    case 'delClient':{state.clients=state.clients.filter(x=>x.id!==c.id);state.sel=state.clients.length?state.clients[0].id:'';renderAll();toast('Cliente eliminado');break}
+    case 'delClient':{delAsk(c);break;state.clients=state.clients.filter(x=>x.id!==c.id);state.sel=state.clients.length?state.clients[0].id:'';renderAll();toast('Cliente eliminado');break}
     case 'planFs':state.planFs=!state.planFs;renderMain();break;
     case 'trFs':state.trFs=state.trFs?'':t.dataset.v;renderMain();if(state.trFs){const f=$('.fsov');if(f)f.scrollTop=0}break;
     case 'trPrint':{let pr=$('#printroot');if(!pr){pr=document.createElement('div');pr.id='printroot';document.body.appendChild(pr)}pr.innerHTML=trSheet(c,t.dataset.v);document.body.classList.add('printing');const done=()=>{document.body.classList.remove('printing');pr.innerHTML=''};window.addEventListener('afterprint',done,{once:true});try{window.print()}catch(_){done();toast('Usa Ctrl/Cmd + P para imprimir')}break}
@@ -5117,7 +5287,7 @@ document.addEventListener('click',e=>{
     case 'msgLike':{const m=c.msgs.find(x=>x.id===t.dataset.m);if(m){if(m.lk)delete m.lk;else m.lk=Date.now();t.classList.toggle('on',!!m.lk);t.setAttribute('aria-pressed',String(!!m.lk));t.title=m.lk?'Quitar me gusta':'Me gusta'}break}
     case 'emoTog':{state.mEmo=!state.mEmo;const p=$('#chEmo');if(p)p.hidden=!state.mEmo;t.setAttribute('aria-expanded',String(state.mEmo));break}
     case 'emoAdd':{const ta=$('#mText');if(ta){const L=ta.value.length,f=document.activeElement===ta,a=Math.min(L,f?ta.selectionStart:state.mCur??L),b=Math.max(a,Math.min(L,f?ta.selectionEnd:state.mCurE??a)),v=t.dataset.v;ta.value=ta.value.slice(0,a)+v+ta.value.slice(b);state.mCur=state.mCurE=a+v.length;state.mDraft=ta.value}break}
-    case 'zoomMsg':{const m=c.msgs.find(x=>x.id===t.dataset.m);if(m&&m.img){$('#lb img').src=m.img;$('#lb').hidden=false}break}
+    case 'zoomMsg':{const m=c.msgs.find(x=>x.id===t.dataset.m);if(m&&m.img){$('#lb img').src=mURL(m.img);$('#lb').hidden=false}break}
     case 'avDel':c.avatar='';renderAll();break;
     case 'pfDay':{const P=prof(c),i=+t.dataset.i,k=P.dias.indexOf(i);if(k>=0)P.dias.splice(k,1);else P.dias.push(i);t.setAttribute('aria-pressed',String(k<0));break}
     case 'pfRem':{const P=prof(c),k=t.dataset.k;P.rem[k]=!P.rem[k];t.setAttribute('aria-pressed',String(P.rem[k]));break}
@@ -5125,8 +5295,8 @@ document.addEventListener('click',e=>{
     case 'rnO':state.rnO=state.rnO===t.dataset.k?'':t.dataset.k;renderMain();break;
     case 'pfO':{if(!state.pfO)state.pfO={};state.pfO[t.dataset.k]=!state.pfO[t.dataset.k];renderMain();break}
     case 'pwOpen':state.pwOpen=!state.pwOpen;renderMain();break;
-    case 'pwSave':state.pwOpen=false;renderMain();toast('En la versión real se cambiará tu contraseña');break;
-    case 'dlData':{const d=JSON.stringify(c,(k,v)=>typeof v==='string'&&v.indexOf('blob:')===0?undefined:v,2);toast('En la demo no se descarga nada');break}
+    case 'pwSave':pwSave(t);break;
+    case 'dlData':{const d=JSON.stringify(c,(k,v)=>typeof v==='string'&&v.indexOf('blob:')===0?undefined:v,2);download('mis-datos-team-biscuit.json',d);break}
     case 'actOpen':{const pre=t.dataset.pre||'',same=state.actOpen===t.dataset.k&&(state.actPre||'')===pre;state.actOpen=same?'':t.dataset.k;state.actPre=pre;state.actF=pre?{type:pre}:{};renderMain();break}
     case 'actCancel':state.actOpen='';state.actF={};renderMain();break;
     case 'actPick':{const F=state.actF||(state.actF={});['actMin','actNote','actOther','actKm','actHr','actHrMax'].forEach(x=>{const e=$('#'+x);if(e)F[{actMin:'min',actNote:'note',actOther:'other',actKm:'km',actHr:'hr',actHrMax:'hrmax'}[x]]=e.value});F[t.dataset.k]=F[t.dataset.k]===t.dataset.v?'':t.dataset.v;const y=window.scrollY;renderMain();window.scrollTo(0,y);break}
@@ -5141,7 +5311,7 @@ document.addEventListener('click',e=>{
     case 'rtStop':restStop();break;
     case 'autoTg':c.training.auto=c.training.auto===false;renderMain();break;
     case 'tplSave':{const k=t.dataset.k,name=(k==='diet'?'Dieta ':'Entreno ')+'de '+first(c.name)+' · '+c.phase;const tp={id:'t'+nid(),name};if(k==='diet')tp.diet=cloneDiet(c.diet);else tp.training=cloneTraining(c.training);state.tpls.push(tp);renderMain();toast('Plantilla guardada: '+name);break}
-    case 'tplApply':{const k=t.dataset.k,sel=$('#tplSel-'+k),tp=sel&&state.tpls.find(x=>x.id===sel.value);if(!tp){toast('Elige una plantilla');break}if(k==='diet')c.diet=Object.assign(cloneDiet(tp.diet),{edad:c.diet.edad,altura:c.diet.altura,nivel:c.diet.nivel,dur:c.diet.dur,inicio:c.diet.inicio,trainDays:c.diet.trainDays});else{c.training=cloneTraining(tp.training);state.dayIdx=0}renderMain();toast('Plantilla aplicada a '+first(c.name));break}
+    case 'tplApply':{const k=t.dataset.k,sel=$('#tplSel-'+k),tp=sel&&state.tpls.find(x=>x.id===sel.value);if(!tp){toast('Elige una plantilla');break}histPush(c,k,'plantilla «'+tp.name+'»');if(k==='diet')c.diet=Object.assign(cloneDiet(tp.diet),{edad:c.diet.edad,altura:c.diet.altura,nivel:c.diet.nivel,dur:c.diet.dur,inicio:c.diet.inicio,trainDays:c.diet.trainDays});else{c.training=cloneTraining(tp.training);state.dayIdx=0}renderMain();toast('Plantilla aplicada a '+first(c.name));break}
     case 'intOpt':{const I=intD(c),k=t.dataset.k,v=t.dataset.v;if(t.dataset.m){const a=I[k]||(I[k]=[]),x=a.indexOf(v);if(x>=0)a.splice(x,1);else a.push(v);t.setAttribute('aria-pressed',String(x<0))}else{I[k]=I[k]===v?'':v;$$('[data-act="intOpt"][data-k="'+k+'"]').forEach(b2=>b2.setAttribute('aria-pressed',String(b2.dataset.v===I[k])))}if(k==='sexo'&&(I.sexo==='Mujer'||I.sexo==='Hombre'))comp(c).sexo=I.sexo;intRefresh(c);break}
     case 'intParq':{const I=intD(c),i=t.dataset.i,v=t.dataset.v;I.parq[i]=I.parq[i]===v?undefined:v;if(!I.parq[i])delete I.parq[i];$$('[data-act="intParq"][data-i="'+i+'"]').forEach(b2=>b2.setAttribute('aria-pressed',String(b2.dataset.v===I.parq[i])));intRefresh(c);break}
     case 'intPrint':{let pr=$('#printroot');if(!pr){pr=document.createElement('div');pr.id='printroot';document.body.appendChild(pr)}pr.innerHTML=intSheet(c,!!t.dataset.b);document.body.classList.add('printing');const done=()=>{document.body.classList.remove('printing');pr.innerHTML=''};window.addEventListener('afterprint',done,{once:true});try{window.print()}catch(_){done();toast('Usa Ctrl/Cmd + P para imprimir')}break}
@@ -5184,13 +5354,13 @@ document.addEventListener('click',e=>{
     case 'ctab':if(t.dataset.t==='entreno'&&t.closest('.hc')){state.esub='fuerza';state.tpsub='rutina'}if(t.dataset.t==='dieta'&&t.closest('.hc'))state.cdsub='dia';state.ctab=t.dataset.t;state.cal=false;state.logTs=null;state.planFs=false;state.trFs='';state.tsub=t.dataset.s||'hoy';state.rw=null;state.rnEdit='';state.rpf=null;renderMain();window.scrollTo({top:0,behavior:'smooth'});break;
     case 'cdsub':state.cdsub=t.dataset.v;renderMain();break;
     case 'cddPick':state.cdd=+t.dataset.i;renderMain();break;
-    case 'zoomEx':{const f=findEx(c,t.dataset.e),L=f&&libFor(f.e.name);if(L&&L.photo){$('#lb img').src=L.photo;$('#lb').hidden=false}break}
-    case 'playEx':{const f=findEx(c,t.dataset.e),L=f&&libFor(f.e.name);if(L&&L.video){const v=$('#vm video');v.src=L.video;$('#vm').hidden=false;const pr=v.play&&v.play();if(pr&&pr.catch)pr.catch(()=>{})}break}
+    case 'zoomEx':{const f=findEx(c,t.dataset.e),L=f&&libFor(f.e.name);if(L&&L.photo){$('#lb img').src=mURL(L.photo);$('#lb').hidden=false}break}
+    case 'playEx':{const f=findEx(c,t.dataset.e),L=f&&libFor(f.e.name);if(L&&L.video){const v=$('#vm video');v.src=mURL(L.video);$('#vm').hidden=false;const pr=v.play&&v.play();if(pr&&pr.catch)pr.catch(()=>{})}break}
     case 'closeVm':closeVm();break;
     case 'bell':state.bell=!state.bell;renderBell();break;
     case 'goto':state.mList=false;state.rnDet='';state.sel=t.dataset.c;state.tab=t.dataset.t;state.dayIdx=0;state.cmp=[];state.view='clients';state.bell=false;renderRail();setMode('coach');setTimeout(()=>{const p=$('.cv')||$('#panel');if(p){const y=p.getBoundingClientRect().top+window.scrollY-12;window.scrollTo({top:Math.max(0,y),behavior:'smooth'})}},80);break;
     case 'cmode':{const E=CM_EDIT;if(t.dataset.v==='edit'){if(E.indexOf(state.tab)<0)state.tab=state.lastEdit||'datos'}else{if(E.indexOf(state.tab)>=0)state.tab=state.lastVer||'resumen'}renderMain();break}
-    case 'zoom':{const p=c.photos.find(x=>x.id===t.dataset.p);if(p){$('#lb img').src=p.url;$('#lb').hidden=false}break}
+    case 'zoom':{const p=c.photos.find(x=>x.id===t.dataset.p);if(p){$('#lb img').src=mURL(p.url);$('#lb').hidden=false}break}
     case 'closeLb':$('#lb').hidden=true;break;
     case 'cmp':{const id=t.dataset.p,i=state.cmp.indexOf(id);if(i>=0)state.cmp.splice(i,1);else{state.cmp.push(id);if(state.cmp.length>2)state.cmp.shift()}renderMain();break}
     case 'delPhoto':{const p=c.photos.find(x=>x.id===t.dataset.p);if(p){try{URL.revokeObjectURL(p.url)}catch(_){}}c.photos=c.photos.filter(x=>x.id!==t.dataset.p);state.cmp=state.cmp.filter(x=>x!==t.dataset.p);renderMain();renderRail();break}
@@ -5321,18 +5491,18 @@ function syncChrome(){
   const ac=$('#acct'),c=cur();
   if(ac){
     if(screen==='login')ac.innerHTML='';
-    else if(screen==='coach')ac.innerHTML='<span class="who"><span class="avatar sm av-ph coach-av"><img src="'+PS_LOGO+'" alt=""></span><span>Robert</span></span><button type="button" class="btn" data-act="logout">Cerrar sesión</button>';
+    else if(screen==='coach')ac.innerHTML='<span class="who"><span class="avatar sm av-ph coach-av"><img src="'+PS_LOGO+'" alt=""></span><span>Robert</span></span><button type="button" class="btn" data-act="logout">Salir de la demo</button>';
     else if(a.role==='coach')ac.innerHTML='<span class="who">Vista previa'+(c?' de '+esc(first(c.name)):'')+'</span><button type="button" class="btn primary" data-act="exitPreview">Volver al panel</button>';
     else ac.innerHTML='<button type="button" class="who me-btn" data-act="ctab" data-t="perfil" title="Mi perfil">'+avHtml(c,'sm')+'<span>'+esc(c?c.name:'')+'</span></button><button type="button" class="btn" data-act="logout">Salir de la demo</button><button type="button" class="acct-set" data-act="pfTog" aria-label="Ajustes y perfil" title="Ajustes"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>';
   }
   const n=$('#notice');
   if(n){
-    n.hidden=false;
-    if(a&&a.u==='demo')n.innerHTML='<b>Demo.</b> Clienta y datos inventados. Prueba lo que quieras: nada se guarda y al salir se borra todo. <a href="./">Volver al acceso</a>';else if(screen==='coach')n.innerHTML='<b>Maqueta.</b> Clientes y datos de ejemplo. Todo se puede editar, pero todavía no se guarda al salir. En el perfil de cada cliente, «Ver como cliente» te enseña lo que él ve; lo que envíe llega al momento a tu panel y a la campana.';
+    n.hidden=false;if(screen==='client'&&a.role==='client'){n.innerHTML='<b>Demo.</b> Clienta y datos inventados. Prueba lo que quieras: nada se guarda y al salir se borra todo. <a href="./">Salir de la demo</a>';return}
+    if(screen==='coach')n.innerHTML='<b>Maqueta.</b> Clientes y datos de ejemplo. Todo se puede editar, pero todavía no se guarda al salir. En el perfil de cada cliente, «Ver como cliente» te enseña lo que él ve; lo que envíe llega al momento a tu panel y a la campana.';
     else if(screen==='client'&&a.role==='coach')n.innerHTML='<b>Vista previa.</b> Esto es lo que ve '+esc(c?first(c.name):'tu cliente')+'. <b>Solo lectura:</b> desde aquí no se cambia ni se envía nada, y sus mensajes y avisos siguen sin leer hasta que entre él o ella.';
   }
 }
-function renderLogin(){
+function renderLoginDemo(){
   try{restStop()}catch(_){}
   state.auth=null;state.mode='coach';state.bell=false;
   syncChrome();
@@ -5344,9 +5514,9 @@ function renderLogin(){
    accts().map(a=>'<button type="button" class="chip btnchip" data-act="fill" data-u="'+esc(a.u)+'" data-p="'+esc(a.p)+'">'+esc(a.role==='coach'?'Entrenador':first(a.name))+'</button>').join('')+'</div><p class="muted" style="margin:10px 0 0">Contraseñas de ejemplo: entrenador «tactical», clientes «biscuit».</p></div></div>';
   setTimeout(()=>{const u=$('#lgU');if(u)u.focus()},0);
 }
-function boot(){state.clients=state.clients.filter(c=>c.id==='c1');const c=state.clients[0];state.auth={u:'demo',role:'client',cid:c.id,name:c.name};state.sel=c.id;state.mode='client';state.ctab='inicio';state.vw=null;state.tw=0;state.cday=null;state.cdd=todayIdx();state.cdsub='dia';state.bell=false;buildApp();renderAll()}
+
 document.addEventListener('submit',e=>{
-  if(e.target.id!=='loginForm')return;
+  if(e.target.id!=='loginFormDemo')return;
   e.preventDefault();
   const u=slug($('#lgU').value.trim()),p=$('#lgP').value,a=accts().find(x=>x.u===u&&x.p===p),err=$('#lgErr');
   if(!a){err.textContent='Usuario o contraseña incorrectos.';err.hidden=false;$('#lgP').value='';$('#lgP').focus();return}
@@ -5362,11 +5532,1134 @@ document.addEventListener('click',e=>{
   switch(t.dataset.act){
     case 'fill':$('#lgU').value=t.dataset.u;$('#lgP').value=t.dataset.p;$('#lgErr').hidden=true;$('#lgP').focus();break;
     case 'togglePw':{const p=$('#lgP'),h=p.type==='password';p.type=h?'text':'password';t.textContent=h?'Ocultar':'Mostrar';break}
-    case 'logout':location.href='./';break;
+    case 'logout':renderLogin();break;
     case 'preview':state.ctab='inicio';state.cday=null;state.cdd=todayIdx();state.cdsub='dia';setMode('client');break;
     case 'exitPreview':setMode('coach');break;
   }
 });
+/* =====================================================================
+   VERSIÓN REAL · conexión con Supabase
+   - acceso con email y contraseña
+   - carga y guardado automático (solo lo que cambia, con fusión si
+     entrenador y cliente tocan a la vez)
+   - fotos y archivos en almacenamiento privado
+   ===================================================================== */
+const SB_URL='https://qadqhxrfhrrdgdwmfcxt.supabase.co';
+const SB_KEY='sb_publishable_cH6Y1fUdSQAOYSzINLVEGQ_Dqo47USj';
+const SBX=window.TB_SUPABASE||window.supabase;
+
+window.__tbSeed=()=>{const c=JSON.parse(JSON.stringify(state.clients.find(x=>x.id==='c1')));
+  const d0=new Date();d0.setHours(0,0,0,0);const mon=new Date(d0);mon.setDate(d0.getDate()-((d0.getDay()+6)%7)-14);
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),dm=d=>d.getDate()+'/'+(d.getMonth()+1);
+  const at=(w,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+w*7+i);return d};
+  const N=10,weeks=[];
+  for(let w=0;w<N;w++){const k=w===N-1,v=[30,32,35,30,38,40,35,42,30,20][w],l=[50,55,60,50,65,70,60,75,45,0][w];
+    weeks.push({dates:dm(at(w,0))+' – '+dm(at(w,6)),phase:w<3?'Base':w<6?'Desarrollo':w<8?'Específica':'Afinar',vol:(k?'≈ 15':(2*v+l)/6|0)+' km',key:k?'Semana de carrera':w%4===3?'Semana de descarga':'',
+      days:[null,{t:'suave',txt:'Rodaje '+v+' min Z2'},{t:'fuerza',txt:'Fuerza (tu rutina)'},
+        k?{t:'suave',txt:'20 min suave + 4 rectas'}:{t:'calidad',txt:w<3?'6×1 min Z4 / 2 min suave':w<6?'4×4 min a ritmo 10K / 2 min':'3×2 km a ritmo 10K / 3 min'},
+        null,k?{t:'descanso',txt:'Descanso'}:{t:'recup',txt:'30 min caminando o bici suave'},k?{t:'carrera',txt:'¡10K!'}:{t:'larga',txt:'Larga '+l+' min Z2'}]})}
+  const ti=(d0.getDay()+6)%7,T=weeks[2].days[ti];if(!T||['fuerza','descanso','recup'].indexOf(T.t)>=0)weeks[2].days[ti]={t:'suave',txt:'Rodaje 30 min Z2'};
+  const logs=[];
+  for(let w=0;w<3;w++)[1,3,6].forEach((i,j)=>{const d=at(w,i);if(d>=d0)return;const S=weeks[w].days[i];const min=j===0?30+w*2:j===1?45:50+w*5;
+    logs.push({id:'dr'+w+i,w,i,st:w===1&&i===3?'part':'done',date:iso(d),ts:d.getTime()+19*36e5,min,km:Math.round(min/6.1*100)/100,up:20+j*15,hr:138+j*9,hrmax:158+j*10,kcal:Math.round(min*9.5),rpe:j===1?7:4,pain:0,note:w===1&&i===3?'Me faltó la última serie, iba justa.':'',fresh:false})});
+  c.run={title:'Plan 10K',start:iso(mon),weeks,logs,
+    race:{name:'10K de ejemplo',place:'',date:iso(at(N-1,6)),dist:'10 km',mod:'Asfalto',est:'55 min',salida:'09:00',oblig:''},
+    zones:[['Z1','< 130','Muy suave','Calentar, soltar'],['Z2','130-145','Cómodo, puedes hablar','Rodajes y larga'],['Z3','146-158','Algo exigente','Tempo'],['Z4','159-170','Duro','Series'],['Z5','> 170','Máximo','Tramos cortos']],
+    rules:['Si un día no te encuentras bien, cambia la sesión por un rodaje suave o descansa.','Si aparece dolor que va a más, para y avísame.','La salida larga siempre en Z2: lento es bien.'],legend:[]};
+  return [{id:c.id,email:'demo@tacticalbiscuit.com',user_id:'demo-user',ver:1,data:c}]};
+const sb=SBX.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,storageKey:'tb-auth'}});
+const RB={base:{},app:{},role:null,user:null,saving:false,again:false,timer:null,poll:null,media:{},want:new Set(),hyd:null,needRender:false,lastPw:{},pwFor:'',err:0};
+const PX='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+/* ---------- utilidades de datos ---------- */
+const J=v=>JSON.stringify(v===undefined?null:v);
+function snap(o){const m={};Object.keys(o).forEach(k=>{if(o[k]!==undefined)m[k]=J(o[k])});return m}
+const isObj=x=>x&&typeof x==='object'&&!Array.isArray(x);
+const isIdArr=a=>Array.isArray(a)&&a.length>0&&a.every(x=>isObj(x)&&x.id!=null);
+function merge3(b,m,t){
+  const jb=J(b),jm=J(m),jt=J(t);
+  if(jm===jb)return t;
+  if(jt===jb||jm===jt)return m;
+  if([b,m,t].every(x=>x==null||Array.isArray(x))&&(isIdArr(b)||isIdArr(m)||isIdArr(t)))return mergeArr(b||[],m||[],t||[]);
+  if([b,m,t].every(isObj)){const r={};new Set(Object.keys(b).concat(Object.keys(m),Object.keys(t))).forEach(k=>{const v=merge3(b[k],m[k],t[k]);if(v!==undefined)r[k]=v});return r}
+  return m;
+}
+function mergeArr(b,m,t){
+  if(!m.every(x=>isObj(x)&&x.id!=null)||!t.every(x=>isObj(x)&&x.id!=null))return m;
+  const bi=new Map(b.filter(isObj).map(x=>[x.id,x])),mi=new Map(m.map(x=>[x.id,x]));
+  const r=t.filter(x=>!(bi.has(x.id)&&!mi.has(x.id))).map(x=>mi.has(x.id)&&bi.has(x.id)?merge3(bi.get(x.id),mi.get(x.id),x):x);
+  m.forEach((x,i)=>{
+    if(bi.has(x.id)||r.some(y=>y.id===x.id))return;
+    let at=0;for(let j=i-1;j>=0;j--){const p=r.findIndex(y=>y.id===m[j].id);if(p>=0){at=p+1;break}}
+    r.splice(at,0,x);
+  });
+  return r;
+}
+function fixClient(c){
+  ['log','photos','msgs','chk','weights'].forEach(k=>{if(!Array.isArray(c[k]))c[k]=[]});
+  if(!c.track)c.track={wday:0,pasos:8000};
+  if(!Array.isArray(c.eat))c.eat=Array.from({length:7},()=>[]);
+  try{rollWeek(c)}catch(e){console.warn(e)}
+  try{cwFix(c)}catch(e){console.warn(e)}
+  try{noFixDays(c)}catch(e){console.warn(e)}
+  if(!c.swaps)c.swaps={};
+  // registros que quedaron sueltos al subir un plan antes de este arreglo
+  try{(c.planHist||[]).forEach(h=>relink(c,h.data))}catch(e){console.warn(e)}
+  try{foodSync(c)}catch(e){console.warn(e)}
+  return c;
+}
+function adopt(r){
+  const c=Object.assign({},r.data||{});c.id=r.id;
+  RB.base[r.id]={ver:r.ver,email:r.email||'',uid:r.user_id||null,s:snap(c)};
+  return fixClient(c);
+}
+function integrate(c,r){
+  const B=RB.base[c.id],base={};
+  Object.keys(B.s).forEach(k=>{base[k]=JSON.parse(B.s[k])});
+  const th=Object.assign({},r.data||{});th.id=r.id;
+  new Set(Object.keys(base).concat(Object.keys(c),Object.keys(th))).forEach(k=>{
+    const v=merge3(base[k],c[k],th[k]);if(v===undefined)delete c[k];else c[k]=v;
+  });
+  B.ver=r.ver;B.s=snap(th);if(r.email!=null)B.email=r.email;if(r.user_id!==undefined)B.uid=r.user_id;
+  fixClient(c);
+}
+function diff(o,s){
+  const patch={},snaps={},rem=[];
+  Object.keys(o).forEach(k=>{if(o[k]===undefined)return;const j=J(o[k]);if(j!==s[k]){patch[k]=o[k];snaps[k]=j}});
+  Object.keys(s).forEach(k=>{if(!(k in o)||o[k]===undefined)rem.push(k)});
+  return{patch,snaps,rem,n:Object.keys(patch).length+rem.length};
+}
+
+/* ---------- fotos y archivos ---------- */
+function mURL(x){
+  if(typeof x!=='string'||x.indexOf('sb:')!==0)return x;
+  const m=RB.media[x];if(m&&m.exp>Date.now())return m.url;
+  RB.want.add(x.slice(3));
+  if(!RB.hyd)RB.hyd=setTimeout(hydrate,0);
+  return PX+'#'+x;
+}
+async function hydrate(){
+  RB.hyd=null;const paths=Array.from(RB.want);RB.want.clear();
+  if(paths.length){
+    try{
+      const{data,error}=await sb.storage.from('media').createSignedUrls(paths,3600);
+      if(!error&&data)data.forEach(d=>{if(d.signedUrl)RB.media['sb:'+d.path]={url:d.signedUrl,exp:Date.now()+50*60e3}});
+    }catch(e){console.warn(e)}
+  }
+  document.querySelectorAll('[src*="#sb:"]').forEach(el=>{
+    const k=el.getAttribute('src').split('#')[1],m=RB.media[k];if(m)el.setAttribute('src',m.url);
+  });
+}
+function walk(o,fn){
+  if(Array.isArray(o))o.forEach((v,i)=>{if(typeof v==='string')fn(o,i,v);else if(v&&typeof v==='object')walk(v,fn)});
+  else if(o&&typeof o==='object')Object.keys(o).forEach(k=>{const v=o[k];if(typeof v==='string')fn(o,k,v);else if(v&&typeof v==='object')walk(v,fn)});
+}
+function shrink(blob,max){
+  return new Promise(res=>{
+    if(!/^image\/(jpeg|png|webp|heic|heif)/.test(blob.type)){res(blob);return}
+    const img=new Image(),u=URL.createObjectURL(blob);
+    img.onload=()=>{
+      const k=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight)),cv=document.createElement('canvas');
+      cv.width=Math.round(img.naturalWidth*k);cv.height=Math.round(img.naturalHeight*k);
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);URL.revokeObjectURL(u);
+      cv.toBlob(b=>res(b&&b.size<blob.size?b:blob),'image/jpeg',.85);
+    };
+    img.onerror=()=>{URL.revokeObjectURL(u);res(blob)};
+    img.src=u;
+  });
+}
+async function uploadBlobs(obj,folder){
+  const jobs=[];walk(obj,(h,k,v)=>{if(v.indexOf('blob:')===0)jobs.push([h,k,v])});
+  for(const[h,k,u]of jobs){
+    try{
+      let b=await (await fetch(u)).blob();
+      b=await shrink(b,k==='avatar'?600:1800);
+      const ext=(b.type.split('/')[1]||'bin').replace('jpeg','jpg').replace(/[^a-z0-9]/g,'').slice(0,5)||'bin';
+      const path=folder+'/'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)+'.'+ext;
+      const{error}=await sb.storage.from('media').upload(path,b,{contentType:b.type||'application/octet-stream',upsert:false});
+      if(error)throw error;
+      RB.media['sb:'+path]={url:u,exp:Infinity};
+      if(h[k]===u)h[k]='sb:'+path;
+      if(state.mAtt===u)state.mAtt='';
+    }catch(e){console.warn('subida',e);setSync('err','No se ha podido subir un archivo');throw e}
+  }
+}
+async function removeFolder(folder){
+  try{const{data}=await sb.storage.from('media').list(folder,{limit:1000});if(data&&data.length)await sb.storage.from('media').remove(data.map(f=>folder+'/'+f.name))}catch(e){console.warn(e)}
+}
+
+/* ---------- indicador de guardado ---------- */
+function setSync(st,msg){
+  let el=document.getElementById('sync');
+  if(!el){el=document.createElement('div');el.id='sync';el.className='sync';el.setAttribute('role','status');document.body.appendChild(el)}
+  el.dataset.st=st;
+  el.textContent=msg||(st==='saving'?'Guardando…':st==='ok'?'Guardado ✓':st==='off'?'Sin conexión · se guardará al volver':'Error al guardar · reintentando');
+  clearTimeout(el._t);if(st==='ok')el._t=setTimeout(()=>{el.dataset.st='idle'},1800);
+}
+
+/* ---------- guardar ---------- */
+function markDirty(){if(!RB.role||(RB.role==='coach'&&state.mode==='client'))return;clearTimeout(RB.timer);RB.timer=setTimeout(saveNow,700)}
+async function saveNow(){
+  if(!RB.role)return;
+  if(RB.saving){RB.again=true;return}
+  RB.saving=true;let did=false;
+  try{
+    for(const c of state.clients.slice()){if(await saveClient(c))did=true}
+    if(RB.role==='coach'){if(await saveApp('tpls',state.tpls))did=true;if(await saveApp('lib',state.lib))did=true}
+    RB.err=0;if(did)setSync('ok');
+  }catch(e){
+    console.error(e);RB.err++;
+    setSync(navigator.onLine===false?'off':'err');
+    clearTimeout(RB.timer);RB.timer=setTimeout(saveNow,Math.min(30000,3000*RB.err));
+  }finally{RB.saving=false}
+  if(RB.again){RB.again=false;saveNow()}
+  else if(RB.needRender)safeRender(true);
+}
+async function saveClient(c){
+  const B=RB.base[c.id];if(!B||B.creating)return false;
+  autoVersion(c,B);
+  let d=diff(c,B.s);if(!d.n)return false;
+  if(RB.role==='client'&&Object.keys(d.patch).concat(d.rem).some(k=>['actTs','cSeen','planSeen','likeSeen'].indexOf(k)<0)){c.actTs=Date.now();d=diff(c,B.s)}
+  setSync('saving');
+  await uploadBlobs(c,c.id);
+  for(let i=0;i<5;i++){
+    d=diff(c,B.s);if(!d.n)return true;
+    const{data:v,error}=await sb.rpc('save_client',{p_id:c.id,p_patch:d.patch,p_remove:d.rem,p_ver:B.ver});
+    if(error)throw error;
+    if(v!=null){B.ver=v;Object.assign(B.s,d.snaps);d.rem.forEach(k=>delete B.s[k]);return true}
+    const{data:r,error:e2}=await sb.from('clients').select('id,email,ver,data'+(RB.role==='coach'?',user_id':'')).eq('id',c.id).maybeSingle();
+    if(e2)throw e2;
+    if(!r){dropClient(c.id);return true}
+    integrate(c,r);RB.needRender=true;
+  }
+  throw new Error('No se ha podido guardar tras varios intentos');
+}
+async function saveApp(key,val){
+  if(val===undefined)return false;
+  const A=RB.app[key]||(RB.app[key]={ver:0,s:null}),j=J(val);
+  if(j===A.s)return false;
+  setSync('saving');
+  await uploadBlobs(val,'lib');
+  const j2=J(val);
+  if(!A.ver){
+    const{error}=await sb.from('app_state').insert({key,data:val,ver:1});
+    if(error&&error.code!=='23505')throw error;
+    if(!error){A.ver=1;A.s=j2;return true}
+  }
+  const{data,error}=await sb.from('app_state').update({data:val,ver:A.ver+1}).eq('key',key).eq('ver',A.ver).select('ver');
+  if(error)throw error;
+  if(data&&data.length){A.ver=data[0].ver;A.s=j2;return true}
+  const{data:r}=await sb.from('app_state').select('ver').eq('key',key).maybeSingle();
+  A.ver=r?r.ver:0;return saveApp(key,val);
+}
+function dropClient(id){
+  delete RB.base[id];state.clients=state.clients.filter(x=>x.id!==id);
+  if(state.sel===id)state.sel=state.clients.length?state.clients[0].id:'';
+}
+
+/* ---------- cargar y sincronizar ---------- */
+async function loadAll(){
+  const cols='id,email,ver,data'+(RB.role==='coach'?',user_id':'');
+  const{data,error}=await sb.from('clients').select(cols).order('id');
+  if(error)throw error;
+  RB.base={};state.clients=data.map(adopt);
+  const{data:ap,error:e2}=await sb.from('app_state').select('key,ver,data');
+  if(e2)throw e2;
+  const row=k=>(ap||[]).find(x=>x.key===k);
+  const t=row('tpls'),l=row('lib');
+  state.tpls=t&&Array.isArray(t.data)?t.data:[];
+  if(l&&Array.isArray(l.data))state.lib=JSON.parse(JSON.stringify(l.data));
+  syncLib();
+  RB.app={tpls:{ver:t?t.ver:0,s:t?J(t.data):J([])},lib:{ver:l?l.ver:0,s:l?J(l.data):null}};
+  if(RB.role!=='coach')RB.app.lib.s=J(state.lib);
+}
+async function poll(){
+  checkVersion();
+  if(!RB.role||RB.saving||document.hidden)return;
+  try{
+    const{data,error}=await sb.from('clients').select('id,ver');if(error)return;
+    const ids=data.filter(r=>!RB.base[r.id]||RB.base[r.id].ver!==r.ver).map(r=>r.id);
+    let touched=false;
+    if(ids.length){
+      const{data:rows,error:e2}=await sb.from('clients').select('id,email,ver,data'+(RB.role==='coach'?',user_id':'')).in('id',ids);
+      if(e2)return;
+      if(RB.saving)return;
+      rows.forEach(r=>{const c=state.clients.find(x=>x.id===r.id);if(c)integrate(c,r);else state.clients.push(adopt(r));touched=true});
+    }
+    state.clients.slice().forEach(c=>{const B=RB.base[c.id];if(B&&!B.creating&&!data.some(r=>r.id===c.id)){dropClient(c.id);touched=true}});
+    const{data:ap}=await sb.from('app_state').select('key,ver');
+    for(const a of ap||[]){
+      const A=RB.app[a.key];if(!A||A.ver===a.ver||!(a.key==='tpls'||a.key==='lib'))continue;
+      const local=a.key==='tpls'?state.tpls:state.lib;
+      if(RB.role==='coach'&&A.s!==J(local))continue;
+      const{data:r}=await sb.from('app_state').select('ver,data').eq('key',a.key).maybeSingle();
+      if(r){if(a.key==='tpls')state.tpls=r.data||[];else{state.lib=JSON.parse(JSON.stringify(r.data||state.lib));syncLib()}A.ver=r.ver;A.s=J(r.data);touched=true}
+    }
+    if(touched){
+      if(state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n))markDirty();
+      safeRender(true);
+    }
+  }catch(e){console.warn('sync',e)}
+}
+function busy(){
+  const a=document.activeElement;
+  if(a&&a.id==='mText')return false;
+  if(a&&a.closest&&a.closest('#app')&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;
+  const lb=$('#lb'),vm=$('#vm');
+  return(lb&&!lb.hidden)||(vm&&!vm.hidden)||!!state.printOpen||!!state.planFs||!!state.trFs;
+}
+function safeRender(fromSync){
+  if(busy()){RB.needRender=true;return}
+  RB.needRender=false;
+  const y=window.scrollY;
+  if(state.auth&&state.auth.role==='client'&&!cur()){renderLogin();return}
+  const a=document.activeElement,chat=a&&a.id==='mText',pos=chat?a.selectionStart:0;
+  renderAll();
+  if(fromSync)window.scrollTo(0,y);
+  if(chat){const t=$('#mText');if(t){t.focus();try{t.setSelectionRange(pos,pos)}catch(_){}}}
+}
+function startSync(){
+  stopSync();
+  RB.poll=setInterval(poll,15000);
+}
+function stopSync(){if(RB.poll)clearInterval(RB.poll);RB.poll=null}
+
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='mText')state.mDraft=e.target.value});
+['click','input','change','submit','keyup','drop'].forEach(ev=>document.addEventListener(ev,()=>setTimeout(markDirty,0)));
+document.addEventListener('focusout',()=>setTimeout(()=>{if(RB.needRender&&!busy())safeRender(true)},250));
+document.addEventListener('visibilitychange',()=>{if(!RB.role)return;if(document.hidden){clearTimeout(RB.timer);saveNow()}else poll()});
+window.addEventListener('online',()=>{if(RB.role){saveNow();poll()}});
+window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
+window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
+
+/* ---------- versión nueva disponible ---------- */
+const APP_VER='20261014233817';let verT=0;
+async function checkVersion(){
+  if(Date.now()-verT<4*60e3)return;verT=Date.now();
+  try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
+    if(j.v&&j.v!==APP_VER&&!document.getElementById('newver')){const b=document.createElement('div');b.id='newver';b.className='newver';b.innerHTML='<span>Hay una versión nueva de la app.</span><button type="button" class="btn sm primary" id="newverGo">Actualizar</button>';document.body.appendChild(b);
+      b.querySelector('#newverGo').onclick=async()=>{await flush();location.reload()}}}catch(_){}
+}
+
+/* ---------- acceso ---------- */
+function loginShell(inner){
+  syncChrome();
+  $('#app').innerHTML='<div class="login"><div class="lg-card"><div class="lg-top">'+EMBLEM+'<div><h1>Team Biscuit</h1><p>Tactical Biscuit Training</p></div></div>'+inner+'</div></div>';
+}
+async function flush(){clearTimeout(RB.timer);for(let i=0;i<60&&RB.saving;i++)await new Promise(r=>setTimeout(r,150));await saveNow();for(let i=0;i<60&&RB.saving;i++)await new Promise(r=>setTimeout(r,150))}
+function renderLogin(msg){location.href='./';return;
+  try{restStop()}catch(_){}
+  if(RB.role&&!RB.leaving){RB.leaving=true;renderLoading('Guardando…');flush().finally(()=>{RB.leaving=false;RB.role=null;RB.user=null;RB.base={};sb.auth.signOut().catch(()=>{});renderLogin(msg)});return}
+  stopSync();
+  state.auth=null;state.mode='coach';state.bell=false;state.clients=[];
+  loginShell('<form id="loginForm" class="lg-form" novalidate><h2>Accede a tu espacio</h2>'+
+   '<label class="cell"><span class="lbl show">Email</span><input id="lgU" class="in" type="email" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false"></label>'+
+   '<label class="cell"><span class="lbl show">Contraseña</span><div class="pw"><input id="lgP" class="in" type="password" autocomplete="current-password"><button type="button" class="linkbtn" data-act="togglePw">Mostrar</button></div></label>'+
+   '<p id="lgErr" class="lg-err" role="alert"'+(msg?'':' hidden')+'>'+esc(msg||'')+'</p><button type="submit" class="btn primary lg-btn">Entrar</button>'+
+   '<p class="muted lg-help"><button type="button" class="linkbtn" id="lgForgot">¿Has olvidado la contraseña?</button></p></form>'+
+   '<a class="lg-try" href="demo.html"><span><b>¿Aún no eres cliente?</b><span class="lgd-s">Descubre cómo es la app por dentro.</span></span>'+
+   '<span class="lgd-go">Ver demo<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>');
+  const f=$('#lgForgot');if(f)f.onclick=()=>renderForgot(($('#lgU')||{}).value||'');
+  setTimeout(()=>{const u=$('#lgU');if(u)u.focus()},0);
+}
+/* recuperar contraseña: enlace por email → pantalla para poner una nueva */
+const RECOVERY=/type=recovery/.test(location.hash);
+const RECOVERY_ERR=/error_description=/.test(location.hash)?decodeURIComponent((location.hash.match(/error_description=([^&]*)/)||[])[1]||'').replace(/\+/g,' '):'';
+function clearHash(){try{history.replaceState(null,'',location.pathname+location.search)}catch(_){}}
+function renderForgot(em){
+  loginShell('<form id="fgForm" class="lg-form" novalidate><h2>Recuperar contraseña</h2>'+
+   '<p class="muted">Escribe el email de tu cuenta y te enviaremos un enlace para crear una contraseña nueva.</p>'+
+   '<label class="cell"><span class="lbl show">Email</span><input id="fgU" class="in" type="email" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" value="'+esc(em)+'"></label>'+
+   '<p id="fgMsg" class="lg-err" role="alert" hidden></p><button type="submit" class="btn primary lg-btn">Enviar enlace</button>'+
+   '<p class="muted lg-help"><button type="button" class="linkbtn" id="fgBack">Volver a entrar</button></p></form>');
+  $('#fgBack').onclick=()=>renderLogin();
+  setTimeout(()=>{const u=$('#fgU');if(u)u.focus()},0);
+}
+function renderNewPw(msg){
+  loginShell('<form id="npForm" class="lg-form" novalidate><h2>Nueva contraseña</h2>'+
+   '<p class="muted">Elige una contraseña nueva de al menos 8 caracteres.</p>'+
+   '<label class="cell"><span class="lbl show">Nueva contraseña</span><input id="npA" class="in" type="password" autocomplete="new-password"></label>'+
+   '<label class="cell"><span class="lbl show">Repítela</span><input id="npB" class="in" type="password" autocomplete="new-password"></label>'+
+   '<p id="npMsg" class="lg-err" role="alert"'+(msg?'':' hidden')+'>'+esc(msg||'')+'</p><button type="submit" class="btn primary lg-btn">Guardar y entrar</button></form>');
+  setTimeout(()=>{const u=$('#npA');if(u)u.focus()},0);
+}
+function renderLoading(txt){
+  document.body.dataset.screen='login';
+  $('#app').innerHTML='<div class="login"><div class="lg-card lg-load"><div class="lg-top">'+EMBLEM+'<div><h1>Team Biscuit</h1><p>'+esc(txt||'Cargando tu espacio…')+'</p></div></div><div class="lg-spin" aria-hidden="true"></div></div></div>';
+}
+function renderRetry(session){
+  document.body.dataset.screen='login';
+  $('#app').innerHTML='<div class="login"><div class="lg-card lg-load"><div class="lg-top">'+EMBLEM+'<div><h1>Team Biscuit</h1><p>No hay conexión ahora mismo. Tu sesión sigue abierta.</p></div></div><div class="actions" style="justify-content:center;margin-top:14px"><button type="button" class="btn primary" id="lgRetry">Reintentar</button></div></div></div>';
+  const b=$('#lgRetry');if(b)b.onclick=()=>{sb.auth.getSession().then(({data})=>data&&data.session?startSession(data.session):renderLogin()).catch(()=>startSession(session))};
+  window.addEventListener('online',()=>{if(!RB.role)sb.auth.getSession().then(({data})=>{if(data&&data.session)startSession(data.session)})},{once:true});
+}
+async function startSession(session){
+  RB.user=session.user;
+  renderLoading();
+  try{
+    const{data:isC,error}=await sb.rpc('is_coach');if(error)throw error;
+    RB.role=isC?'coach':'client';
+    await loadAll();
+  }catch(e){console.error(e);RB.role=null;
+    const bad=e&&(e.status===401||/jwt|token|refresh/i.test(String(e.message||'')));
+    if(bad){await sb.auth.signOut().catch(()=>{});renderLogin('Tu sesión ha caducado. Vuelve a entrar.');return}
+    renderRetry(session);return}
+  if(RB.role==='client'&&!state.clients.length){RB.role=null;await sb.auth.signOut().catch(()=>{});renderLogin('Tu cuenta todavía no tiene un plan asignado. Habla con tu entrenador.');return}
+  state.bell=false;state.sent={};
+  if(RB.role==='client'){
+    const c=state.clients[0];
+    state.auth={role:'client',cid:c.id,name:c.name};state.view='clients';
+    state.sel=c.id;state.mode='client';state.ctab='inicio';state.vw=null;state.tw=0;state.cday=null;state.cdd=todayIdx();state.cdsub='dia';
+  }else{
+    state.auth={role:'coach',name:'Robert'};state.view='dash';state.mode='coach';
+    if(!cur())state.sel=state.clients.length?state.clients[0].id:'';
+  }
+  buildApp();renderAll();startSync();
+  
+  const n=RB.role==='coach'?notifItems().length:0;
+  if(n)toast('Tienes '+n+(n===1?' aviso nuevo':' avisos nuevos'));
+}
+document.addEventListener('submit',async e=>{
+  if(e.target.id==='fgForm'){
+    e.preventDefault();
+    const em=$('#fgU').value.trim().toLowerCase(),m=$('#fgMsg'),btn=e.target.querySelector('button[type=submit]');
+    if(!okEmail(em)){m.textContent='Escribe un email válido.';m.hidden=false;return}
+    btn.disabled=true;btn.textContent='Enviando…';
+    const{error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});
+    btn.disabled=false;btn.textContent='Enviar enlace';
+    if(error&&!/rate|seconds/i.test(error.message)){m.textContent=/fetch|network/i.test(error.message)?'Sin conexión. Inténtalo de nuevo.':'No se ha podido enviar. Inténtalo dentro de un rato.';m.hidden=false;return}
+    if(error){m.textContent='Ya se ha enviado un enlace hace poco. Espera un minuto y vuelve a intentarlo.';m.hidden=false;return}
+    m.classList.add('ok');m.textContent='Listo. Si ese email tiene cuenta, te llegará un enlace en unos minutos. Revisa también la carpeta de spam.';m.hidden=false;
+    return;
+  }
+  if(e.target.id==='npForm'){
+    e.preventDefault();
+    const a=$('#npA').value,b=$('#npB').value,m=$('#npMsg'),btn=e.target.querySelector('button[type=submit]');
+    if(a.length<8){m.textContent='La contraseña debe tener al menos 8 caracteres.';m.hidden=false;return}
+    if(a!==b){m.textContent='Las dos contraseñas no coinciden.';m.hidden=false;return}
+    btn.disabled=true;btn.textContent='Guardando…';
+    const{error}=await sb.auth.updateUser({password:a});
+    btn.disabled=false;btn.textContent='Guardar y entrar';
+    if(error){m.textContent=/same|different/i.test(error.message)?'Usa una contraseña distinta de la anterior.':'No se ha podido guardar. Vuelve a pedir el enlace.';m.hidden=false;return}
+    clearHash();
+    const{data}=await sb.auth.getSession();
+    if(data&&data.session){toast('Contraseña cambiada ✓');startSession(data.session)}else renderLogin('Contraseña cambiada. Ya puedes entrar.');
+    return;
+  }
+  if(e.target.id!=='loginForm')return;
+  e.preventDefault();
+  const em=$('#lgU').value.trim().toLowerCase(),pw=$('#lgP').value,err=$('#lgErr'),btn=e.target.querySelector('button[type=submit]');
+  if(!em||!pw){err.textContent='Escribe tu email y tu contraseña.';err.hidden=false;return}
+  btn.disabled=true;btn.textContent='Entrando…';
+  const{data,error}=await sb.auth.signInWithPassword({email:em,password:pw});
+  btn.disabled=false;btn.textContent='Entrar';
+  if(error){err.textContent=/fetch|network/i.test(error.message)?'Sin conexión. Inténtalo de nuevo.':'Email o contraseña incorrectos.';err.hidden=false;$('#lgP').value='';$('#lgP').focus();return}
+  startSession(data.session);
+});
+sb.auth.onAuthStateChange((ev)=>{if(ev==='PASSWORD_RECOVERY'&&!RB.role){renderNewPw();return}if(ev==='SIGNED_OUT'&&RB.role&&!RB.leaving){setTimeout(()=>{sb.auth.getSession().then(({data})=>{if(data&&data.session)return;if(RB.role){flush().catch(()=>{});RB.role=null;renderLogin('Tu sesión ha caducado. Vuelve a entrar.')}})},800)}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&RB.role){sb.auth.getSession().catch(()=>{})}});
+
+/* ---------- alta y acceso de clientes (entrenador) ---------- */
+const genPw=()=>{const w=['Biscuit','Fuerza','Tactical','Proteina','Sentadilla','Valencia','Constancia'];const a=new Uint32Array(2);crypto.getRandomValues(a);return w[a[0]%w.length]+'-'+String(1000+a[1]%9000)};
+const okEmail=s=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
+function newCheck(){
+  const em=($('#nEm')&&$('#nEm').value.trim().toLowerCase())||'',pw=($('#nPw')&&$('#nPw').value)||'';
+  if(!okEmail(em)){toast('Escribe un email válido para el cliente');$('#nEm').focus();return false}
+  if(pw.length<8){toast('La contraseña debe tener al menos 8 caracteres');$('#nPw').focus();return false}
+  if(Object.values(RB.base).some(b=>(b.email||'').toLowerCase()===em)){toast('Ya hay un cliente con ese email');$('#nEm').focus();return false}
+  RB.pending={em,pw};return true;
+}
+async function newClient(c){
+  const p=RB.pending;RB.pending=null;if(!p)return;
+  if(RB.imp){const d=RB.imp.data;Object.keys(d).forEach(k=>{if(k!=='id')c[k]=JSON.parse(JSON.stringify(d[k]))});c.name=$('#nn')&&$('#nn').value.trim()||c.name;RB.imp=null;try{foodSync(c)}catch(e){};const l=$('#nImpT');if(l)l.textContent='';['#ntD','#ntT'].forEach(x=>{const e=$(x);if(e&&e.closest('label'))e.closest('label').hidden=false});fixClient(c);renderAll()}
+  RB.base[c.id]={ver:0,email:p.em,uid:null,s:{},creating:true};
+  setSync('saving','Creando cliente…');
+  try{
+    const{error}=await sb.from('clients').insert({id:c.id,email:p.em,data:c,ver:1});
+    if(error)throw error;
+    RB.base[c.id]={ver:1,email:p.em,uid:null,s:snap(c)};
+    await createAccount(c.id,p.em,p.pw);
+    setSync('ok','Cliente creado ✓');
+  }catch(e){
+    console.error(e);delete RB.base[c.id];dropClient(c.id);renderAll();
+    setSync('err','No se ha podido crear el cliente');toast('No se ha podido crear el cliente: '+(e.message||'error'));
+  }
+  safeRender();
+}
+async function createAccount(cid,em,pw){
+  const tmp=SBX.createClient(SB_URL,SB_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false,storageKey:'tb-tmp'}});
+  const{data,error}=await tmp.auth.signUp({email:em,password:pw});
+  if(error){toast('Cliente creado, pero falta su acceso: '+error.message);return false}
+  const B=RB.base[cid];if(B&&data&&data.user)B.uid=data.user.id;
+  RB.lastPw[cid]=pw;if(state.sel===cid){state.tab='datos'}return true;
+}
+function welcomeMsg(c,pw){
+  const B=RB.base[c.id]||{};
+  return '¡Hola '+first(c.name)+'! Ya tienes tu acceso a Team Biscuit 💪\n\nEntra aquí: '+location.origin+location.pathname.replace(/index\.html$/,'')+'\nEmail: '+(B.email||'')+'\nContraseña: '+pw+'\n\nConsejo: guárdala en la pantalla de inicio del móvil (en el navegador, «Añadir a pantalla de inicio») y la tendrás como una app.';
+}
+function accessCard(c){
+  if(RB.role!=='coach')return '';
+  const B=RB.base[c.id]||{},has=!!B.uid,pw=RB.lastPw[c.id];
+  return '<section class="card acc-card"><h2>Acceso del cliente</h2>'+
+   '<ul class="acc-l"><li><span>Email</span><b>'+esc(B.email||'—')+'</b></li><li><span>Estado</span><b class="'+(has?'ok':'warn')+'">'+(has?'Cuenta activa':'Sin cuenta de acceso')+'</b></li></ul>'+
+   (pw?'<div class="acc-new"><p><b>Envíale estos datos</b> (solo se muestran ahora):</p><pre>'+esc(welcomeMsg(c,pw))+'</pre><div class="actions"><button type="button" class="btn primary sm" data-act="accCopy">Copiar mensaje</button>'+(navigator.share?'<button type="button" class="btn sm" data-act="accShare">Enviar…</button>':'')+'<button type="button" class="btn sm" data-act="accHide">Ya lo he enviado</button></div></div>':'')+
+   (RB.pwFor===c.id?'<div class="acc-pw"><label class="cell"><span class="lbl show">'+(has?'Nueva contraseña':'Contraseña')+'</span><input id="accPw" class="in" value="'+esc(genPw())+'" autocomplete="off"></label><div class="actions"><button type="button" class="btn primary sm" data-act="accSave">'+(has?'Guardar contraseña':'Crear acceso')+'</button><button type="button" class="btn sm" data-act="accCancel">Cancelar</button></div></div>'
+    :'<div class="actions"><button type="button" class="btn sm" data-act="accOpen">'+(has?'Restablecer contraseña':'Crear acceso')+'</button></div>')+
+   '</section>';
+}
+async function accSave(c){
+  const pw=($('#accPw')&&$('#accPw').value.trim())||'';const B=RB.base[c.id]||{};
+  if(pw.length<8){toast('Mínimo 8 caracteres');return}
+  if(B.uid){
+    const{error}=await sb.rpc('coach_set_password',{p_client:c.id,p_pass:pw});
+    if(error){toast(error.message);return}
+    RB.lastPw[c.id]=pw;
+  }else if(!(await createAccount(c.id,B.email,pw)))return;
+  RB.pwFor='';renderMain();toast('Contraseña guardada');
+}
+async function delClient(id){
+  try{const{error}=await sb.rpc('coach_delete_client',{p_client:id});if(error)throw error;await removeFolder(id);delete RB.base[id]}
+  catch(e){console.error(e);toast('No se ha podido eliminar en el servidor');poll()}
+}
+/* ---------- eliminar cliente: perfil completo en Word + cuenta atrás ---------- */
+const PF_L={name:'Nombre',goal:'Objetivo',phase:'Fase',review:'Revisión',date:'Fecha',type:'Tipo',other:'Otra',min:'Minutos',km:'Km',hr:'FC media',hrmax:'FC máx.',rpe:'Esfuerzo (RPE)',pain:'Dolor',painZ:'Zona de dolor',note:'Nota',notes:'Notas',st:'Estado',ts:'Fecha',w:'Semana',i:'Sesión',sets:'Series',reps:'Reps',kg:'Kg',rest:'Descanso (s)',tempo:'Tempo',tech:'Técnica',rir:'RIR',focus:'Enfoque',dur:'Duración',place:'Lugar',warm:'Calentamiento',phaseN:'Fase',vol:'Volumen',int:'Intensidad',text:'Texto',kind:'Tipo',from:'De',label:'Etiqueta',ex:'Ejercicio',day:'Día',eq:'Material',pr:'Récord',edited:'Corregido',img:'Captura'};
+const pfLab=k=>PF_L[k]||String(k).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/^./,x=>x.toUpperCase());
+const pfSkip=k=>k==='id'||k==='fresh';
+function pfVal(v){
+  if(v==null||v==='')return '';
+  if(typeof v==='boolean')return v?'Sí':'No';
+  if(typeof v==='number')return v>1e12&&v<4e12?cDate(v):fmtN(v);
+  if(typeof v==='string')return v.indexOf('sb:')===0||v.indexOf('blob:')===0?'(archivo guardado en la app)':v;
+  if(Array.isArray(v))return v.map(pfVal).filter(Boolean).join(Array.isArray(v[0])?' · ':', ');
+  return Object.keys(v).filter(k=>!pfSkip(k)).map(k=>{const x=pfVal(v[k]);return x?pfLab(k)+': '+x:''}).filter(Boolean).join(' · ');
+}
+/* cualquier dato sin sección propia: así no se queda nada fuera */
+function pfGen(B,title,v,lv){
+  if(v==null||v===''||(typeof v==='object'&&!pfVal(v)))return;
+  if(typeof v!=='object'){B.push(['kv',[[title,pfVal(v)]]]);return}
+  B.push(['h',lv,title]);
+  if(Array.isArray(v)){
+    if(v.every(x=>x&&typeof x==='object'&&!Array.isArray(x))){
+      const ks=[];v.forEach(x=>Object.keys(x).forEach(k=>{if(!pfSkip(k)&&ks.indexOf(k)<0)ks.push(k)}));
+      B.push(['t',ks.map(pfLab),v.map(x=>ks.map(k=>pfVal(x[k])))]);
+    }else B.push(['p',pfVal(v)]);
+    return;
+  }
+  const kv=[],sub=[];
+  Object.keys(v).forEach(k=>{if(pfSkip(k))return;const x=v[k];if(x&&typeof x==='object'&&!(Array.isArray(x)&&x.every(y=>y==null||typeof y!=='object')))sub.push(k);else kv.push([pfLab(k),pfVal(x)])});
+  if(kv.length)B.push(['kv',kv]);
+  sub.forEach(k=>pfGen(B,pfLab(k),v[k],Math.min(3,lv+1)));
+}
+function pfDiet(B,d,lv){
+  if(!d)return;
+  B.push(['kv',[['Edad',d.edad],['Altura (cm)',d.altura],['Nivel de actividad',d.nivel],['Duración',d.dur],['Inicio',d.inicio],['Días de entreno',(d.trainDays||[]).map((x,i)=>x?DAYS[i]:'').filter(Boolean).join(', ')],['Agua (l/día)',d.water],['Peso objetivo (kg)',d.goalW],['Metabolismo basal (kcal)',d.bmr],['Gasto total (kcal)',d.tdee],['Notas',d.notes]].map(r=>[r[0],pfVal(r[1])])]);
+  [['train','Día de entrenamiento'],['rest','Día de descanso']].forEach(([t,n])=>{const T=d.types&&d.types[t];if(!T)return;
+    B.push(['h',lv,n+(T.kcal?' · '+Math.round(T.kcal)+' kcal':'')+(T.p?' · '+Math.round(T.p)+' g proteína':'')]);
+    (T.meals||[]).forEach(m=>{const it=m.items||[],k=it.reduce((a,i)=>a+kc(i),0);
+      B.push(['p',(m.time?m.time+' · ':'')+m.name+' ('+Math.round(k)+' kcal)'+(m.note?'\n'+m.note:'')]);
+      B.push(['t',['Alimento','Gramos','Proteína','Hidratos','Grasas','Kcal','Alternativa'],it.map(i=>[i.food,pfVal(i.g),pfVal(i.p),pfVal(i.c),pfVal(i.f),Math.round(kc(i)),pfVal(i.alt)])])});
+  });
+  if((d.supps||[]).length){B.push(['h',lv,'Suplementación']);B.push(['t',['Suplemento','Dosis','Cuándo','Observaciones'],d.supps.map(x=>[x.name,x.dose,x.when,x.obs])])}
+  const rest={};Object.keys(d).forEach(k=>{if(['edad','altura','nivel','dur','inicio','trainDays','water','goalW','bmr','tdee','notes','types','supps'].indexOf(k)<0)rest[k]=d[k]});
+  if(Object.keys(rest).length)pfGen(B,'Otros datos de la dieta',rest,lv);
+}
+function pfTrain(B,t,run,lv){
+  if(t){
+    const M=t.meso||{};
+    B.push(['kv',[['Mesociclo',M.n],['Nivel',M.level],['Inicio',M.start]].map(r=>[r[0],pfVal(r[1])])]);
+    if((M.weeks||[]).length)B.push(['t',['Semana','Fase','RIR','Volumen','Intensidad','Notas'],M.weeks.map((w,i)=>[i+1,w.phase,pfVal(w.rir),w.vol,w.int,w.notes])]);
+    (t.days||[]).forEach(d=>{
+      B.push(['h',lv,d.name+(d.focus?' · '+d.focus:'')]);
+      B.push(['kv',[['Día de la semana',d.wd>=0&&d.wd<7?DAYS[d.wd]:''],['Duración (min)',d.dur],['Lugar',d.place],['Calentamiento',d.warm],['Nota',d.note]].map(r=>[r[0],pfVal(r[1])])]);
+      const ks=[];(d.exs||[]).forEach(x=>Object.keys(x).forEach(k=>{if(!pfSkip(k)&&ks.indexOf(k)<0)ks.push(k)}));
+      if(ks.length)B.push(['t',ks.map(pfLab),d.exs.map(x=>ks.map(k=>pfVal(x[k])))]);
+      const o={};Object.keys(d).forEach(k=>{if(['id','name','focus','wd','dur','place','warm','note','exs'].indexOf(k)<0)o[k]=d[k]});if(Object.keys(o).length)pfGen(B,'Más datos de '+d.name,o,3);
+    });
+    const o={};Object.keys(t).forEach(k=>{if(k!=='meso'&&k!=='days')o[k]=t[k]});if(Object.keys(o).length)pfGen(B,'Otros datos del entrenamiento',o,lv);
+  }
+  if(run){const r=Object.assign({},run);delete r.logs;pfGen(B,'Plan de carrera',r,lv)}
+}
+async function pfPhoto(x){
+  const b=await (await fetch(await fileURL(x))).blob(),im=await createImageBitmap(b),k=Math.min(1,1400/Math.max(im.width,im.height));
+  const cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
+  const j=await new Promise(r=>cv.toBlob(r,'image/jpeg',.85));return new Uint8Array(await j.arrayBuffer());
+}
+async function perfilDoc(c){
+  const B=[],imgs=[],base=RB.base[c.id]||{},done=['id','name','goal','phase','review','revDate','track','consent','int','comp','chk','weights','adh','hab','eat','eatWk','diet','training','run','log','acts','msgs','planHist','planSince','planEd','photos'];
+  B.push(['h',1,'Datos generales']);
+  B.push(['kv',[['Nombre',c.name],['Objetivo',c.goal],['Fase',c.phase],['Revisión',c.review],['Próxima revisión',c.revDate],['Email de acceso',base.email],['Cuenta de acceso',base.uid?'Activa':'Sin cuenta'],['Pasos objetivo al día',c.track&&c.track.pasos],['Consentimiento de fotos',c.consent?(c.consent.ts?'Aceptado el '+cDate(c.consent.ts):'Aceptado'):'No aceptado']].map(r=>[r[0],pfVal(r[1])])]);
+  if(c.int){const I=c.int,used={};let kv=[];const fl=()=>{if(kv.length)B.push(['kv',kv]);kv=[]};
+    B.push(['pb']);B.push(['h',1,'Ficha inicial (entrevista)']);
+    INT.forEach(R=>{const a=R[0];
+      if(a==='sec'){fl();B.push(['h',2,R[1]+'. '+R[2]])}
+      else if(a==='secI'){fl();B.push(['h',2,'Valoración del entrenador'])}
+      else if(a==='row')R[1].forEach(f=>{if(/^[!@]/.test(f[0]))return;used[f[0]]=1;kv.push([f[1],pfVal(I[f[0]])])});
+      else if(['opt','ta','multi','scale'].indexOf(a)>=0){used[R[1]]=1;kv.push([R[2],pfVal(I[R[1]])])}
+      else if(a==='parq'){fl();used.parq=1;B.push(['t',['Cuestionario de salud (PAR-Q)','Respuesta'],INT_PARQ.map((q,i)=>[q,{si:'Sí',no:'No'}[(I.parq||{})[i]]||pfVal((I.parq||{})[i])])])}
+      else if(a==='dia'){fl();used.dia=1;B.push(['t',['Toma','Hora','Qué come'],INT_TOMAS.map(t=>{const x=(I.dia||{})[t]||{};return [t,x.h||'',x.q||'']})])}
+      else if(a==='firmas'){used.firmaCli=used.firmaFecha=1;kv.push(['Firma del cliente',pfVal(I.firmaCli)],['Fecha de la firma',pfVal(I.firmaFecha)])}
+      else if(a==='steps'){fl();used.steps=1;B.push(['t',['Siguientes pasos','Estado'],INT_STEPS.map(s=>[s,(I.steps||[]).indexOf(s)>=0?'✓ Hecho':'Pendiente'])])}
+    });fl();
+    const o={};Object.keys(I).forEach(k=>{if(!used[k])o[k]=I[k]});if(Object.keys(o).length)pfGen(B,'Otros datos de la ficha',o,2);
+  }
+  if(c.comp){const C=JSON.parse(JSON.stringify(c.comp)),cl=Object.assign({},c,{comp:C});
+    B.push(['pb']);B.push(['h',1,'Revisiones · composición corporal']);
+    B.push(['kv',[['Fecha de nacimiento',C.nac],['Sexo',C.sexo],['Altura (cm)',C.altura],['Notas',C.notas]].map(r=>[r[0],pfVal(r[1])])]);
+    const idx=(C.revs||[]).map((r,i)=>i).filter(i=>C.revs[i].fecha||Object.keys(C.revs[i].v||{}).length);
+    for(let s=0;s<idx.length;s+=6){const part=idx.slice(s,s+6);
+      B.push(['t',['Parámetro'].concat(part.map(i=>C.revs[i].fecha?isoD(pIso(C.revs[i].fecha)).split('-').reverse().join('/'):'Sin fecha')),
+        CC_ROWS.map(R=>R[0]==='h'?[R[1]].concat(part.map(()=>'')):[R[1]].concat(part.map(i=>{let v;try{v=R[2]==='calc'?ccVal(cl,i,R[0]):C.revs[i].v[R[0]]}catch(_){v=null}return v==null||v===''||(typeof v==='number'&&!isFinite(v))?'':pfVal(typeof v==='number'?Math.round(v*100)/100:v)})))]);
+    }
+  }
+  B.push(['pb']);B.push(['h',1,'Seguimiento']);
+  if((c.chk||[]).length){B.push(['h',2,'Pesajes y check-ins']);
+    B.push(['t',['Fecha','Semana','Peso (kg)','Ánimo'].concat(CK.map(k=>k[1])).concat(['Dieta','Incidencias','Comentario']),c.chk.slice().sort((a,b)=>a.ts-b.ts).map(x=>[cDate(x.ts),pfVal(x.week),pfVal(x.peso),x.animo?MOODS[x.animo-1][0]+' '+MOODS[x.animo-1][1]:''].concat(CK.map(k=>pfVal(x[k[0]]))).concat([pfVal(x.die),pfVal(x.cond),pfVal(x.comm)]))]);
+    const ex={};c.chk.forEach(x=>Object.keys(x).forEach(k=>{if(['id','ts','week','peso','animo','die','cond','comm','fresh'].concat(CK.map(q=>q[0])).indexOf(k)<0)ex[k]=1}));
+    if(Object.keys(ex).length)pfGen(B,'Otros datos de los check-ins',c.chk.map(x=>{const o={ts:x.ts};Object.keys(ex).forEach(k=>{o[k]=x[k]});return o}),2);
+  }
+  if((c.weights||[]).length)B.push(['kv',[['Pesos registrados (en orden)',c.weights.map(fmtN).join(' · ')]]]);
+  {const H=Object.assign({},c.hab||{});if(c.eatWk&&c.adh)H[c.eatWk]=Object.assign({},H[c.eatWk],{adh:c.adh,eat:c.eat});
+    const rows=[];Object.keys(H).sort((a,b)=>pIso(a)-pIso(b)).forEach(wk=>{const A=H[wk].adh||[],E=H[wk].eat||[],m0=pIso(wk);
+      for(let i=0;i<7;i++){const a=A[i]||{},e=E[i]||[];if(!Object.keys(a).some(k=>a[k])&&!e.length)continue;const d=new Date(m0.getTime());d.setDate(d.getDate()+i);
+        rows.push([DAYS[i]+' '+cDate(d.getTime())].concat(ADH.map(x=>a[x[0]]?'✓':'')).concat([e.length?e.length+' comidas marcadas':'']))}});
+    if(rows.length){B.push(['h',2,'Adherencia (hábitos diarios)']);B.push(['t',['Día'].concat(ADH.map(x=>x[1])).concat(['Comidas']),rows])}}
+  B.push(['pb']);B.push(['h',1,'Plan nutricional actual']);pfDiet(B,c.diet,2);
+  B.push(['pb']);B.push(['h',1,'Entrenamiento actual']);pfTrain(B,c.training,c.run,2);
+  if((c.log||[]).length){B.push(['pb']);B.push(['h',1,'Registro de entrenos']);
+    B.push(['t',['Fecha','Día','Ejercicio','Series','RIR','Nota','Otros'],c.log.slice().sort((a,b)=>a.ts-b.ts).map(l=>[cDate(l.ts),l.day||'',l.ex||'',(l.sets||[]).map(s=>setTxt(s,l.u)).join(' · '),pfVal(l.rir),l.note||'',[l.eq?'Material: '+l.eq:'',l.pr?'🏆 Récord':'',l.edited?'Corregido':''].filter(Boolean).join(' · ')])]);
+  }
+  if(c.run&&(c.run.logs||[]).length)pfGen(B,'Registro de carrera',c.run.logs.map(l=>Object.assign({date:typeof rLogDate==='function'?rLogDate(c,l):''},l,{st:(RUN_ST[l.st]||[])[1]||l.st})),1);
+  if((c.acts||[]).length)pfGen(B,'Otras actividades',c.acts,1);
+  if((c.msgs||[]).length){B.push(['pb']);B.push(['h',1,'Mensajes']);
+    B.push(['t',['Fecha','De','Tipo','Mensaje'],c.msgs.slice().sort((a,b)=>a.ts-b.ts).map(m=>[cDate(m.ts)+' '+new Date(m.ts).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}),m.from==='client'?first(c.name):'Entrenador',m.kind||'',(m.text||'')+(m.att||m.img?' (adjunto)':'')])])}
+  ['diet','training'].forEach(k=>{const L=histOf(c,k);if(!L.length)return;
+    B.push(['pb']);B.push(['h',1,'Historial · '+(k==='diet'?'Dieta':'Entrenamiento')]);
+    L.forEach(h=>{B.push(['h',2,histWhen(h)+(h.label?' · '+h.label:'')]);B.push(['p',histSum(h.data,k)+(h.fname?'\nArchivo original: '+h.fname:'')]);if(k==='diet')pfDiet(B,h.data.diet,3);else pfTrain(B,h.data.training,h.data.run,3)})});
+  if((c.photos||[]).length){B.push(['pb']);B.push(['h',1,'Fotos de progreso']);
+    for(const p of c.photos.slice().sort((a,b)=>a.ts-b.ts)){let d=null;try{d=await pfPhoto(p.url)}catch(e){console.warn(e)}imgs.push(d);B.push(['img',imgs.length-1,cDate(p.ts)+(p.label?' · '+p.label:'')])}}
+  const o={};Object.keys(c).forEach(k=>{if(done.indexOf(k)<0&&c[k]!=null)o[k]=c[k]});
+  if(Object.keys(o).length){B.push(['pb']);pfGen(B,'Otros datos',o,1)}
+  const py=await pyImporter();
+  if(!py._pf){py.FS.writeFile('/tb/tools/perfil.py',await (await fetch('vendor/importer/perfil.py',{cache:'no-cache'})).text());py._pf=1}
+  py.globals.set('PF_IN',JSON.stringify({title:'Perfil de '+c.name,sub:'Tactical Biscuit Training · generado el '+cDate(Date.now()),blocks:B}));
+  py.globals.set('PF_IMG',py.toPy(imgs.map(x=>x||null)));
+  const r=py.runPython('import json, perfil\nperfil.build(json.loads(PF_IN), [bytes(x) if x is not None else None for x in PF_IMG])');
+  const bytes=r.toJs?r.toJs():r;r.destroy&&r.destroy();
+  const a=document.createElement('a'),u=URL.createObjectURL(new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}));
+  a.href=u;a.download='PERFIL '+c.name+' '+isoD(Date.now())+'.docx';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+}
+function delAsk(c){
+  const box=impBox('<h3 style="margin:0 0 6px">¿Eliminar a '+esc(c.name)+'?</h3><p class="muted" style="margin:0 0 12px">Se borran todos sus datos, su cuenta de acceso y sus fotos. No se puede deshacer.</p>'+
+    '<div class="del-doc"><p style="margin:0 0 8px"><b>Antes de borrar</b>, guarda su perfil completo en Word (ficha, planes, historial, registros, revisiones, seguimiento, mensajes y fotos).</p><button type="button" class="btn" id="delDoc">📄 Descargar perfil completo (Word)</button></div>',
+    '<button type="button" class="btn" data-ib="ok">Cancelar</button><button type="button" class="btn danger" id="delGo" disabled>Eliminar (5)</button>');
+  box.setAttribute('aria-label','Eliminar cliente');
+  let n=5;const go=box.querySelector('#delGo'),tm=setInterval(()=>{if(!go.isConnected){clearInterval(tm);return}n--;if(n>0)go.textContent='Eliminar ('+n+')';else{clearInterval(tm);go.disabled=false;go.textContent='Eliminar definitivamente'}},1000);
+  box.querySelector('#delDoc').onclick=async e=>{const b=e.currentTarget;b.disabled=true;b.textContent='Preparando el documento…';
+    try{await perfilDoc(c);b.textContent='✓ Perfil descargado';toast('Perfil descargado ✓')}catch(err){console.error(err);b.disabled=false;b.textContent='📄 Descargar perfil completo (Word)';toast('No he podido preparar el documento')}};
+  go.onclick=()=>{if(go.disabled)return;box.remove();delClient(c.id);state.clients=state.clients.filter(x=>x.id!==c.id);state.sel=state.clients.length?state.clients[0].id:'';renderAll();toast('Cliente eliminado')};
+}
+async function pwSave(t){
+  const box=t.closest('.pf-pw'),ins=box?box.querySelectorAll('input'):[],cur0=ins[0]?ins[0].value:'',nw=ins[1]?ins[1].value:'';
+  if(nw.length<8){toast('La nueva contraseña debe tener al menos 8 caracteres');return}
+  t.disabled=true;
+  const{error:e1}=await sb.auth.signInWithPassword({email:RB.user.email,password:cur0});
+  if(e1){t.disabled=false;toast('La contraseña actual no es correcta');return}
+  const{error}=await sb.auth.updateUser({password:nw});
+  t.disabled=false;
+  if(error){toast('No se ha podido cambiar: '+error.message);return}
+  state.pwOpen=false;renderMain();toast('Contraseña cambiada ✓');
+}
+function download(name,text){
+  const a=document.createElement('a'),u=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Datos descargados');
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-act]');if(!t)return;const c=cur();
+  switch(t.dataset.act){
+    case 'accOpen':RB.pwFor=c.id;renderMain();setTimeout(()=>{const i=$('#accPw');if(i)i.select()},0);break;
+    case 'accCancel':RB.pwFor='';renderMain();break;
+    case 'accSave':accSave(c);break;
+    case 'accHide':delete RB.lastPw[c.id];renderMain();break;
+    case 'accCopy':{const m=welcomeMsg(c,RB.lastPw[c.id]||'');(navigator.clipboard?navigator.clipboard.writeText(m):Promise.reject()).then(()=>toast('Mensaje copiado'),()=>toast('Mantén pulsado el texto para copiarlo'));break}
+    case 'accShare':navigator.share({text:welcomeMsg(c,RB.lastPw[c.id]||'')}).catch(()=>{});break;
+    case 'nGen':{const i=$('#nPw');if(i)i.value=genPw();break}
+  }
+});
+/* swaps del cliente: se guardan dentro de su ficha */
+Object.defineProperty(state,'swaps',{configurable:true,get(){const c=cur();return c?(c.swaps||(c.swaps={})):{}},set(){}});
+
+/* ---------- importar planes (archivo generado desde Word/Excel) ---------- */
+function readImport(file){
+  return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(!j||j.tbImport!==1||!j.data)throw new Error('formato');res(j)}catch(e){rej(e)}};r.onerror=rej;r.readAsText(file)});
+}
+const PLAN_KEYS=['goal','phase','review','diet','training'];
+const HIST_N=20;
+const HK={diet:'dieta',training:'entrenamiento'};
+/* historial de planes: cada versión guarda la dieta o el entrenamiento (con la carrera), con sus fechas de uso */
+function kSnap(c,k){const o={};if(k==='diet')o.diet=c.diet;else{o.training=c.training;if(c.run){const r=Object.assign({},c.run);delete r.logs;o.run=r}}return JSON.parse(JSON.stringify(o))}
+const hasK=(h,k)=>!!(h.data&&h.data[k]);
+const histOf=(c,k)=>(c.planHist||[]).filter(h=>hasK(h,k));
+function histPush(c,k,label,o){
+  o=o||{};const s=o.data||kSnap(c,k);if(!s[k])return false;
+  const full=k==='diet'?Object.values(s.diet.types||{}).some(t=>(t.meals||[]).some(m=>(m.items||[]).length||m.dish)):(s.training.days||[]).some(d=>(d.exs||[]).length)||!!s.run;
+  const now=Date.now(),P=c.planSince||(c.planSince={});(c.planEd||(c.planEd={}))[k]=now;
+  const last=histOf(c,k)[0];
+  if((!full&&!o.force)||(last&&J(last.data[k])===J(s[k]))){P[k]=now;return false}
+  c.planHist=c.planHist||[];c.planHist.unshift({id:nid(),from:P[k]||null,ts:now,kind:k,label:label||'',data:s});P[k]=now;
+  const n={diet:0,training:0};c.planHist=c.planHist.filter(h=>{const ks=['diet','training'].filter(x=>hasK(h,x)),keep=ks.some(x=>n[x]<HIST_N);ks.forEach(x=>n[x]++);return keep});
+  return true;
+}
+/* cambios a mano: al primer cambio de cada día se guarda en el historial cómo estaba el plan */
+function autoVersion(c,B){
+  if(RB.role!=='coach'||state.mode==='client')return;
+  ['diet','training'].forEach(k=>{const old=B.s[k];if(old==null||old==='null'||J(c[k])===old)return;
+    const E=(c.planEd||{})[k];
+    if(E&&new Date(E).toDateString()===new Date().toDateString()){c.planEd[k]=Date.now();return}
+    const d={};d[k]=JSON.parse(old);if(k==='training'&&c.run){const r=Object.assign({},c.run);delete r.logs;d.run=JSON.parse(J(r))}
+    histPush(c,k,'cambios a mano',{data:d})});
+}
+/* al subir un plan nuevo cambian los ids de comidas, alimentos y ejercicios: lo ya registrado (series, comidas hechas, cambios) pasa a los nuevos */
+const rlN=x=>String(x||'').normalize('NFC').toLowerCase().replace(/\s+/g,' ').trim();
+function rlKeys(o){const K={};
+  Object.keys((o&&o.diet&&o.diet.types)||{}).forEach(t=>((o.diet.types[t]||{}).meals||[]).forEach((m,k)=>{if(!m)return;
+    if(m.id)K[m.id]=['m|'+t+'|'+rlN(m.name),'m|'+t+'|#'+k];
+    (m.items||[]).forEach((it,j)=>{if(it&&it.id)K[it.id]=['f|'+t+'|'+rlN(m.name)+'|'+rlN(it.food),'f|'+t+'|#'+k+'|#'+j]})}));
+  ((o&&o.training&&o.training.days)||[]).forEach(d=>(d.exs||[]).forEach(e=>{if(e&&e.id)K[e.id]=['e|'+rlN(d.name)+'|'+rlN(e.name),'e||'+rlN(e.name)]}));
+  return K}
+function relink(c,old){
+  const cur=rlKeys(c),by={};Object.keys(cur).forEach(id=>cur[id].forEach(k=>{if(!(k in by))by[k]=id}));
+  const ol=rlKeys(old),M={};Object.keys(ol).forEach(id=>{if(cur[id])return;const n=ol[id].map(k=>by[k]).find(Boolean);if(n)M[id]=n});
+  if(!Object.keys(M).length)return 0;let n=0;const mp=id=>{if(M[id]){n++;return M[id]}return id};
+  (c.log||[]).forEach(l=>{if(l&&l.exId&&M[l.exId])l.exId=mp(l.exId)});
+  const eatFix=a=>Array.isArray(a)&&a.forEach((x,i)=>{if(Array.isArray(x))a[i]=x.map(mp).filter((v,k,z)=>z.indexOf(v)===k)});
+  const altFix=a=>Array.isArray(a)&&a.forEach(o=>o&&Object.keys(o).forEach(k=>{if(M[k]){if(!(M[k] in o))o[M[k]]=o[k];delete o[k];n++}}));
+  eatFix(c.eat);Object.values(c.hab||{}).forEach(H=>{if(H){if(H.eat!==c.eat)eatFix(H.eat);altFix(H.alt)}});
+  if(c.swaps)Object.keys(c.swaps).forEach(k=>{const i=k.lastIndexOf('|'),id=k.slice(i+1);if(i>0&&M[id]){const nk=k.slice(0,i+1)+M[id];if(!(nk in c.swaps))c.swaps[nk]=c.swaps[k];delete c.swaps[k];n++}});
+  if(c.exVar)Object.keys(c.exVar).forEach(k=>{if(M[k]){if(!(M[k] in c.exVar))c.exVar[M[k]]=c.exVar[k];delete c.exVar[k];n++}});
+  return n}
+function applyPlan(c,d,label){
+  const old0={diet:c.diet,training:c.training};
+  if(d.diet!==undefined)histPush(c,'diet',label);
+  if(d.training!==undefined||d.run!==undefined)histPush(c,'training',label);
+  const touch=['diet','training','run'].filter(k=>d[k]!==undefined);
+  PLAN_KEYS.forEach(k=>{if(d[k]!==undefined)c[k]=JSON.parse(JSON.stringify(d[k]))});
+  // próxima revisión: la fecha del Word pasa a revDate (la que usan los avisos); si no trae fecha, se queda la que había
+  if(d.revDate)setRev(c,d.revDate);else if(d.review!==undefined){const rv=revParse(d.review);if(rv)setRev(c,rv);else if(c.revDate)c.review=revDmy(c.revDate)}
+  if(d.run){const keep=c.run&&c.run.logs||[];c.run=JSON.parse(JSON.stringify(d.run));const ids=new Set(keep.map(l=>l.id));c.run.logs=keep.concat((d.run.logs||[]).filter(l=>!ids.has(l.id)))}
+  if(Array.isArray(d.log)){const ids=new Set((c.log||[]).map(l=>l.id));c.log=(c.log||[]).concat(d.log.filter(l=>!ids.has(l.id))).sort((a,b)=>b.ts-a.ts)}
+  // composición: el Excel manda; se añaden las fechas nuevas y se actualizan las que ya estaban
+  if(d.comp){if(!c.comp||!Array.isArray(c.comp.revs))c.comp=JSON.parse(JSON.stringify(d.comp));else{
+    const M={};c.comp.revs.filter(r=>r.fecha).forEach(r=>{M[r.fecha]=r});(d.comp.revs||[]).forEach(r=>{if(r.fecha)M[r.fecha]={fecha:r.fecha,v:Object.assign({},(M[r.fecha]||{}).v||{},r.v)}});
+    c.comp.revs=Object.keys(M).sort().map(k=>M[k]);['altura','nac','sexo'].forEach(k=>{if(d.comp[k])c.comp[k]=d.comp[k]})}}
+  if(d.int&&!(c.int&&Object.keys(c.int).length>6))c.int=d.int;
+  if(Array.isArray(d.weights)&&!(c.weights||[]).length)c.weights=d.weights;
+  if(Array.isArray(d.chk)&&!(c.chk||[]).length)c.chk=d.chk;
+  // igual que al cargar (fixClient): así el primer cambio a mano no deja en el historial una copia idéntica
+  if(d.training!==undefined)try{noFixDays(c)}catch(e){console.warn(e)}
+  if(touch.length)c.planUpd={ts:Date.now(),what:touch};
+  try{relink(c,old0)}catch(e){console.warn(e)}
+  try{foodSync(c)}catch(e){console.warn(e)}
+}
+const hDate=(ts,m)=>new Date(ts).toLocaleDateString('es-ES',{day:'numeric',month:m||'short',year:'numeric'});
+const hTime=ts=>new Date(ts).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+function histSum(o,k){const b=[];
+  if(k==='diet'){const t=o.diet&&o.diet.types;if(t&&t.train)b.push('Entreno '+Math.round(t.train.kcal||0)+' kcal');if(t&&t.rest)b.push('descanso '+Math.round(t.rest.kcal||0)+' kcal')}
+  else{if(o.training&&o.training.days)b.push(o.training.days.filter(d=>d.exs&&d.exs.length).length+' días de entreno');if(o.run&&o.run.weeks)b.push('carrera '+o.run.weeks.length+' sem.')}
+  return b.join(' · ')}
+function histStart(h){const o=h.data||{},iso=(o.diet&&o.diet.inicio)||(o.training&&o.training.meso&&o.training.meso.start)||'';
+  if(h.from)return h.from;const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(iso);if(!m)return null;const t=new Date(+m[1],m[2]-1,+m[3]).getTime();return t<h.ts?t:null}
+function histWhen(h){
+  const f=histStart(h);
+  if(!f)return 'Usado hasta el '+hDate(h.ts);
+  if(new Date(f).toDateString()===new Date(h.ts).toDateString())return 'Usado solo el '+hDate(h.ts);
+  return 'Del '+hDate(f)+' al '+hDate(h.ts);
+}
+function histWhy(h){const l=h.label||'';
+  if(h.added)return 'añadido desde tu archivo';
+  return l==='cambios a mano'?'después lo cambiaste a mano':l==='versión recuperada'?'después volviste a un plan anterior':h.manual?'copia guardada a mano':l?'después subiste '+(/^plantilla/.test(l)?'la ':'')+l:''}
+const histCur=(c,k)=>({id:'cur',ts:Date.now(),data:kSnap(c,k)});
+const histGet=(c,k,id)=>id==='cur'?histCur(c,k):(c.planHist||[]).find(x=>x.id===id);
+/* tarjeta única del plan en Editar plan (solo el entrenador): descargar en tus plantillas, subir y el historial */
+function planCard(c){
+  if(RB.role!=='coach')return '';
+  return '<div class="card tpl-bar plan-bar"><div><b>Plan de '+esc(first(c.name))+'</b><span class="muted">Descarga el plan en tu plantilla, cámbialo y súbelo: se aplica todo de una vez. El plan que tenía queda en el historial.</span></div>'+
+   '<div class="tpl-a"><button type="button" class="btn sm" data-ph="dl" data-k="diet" data-id="cur">⬇ Dieta (Word)</button><button type="button" class="btn sm" data-ph="dl" data-k="training" data-id="cur">⬇ Entreno (Excel)</button>'+
+   '<label class="btn sm primary">⬆ Subir plan nuevo<input id="upImp" class="sr-file" type="file" accept=".docx,.xlsx,.xlsm,.json,application/json" multiple></label>'+
+   '<button type="button" class="btn sm" data-ph="open">Historial</button></div></div>';
+}
+function histList0(c,k){const cur=J(c[k]);return histOf(c,k).filter(h=>J(h.data[k])!==cur)}
+/* historial conjunto: dieta y entrenamiento en una sola lista, del más reciente al más antiguo */
+const HTAG={diet:'Dieta',training:'Entreno'};
+function histList(c){
+  const since=k=>(c.planSince||{})[k]||(c.planUpd&&c.planUpd.ts);
+  const btn=(a,k,id,t,cl)=>'<button type="button" class="btn sm'+(cl?' '+cl:'')+'" data-ph="'+a+'" data-k="'+k+'" data-id="'+id+'">'+t+'</button>';
+  const sec=k=>{const H=histList0(c,k);return '<h4 class="ph-h"><i class="ph-tag ph-'+k+'">'+HTAG[k]+'</i> '+(k==='diet'?'Dieta · tus Word':'Entrenamiento · tus Excel')+'</h4><ul class="ph-l" data-phsec="'+k+'">'+
+    '<li class="ph-i now"><div><b>Plan actual'+(since(k)?' · desde el '+esc(hDate(since(k))):'')+'</b><span>'+esc(histSum(kSnap(c,k),k))+'</span></div><div class="ph-a">'+btn('ver',k,'cur','Ver')+btn('dl',k,'cur','Descargar')+'</div></li>'+
+    (H.length?H.map(h=>'<li class="ph-i"><div><b>'+esc(histWhen(h))+'</b><span>'+esc([histSum(h.data,k),histWhy(h)].filter(Boolean).join(' · '))+'</span></div><div class="ph-a">'+btn('ver',k,h.id,'Ver')+btn('dl',k,h.id,'Descargar')+btn('rec',k,h.id,'Volver a este plan')+btn('del',k,h.id,'Eliminar','danger-l')+'</div></li>').join(''):'<li class="muted" style="padding:6px 2px">Todavía no hay planes anteriores.</li>')+'</ul>'};
+  return '<h3 style="margin:0 0 6px">Historial de planes · '+esc(first(c.name))+'</h3><p class="muted" style="margin:0 0 10px">Cada vez que cambias el plan (a mano o subiendo tu Word/Excel), el que tenía queda aquí con sus fechas. Solo lo ves tú.</p>'+
+    sec('diet')+sec('training')+
+    '<div class="actions" style="margin:14px 0 0"><label class="btn sm">Añadir un plan anterior (Word / Excel)<input class="sr-file" type="file" data-phadd="1" accept=".docx,.xlsx,.xlsm" multiple></label></div>';
+}
+/* entrenamiento con el diseño de tu Excel (Resumen + una hoja por día) */
+function trainSheet(c,o){
+  const T=o.training||{},M=T.meso||{},days=(T.days||[]).filter(d=>d.exs&&d.exs.length),WDN=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  const st=/^\d{4}-\d\d-\d\d$/.test(M.start||'')?new Date(M.start+'T12:00:00'):null,dm=d=>String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
+  const add=(d,n)=>new Date(d.getTime()+n*864e5);
+  const head=(t,sub)=>'<div class="xs-h"><b>'+t+'</b><img src="'+PS_LOGO+'" alt=""></div><div class="xs-hs">Tactical Biscuit Training'+(sub?' · '+sub:'')+'</div>';
+  const sec=(t,cl)=>'<div class="xs-sec'+(cl?' '+cl:'')+'">'+t+'</div>';
+  const kv=(l,v)=>'<tr><th>'+l+'</th><td>'+esc(v==null?'':String(v))+'</td></tr>';
+  const W=(M.weeks&&M.weeks.length?M.weeks:T.onlyWeek!=null?[]:[{phase:'Adaptación',rir:3},{phase:'Progresión',rir:2},{phase:'Intensificación',rir:1},{phase:'Descarga',rir:4}]).slice(0,4);
+  let h='<article class="xsheet">'+head('PLAN DE ENTRENAMIENTO · MESOCICLO','Bloque de 4 semanas')+sec('DATOS DEL CLIENTE')+
+   '<div class="xs-2"><table class="xs-kv">'+kv('Cliente',c.name)+kv('Objetivo',c.goal)+kv('Nivel',M.level||'')+kv('Fecha de inicio',st?st.toLocaleDateString('es-ES'):'')+kv('Días / semana',days.length)+kv('Mesociclo nº',M.n||1)+'</table>'+
+   '<div class="xs-side"><span>Entrenador</span><b>Robert</b>'+(st?'<span>Fin del mesociclo</span><b>'+add(st,27).toLocaleDateString('es-ES')+'</b>':'')+'</div></div>'+
+   (W.length?sec('PLANIFICACIÓN DE LAS 4 SEMANAS')+'<div class="xs-x"><table class="xs-t"><thead><tr><th>Semana</th><th>Fechas</th><th>Fase</th><th>RIR objetivo</th><th>Volumen</th><th>Intensidad</th><th>Notas</th></tr></thead><tbody>'+
+   W.map((w,i)=>'<tr><th>Semana '+(i+1)+'</th><td>'+(st?dm(add(st,7*i))+' – '+dm(add(st,7*i+6)):'')+'</td><td class="b">'+esc(w.phase||'')+'</td><td class="b"><b>'+esc(w.rir!=null?String(w.rir):'')+'</b></td><td class="b">'+esc(w.vol||'')+'</td><td class="b">'+esc(w.int||'')+'</td><td>'+esc(w.notes||'')+'</td></tr>').join('')+'</tbody></table></div>':'')+
+   sec('ESTRUCTURA SEMANAL')+'<div class="xs-x"><table class="xs-t"><thead><tr><th>Sesión</th><th>Día de la semana</th><th>Enfoque / grupos musculares</th><th>Duración (min)</th><th>Material / lugar</th></tr></thead><tbody>'+
+   days.map(d=>'<tr><th>'+esc(d.name)+'</th><td class="b">'+(d.wd>=0&&d.wd<7?WDN[d.wd]:'')+'</td><td class="b l">'+esc(d.focus||'')+'</td><td class="b">'+esc(d.dur||'')+'</td><td class="b l">'+esc(d.place||'')+'</td></tr>').join('')+'</tbody></table></div>';
+  days.forEach(d=>{
+    const ex=d.exs;
+    h+='<div class="xs-day">'+head('PLAN DE ENTRENAMIENTO · '+esc(d.name).toUpperCase(),esc(c.name)+(d.focus?' · '+esc(d.focus):''))+sec('EJERCICIOS DEL DÍA')+
+     '<div class="xs-x"><table class="xs-t"><thead><tr><th>Nº</th><th>Ejercicio</th><th>Grupo</th><th>Tempo</th><th>Descanso</th><th>Indicaciones técnicas</th></tr></thead><tbody>'+
+     ex.map((e,i)=>'<tr><th>'+(i+1)+'</th><td class="b l"><b>'+esc(e.name)+'</b></td><td class="b">'+esc(e.group||'')+'</td><td class="b">'+esc(e.tempo||'')+'</td><td class="b">'+esc(e.rest||'')+'</td><td class="b l">'+esc(e.tech||'')+'</td></tr>').join('')+'</tbody></table></div>'+
+     (d.warm?sec('🔥 CALENTAMIENTO PREVIO','or')+'<div class="xs-txt">'+d.warm.split(/\s*·\s*/).map(esc).join('<br>')+'</div>':'')+
+     (T.onlyWeek!=null?[T.onlyWeek]:[0,1,2,3]).filter(wi=>T.onlyWeek!=null||W[wi]).map(wi=>{const w=W[wi]||{},dn=ex.some(e=>e.done);return sec('SEMANA '+(wi+1)+(w.phase?'  ·  '+esc(String(w.phase)).toUpperCase():'')+(w.rir!=null&&w.rir!==''?'  ·  RIR objetivo '+esc(String(w.rir)):''))+
+      '<div class="xs-x"><table class="xs-t"><thead><tr><th>Nº</th><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Kg obj.</th>'+(T.onlyWeek!=null?'':'<th>RIR obj.</th>')+(dn?'<th class="xs-y">Series ✍</th><th class="xs-y">Reps ✍</th><th class="xs-y">Kg ✍</th><th class="xs-y">RIR ✍</th>':'')+'</tr></thead><tbody>'+
+      ex.map((e,i)=>{const P=(e.wk||{})[wi]||{};const kg=P.kg!=null&&P.kg!==''?P.kg:e.kg,D=e.done||{};return '<tr><th>'+(i+1)+'</th><td class="l">'+esc(e.name)+'</td><td class="b">'+esc(String(P.sets||e.sets||''))+'</td><td class="b">'+esc(String(e.reps||''))+'</td><td class="b">'+esc(kg==null?'':String(kg))+'</td>'+(T.onlyWeek!=null?'':'<td class="b">'+esc(w.rir!=null?String(w.rir):'')+'</td>')+(dn?['sets','reps','kg','rir'].map(x=>'<td class="xs-y">'+esc(D[x]||'')+'</td>').join(''):'')+'</tr>'}).join('')+'</tbody></table></div>'}).join('')+
+     (d.note?sec('NOTAS')+'<div class="xs-txt">'+esc(d.note).replace(/\n/g,'<br>')+'</div>':'')+'</div>';
+  });
+  return h+'</article>';
+}
+/* plan de carrera entero en una hoja (mismo diseño que el entrenamiento) */
+function runSheet(c,R){
+  R=R||c.run;if(!R)return '';const race=R.race||{},WK=R.weeks||[];
+  const head=(t,sub)=>'<div class="xs-h"><b>'+t+'</b><img src="'+PS_LOGO+'" alt=""></div><div class="xs-hs">Tactical Biscuit Training'+(sub?' · '+sub:'')+'</div>';
+  const sec=(t,cl)=>'<div class="xs-sec'+(cl?' '+cl:'')+'">'+t+'</div>';
+  const kv=(l,v)=>'<tr><th>'+l+'</th><td>'+esc(v==null?'':String(v))+'</td></tr>';
+  const tb=(hd,rows)=>'<div class="xs-x"><table class="xs-t"><thead><tr>'+hd.map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map((x,j)=>j===0?'<th>'+esc(x==null?'':String(x))+'</th>':'<td class="b l">'+esc(x==null?'':String(x))+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
+  const ds=d=>{const x=rParse(d);return x?x.toLocaleDateString('es-ES'):(d||'')};
+  let h='<article class="xsheet">'+head('PLAN DE CARRERA',esc(race.name||''))+sec('DATOS DEL CLIENTE')+
+   '<div class="xs-2"><table class="xs-kv">'+kv('Cliente',c.name)+kv('Carrera',race.name||'')+kv('Fecha de la carrera',ds(race.date))+kv('Inicio del plan',ds(R.start))+kv('Semanas',WK.length)+'</table><div class="xs-side"><span>Entrenador</span><b>Robert</b></div></div>';
+  WK.forEach((W,w)=>{
+    const rows=[0,1,2,3,4,5,6].map(i=>{const S=(W.days||[])[i];if(!S||!S.txt)return null;const d=rDate(Object.assign({},c,{run:R}),w,i);return[DAYS[i]+(d?' '+d.getDate()+'/'+(d.getMonth()+1):''),(RUN_T[S.t]||RUN_T.suave)[0],S.txt]}).filter(Boolean);
+    h+=sec('SEMANA '+(w+1)+(W.phase?'  ·  '+esc(String(W.phase)).toUpperCase():'')+(W.dates?'  ·  '+esc(W.dates):'')+(W.vol?'  ·  ≈ '+esc(W.vol):''))+
+     (rows.length?tb(['Día','Tipo','Sesión'],rows):'<div class="xs-txt">Semana sin carreras.</div>')+(W.key?'<div class="xs-txt"><b>Clave de la semana:</b> '+esc(W.key)+'</div>':'');
+  });
+  if(R.zones&&R.zones.length)h+=sec('TUS ZONAS DE PULSO')+tb(['Zona','Pulso (ppm)','Sensación','Para qué la usamos'],R.zones)+(R.zonesNote?'<div class="xs-txt">'+esc(R.zonesNote)+'</div>':'');
+  if(R.rules&&R.rules.length)h+=sec('REGLAS DEL PLAN')+'<div class="xs-txt">'+R.rules.map((r,i)=>(i+1)+'. '+esc(r)).join('<br>')+((R.legend||[]).length?'<br><br>'+R.legend.map(esc).join('<br>'):'')+'</div>';
+  const S=R.strat;
+  if(S&&(S.segs||[]).length){h+=sec('ESTRATEGIA DE CARRERA · TRAMO A TRAMO')+tb(['Km','Tramo','Desnivel','Pulso','Cómo','Cómo hacerlo','Tiempo','Acumulado'],S.segs)+(S.total?'<div class="xs-txt">'+esc(S.total)+'</div>':'');
+    if((S.food||[]).length)h+=sec('COMIDA Y BEBIDA DURANTE LA CARRERA')+tb(['Momento','Qué tomar','Notas'],S.food)+(S.foodNote?'<div class="xs-txt">'+esc(S.foodNote)+'</div>':'');
+    if((S.controls||[]).length)h+=sec('CONTROLES Y TU PASO ESTIMADO')+tb(['Km','Control','Horario','Tu paso','Qué hacer'],S.controls)+(S.controlsNote?'<div class="xs-txt">'+esc(S.controlsNote)+'</div>':'');
+    if((S.prev||[]).length)h+=sec('DÍAS PREVIOS Y MATERIAL')+tb(['Cuándo','Qué hacer'],S.prev)}
+  return h+'</article>';
+}
+function histFs(c,h,k){
+  const ib=$('#impbox');if(ib)ib.remove();let el=$('#histFs');if(el)el.remove();
+  const title=(k==='diet'?'Dieta':'Entrenamiento')+' · '+(h.id==='cur'?'plan actual':histWhen(h).replace(/^./,x=>x.toLowerCase()));
+  el=document.createElement('div');el.id='histFs';el.className='fsov';
+  el.innerHTML='<div class="fs-bar noprint"><b>'+esc(title)+'</b><span><button type="button" class="btn" data-ph="dl" data-k="'+k+'" data-id="'+h.id+'">Descargar</button> <button type="button" class="btn primary" data-ph="open" data-k="'+k+'">Cerrar</button></span></div>'+
+    (k==='diet'?planSheet(Object.assign({},c,{diet:h.data.diet}),['01','02','03','04','05','06','07','09']):trainSheet(c,h.data));
+  document.body.appendChild(el);el.scrollTop=0;
+}
+/* descargar en tus plantillas: dieta → tu Word, entrenamiento → tu Excel (tools/exporter.py en el navegador) */
+async function fileURL(x){
+  if(typeof x!=='string'||x.indexOf('sb:')!==0)return x;
+  const m=RB.media[x];if(m&&m.exp>Date.now())return m.url;
+  const{data,error}=await sb.storage.from('media').createSignedUrls([x.slice(3)],600);
+  if(error||!data||!data[0]||!data[0].signedUrl)throw error||new Error('sin enlace');
+  RB.media[x]={url:data[0].signedUrl,exp:Date.now()+9*60e3};return data[0].signedUrl;
+}
+async function histDownload(c,h,k){
+  if(h.file){
+    try{const b=await (await fetch(await fileURL(h.file))).blob();
+      const a=document.createElement('a'),u=URL.createObjectURL(b);a.href=u;a.download=h.fname||('plan '+c.name);document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('Descargado ✓')}
+    catch(e){console.error(e);toast('No he podido descargar el archivo')}
+    return;
+  }
+  toast('Preparando el archivo…');
+  try{
+    const py=await pyImporter();
+    if(!py._exp){
+      const base='vendor/importer/',get=async(u,b)=>{const r=await fetch(base+u,{cache:'no-cache'});if(!r.ok)throw new Error(u);return b?new Uint8Array(await r.arrayBuffer()):r.text()};
+      const [code,a,b]=await Promise.all([get('exporter.py'),get('plantillas/PLAN_NUTRICIONAL.docx',1),get('plantillas/ENTRENAMIENTO_CLIENTE.xlsx',1)]);
+      try{py.FS.mkdir('/tb/tools/plantillas')}catch(_){}
+      py.FS.writeFile('/tb/tools/exporter.py',code);py.FS.writeFile('/tb/tools/plantillas/PLAN_NUTRICIONAL.docx',a);py.FS.writeFile('/tb/tools/plantillas/ENTRENAMIENTO_CLIENTE.xlsx',b);
+      py.runPython('import exporter');py._exp=1;
+    }
+    const W=c.weights||[];
+    py.globals.set('EXP_IN',JSON.stringify({kind:k,name:c.name,goal:c.goal,review:c.review,weight:W.length?W[W.length-1]:0,data:h.data}));
+    const r=py.runPython('import json, exporter\n_b, _e, _w = exporter.export(json.loads(EXP_IN))\n(_b, _e, json.dumps(_w, ensure_ascii=False))');
+    const [bp,ext,wj]=r.toJs();r.destroy&&r.destroy();
+    const bytes=bp.toJs?bp.toJs():bp;
+    const name=(k==='diet'?'PLAN NUTRICIONAL':'ENTRENAMIENTO')+' '+c.name+' '+isoD(h.id==='cur'?Date.now():h.ts)+'.'+ext;
+    const blob=new Blob([bytes],{type:ext==='docx'?'application/vnd.openxmlformats-officedocument.wordprocessingml.document':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    const a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+    const w=JSON.parse(wj);toast(w.length?'Descargado · '+w[0]:'Descargado ✓');
+  }catch(e){console.error(e);toast('No he podido preparar el archivo')}
+}
+/* añadir planes antiguos (tus Word / Excel) al historial sin cambiar el plan actual */
+const isoTs=s=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(s||'');return m?new Date(+m[1],m[2]-1,+m[3],12).getTime():null};
+function histFixEnds(c,k){
+  const L=histOf(c,k).map(h=>({h,s:histStart(h)})).filter(x=>x.s).sort((a,b)=>a.s-b.s);
+  L.forEach((x,i)=>{if(!x.h.added)return;const nx=L.slice(i+1).find(y=>y.s>x.s);x.h.ts=nx?nx.s:Math.max(x.s,(c.planSince||{})[k]||Date.now())});
+  c.planHist.sort((a,b)=>b.ts-a.ts);
+}
+async function histAddFiles(c,files){
+  const got=[];
+  for(const f of files){
+    try{const r=await readPlanFiles([f]),d=(r.j&&r.j.data)||{},k=d.diet?'diet':d.training?'training':'';
+      if(!k){toast(f.name+': no es un plan nutricional ni un entrenamiento');continue}
+      const o={};o[k]=d[k];if(k==='training'&&d.run)o.run=d.run;
+      const fm=/(\d{4})-(\d\d)-(\d\d)/.exec(f.name),iso=fm?fm[0]:(k==='diet'?d.diet.inicio:(d.training.meso||{}).start)||'';
+      got.push({name:f.name,k,data:o,iso,rep:r.rep||[],file:f});
+    }catch(e){console.error(e);toast('No he podido leer '+f.name)}
+  }
+  if(!got.length)return;
+  const box=impBox('<h3 style="margin:0 0 6px">Añadir al historial</h3><p class="muted" style="margin:0 0 10px">Revisa la fecha en la que empezó cada plan. El plan actual de '+esc(first(c.name))+' no cambia.</p><ul class="ph-l">'+
+    got.map((g,i)=>'<li class="ph-i"><div><b><i class="ph-tag ph-'+g.k+'">'+HTAG[g.k]+'</i> '+esc(g.name)+'</b><span>'+esc(histSum(g.data,g.k))+'</span></div><label class="muted" style="font-size:13px">Empezó el <input type="date" class="in" data-phd="'+i+'" value="'+esc(g.iso)+'"></label></li>').join('')+'</ul>',
+    '<button type="button" class="btn" data-ph="open">Cancelar</button><button type="button" class="btn primary" data-ib="apply">Añadir al historial</button>');
+  box._apply=()=>{
+    got.forEach((g,i)=>{const inp=box.querySelector('[data-phd="'+i+'"]'),s=isoTs(inp&&inp.value)||Date.now();
+      c.planHist=c.planHist||[];c.planHist.push({id:nid(),from:s,ts:s,kind:g.k,label:'',added:true,fname:g.name,file:URL.createObjectURL(g.file),data:JSON.parse(JSON.stringify(g.data))})});
+    new Set(got.map(g=>g.k)).forEach(k=>histFixEnds(c,k));renderAll();markDirty();toast(got.length===1?'Plan añadido al historial ✓':got.length+' planes añadidos al historial ✓');
+    setTimeout(()=>impBox(histList(c),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>'),0);
+  };
+}
+document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset||!t.dataset.phadd||!t.files||!t.files.length)return;const c=cur();if(!c)return;const fl=Array.from(t.files);t.value='';histAddFiles(c,fl)});
+function histRecover(c,h,k){
+  const d={};
+  if(k==='diet'){d.diet=JSON.parse(JSON.stringify(h.data.diet));if(c.diet)['edad','altura','nivel','dur','inicio','trainDays'].forEach(x=>{if(c.diet[x]!==undefined)d.diet[x]=c.diet[x]})}
+  else{d.training=JSON.parse(JSON.stringify(h.data.training));if(d.training.meso)d.training.meso.start=isoD(Date.now());delete d.training.cw;delete d.training.cwUndo;if(h.data.run)d.run=h.data.run}
+  applyPlan(c,d,'versión recuperada');
+}
+function histDel(c,h,k){
+  if(hasK(h,'diet')&&hasK(h,'training')){delete h.data[k];if(k==='training')delete h.data.run}
+  else{c.planHist=(c.planHist||[]).filter(x=>x.id!==h.id);
+    if(typeof h.file==='string'&&h.file.indexOf('sb:')===0)sb.storage.from('media').remove([h.file.slice(3)]).catch(e=>console.warn(e))}
+}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ph]');if(!b)return;const c=cur();if(!c||RB.role!=='coach')return;const k=b.dataset.k,a=b.dataset.ph;
+  if(a==='open'){const f=$('#histFs');if(f)f.remove();impBox(histList(c),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>');return}
+  const h=histGet(c,k,b.dataset.id);if(!h)return;
+  if(a==='ver'){histFs(c,h,k);return}
+  if(a==='dl'){histDownload(c,h,k);return}
+  const back='<button type="button" class="btn" data-ph="open">Volver</button>',when=histWhen(h).replace(/^./,x=>x.toLowerCase());
+  if(a==='del'){
+    const box=impBox('<h3 style="margin:0 0 6px">¿Eliminar este plan del historial?</h3><p class="muted" style="margin:0">'+(k==='diet'?'Dieta':'Entrenamiento')+' '+esc(when)+'. No se puede deshacer. El plan actual no cambia.</p>',back+'<button type="button" class="btn danger-l" data-ib="apply">Eliminar</button>');
+    box._apply=()=>{histDel(c,h,k);renderAll();markDirty();toast('Eliminado del historial');setTimeout(()=>impBox(histList(c),'<button type="button" class="btn primary" data-ib="ok">Cerrar</button>'),0)};return}
+  const box=impBox('<h3 style="margin:0 0 6px">¿Volver a '+(k==='diet'?'esta dieta':'este entrenamiento')+'?</h3><p class="muted" style="margin:0">'+(k==='diet'?'La dieta que usó '+esc(first(c.name))+' '+esc(when)+' vuelve a ser su dieta. Su entrenamiento no cambia.':'El entrenamiento que usó '+esc(first(c.name))+' '+esc(when)+' vuelve a ser el suyo'+(h.data.run?' (con la carrera)':'')+', empezando hoy por la semana 1. Su dieta no cambia.')+' El plan actual no se pierde: pasa al historial con la fecha de hoy.</p>',back+'<button type="button" class="btn primary" data-ib="apply">Volver a este plan</button>');
+  box._apply=()=>{histRecover(c,h,k);renderAll();markDirty();toast((k==='diet'?'Dieta':'Entrenamiento')+' cambiado ✓')}});
+/* ---------- leer Word / Excel en el navegador (mismo importador que uso yo: tools/importer.py) ---------- */
+let PYO=null;
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('No se pudo cargar '+src));document.head.appendChild(s)})}
+function pyImporter(){
+  if(PYO)return PYO;
+  PYO=(async()=>{
+    const base=new URL('vendor/pyodide/',location.href).href;
+    if(!window.loadPyodide)await loadScript(base+'pyodide.js');
+    const py=await loadPyodide({indexURL:base});
+    await py.loadPackage(['lxml','typing-extensions',base+'et_xmlfile-2.0.0-py3-none-any.whl',base+'openpyxl-3.1.5-py2.py3-none-any.whl',base+'python_docx-1.2.0-py3-none-any.whl']);
+    const get=async u=>{const r=await fetch(u,{cache:'no-cache'});if(!r.ok)throw new Error(u);return r.text()};
+    const [code,foods]=await Promise.all([get('vendor/importer/importer.py'),get('vendor/importer/foods.json')]);
+    ['/tb','/tb/tools','/tb/src','/in'].forEach(d=>{try{py.FS.mkdir(d)}catch(_){}});
+    py.FS.writeFile('/tb/tools/importer.py',code);py.FS.writeFile('/tb/src/foods.json',foods);
+    py.runPython('import sys, warnings\nwarnings.filterwarnings("ignore")\nsys.path.insert(0, "/tb/tools")\nimport importer');
+    return py})();
+  PYO.catch(()=>{PYO=null});
+  return PYO;
+}
+const IMP_K={plan:'Plan nutricional',entreno:'Entrenamiento',carrera:'Plan de carrera',comp:'Composición corporal',ficha:'Ficha inicial'};
+async function officeImport(files){
+  const py=await pyImporter();
+  try{py.FS.readdir('/in').forEach(f=>{if(f!=='.'&&f!=='..')py.FS.unlink('/in/'+f)})}catch(_){}
+  const paths=[];
+  for(let i=0;i<files.length;i++){const f=files[i],ext=(f.name.match(/\.(docx|xlsx|xlsm)$/i)||[])[1];if(!ext)continue;const p='/in/'+i+'.'+ext.toLowerCase();py.FS.writeFile(p,new Uint8Array(await f.arrayBuffer()));paths.push([p,f.name])}
+  py.globals.set('_paths',py.toPy(paths));
+  const out=py.runPython(`
+import json, importer
+K, dup, names = {}, [], {}
+for p, n in _paths:
+    try: k = importer.classify(p)
+    except Exception as e: k = None
+    if not k: continue
+    if k in K: dup.append(n); continue
+    K[k] = p; names[k] = n
+try:
+    o, rep = importer.build(K.get('plan'), K.get('entreno'), K.get('carrera'), K.get('comp'), K.get('ficha'))
+    err = ''
+except Exception as e:
+    o, rep, err = None, [], '%s: %s' % (type(e).__name__, e)
+json.dumps({'j': o, 'rep': rep, 'kinds': names, 'dup': dup, 'err': err}, ensure_ascii=False)
+`);
+  return JSON.parse(out);
+}
+function impBox(html,actions){
+  let el=$('#impbox');if(el)el.remove();
+  el=document.createElement('div');el.id='impbox';el.className='impbox';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','Importar plan');
+  el.innerHTML='<div class="impbox-c">'+html+'<div class="actions" style="margin:14px 0 0;justify-content:flex-end">'+(actions==null?'<button type="button" class="btn primary" data-ib="ok">Entendido</button>':actions)+'</div></div>';
+  document.body.appendChild(el);return el;
+}
+function impSummary(r,forWho){
+  const k=Object.keys(r.kinds||{}).map(x=>'<li><b>'+IMP_K[x]+'</b> · '+esc(r.kinds[x])+'</li>').join('');
+  const d=r.j&&r.j.data||{},bits=[];
+  if(d.diet&&d.diet.types){const t=d.diet.types;if(t.train)bits.push('Día de entreno: '+Math.round(t.train.kcal)+' kcal');if(t.rest)bits.push('Día de descanso: '+Math.round(t.rest.kcal)+' kcal')}
+  if(d.training&&d.training.days)bits.push(d.training.days.length+' días de entrenamiento');
+  if(d.run&&d.run.weeks)bits.push('Carrera: '+d.run.weeks.length+' semanas');
+  return '<h3 style="margin:0 0 6px">'+(forWho?'Plan de '+esc(forWho):'Archivos leídos')+'</h3>'+
+    '<ul class="impbox-l">'+k+'</ul>'+(bits.length?'<p class="muted" style="margin:6px 0 0">'+bits.map(esc).join(' · ')+'</p>':'')+
+    ((r.dup||[]).length?'<p class="impbox-w">No he usado: '+r.dup.map(esc).join(', ')+' (ya había otro archivo del mismo tipo).</p>':'')+
+    ((r.rep||[]).length?'<p style="margin:12px 0 4px"><b>Avisos</b></p><ul class="impbox-w">'+r.rep.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<p class="impbox-ok">✓ Todo cuadra con la tabla de alimentos.</p>');
+}
+async function readPlanFiles(files){
+  const fl=Array.from(files);
+  if(fl.length===1&&/\.json$/i.test(fl[0].name))return {j:await readImport(fl[0]),rep:[],kinds:{},dup:[]};
+  if(!fl.some(f=>/\.(docx|xlsx|xlsm)$/i.test(f.name)))throw new Error('formato');
+  const w=impBox('<h3 style="margin:0 0 6px">Leyendo tus archivos…</h3><p class="muted" style="margin:0">La primera vez tarda un poco (unos segundos) porque se prepara el lector de Word y Excel.</p><div class="impbox-sp" aria-hidden="true"></div>','');
+  try{const r=await officeImport(fl);w.remove();if(r.err||!r.j)throw new Error(r.err||'vacío');if(!Object.keys(r.kinds).length)throw new Error('formato');return r}
+  catch(e){w.remove();throw e}
+}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ib]');if(!b)return;const box=$('#impbox');const k=b.dataset.ib;if(k==='apply'&&box&&box._apply)box._apply();if(box)box.remove()});
+document.addEventListener('change',async e=>{
+  const t=e.target;if(!t||!t.files||!t.files[0])return;
+  if(t.id==='nImp'){
+    const files=Array.from(t.files);t.value='';
+    try{const r=await readPlanFiles(files),j=r.j;RB.imp=j;const n=$('#nn');if(n&&!n.value)n.value=j.name||'';const g=$('#ng');if(g&&!g.value&&j.data.goal)g.value=j.data.goal;const l=$('#nImpT');if(l)l.textContent='✓ '+(j.name||'Plan')+' listo para importar';['#ntD','#ntT'].forEach(x=>{const e=$(x);if(e&&e.closest('label'))e.closest('label').hidden=true});
+      if(Object.keys(r.kinds).length)impBox(impSummary(r,j.name)+'<p class="muted" style="margin:10px 0 0">Completa el email y la contraseña y pulsa «Crear» para darlo de alta.</p>');}
+    catch(err){RB.imp=null;console.warn(err);impBox('<h3 style="margin:0 0 6px">No he podido leer los archivos</h3><p class="muted" style="margin:0">'+(String(err&&err.message||'')==='formato'?'Sube tus plantillas de Word (.docx) y Excel (.xlsx).':'Comprueba que son tus plantillas de siempre. Detalle: '+esc(String(err&&err.message||err)).slice(0,300))+'</p>')}
+  }else if(t.id==='upImp'){
+    const c=cur();const files=Array.from(t.files);t.value='';if(!c)return;
+    try{const r=await readPlanFiles(files),j=r.j;
+      const other=j.name&&first(j.name).toLowerCase()!==first(c.name).toLowerCase();
+      const go=()=>{applyPlan(c,j.data,Object.values(r.kinds||{}).join(', ')||'archivo de plan');renderAll();markDirty();const d=j.data||{};toast(d.diet||d.training||d.run?'Plan actualizado ✓ · '+first(c.name)+' verá el aviso al entrar':'Datos actualizados ✓')};
+      if(!Object.keys(r.kinds).length){if(other&&!confirm('El archivo es de «'+j.name+'» y estás en la ficha de «'+c.name+'». ¿Cargarlo igualmente?'))return;go();return}
+      const box=impBox(impSummary(r,c.name)+(other?'<p class="impbox-w">⚠ Los archivos son de «'+esc(j.name)+'» y estás en la ficha de «'+esc(c.name)+'».</p>':''),'<button type="button" class="btn" data-ib="no">Cancelar</button><button type="button" class="btn primary" data-ib="apply">Aplicar al plan de '+esc(first(c.name))+'</button>');
+      box._apply=go;
+    }catch(err){console.warn(err);impBox('<h3 style="margin:0 0 6px">No he podido leer los archivos</h3><p class="muted" style="margin:0">'+(String(err&&err.message||'')==='formato'?'Sube tus plantillas de Word (.docx) y Excel (.xlsx).':'Comprueba que son tus plantillas de siempre. Detalle: '+esc(String(err&&err.message||err)).slice(0,300))+'</p>')}
+  }
+});
+
+/* ---------- imágenes de ejercicios (free-exercise-db, dominio público) ---------- */
+const FEDB={"Press banca con barra": "Barbell_Bench_Press_-_Medium_Grip","Press inclinado con mancuernas": "Incline_Dumbbell_Press","Press banca con mancuernas": "Dumbbell_Bench_Press","Aperturas en polea (cruce)": "Cable_Crossover","Press en máquina": "Machine_Bench_Press","Fondos en paralelas": "Dips_-_Chest_Version","Flexiones": "Pushups","Dominadas": "Pullups","Jalón al pecho": "Wide-Grip_Lat_Pulldown","Remo con barra": "Bent_Over_Barbell_Row","Remo con mancuerna a una mano": "One-Arm_Dumbbell_Row","Remo en polea baja": "Seated_Cable_Rows","Remo en máquina / T": "T-Bar_Row_with_Handle","Pullover en polea": "Straight-Arm_Pulldown","Peso muerto convencional": "Barbell_Deadlift","Press militar con barra": "Standing_Military_Press","Press de hombro con mancuernas": "Seated_Dumbbell_Press","Elevaciones laterales": "Side_Lateral_Raise","Elevaciones laterales en polea": "Cable_Seated_Lateral_Raise","Pájaros / posterior en máquina": "Reverse_Machine_Flyes","Face pull": "Face_Pull","Curl con barra": "Barbell_Curl","Curl alterno con mancuernas": "Dumbbell_Alternate_Bicep_Curl","Curl martillo": "Hammer_Curls","Curl en banco Scott": "Preacher_Curl","Curl en polea": "Standing_Biceps_Cable_Curl","Extensión en polea con cuerda": "Triceps_Pushdown_-_Rope_Attachment","Press francés": "EZ-Bar_Skullcrusher","Extensión sobre la cabeza": "Cable_Rope_Overhead_Triceps_Extension","Press banca agarre cerrado": "Close-Grip_Barbell_Bench_Press","Fondos en banco": "Bench_Dips","Sentadilla trasera": "Barbell_Squat","Sentadilla goblet": "Goblet_Squat","Prensa de piernas": "Leg_Press","Sentadilla búlgara": "Split_Squat_with_Dumbbells","Zancadas": "Dumbbell_Lunges","Extensión de cuádriceps": "Leg_Extensions","Sentadilla hack": "Hack_Squat","Step-up al banco": "Dumbbell_Step_Ups","Peso muerto rumano": "Romanian_Deadlift","Curl femoral tumbado": "Lying_Leg_Curls","Curl femoral sentado": "Seated_Leg_Curl","Buenos días": "Good_Morning","Curl nórdico": "Natural_Glute_Ham_Raise","Hip thrust": "Barbell_Hip_Thrust","Puente de glúteo": "Butt_Lift_Bridge","Patada de glúteo en polea": "Glute_Kickback","Abducción de cadera": "Thigh_Abductor","Abducción de cadera de pie en máquina": "Abd_Pie_Maquina","Abducción de cadera de pie": "Side_Leg_Raises","Peso muerto sumo": "Sumo_Deadlift","Elevación de talones de pie": "Standing_Calf_Raises","Elevación de talones sentado": "Seated_Calf_Raise","Plancha frontal": "Plank","Plancha lateral": "Side_Bridge","Dead bug": "Dead_Bug","Pallof press": "Pallof_Press","Rueda abdominal": "Ab_Roller","Elevación de piernas colgado": "Hanging_Leg_Raise","Cinta inclinada caminando": "Walking_Treadmill","Bicicleta estática": "Bicycling_Stationary","Remo ergómetro": "Rowing_Stationary","Elíptica": "Elliptical_Trainer","Farmer walk": "Farmers_Walk","Kettlebell swing": "One-Arm_Kettlebell_Swings","Puente de glúteo unilateral": "Single_Leg_Glute_Bridge","Puente de glúteo unilateral (pies elevados)": "Single_Leg_Glute_Bridge","Puente de glúteo unilateral (pausa arriba)": "Single_Leg_Glute_Bridge","Press de hombro en máquina": "Machine_Shoulder_Military_Press","Isométrico banca (punto bajo)": "Iso_Banca_punto_bajo.jpg","Isométrico Spanish squat": "Iso_Spanish_squat.jpg","Isométrico curl Z": "Iso_Curl_Z.jpg","Isométrico gemelo": "Iso_Gemelo.jpg","Elevación de puntera (tibial)": "Tibial_Pared.jpg","Elevación de punteras (tibial)": "Tibial_Pared.jpg","Elevación de puntera en pared": "Tibial_Pared.jpg"};
+const fedbN=n=>String(n||'').normalize('NFC').toLowerCase().replace(/\s+/g,' ').trim();
+const FEDB_N={};Object.keys(FEDB).forEach(k=>{FEDB_N[fedbN(k)]=FEDB[k]});
+const fedbOf=n=>FEDB[n]||FEDB_N[fedbN(n)];
+const fedbPath=id=>/\.jpg$/.test(id)?'ex/'+id:'ex/'+id+'-0.jpg';
+state.lib.forEach(L=>{const id=fedbOf(L.name);if(id&&(!L.photo||L.photo.indexOf('data:')===0))L.photo=fedbPath(id)});
+const LIB_DEF=JSON.parse(JSON.stringify(state.lib));
+/* añade a la biblioteca guardada los ejercicios e imágenes nuevos de la app */
+function libGroupOf(n){return /tal[oó]n|talones|puntas|tibial|gemel|s[oó]leo|pantorr/i.test(n)?'Gemelo':/femoral|peso muerto|curl de pierna|isquio|n[oó]rdic/i.test(n)?'Isquios':/plancha|abdomin|crunch|core|pallof|dead bug|copenhague|equilibrio|rueda abdominal/i.test(n)?'Core':/gl[uú]te|hip thrust|abducc|puente|patada/i.test(n)?'Glúteo':/sentadilla|prensa|zancada|extensi[oó]n de cu[aá]d|b[uú]lgara|step-?up|wall sit/i.test(n)?'Cuádriceps':/press banca|aperturas|pecho|fondos|flexiones/i.test(n)?'Pecho':/remo|jal[oó]n|dominada|pull/i.test(n)?'Espalda':/hombro|militar|elevaci[oó]n(es)? (lateral|frontal)|face pull|press de hombro/i.test(n)?'Hombro':/b[ií]ceps|curl/i.test(n)?'Bíceps':/tr[ií]ceps|franc[eé]s/i.test(n)?'Tríceps':'Otros'}
+function syncLib(){
+  if(!Array.isArray(state.lib))return;
+  const names=new Set(state.lib.map(l=>String(l.name||'').toLowerCase()));
+  LIB_DEF.forEach(d=>{if(!names.has(d.name.toLowerCase()))state.lib.push(Object.assign({},d,{id:nid()}))});
+  // los ejercicios de los planes que aún no están en la biblioteca se añaden solos (para poder ponerles foto o vídeo)
+  if(RB.role==='coach')(state.clients||[]).forEach(c=>((c.training&&c.training.days)||[]).forEach(d=>(d.exs||[]).forEach(e=>{const n=String(e.name||'').trim();if(!n||names.has(n.toLowerCase()))return;names.add(n.toLowerCase());
+    const g=libGroupOf(n);
+    state.lib.push({id:nid(),group:g,name:n,mat:'',photo:'',video:'',link:''})})));
+  state.lib.forEach(L=>{if(!L.group||L.group==='Otros'){const g=libGroupOf(L.name||'');if(g!=='Otros')L.group=g}});
+  state.lib.forEach(L=>{const id=fedbOf(L.name);if(id&&(!L.photo||String(L.photo).indexOf('data:')===0||(/^ex\//.test(L.photo)&&L.photo!==fedbPath(id))))L.photo=fedbPath(id)});
+}
+setInterval(()=>{if(document.hidden)return;document.querySelectorAll('.exo-ph img,.exm-img,#lb img').forEach(i=>{const s=i.getAttribute('src')||'';if(/^ex\/[^/]+-[01]\.jpg$/.test(s))i.setAttribute('src',s.replace(/-([01])\.jpg$/,(m,d)=>'-'+(d==='0'?1:0)+'.jpg'))})},1400);
+
+function boot(){
+  renderLoading('Comprobando acceso…');
+  if(RECOVERY_ERR){clearHash();renderLogin('El enlace para cambiar la contraseña ha caducado o ya se usó. Pide uno nuevo.');return}
+  sb.auth.getSession().then(({data})=>{
+    if(RECOVERY){if(data&&data.session)renderNewPw();else{clearHash();renderLogin('El enlace para cambiar la contraseña ha caducado o ya se usó. Pide uno nuevo.')}return}
+    if(data&&data.session)startSession(data.session);else renderLogin()}).catch(()=>renderLogin());
+}
+
+/* ---------- imprimir en la app del iPhone (pantalla de inicio): window.print no funciona → PDF ---------- */
+const IOS_PWA=navigator.standalone===true||/[?&]pdftest=1/.test(location.search);
+let h2pP=null;
+function ldS(src){return new Promise((ok,ko)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>ko(new Error('load'));document.head.appendChild(s)})}
+function h2p(){return h2pP||(h2pP=ldS('vendor/html2canvas-pro.min.js').then(()=>ldS('vendor/html2pdf.min.js')).then(()=>window.html2pdf,e=>{h2pP=null;throw e}))}
+async function pdfSheet(html){
+  const ov=document.createElement('div');ov.className='pdfov';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');
+  ov.innerHTML='<div class="pdf-box"><div class="lg-spin"></div><p><b>Preparando el PDF…</b></p><p class="muted">Tarda unos segundos.</p></div>';document.body.appendChild(ov);
+  const box=document.createElement('div');box.id='pdfroot';box.innerHTML='<div class="pdfx">'+html+'</div>';document.body.appendChild(box);
+  const pcss=[];for(const sh of document.styleSheets){let rs;try{rs=sh.cssRules}catch(_){continue}for(const r of rs){if(r.media&&/print/.test(r.media.mediaText))for(const x of r.cssRules){if(x.selectorText&&x.selectorText.indexOf('#printroot')>=0)pcss.push(x.cssText.replace(/#printroot/g,'.pdfx'))}}}
+  const pst=document.createElement('style');pst.textContent=pcss.join('\n');document.head.appendChild(pst);
+  const root=document.documentElement,th=root.getAttribute('data-theme');root.setAttribute('data-theme','light');
+  const back=()=>{pst.remove();if(th==null)root.removeAttribute('data-theme');else root.setAttribute('data-theme',th)};
+  const close=()=>{ov.remove()};
+  try{
+    const lib=await h2p();
+    await new Promise(r=>setTimeout(r,60));
+    const t=(box.querySelector('h2')||{}).textContent||'Team Biscuit';
+    const name=(t.trim().replace(/[^\wÁÉÍÓÚÑÜáéíóúñü ·-]/g,'').slice(0,40)||'Team Biscuit')+'.pdf';
+    const blob=await lib().set({margin:[8,8,10,8],filename:name,image:{type:'jpeg',quality:.92},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css'],avoid:['tr','.ps-sec','.sh-box','.xg','.iv-row','.supp-i']}}).from(box.firstElementChild).outputPdf('blob');
+    box.remove();back();
+    const file=new File([blob],name,{type:'application/pdf'});
+    ov.innerHTML='<div class="pdf-box"><p class="pdf-ic" aria-hidden="true">📄</p><p><b>PDF listo</b></p><p class="muted">Ábrelo y desde el botón de compartir podrás imprimirlo, guardarlo en Archivos o enviarlo.</p><div class="actions"><button type="button" class="btn primary" id="pdfGo">Abrir PDF</button><button type="button" class="btn" id="pdfX">Cerrar</button></div></div>';
+    ov.querySelector('#pdfX').onclick=close;
+    ov.querySelector('#pdfGo').onclick=()=>{
+      if(navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title:name}).then(close,()=>{})}
+      else{const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;a.target='_blank';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000);close()}
+    };
+  }catch(e){
+    box.remove();back();
+    ov.innerHTML='<div class="pdf-box"><p><b>No se pudo preparar el PDF</b></p><p class="muted">Comprueba la conexión e inténtalo de nuevo.</p><div class="actions"><button type="button" class="btn" id="pdfX">Cerrar</button></div></div>';
+    ov.querySelector('#pdfX').onclick=close;
+  }
+}
+if(IOS_PWA){window.print=function(){const pr=document.getElementById('printroot'),html=pr?pr.innerHTML:'';window.dispatchEvent(new Event('afterprint'));if(html)pdfSheet(html)}}
+
+/* ---------- «Ver como cliente»: solo lectura para el entrenador ---------- */
+const PV=()=>RB.role==='coach'&&state.mode==='client';
+const PV_OK=new Set(['ctab','pfTog','cdsub','cddPick','cday','vw','exT','mxT','rnO','rnW','calOpen','calM','calD','tsub','pfO','showRut','zoomEx','playEx','rnZoom','planFs','planPrint','trFs','trPrint','tpsub','planPrintGo','printClose','psAll','shopPrint','intPrint','zoom','zoomMsg','closeLb','closeVm','goDiet','twNav','progEx','progAll','ccsub','bell','goto','view','tab','pick','preview','restGo','rtAdd','rtStop','calTop','calGo','strPick','wgMeal','pickDay','cmp','mKind','esub','wZoom','wRange','wZoomClose','wForm']);
+function pvBlock(e){toast('Vista de cliente: solo lectura. No se cambia nada.');e.preventDefault();e.stopImmediatePropagation()}
+document.addEventListener('click',e=>{
+  if(!PV())return;const m=$('#main');if(!m||!m.contains(e.target))return;
+  const t=e.target.closest('[data-act]');
+  if(t){if(!PV_OK.has(t.dataset.act))pvBlock(e);return}
+  if(e.target.closest('input,textarea,label,.whx,.wh'))pvBlock(e);
+},true);
+['keydown','beforeinput','paste'].forEach(ev=>document.addEventListener(ev,e=>{if(!PV())return;const m=$('#main');if(m&&m.contains(e.target)&&e.target.matches('input,textarea,[contenteditable],.wh')&&!(ev==='keydown'&&/^(Tab|Shift|Escape)$/.test(e.key)))pvBlock(e)},true));
+['change','input'].forEach(ev=>document.addEventListener(ev,e=>{if(PV()){const m=$('#main'),t=e.target;if(m&&m.contains(t)){e.stopImmediatePropagation();
+  if(t.tagName==='SELECT'){const o=Array.from(t.options).find(x=>x.defaultSelected)||t.options[0];if(o)t.value=o.value;if(ev==='change')toast('Vista de cliente: solo lectura. No se cambia nada.')}}}},true));
+new MutationObserver(()=>{document.body.classList.toggle('pv',PV())}).observe(document.documentElement,{attributes:true,attributeFilter:['data-screen'],subtree:true});
+
+/* versión visible al pie de la página */
+(function(){const v=APP_VER,f=v.length>=12?v.slice(6,8)+'/'+v.slice(4,6)+' '+v.slice(8,10)+':'+v.slice(10,12):v;const el=document.createElement('p');el.className='app-ver';el.textContent='Versión '+f;document.body.appendChild(el)})();
+
+/* ---------- guía para instalar la app en el móvil ---------- */
+let BIP=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();BIP=e});
+function installHint(force){
+  const sa=navigator.standalone===true||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches);
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),and=/android/i.test(navigator.userAgent);
+  if(sa||!(ios||and)||document.getElementById('inst'))return;
+  if(!force){try{const x=+localStorage.getItem('tbInstX')||0;if(Date.now()-x<14*864e5)return}catch(_){}}
+  const share='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Compartir" role="img" style="vertical-align:-3px"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
+  const el=document.createElement('div');el.id='inst';el.className='inst';el.setAttribute('role','dialog');el.setAttribute('aria-label','Instalar Team Biscuit');
+  el.innerHTML='<div class="inst-c"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>Ten Team Biscuit como una app</b>'+
+    (ios?'<ol><li>Abre esta página en <b>Safari</b>.</li><li>Pulsa '+share+' <b>Compartir</b> abajo.</li><li>Elige <b>«Añadir a pantalla de inicio»</b>.</li></ol>'
+        :'<p>'+(BIP?'Instálala con un toque y ábrela desde su icono.':'Abre el menú ⋮ de Chrome y elige <b>«Instalar aplicación»</b> o «Añadir a pantalla de inicio».')+'</p>')+
+    '<small>Se abre a pantalla completa y no tendrás que buscar el enlace.</small></div></div><div class="inst-a"><button type="button" class="btn" data-x>Ahora no</button>'+(BIP&&!ios?'<button type="button" class="btn primary" data-i>Instalar</button>':'')+'</div>';
+  document.body.appendChild(el);
+  const close=()=>{try{localStorage.setItem('tbInstX',String(Date.now()))}catch(_){}el.remove()};
+  el.querySelector('[data-x]').onclick=close;
+  const bi=el.querySelector('[data-i]');if(bi)bi.onclick=async()=>{try{BIP.prompt();await BIP.userChoice}catch(_){}BIP=null;close()};
+}
+
+/* ---------- leer la captura de una actividad (reloj / app) ---------- */
+async function readShot(file){if(!file||!/^image\//.test(file.type))throw new Error('imagen');await new Promise(r=>setTimeout(r,1400));return {tipo:'correr',tiempo:'35:12',min:35.2,distancia:'5,82 km',km:5.82,up:41,hr:149,hrmax:171,kcal:395,efecto:'Aeróbico 3,1',fecha:new Date().toISOString().slice(0,10)};
+  if(!file||!/^image\//.test(file.type))throw new Error('imagen');
+  const b=await shrink(file,1568);
+  const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]);r.onerror=rej;r.readAsDataURL(b)});
+  const{data:s}=await sb.auth.getSession();const tok=s&&s.session&&s.session.access_token;if(!tok)throw new Error('sesion');
+  const r=await fetch(/workers\.dev$|^localhost/.test(location.hostname)?'api/run-shot':'https://team-biscuit-app.tacticalbiscuittraining.workers.dev/api/run-shot',{method:'POST',headers:{'content-type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({type:b.type||'image/jpeg',data})});
+  let j={};try{j=await r.json()}catch(_){}
+  const c0=typeof cur==='function'?cur():null;
+  if(!r.ok){if(j.error==='sin_saldo'&&c0){c0.shotNoCredit=Date.now();try{saveNow()}catch(_){}}throw new Error(j.error||('http'+r.status))}
+  if(c0&&c0.shotNoCredit)delete c0.shotNoCredit;
+  return j;
+}
+const SHOT_ERR={sin_clave:'La lectura automática aún no está activada.',sin_saldo:'La lectura automática no tiene saldo ahora mismo. Apunta los datos a mano.',no_actividad:'Esa imagen no parece una actividad. Prueba con la pantalla de resumen.',lectura:'No he podido leer los datos. Prueba con otra captura o apúntalos a mano.',imagen:'Elige una imagen (captura de pantalla).',sesion:'Vuelve a entrar en la app e inténtalo de nuevo.'};
+window.readShot=readShot;window.shotErr=e=>SHOT_ERR[String(e&&e.message||'')]||'No he podido leer la captura. Apunta los datos a mano.';
+
 boot();
 })();
 </script>
+
+</body>
+</html>

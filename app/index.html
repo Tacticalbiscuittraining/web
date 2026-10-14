@@ -2599,6 +2599,18 @@ body[data-screen="client"] .pm{padding-bottom:64px}
   .cv .tab[aria-selected="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
   .cv .tab[aria-selected="true"] .badge{background:#fff;color:var(--teal-ink)}
 }
+/* cabecera del cliente más compacta en el móvil */
+@media (max-width:880px){
+  .cv .chead h1{font-size:30px;margin:2px 0}
+  .cv .chead .goal{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:2px 0 8px;font-size:15px}
+  .cv .chead .actions .btn{padding:6px 12px;font-size:14px}
+}
+@media (max-width:880px){
+  .cv .tabs{display:grid;grid-template-columns:1fr 1fr}
+  .cv .tab{justify-content:center}
+  .cv .es2 .es-b{font-size:13px;padding-inline:6px;gap:4px}
+}
+@media (max-width:420px){.cv .es2 .es-b>span[aria-hidden]{display:none}}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -3119,14 +3131,13 @@ function tabsHtml(c){
 function resumen(c){
   const ws=wSeries(c),w=ws.length>1?ws.map(x=>x.y):c.weights,last=w.length?w[w.length-1]:null,d=w.length>1?last-w[0]:null;
   const week=new Set(c.log.filter(l=>Date.now()-l.ts<7*D).map(l=>l.day)).size;
-  const recent=feedItems(c).slice(0,4);
+  const recent=feedItems(c).slice(0,8);
   const ds=d==null?'':(d>0?'+':'−')+Math.abs(d).toFixed(1).replace('.',',')+' kg desde el inicio';
   return '<div class="grid2"><div class="stack">'+
    '<div class="kpis"><div class="kpi"><div class="k-l">Sesiones 7 días</div><div class="k-v">'+week+' / '+weekTarget(c)+'</div><div class="k-s">según el plan</div></div>'+
    '<div class="kpi"><div class="k-l">Peso actual</div><div class="k-v">'+(last==null?'—':last.toFixed(1).replace('.',',')+' kg')+'</div><div class="k-s">'+esc(ds||'Sin pesajes')+'</div></div>'+
    revKpi(c)+'<div class="kpi"><div class="k-l">Adherencia semana</div><div class="k-v">'+adhPct(c)+' %</div><div class="k-s">hasta hoy</div></div></div>'+
-   '<div class="card"><div class="feed-bar"><h2 style="margin:0">Evolución del peso</h2><button type="button" class="btn sm" data-act="goSeg">Ver seguimiento</button></div>'+(wBox(c)||chartSvg(w))+'<div class="inline"><label class="cell"><span class="lbl show">Añadir pesaje (kg)</span><input id="newW" class="in num" inputmode="decimal" placeholder="Ej.: 66.7"></label><button type="button" class="btn primary" data-act="addW">Registrar peso</button></div></div>'+
-  '</div><div class="card"><h2>Actividad reciente</h2>'+(recent.length?recent.map(it=>feedHtml(c,it)).join(''):'<div class="empty">Aún no hay registros de este cliente.</div>')+'</div></div>';
+  '</div><div class="card"><div class="feed-bar"><h2 style="margin:0">Actividad reciente</h2><div class="actions" style="margin:0">'+(feedItems(c).some(it=>it.l.fresh)?'<button type="button" class="btn sm" data-act="seen">Marcar todo como visto</button>':'')+'<button type="button" class="btn sm" data-act="tab" data-t="registro">Ver calendario</button></div></div>'+(recent.length?recent.map(it=>feedHtml(c,it)).join(''):'<div class="empty">Aún no hay registros de este cliente.</div>')+'</div></div>';
 }
 function foodRow(m,it){
   const a=f=>'data-r="food" data-m="'+m.id+'" data-i="'+it.id+'" data-f="'+f+'"';
@@ -3388,7 +3399,7 @@ function ccCliCharts(c){
 }
 function segPanel(c){
   const T=trk(c);
-  return '<div class="stack"><div class="card"><h2>Peso</h2>'+(wUndated(c)?'<p class="chip warn" style="margin:0 0 8px">'+wUndated(c)+(wUndated(c)===1?' peso de Revisiones no tiene fecha':' pesos de Revisiones no tienen fecha')+': ponles fecha en Revisiones → Registro para que salgan en la gráfica.</p>':'')+wBox(c,'Con dos pesajes o revisiones verás aquí la gráfica.')+chkTable(c,true)+'</div>'+ccSegCard(c)+'<div class="card"><div class="feed-bar"><h2 style="margin:0">Adherencia</h2><span class="chip good" id="adh-pct">Esta semana: '+adhPct(c)+' %</span></div>'+weekGrid(c,false,state.tw)+'</div>'+progCard(c,true)+'<div class="card"><h2>Ajustes del seguimiento</h2><div class="form-grid"><label class="cell"><span class="lbl show">Pasos objetivo al día</span><input class="in num" inputmode="numeric" data-r="trk" data-f="pasos" value="'+esc(T.pasos)+'"></label></div><p class="muted" style="margin:10px 0 0;font-size:13.5px">El entreno se marca solo cuando '+esc(first(c.name))+' envía sus series, y las comidas cuando las marca en «Mi día». Agua, pasos y descanso los confirma con un toque.</p></div>'+'</div>';
+  return '<div class="stack"><div class="card"><h2>Peso</h2>'+(wUndated(c)?'<p class="chip warn" style="margin:0 0 8px">'+wUndated(c)+(wUndated(c)===1?' peso de Revisiones no tiene fecha':' pesos de Revisiones no tienen fecha')+': ponles fecha en Revisiones → Mediciones para que salgan en la gráfica.</p>':'')+wBox(c,'Con dos pesajes o revisiones verás aquí la gráfica.')+'<div class="inline"><label class="cell"><span class="lbl show">Añadir pesaje (kg)</span><input id="newW" class="in num" inputmode="decimal" placeholder="Ej.: 66.7"></label><button type="button" class="btn primary" data-act="addW">Registrar peso</button></div>'+chkTable(c,true)+'</div>'+ccSegCard(c)+'<div class="card"><div class="feed-bar"><h2 style="margin:0">Adherencia</h2><span class="chip good" id="adh-pct">Esta semana: '+adhPct(c)+' %</span></div>'+weekGrid(c,false,state.tw)+'</div>'+progCard(c,true)+'<div class="card"><h2>Ajustes del seguimiento</h2><div class="form-grid"><label class="cell"><span class="lbl show">Pasos objetivo al día</span><input class="in num" inputmode="numeric" data-r="trk" data-f="pasos" value="'+esc(T.pasos)+'"></label></div><p class="muted" style="margin:10px 0 0;font-size:13.5px">El entreno se marca solo cuando '+esc(first(c.name))+' envía sus series, y las comidas cuando las marca en «Mi día». Agua, pasos y descanso los confirma con un toque.</p></div>'+'</div>';
 }
 function clientTrack(c){
   const ti=todayIdx(),T=trk(c),day=c.training.days.find(d=>d.wd===ti),ms=mealsFor(c,ti),ne=eatOf(c,ti).length,tDone=trainDone(c,ti),nLog=dayLogs(c,ti).length;
@@ -3626,7 +3637,7 @@ function revPanel(c){
    '<div><p class="dh-e">'+(today?'Hoy toca revisión':R.k==='late'?'Revisión vencida':R.k==='done'?'Revisión hecha':'Próxima revisión')+'</p><h3>'+(today?'Revisión con '+esc(first(c.name)):R.s?esc(revLong(R.s)).replace(/^./,x=>x.toUpperCase()):'Sin fecha')+'</h3><span class="muted">'+help+'</span></div></div>'+
    '<div class="rv-act"><div class="rv-date"><label class="cell"><span class="lbl show">Fecha de revisión</span><input class="in" type="date" data-r="revd" value="'+esc(R.s)+'"></label>'+(R.s?'<button type="button" class="linkbtn rv-clear" data-act="revNext" data-v="">Quitar fecha (no avisar)</button>':'')+'</div>'+(today&&!doneToday&&free>=0?'<button type="button" class="btn primary" data-act="revStart">Empezar revisión de hoy</button>':'')+
    (R.k==='none'||R.k==='done'||R.k==='late'||(today&&doneToday)?'<button type="button" class="btn" data-act="revNext" data-v="'+nx+'">Siguiente en 4 semanas ('+esc(dmy(pIso(nx)))+')</button>':'')+'</div></div>';
-  const tabs='<div class="pills subnav" role="group" aria-label="Hoja"><button type="button" class="pill" data-act="ccsub" data-v="reg" aria-pressed="'+(sub==='reg')+'">Registro</button><button type="button" class="pill" data-act="ccsub" data-v="graf" aria-pressed="'+(sub==='graf')+'">Gráficos</button><button type="button" class="pill" data-act="ccsub" data-v="prot" aria-pressed="'+(sub==='prot')+'">Protocolo</button></div>';
+  const tabs='<div class="pills subnav" role="group" aria-label="Hoja"><button type="button" class="pill" data-act="ccsub" data-v="reg" aria-pressed="'+(sub==='reg')+'">Mediciones</button><button type="button" class="pill" data-act="ccsub" data-v="graf" aria-pressed="'+(sub==='graf')+'">Gráficos</button><button type="button" class="pill" data-act="ccsub" data-v="prot" aria-pressed="'+(sub==='prot')+'">Protocolo</button></div>';
   return bar+tabs+(sub==='graf'?ccGraficos(c):sub==='prot'?ccProtocolo():ccRegistro(c));
 }
 
@@ -4524,7 +4535,7 @@ function renderBell(){
 }
 function updateBadges(){
   const c=cur();
-  if(c){setBadge('#reg-badge',freshLogs(c));setBadge('#msg-badge',freshMsgs(c));setBadge('#photo-badge',freshPhotos(c));setBadge('#chk-badge',freshChk(c));setBadge('#run-badge',rFresh(c))}
+  if(c){setBadge('#reg-badge',freshLogs(c));setBadge('#msg-badge',freshMsgs(c));setBadge('#photo-badge',freshPhotos(c));setBadge('#chk-badge',freshChk(c));setBadge('#run-badge',rFresh(c));setBadge('#tr-badge',trN(c));setBadge('#pg-badge',pgN(c))}
   renderRail();
 }
 function postRender(c){
@@ -4554,7 +4565,7 @@ function dayPills(act,sel){
 
 function coachView(c){
   let p='';
-  if(state.tab==='resumen')p=resumen(c);else if(state.tab==='dieta')p=dietPanel(c);else if(state.tab==='entreno')p=trainPanel(c);else if(state.tab==='entrevista')p=intPanel(c);else if(state.tab==='datos')p=datosPanel(c);else if(state.tab==='carrera')p=trSub(c)+runPanel(c);else if(state.tab==='fuerza')p=fuerzaPanel(c);else if(state.tab==='seguimiento')p=segPanel(c);else if(state.tab==='revision')p=revPanel(c);else if(state.tab==='fotos')p=fotosPanel(c);else if(state.tab==='mensajes')p=msgsPanel(c);else p=calView(c,'coach')+registroPanel(c);
+  if(state.tab==='resumen')p=resumen(c);else if(state.tab==='dieta')p=dietPanel(c);else if(state.tab==='entreno')p=trainPanel(c);else if(state.tab==='entrevista')p=intPanel(c);else if(state.tab==='datos')p=datosPanel(c);else if(state.tab==='carrera')p=trSub(c)+runPanel(c);else if(state.tab==='fuerza')p=fuerzaPanel(c);else if(state.tab==='seguimiento')p=pgSub(c)+segPanel(c);else if(state.tab==='revision')p=pgSub(c)+revPanel(c);else if(state.tab==='fotos')p=pgSub(c)+fotosPanel(c);else if(state.tab==='mensajes')p=msgsPanel(c);else{state.tab='registro';p=trSub(c)+calView(c,'coach')}
   return '<div class="cv '+coachMode()+'"><button type="button" class="btn sm m-back" data-act="mList">← Todos los clientes</button>'+headHtml(c)+tabsHtml(c)+'<section id="panel">'+p+'</section></div>';
 }
 
@@ -4920,19 +4931,28 @@ function clientHome(c){
 /* ---------- ficha del cliente para el entrenador: Ver / Editar ---------- */
 const CM_EDIT=['datos','dieta','entreno','entrevista'];
 function coachMode(){return CM_EDIT.indexOf(state.tab)>=0?'edit':'ver'}
+/* Ver: 4 pestañas. Entrenamiento agrupa Calendario/Fuerza/Carrera y Progreso agrupa Peso y medidas/Revisiones/Fotos (los ids internos no cambian) */
+const G_TR=['registro','fuerza','carrera'],G_PG=['seguimiento','revision','fotos'];
+const trN=c=>freshLogs(c)+(c.run?rFresh(c):0)+(c.acts||[]).filter(x=>x.fresh&&isOut(x)).length;
+const pgN=c=>{const rs=revSt(c).k;return freshChk(c)+freshPhotos(c)+(rs==='today'||rs==='late'?1:0)};
 function tabsHtml(c){
-  const outN=(c.acts||[]).filter(x=>x.fresh&&isOut(x)).length,hasRun=!!c.run||(c.acts||[]).some(isOut);
-  const V=[['resumen','Resumen',0,''],['registro','Registro',freshLogs(c),'reg-badge'],['tr','Entrenamiento',hasRun?(c.run?rFresh(c):0)+outN:0,hasRun?'run-badge':''],['seguimiento','Seguimiento',freshChk(c),'chk-badge'],['revision',isRevToday(c)?'Revisión hoy':'Revisiones',0,''],['fotos','Fotos',freshPhotos(c),'photo-badge'],['mensajes','Mensajes',freshMsgs(c),'msg-badge']];
-  const Ed=[['datos','Datos y archivos',0,''],['dieta','Dieta',0,''],['entreno','Entrenamiento',0,''],['entrevista','Ficha / entrevista',0,'']];
+  const rs=revSt(c).k;
+  const trDef=state.lastTr&&G_TR.indexOf(state.lastTr)>=0?state.lastTr:(c.run&&rFresh(c)?'carrera':'fuerza');
+  const pgDef=state.lastPg&&G_PG.indexOf(state.lastPg)>=0?state.lastPg:(rs==='today'||rs==='late'?'revision':'seguimiento');
+  const V=[['resumen','Resumen',0,'',['resumen']],[trDef,'Entrenamiento',trN(c),'tr-badge',G_TR],[pgDef,'Progreso',pgN(c),'pg-badge',G_PG],['mensajes','Mensajes',freshMsgs(c),'msg-badge',['mensajes']]];
+  const Ed=[['datos','Datos y archivos',0,'',['datos']],['dieta','Dieta',0,'',['dieta']],['entreno','Entrenamiento',0,'',['entreno']],['entrevista','Ficha / entrevista',0,'',['entrevista']]];
   const m=coachMode();if(m==='edit')state.lastEdit=state.tab;else state.lastVer=state.tab;
   const vb=V.reduce((a,x)=>a+(x[2]||0),0);
   const T=m==='edit'?Ed:V;
-  const trT=state.tab==='carrera'&&hasRun?'carrera':'fuerza';
   return '<div class="cmode" role="tablist" aria-label="Modo"><button type="button" role="tab" class="es-b" data-act="cmode" data-v="ver" aria-selected="'+(m==='ver')+'">👁 Ver'+(m==='edit'&&vb?'<i class="es-hoy">'+vb+'</i>':'')+'</button><button type="button" role="tab" class="es-b" data-act="cmode" data-v="edit" aria-selected="'+(m==='edit')+'">✎ Editar plan</button></div>'+(m==='edit'?planCard(c):'')+
-   '<div class="tabs" role="tablist">'+T.map(x=>{const tr=x[0]==='tr',k=tr?(state.tab==='carrera'||state.tab==='fuerza'?trT:(state.lastTr==='carrera'&&hasRun?'carrera':'fuerza')):x[0];return '<button type="button" role="tab" class="tab" data-act="tab" data-t="'+(tr&&x[2]&&state.tab!=='fuerza'&&state.tab!=='carrera'?'carrera':k)+'" aria-selected="'+(tr?state.tab===trT:state.tab===x[0])+'">'+x[1]+(x[3]?'<span class="badge" id="'+x[3]+'"'+(x[2]?'':' hidden')+'>'+x[2]+'</span>':'')+'</button>'}).join('')+'</div>';
+   '<div class="tabs" role="tablist">'+T.map(x=>'<button type="button" role="tab" class="tab" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(x[4].indexOf(state.tab)>=0)+'">'+x[1]+(x[3]?'<span class="badge" id="'+x[3]+'"'+(x[2]?'':' hidden')+'>'+x[2]+'</span>':'')+'</button>').join('')+'</div>';
 }
-function trSub(c){state.lastTr=state.tab;if(!c.run&&!(c.acts||[]).some(isOut))return '';const rn=(c.run?rFresh(c):0)+(c.acts||[]).filter(x=>x.fresh&&isOut(x)).length;
-  return '<div class="esub es2" role="tablist" aria-label="Tipo de entrenamiento">'+[['fuerza','🏋️','Fuerza'],['carrera','🏃','Carrera']].map(x=>'<button type="button" role="tab" class="es-b" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(state.tab===x[0])+'"><span aria-hidden="true">'+x[1]+'</span>'+x[2]+(x[0]==='carrera'&&rn&&state.tab!=='carrera'?'<i class="es-hoy">'+rn+'</i>':'')+'</button>').join('')+'</div>'}
+/* barra de segundo nivel (mismo diseño en las dos pestañas agrupadas) */
+function subBar(lab,items){return '<div class="esub es2" role="tablist" aria-label="'+lab+'">'+items.map(x=>'<button type="button" role="tab" class="es-b" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(state.tab===x[0])+'"><span aria-hidden="true">'+x[1]+'</span>'+x[2]+(x[3]&&state.tab!==x[0]?'<i class="es-hoy">'+x[3]+'</i>':'')+'</button>').join('')+'</div>'}
+function trSub(c){state.lastTr=state.tab;const hasRun=!!c.run||(c.acts||[]).some(isOut),rn=(c.run?rFresh(c):0)+(c.acts||[]).filter(x=>x.fresh&&isOut(x)).length;
+  return subBar('Entrenamiento',[['registro','📅','Calendario',0],['fuerza','🏋️','Fuerza',freshLogs(c)]].concat(hasRun?[['carrera','🏃','Carrera',rn]]:[]))}
+function pgSub(c){state.lastPg=state.tab;const rs=revSt(c).k;
+  return subBar('Progreso',[['seguimiento','⚖️','Peso',freshChk(c)],['revision','📋','Revisiones',rs==='today'?'Hoy':rs==='late'?'!':0],['fotos','📷','Fotos',freshPhotos(c)]])}
 function fuerzaPanel(c){return trSub(c)+fuerzaBody(c)}
 function fuerzaBody(c){
   if(state.rnDet&&state.rnDet.slice(0,2)==='s:'){const d=strDet(c,state.rnDet);if(d)return d;state.rnDet=''}
@@ -5727,7 +5747,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014205932';let verT=0;
+const APP_VER='20261014213111';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

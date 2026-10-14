@@ -2525,7 +2525,11 @@ body[data-screen="client"] .pm{padding-bottom:64px}
 .rv-bar.late,.rv-bar.done{border-color:var(--coral-ink);background:color-mix(in srgb,var(--coral) 9%,var(--surface))}
 .rv-bar.none{border-style:dashed}
 .rv-bar.soon .dh-e,.rv-bar.later .dh-e{color:var(--teal-ink)}
-.rv-act{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.rv-act{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;min-width:0}
+.rv-date{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
+.rv-date .cell{width:100%}
+.rv-date .in{width:100%;min-width:170px;max-width:220px;box-sizing:border-box}
+.rv-clear{font-size:13px;padding:2px 0;color:var(--muted);text-decoration:underline}
 .rv-cli{display:flex;align-items:center;gap:14px;margin:0 0 16px;padding:14px 16px;border-radius:16px;border:1px solid var(--teal);background:color-mix(in srgb,var(--teal) 8%,var(--surface))}
 .rv-cli.today{border-color:var(--coral);background:color-mix(in srgb,var(--coral) 9%,var(--surface))}
 .rv-cli b{display:block;font-size:16px}.rv-cli span:not(.rv-n){display:block;color:var(--muted);font-size:13.5px;margin-top:2px}
@@ -3560,9 +3564,8 @@ function revPanel(c){
    later:'Te avisará '+REV_AVISO+' días antes en el panel y en la campana.'}[R.k];
   const bar='<div class="card rv-bar '+R.k+(today?' today':'')+'"><div class="rv-main">'+(R.s&&R.k!=='done'?'<span class="rv-n">'+(R.k==='today'?'HOY':R.k==='late'?'+'+(-R.d):R.d)+(R.k==='today'?'':'<small>'+(R.k==='late'?(R.d===-1?'día tarde':'días tarde'):(R.d===1?'día':'días'))+'</small>')+'</span>':'')+
    '<div><p class="dh-e">'+(today?'Hoy toca revisión':R.k==='late'?'Revisión vencida':R.k==='done'?'Revisión hecha':'Próxima revisión')+'</p><h3>'+(today?'Revisión con '+esc(first(c.name)):R.s?esc(revLong(R.s)).replace(/^./,x=>x.toUpperCase()):'Sin fecha')+'</h3><span class="muted">'+help+'</span></div></div>'+
-   '<div class="rv-act"><label class="cell"><span class="lbl show">Fecha de revisión</span><input class="in" type="date" data-r="revd" value="'+esc(R.s)+'"></label>'+(today&&!doneToday&&free>=0?'<button type="button" class="btn primary" data-act="revStart">Empezar revisión de hoy</button>':'')+
-   (R.k==='none'||R.k==='done'||R.k==='late'||(today&&doneToday)?'<button type="button" class="btn" data-act="revNext" data-v="'+nx+'">Siguiente en 4 semanas ('+esc(dmy(pIso(nx)))+')</button>':'')+
-   (R.s?'<button type="button" class="btn" data-act="revNext" data-v="">Sin fecha</button>':'')+'</div></div>';
+   '<div class="rv-act"><div class="rv-date"><label class="cell"><span class="lbl show">Fecha de revisión</span><input class="in" type="date" data-r="revd" value="'+esc(R.s)+'"></label>'+(R.s?'<button type="button" class="linkbtn rv-clear" data-act="revNext" data-v="">Quitar fecha (no avisar)</button>':'')+'</div>'+(today&&!doneToday&&free>=0?'<button type="button" class="btn primary" data-act="revStart">Empezar revisión de hoy</button>':'')+
+   (R.k==='none'||R.k==='done'||R.k==='late'||(today&&doneToday)?'<button type="button" class="btn" data-act="revNext" data-v="'+nx+'">Siguiente en 4 semanas ('+esc(dmy(pIso(nx)))+')</button>':'')+'</div></div>';
   const tabs='<div class="pills subnav" role="group" aria-label="Hoja"><button type="button" class="pill" data-act="ccsub" data-v="reg" aria-pressed="'+(sub==='reg')+'">Registro</button><button type="button" class="pill" data-act="ccsub" data-v="graf" aria-pressed="'+(sub==='graf')+'">Gráficos</button><button type="button" class="pill" data-act="ccsub" data-v="prot" aria-pressed="'+(sub==='prot')+'">Protocolo</button></div>';
   return bar+tabs+(sub==='graf'?ccGraficos(c):sub==='prot'?ccProtocolo():ccRegistro(c));
 }
@@ -5601,7 +5604,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014140751';let verT=0;
+const APP_VER='20261014141930';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

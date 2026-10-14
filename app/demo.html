@@ -4287,7 +4287,7 @@ document.addEventListener('change',async e=>{
     renderMain();window.scrollTo(0,y);
     const N={min:'tiempo',km:'distancia',up:'desnivel',hr:'pulso medio',hrmax:'pulso máximo',kcal:'calorías'};
     if(d.fecha&&when&&d.fecha!==when){const p=d.fecha.split('-');toast('⚠ La captura es del '+(+p[2])+'/'+(+p[1])+'. Comprueba que es la sesión correcta antes de guardar');return}
-    toast('✓ Leído: '+keys.map(k=>N[k]).join(', ')+'. Revísalo y guarda');
+    toast('Demo: tu imagen no se lee, son datos de ejemplo. En la app real se rellenan con los de tu captura.');
   }catch(err){toast(window.shotErr?window.shotErr(err):'No he podido leer la captura')}
   finally{if(lab&&lab.isConnected)lab.classList.remove('busy')}
 });
@@ -5833,7 +5833,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014233817';let verT=0;
+const APP_VER='20261014234254';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

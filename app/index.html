@@ -4318,7 +4318,7 @@ function wfShown(id){const inp=document.getElementById(id);if(!inp)return '';if(
 
 function registroPanel(c){
   const list=feedItems(c);
-  return '<div class="card"><div class="feed-bar"><span class="live"><i></i>En directo</span><div class="actions"><button type="button" class="btn" data-act="seen">Marcar todo como visto</button><button type="button" class="btn ghost" data-act="sim">Demo: simular envío del cliente</button></div></div>'+
+  return '<div class="card"><div class="feed-bar"><span class="live"><i></i>En directo</span><div class="actions">'+(list.some(it=>it.l.fresh)?'<button type="button" class="btn" data-act="seen">Marcar todo como visto</button>':'')+'</div></div>'+
    '<p class="muted" style="margin:0 0 6px">Lo que '+esc(first(c.name))+' anota en su móvil llega aquí al instante, comparado con tu pauta.</p>'+
    (list.length?list.slice(0,40).map(it=>feedHtml(c,it)).join(''):'<div class="empty">Cuando '+esc(first(c.name))+' registre su primer entreno, aparecerá aquí.</div>')+'</div>';
 }
@@ -5043,7 +5043,7 @@ document.addEventListener('click',e=>{
     case 'libDel':{state.lib=state.lib.filter(l=>l.id!==t.dataset.l);renderMain();break}
     case 'libClear':{const L=state.lib.find(l=>l.id===t.dataset.l);if(L){const k=t.dataset.k==='photo'?'photo':'video';try{URL.revokeObjectURL(L[k])}catch(_){}L[k]='';state.exOpen[L.id]=true;renderMain()}break}
     case 'addW':{const v=num($('#newW').value);if(v>0){c.weights.push(v);c.chk.push({id:nid(),ts:Date.now(),week:clientWeek(c)+1,peso:v,animo:0,cond:'',comm:'Apuntado por el entrenador'});renderMain();toast('Peso registrado')}else toast('Escribe un peso válido');break}
-    case 'seen':c.log.forEach(l=>{l.fresh=false});renderAll();break;
+    case 'seen':c.log.forEach(l=>{l.fresh=false});(c.acts||[]).forEach(x=>{x.fresh=false});if(c.run)(c.run.logs||[]).forEach(x=>{x.fresh=false});renderAll();break;
     case 'sim':simulate(c);break;
     case 'delClient':{delAsk(c);break;state.clients=state.clients.filter(x=>x.id!==c.id);state.sel=state.clients.length?state.clients[0].id:'';renderAll();toast('Cliente eliminado');break}
     case 'planFs':state.planFs=!state.planFs;renderMain();break;
@@ -5608,7 +5608,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014181710';let verT=0;
+const APP_VER='20261014182112';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

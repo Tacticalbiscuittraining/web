@@ -2611,6 +2611,12 @@ body[data-screen="client"] .pm{padding-bottom:64px}
   .cv .es2 .es-b{font-size:13px;padding-inline:6px;gap:4px}
 }
 @media (max-width:420px){.cv .es2 .es-b>span[aria-hidden]{display:none}}
+/* botón de calendario en la cabecera del cliente */
+.ch-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%}
+.ch-cal{margin-left:auto}
+.cv .chead>div:first-child{flex:1 1 auto;min-width:0}
+.ch-cal[aria-expanded="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.ccal-box{margin:0 0 16px}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -3122,7 +3128,7 @@ function chartSvg(w){
   return '<svg class="chart" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Evolución del peso en kilos">'+grid+'<path class="ar" d="'+area+'"/><polyline class="ln" points="'+pts+'"/>'+dots+'<text class="lastv" x="'+lx+'" y="'+(ly-11)+'" text-anchor="end">'+w[w.length-1].toFixed(1).replace('.',',')+' kg</text><text class="ax" x="'+pl+'" y="'+(Hh-8)+'">Inicio</text><text class="ax" x="'+(W-pr)+'" y="'+(Hh-8)+'" text-anchor="end">Último</text></svg>';
 }
 function headHtml(c){
-  return '<div class="chead"><div><p class="eyebrow" id="h-phase">'+esc(c.phase)+'</p><h1 id="h-name">'+esc(c.name)+'</h1><p class="goal" id="h-goal">'+esc(c.goal)+'</p>'+revChip(c,{all:1,head:1})+'</div><div class="actions" style="margin:0"><button type="button" class="btn" data-act="preview">Ver como cliente</button><button type="button" class="btn danger" data-act="delClient">Eliminar cliente</button></div></div>';
+  return '<div class="chead"><div><p class="eyebrow" id="h-phase">'+esc(c.phase)+'</p><h1 id="h-name">'+esc(c.name)+'</h1><p class="goal" id="h-goal">'+esc(c.goal)+'</p>'+'<div class="ch-row">'+revChip(c,{all:1,head:1})+'<button type="button" class="btn sm ch-cal" data-act="ccal" aria-expanded="'+!!state.ccal+'">📅 '+(state.ccal?'Cerrar calendario':'Calendario')+'</button></div></div><div class="actions" style="margin:0"><button type="button" class="btn" data-act="preview">Ver como cliente</button><button type="button" class="btn danger" data-act="delClient">Eliminar cliente</button></div></div>';
 }
 function tabsHtml(c){
   const t=[['resumen','Resumen',0,''],['entrevista','Entrevista',0,''],['dieta','Dieta',0,''],['entreno','Entrenamiento',0,''],['registro','Registro',freshLogs(c),'reg-badge'],['seguimiento','Seguimiento',freshChk(c),'chk-badge'],...(c.run?[['carrera','Carrera',rFresh(c),'run-badge']]:[]),['revision',{today:'Revisión hoy',late:'Revisión vencida',soon:'Revisión en '+revSt(c).d+' d'}[revSt(c).k]||'Revisiones',0,''],['fotos','Fotos',freshPhotos(c),'photo-badge'],['mensajes','Mensajes',freshMsgs(c),'msg-badge']];
@@ -3137,7 +3143,7 @@ function resumen(c){
    '<div class="kpis"><div class="kpi"><div class="k-l">Sesiones 7 días</div><div class="k-v">'+week+' / '+weekTarget(c)+'</div><div class="k-s">según el plan</div></div>'+
    '<div class="kpi"><div class="k-l">Peso actual</div><div class="k-v">'+(last==null?'—':last.toFixed(1).replace('.',',')+' kg')+'</div><div class="k-s">'+esc(ds||'Sin pesajes')+'</div></div>'+
    revKpi(c)+'<div class="kpi"><div class="k-l">Adherencia semana</div><div class="k-v">'+adhPct(c)+' %</div><div class="k-s">hasta hoy</div></div></div>'+
-  '</div><div class="card"><div class="feed-bar"><h2 style="margin:0">Actividad reciente</h2><div class="actions" style="margin:0">'+(feedItems(c).some(it=>it.l.fresh)?'<button type="button" class="btn sm" data-act="seen">Marcar todo como visto</button>':'')+'<button type="button" class="btn sm" data-act="tab" data-t="registro">Ver calendario</button></div></div>'+(recent.length?recent.map(it=>feedHtml(c,it)).join(''):'<div class="empty">Aún no hay registros de este cliente.</div>')+'</div></div>';
+  '</div><div class="card"><div class="feed-bar"><h2 style="margin:0">Actividad reciente</h2><div class="actions" style="margin:0">'+(feedItems(c).some(it=>it.l.fresh)?'<button type="button" class="btn sm" data-act="seen">Marcar todo como visto</button>':'')+'<button type="button" class="btn sm" data-act="ccal">Ver calendario</button></div></div>'+(recent.length?recent.map(it=>feedHtml(c,it)).join(''):'<div class="empty">Aún no hay registros de este cliente.</div>')+'</div></div>';
 }
 function foodRow(m,it){
   const a=f=>'data-r="food" data-m="'+m.id+'" data-i="'+it.id+'" data-f="'+f+'"';
@@ -4565,8 +4571,8 @@ function dayPills(act,sel){
 
 function coachView(c){
   let p='';
-  if(state.tab==='resumen')p=resumen(c);else if(state.tab==='dieta')p=dietPanel(c);else if(state.tab==='entreno')p=trainPanel(c);else if(state.tab==='entrevista')p=intPanel(c);else if(state.tab==='datos')p=datosPanel(c);else if(state.tab==='carrera')p=trSub(c)+runPanel(c);else if(state.tab==='fuerza')p=fuerzaPanel(c);else if(state.tab==='seguimiento')p=pgSub(c)+segPanel(c);else if(state.tab==='revision')p=pgSub(c)+revPanel(c);else if(state.tab==='fotos')p=pgSub(c)+fotosPanel(c);else if(state.tab==='mensajes')p=msgsPanel(c);else{state.tab='registro';p=trSub(c)+calView(c,'coach')}
-  return '<div class="cv '+coachMode()+'"><button type="button" class="btn sm m-back" data-act="mList">← Todos los clientes</button>'+headHtml(c)+tabsHtml(c)+'<section id="panel">'+p+'</section></div>';
+  if(state.tab==='resumen')p=resumen(c);else if(state.tab==='dieta')p=dietPanel(c);else if(state.tab==='entreno')p=trainPanel(c);else if(state.tab==='entrevista')p=intPanel(c);else if(state.tab==='datos')p=datosPanel(c);else if(state.tab==='carrera')p=trSub(c)+runPanel(c);else if(state.tab==='fuerza')p=fuerzaPanel(c);else if(state.tab==='seguimiento')p=pgSub(c)+segPanel(c);else if(state.tab==='revision')p=pgSub(c)+revPanel(c);else if(state.tab==='fotos')p=pgSub(c)+fotosPanel(c);else if(state.tab==='mensajes')p=msgsPanel(c);else{state.tab='fuerza';state.ccal=true;p=fuerzaPanel(c)}
+  return '<div class="cv '+coachMode()+'"><button type="button" class="btn sm m-back" data-act="mList">← Todos los clientes</button>'+headHtml(c)+(state.ccal&&coachMode()==='ver'?'<section class="ccal-box">'+calView(c,'coach')+'<div class="actions" style="margin:10px 0 0"><button type="button" class="btn sm" data-act="ccal">✕ Cerrar calendario</button></div></section>':'')+tabsHtml(c)+'<section id="panel">'+p+'</section></div>';
 }
 
 /* ---------- vista del cliente ---------- */
@@ -4932,7 +4938,7 @@ function clientHome(c){
 const CM_EDIT=['datos','dieta','entreno','entrevista'];
 function coachMode(){return CM_EDIT.indexOf(state.tab)>=0?'edit':'ver'}
 /* Ver: 4 pestañas. Entrenamiento agrupa Calendario/Fuerza/Carrera y Progreso agrupa Peso y medidas/Revisiones/Fotos (los ids internos no cambian) */
-const G_TR=['registro','fuerza','carrera'],G_PG=['seguimiento','revision','fotos'];
+const G_TR=['fuerza','carrera'],G_PG=['seguimiento','revision','fotos'];
 const trN=c=>freshLogs(c)+(c.run?rFresh(c):0)+(c.acts||[]).filter(x=>x.fresh&&isOut(x)).length;
 const pgN=c=>{const rs=revSt(c).k;return freshChk(c)+freshPhotos(c)+(rs==='today'||rs==='late'?1:0)};
 function tabsHtml(c){
@@ -4950,7 +4956,7 @@ function tabsHtml(c){
 /* barra de segundo nivel (mismo diseño en las dos pestañas agrupadas) */
 function subBar(lab,items){return '<div class="esub es2" role="tablist" aria-label="'+lab+'">'+items.map(x=>'<button type="button" role="tab" class="es-b" data-act="tab" data-t="'+x[0]+'" aria-selected="'+(state.tab===x[0])+'"><span aria-hidden="true">'+x[1]+'</span>'+x[2]+(x[3]&&state.tab!==x[0]?'<i class="es-hoy">'+x[3]+'</i>':'')+'</button>').join('')+'</div>'}
 function trSub(c){state.lastTr=state.tab;const hasRun=!!c.run||(c.acts||[]).some(isOut),rn=(c.run?rFresh(c):0)+(c.acts||[]).filter(x=>x.fresh&&isOut(x)).length;
-  return subBar('Entrenamiento',[['registro','📅','Calendario',0],['fuerza','🏋️','Fuerza',freshLogs(c)]].concat(hasRun?[['carrera','🏃','Carrera',rn]]:[]))}
+  return subBar('Entrenamiento',[['fuerza','🏋️','Fuerza',freshLogs(c)]].concat(hasRun?[['carrera','🏃','Carrera',rn]]:[]))}
 function pgSub(c){state.lastPg=state.tab;const rs=revSt(c).k;
   return subBar('Progreso',[['seguimiento','⚖️','Peso',freshChk(c)],['revision','📋','Revisiones',rs==='today'?'Hoy':rs==='late'?'!':0],['fotos','📷','Fotos',freshPhotos(c)]])}
 function fuerzaPanel(c){return trSub(c)+fuerzaBody(c)}
@@ -5153,8 +5159,9 @@ document.addEventListener('click',e=>{
   const a=t.dataset.act,c=cur();
   if(t.dataset.confirm!==undefined&&!arm(t))return;
   switch(a){
+    case 'ccal':state.ccal=!state.ccal;renderMain();if(state.ccal){const x=$('.ccal-box');if(x)window.scrollTo({top:Math.max(0,x.getBoundingClientRect().top+window.scrollY-12)})}break;
     case 'mList':state.mList=true;renderRail();window.scrollTo({top:0});break;
-    case 'pick':state.mList=false;state.rnDet='';if(window.innerWidth<=880)setTimeout(()=>window.scrollTo({top:0}),0);state.sel=t.dataset.c;state.dayIdx=0;state.cday=null;state.sent={};state.cmp=[];state.view='clients';renderAll();break;
+    case 'pick':state.mList=false;state.ccal=false;state.rnDet='';if(window.innerWidth<=880)setTimeout(()=>window.scrollTo({top:0}),0);state.sel=t.dataset.c;state.dayIdx=0;state.cday=null;state.sent={};state.cmp=[];state.view='clients';renderAll();break;
     case 'view':if(t.dataset.v==='clients')state.mList=window.innerWidth<=880;state.view=t.dataset.v;renderAll();break;
     case 'dashGo':{const k=t.dataset.k,d=$('#ds-'+k);if(d){d.open=true;state.dk=Object.assign(state.dk||{},{[k]:true});const y=d.getBoundingClientRect().top+window.scrollY-12;window.scrollTo({top:Math.max(0,y),behavior:'smooth'})}break}
     case 'toggleNew2':break;
@@ -5747,7 +5754,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014213111';let verT=0;
+const APP_VER='20261014214111';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

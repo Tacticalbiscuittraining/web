@@ -3857,19 +3857,15 @@ function dashView(){
   const att=[];
   C.forEach(c=>{
     const go=(t,txt,lv)=>att.push({c,t,txt,lv});
-    {const R=revSt(c);if(R.k==='today')go('revision','Hoy toca su revisión','hot');else if(R.k==='late')go('revision','Revisión vencida hace '+(-R.d)+(R.d===-1?' día':' días'),'hot');else if(R.k==='done')go('revision','Revisión hecha: pon la fecha de la siguiente','warn');else if(R.k==='soon'&&R.d<=2)go('revision','Revisión '+(R.d===1?'mañana':'en 2 días'),'warn')}
+    {const R=revSt(c);if(R.k==='today')go('revision','Hoy toca su revisión','hot');else if(R.k==='late')go('revision','Revisión vencida hace '+(-R.d)+(R.d===-1?' día':' días'),'hot');else if(R.k==='done')go('revision','Revisión hecha: pon la fecha de la siguiente','warn');}
     const u=unread(c);if(u)go('mensajes',u+(u===1?' mensaje sin leer':' mensajes sin leer'),'hot');
-    const P=intD(c),yes=INT_PARQ.filter((_,i)=>P.parq[i]==='si').length;if(yes)go('resumen','PAR-Q con '+yes+' «sí»: revisa antes de subir intensidad','warn');
-    const lt=lastLogTs(c),days=lt?Math.floor((Date.now()-lt)/D):99;if(days>=7&&c.training.days.length)go('registro',days>=99?'Aún no ha registrado ningún entreno':'Lleva '+days+' días sin registrar entrenos','info');
     const ap=(c.acts||[]).filter(a=>a.pain===2&&a.fresh);if(ap.length)go('registro','⚠️ Dolor en '+esc(ap[0].type==='Otra'&&ap[0].other?ap[0].other:ap[0].type).toLowerCase()+(ap[0].note?': «'+esc(ap[0].note)+'»':''),'hot');
-    const wy=whyWeek(c);if(wy.length)go('registro','Esta semana: '+wy.join(' · '),'warn');
-    const fw=c.chk.filter(x=>x.fresh);if(fw.length)go('seguimiento','Nuevo pesaje: '+fmtN(fw[fw.length-1].peso)+' kg','info');
-    const fp=c.photos.filter(x=>x.fresh).length;if(fp)go('fotos',fp+(fp===1?' foto nueva':' fotos nuevas'),'info');
-    const prs=c.log.filter(l=>l.pr&&l.fresh);if(prs.length)go('registro','🏆 '+prs.length+(prs.length===1?' récord nuevo':' récords nuevos')+' ('+esc(prs[0].ex)+')','good');
+    const wy=whyWeek(c).filter(x=>/Molestias/.test(x));if(wy.length)go('registro','Molestias esta semana: '+wy.map(x=>x.replace(/^.*\(/,'').replace(')','')).join(', '),'hot');
+    if(c.run){const rp=(c.run.logs||[]).filter(x=>x.fresh&&x.pain>=3);if(rp.length)go('carrera','⚠️ Dolor en carrera: '+rp[0].pain+'/10'+(rp[0].painZ?' · '+esc(rp[0].painZ):''),'hot')}
   });
   const ord={hot:0,warn:1,good:2,info:3};att.sort((a,b)=>ord[a.lv]-ord[b.lv]);
   const grp=[];att.forEach(a=>{const g=grp.find(x=>x.c===a.c);if(!g)grp.push({c:a.c,t:a.t,lv:a.lv,txt:[a.txt]});else g.txt.push(a.txt)});grp.forEach(g=>{g.txt=g.txt.join('<br>')});
-  const attHtml=grp.length?grp.map(a=>'<button type="button" class="da '+a.lv+'" data-act="goto" data-c="'+a.c.id+'" data-t="'+a.t+'">'+avHtml(a.c,'sm')+'<span><b>'+esc(a.c.name)+'</b><span>'+a.txt+'</span></span><i aria-hidden="true">›</i></button>').join(''):'<p class="muted">Todo en orden: nadie necesita tu atención ahora mismo. 👌</p>';
+  const attHtml=grp.length?grp.map(a=>'<button type="button" class="da '+a.lv+'" data-act="goto" data-c="'+a.c.id+'" data-t="'+a.t+'">'+avHtml(a.c,'sm')+'<span><b>'+esc(a.c.name)+'</b><span>'+a.txt+'</span></span><i aria-hidden="true">›</i></button>').join(''):'<p class="muted">Nada urgente ahora mismo. 👌</p>';
   const st=c=>{const d=todayDay(c),done=trainDone(c,ti);if(done)return '<span class="dt-ok">✓ '+esc(d?d.name:(dayActs(c,ti).length&&!dayLogs(c,ti).length?dayActs(c,ti).map(a=>a.type==='Otra'&&a.other?a.other:a.type).join(', '):'Ha entrenado'))+'</span>';return d?'<span class="dt-p">'+esc(d.name)+' · pendiente</span>':'<span class="muted">'+(trMark(c,ti)===false?'Descanso':'Sin entreno hoy')+'</span>'};
   const rows=C.map(c=>{const w=lastW(c),w0=c.weights.length>1?c.weights[c.weights.length-2]:null,dw=w&&w0!=null?Math.round((w-w0)*10)/10:null;
     return '<button type="button" class="dh-r" data-act="goto" data-c="'+c.id+'" data-t="resumen">'+avHtml(c,'sm')+'<span class="dh-n"><b>'+esc(c.name)+'</b>'+st(c)+'</span><span class="dh-w">'+(w?'<b>'+fmtN(w)+' kg</b>'+(dw?'<small class="'+(dw<0?'dn':'up')+'">'+(dw>0?'+':'−')+fmtN(Math.abs(dw))+'</small>':''):'<small class="muted">sin peso</small>')+'</span><i aria-hidden="true">›</i></button>'}).join('');
@@ -5763,7 +5759,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014220457';let verT=0;
+const APP_VER='20261014220731';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

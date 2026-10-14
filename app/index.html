@@ -3929,7 +3929,9 @@ function rDate(c,w,i){const s=rParse(c.run.start);if(!s)return null;const d=new 
 function rWeekNow(c){const s=rParse(c.run.start),n=c.run.weeks.length;if(!s||!n)return 0;const w=Math.floor((rDay0()-s)/864e5/7);return Math.max(0,Math.min(n-1,w))}
 function rTodayIdx(c){const s=rParse(c.run.start);if(!s)return{w:0,i:todayIdx()};const k=Math.floor((rDay0()-s)/864e5);return{w:Math.floor(k/7),i:((k%7)+7)%7}}
 const rSes=(c,w,i)=>{const W=c.run.weeks[w];return W&&W.days?W.days[i]:null};
-const rLog=(c,w,i)=>(c.run.logs||[]).filter(l=>l.w===w&&l.i===i).sort((a,b)=>b.ts-a.ts)[0];
+/* un registro solo vale para su día si su fecha real cuadra con el plan actual (al cargar un plan nuevo, los registros viejos no pasan a las semanas nuevas) */
+function rLogOk(c,l){const s=c.run.start,real=l.date||rIso(new Date(l.ts));if(s&&real<s)return false;if(l.date){const p=rDate(c,l.w,l.i);if(p&&l.date>rIso(p))return false}return true}
+const rLog=(c,w,i)=>(c.run.logs||[]).filter(l=>l.w===w&&l.i===i&&rLogOk(c,l)).sort((a,b)=>b.ts-a.ts)[0];
 const rFresh=c=>c.run?(c.run.logs||[]).filter(l=>l.fresh).length:0;
 const rPace=(min,km)=>{if(!(min>0&&km>0))return '';const p=min/km,m=Math.floor(p),s=Math.round((p-m)*60);return (s===60?(m+1)+':00':m+':'+String(s).padStart(2,'0'))+' /km'};
 const rHM=min=>{min=+min||0;if(min%1&&min<120){const m=Math.floor(min),s=Math.round((min-m)*60);return (s===60?(m+1)+':00':m+':'+String(s).padStart(2,'0'))+' min'}min=Math.round(min);const h=Math.floor(min/60),m=min%60;return h?h+' h'+(m?' '+m+' min':''):m+' min'};
@@ -3982,7 +3984,7 @@ function rSession(c,w,i,who,big,fold){
 }
 function rVolChart(c){
   const n=c.run.weeks.length;if(!n)return '';
-  const km=Array(n).fill(0),mn=Array(n).fill(0);(c.run.logs||[]).forEach(l=>{if(l.st==='no'||l.w==null||l.w>=n)return;km[l.w]+=num(l.km)||0;mn[l.w]+=num(l.min)||0});
+  const km=Array(n).fill(0),mn=Array(n).fill(0);(c.run.logs||[]).forEach(l=>{if(l.st==='no'||l.w==null||l.w>=n||!rLogOk(c,l))return;km[l.w]+=num(l.km)||0;mn[l.w]+=num(l.min)||0});
   if(!mn.some(Boolean))return '<p class="muted">Cuando registres salidas verás aquí tu volumen semana a semana.</p>';
   const W=Math.max(320,n*58),H=170,mx=Math.max.apply(null,mn)||1,bw=Math.min(34,(W-40)/n-14);
   const bars=mn.map((v,i)=>{const x=24+i*((W-40)/n)+((W-40)/n-bw)/2,h=v/mx*(H-58),y=H-26-h;return '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(0,h).toFixed(1)+'" rx="4" class="rn-bar'+(i===rWeekNow(c)?' now':'')+'"/><text x="'+(x+bw/2).toFixed(1)+'" y="'+(y-6).toFixed(1)+'" text-anchor="middle" class="rn-bv">'+(v?rHM(v).replace(' min','′'):'')+'</text><text x="'+(x+bw/2).toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle" class="rn-bl">S'+(i+1)+'</text>'+(km[i]?'<text x="'+(x+bw/2).toFixed(1)+'" y="'+(H+6)+'" text-anchor="middle" class="rn-bk">'+fmtN(Math.round(km[i]*10)/10)+' km</text>':'')}).join('');
@@ -5604,7 +5606,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014141930';let verT=0;
+const APP_VER='20261014162322';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

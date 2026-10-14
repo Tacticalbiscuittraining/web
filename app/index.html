@@ -1441,6 +1441,7 @@ button.bub-lk:active svg{transform:scale(.85)}
 .dk small{font-size:12.5px;color:var(--muted)}
 .dk.hot{border-color:var(--coral);background:color-mix(in srgb,var(--coral) 8%,var(--surface))}
 .dk.hot b{color:var(--coral-ink)}
+button.dk{font:inherit;color:inherit;text-align:left;cursor:pointer}button.dk:hover{border-color:var(--ink-btn)}
 .dash-g{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start}
 .da-l,.dag-l{display:grid;gap:8px}
 .da{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px 12px;border-radius:12px;border:1px solid var(--line);border-left:5px solid var(--muted);background:var(--surface);color:var(--fg);font:inherit;cursor:pointer}
@@ -3026,7 +3027,7 @@ function railHtml(){
     return '<button type="button" class="client" data-act="pick" data-c="'+c.id+'" aria-current="'+(c.id===state.sel)+'">'+avHtml(c,'')+'<span class="cl-text"><span class="cl-name">'+esc(c.name)+'</span><span class="cl-sub">'+esc(sub)+'</span>'+revChip(c)+'</span>'+(f?'<span class="badge" title="Registros nuevos">'+f+'</span>':'')+'</button>';
   }).join('');
 }
-function renderRail(){$('#clist').innerHTML=railHtml();const lib=inLib();$('.rail-head').hidden=lib;$('#clist').hidden=lib;$('.seg').hidden=state.mode==='client';if(lib||state.mode==='client')$('#newform').hidden=true;const tO=k=>'<option value="">En blanco</option>'+state.tpls.filter(x=>x[k]).map(x=>'<option value="'+x.id+'">'+esc(x.name)+'</option>').join('');if($('#ntD'))$('#ntD').innerHTML=tO('diet');if($('#ntT'))$('#ntT').innerHTML=tO('training');$$('[data-act="view"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===state.view)));renderBell()}
+function renderRail(){$('#clist').innerHTML=railHtml();const lib=inLib(),dash=state.mode==='coach'&&state.view==='dash';$('.rail-head').hidden=lib||dash;$('#clist').hidden=lib||dash;$('.seg').hidden=state.mode==='client';if(lib||state.mode==='client')$('#newform').hidden=true;const tO=k=>'<option value="">En blanco</option>'+state.tpls.filter(x=>x[k]).map(x=>'<option value="'+x.id+'">'+esc(x.name)+'</option>').join('');if($('#ntD'))$('#ntD').innerHTML=tO('diet');if($('#ntT'))$('#ntT').innerHTML=tO('training');$$('[data-act="view"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===state.view)));renderBell()}
 
 /* ---------- vista del entrenador ---------- */
 function entryHtml(c,l){
@@ -3767,7 +3768,8 @@ function dashView(){
   const trainToday=C.filter(todayDay).length,msgs=C.reduce((a,c)=>a+unread(c),0);
   const in7=C.filter(revWarn),late7=in7.filter(c=>revSt(c).k==='late').length,hot7=in7.some(c=>{const k=revSt(c).k;return k==='late'||k==='today'});
   const avg=C.length?Math.round(C.reduce((a,c)=>a+adhPct(c),0)/C.length):0;
-  const kpi=(l,v,s,cls)=>'<div class="dk'+(cls?' '+cls:'')+'"><span>'+l+'</span><b>'+v+'</b><small>'+s+'</small></div>';
+  const kpi=(l,v,s,cls,at)=>at?'<button type="button" class="dk'+(cls?' '+cls:'')+'" '+at+'><span>'+l+'</span><b>'+v+'</b><small>'+s+'</small></button>':'<div class="dk'+(cls?' '+cls:'')+'"><span>'+l+'</span><b>'+v+'</b><small>'+s+'</small></div>';
+  const lastU=c=>c.msgs.filter(m=>m.fresh&&m.from==='client').reduce((a,m)=>Math.max(a,m.ts||0),0),mc=C.filter(unread).sort((a,b)=>lastU(b)-lastU(a))[0];
   const att=[];
   C.forEach(c=>{
     const go=(t,txt,lv)=>att.push({c,t,txt,lv});
@@ -3794,7 +3796,7 @@ function dashView(){
      '<td class="n"><span class="pct" style="--p:'+adhPct(c)+'">'+adhPct(c)+' %</span></td><td>'+(revChip(c)||esc(revShort(c)))+'</td></tr>'}).join('');
   const agenda=revAgenda(C);
   return '<div class="dash"><header class="dash-h"><div><p class="dh-e">'+esc(now.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}))+'</p><h2>'+hi+', Robert</h2></div><button type="button" class="btn primary" data-act="toggleNew">+ Nuevo cliente</button></header>'+
-   '<div class="dks">'+kpi('Clientes activos',C.length,'en seguimiento')+kpi('Entrenan hoy',trainToday,'de '+C.length+' clientes')+kpi('Mensajes sin leer',msgs,msgs?'pendientes de responder':'al día',msgs?'hot':'')+kpi('Revisiones',in7.length,late7?late7+(late7===1?' vencida':' vencidas')+' · próximos '+REV_AVISO+' días':'próximos '+REV_AVISO+' días',hot7?'hot':'')+kpi('Adherencia media',avg+' %','esta semana')+'</div>'+revBanner(C)+
+   '<div class="dks">'+kpi('Clientes activos',C.length,'en seguimiento','','data-act="view" data-v="clients"')+kpi('Entrenan hoy',trainToday,'de '+C.length+' clientes')+kpi('Mensajes sin leer',msgs,msgs?'pendientes de responder':'al día',msgs?'hot':'',mc?'data-act="goto" data-c="'+mc.id+'" data-t="mensajes"':'')+kpi('Revisiones',in7.length,late7?late7+(late7===1?' vencida':' vencidas')+' · próximos '+REV_AVISO+' días':'próximos '+REV_AVISO+' días',hot7?'hot':'')+kpi('Adherencia media',avg+' %','esta semana')+'</div>'+revBanner(C)+
    '<div class="dash-g"><section class="card"><h2>Necesitan tu atención</h2><div class="da-l">'+attHtml+'</div></section><section class="card"><h2>Revisiones de tus clientes</h2><div class="dag-l rv-ag">'+agenda+'</div></section></div>'+
    '<section class="card"><h2>Hoy, '+DAYS[ti].toLowerCase()+'</h2><div class="tbl-wrap"><table class="dt dtab"><thead><tr><th scope="col">Cliente</th><th scope="col">Entreno de hoy</th><th scope="col" class="n">Comidas</th><th scope="col" class="n">Agua</th><th scope="col" class="n">Pasos</th><th scope="col" class="n">Descanso</th><th scope="col" class="n">Último peso</th><th scope="col" class="n">Semana</th><th scope="col">Revisión</th></tr></thead><tbody>'+rows+'</tbody></table></div></section></div>';
 }
@@ -5606,7 +5608,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014162322';let verT=0;
+const APP_VER='20261014181710';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

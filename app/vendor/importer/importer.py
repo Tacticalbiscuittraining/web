@@ -244,6 +244,8 @@ def parse_plan(path):
     out['phase'] = re.split(r'\s+--\s+|\s+—\s+', diet['dur'])[0].strip()
     rv = kv.get('Próxima revisión', '').strip()
     out['review'] = rv if rv and rv not in ('-', '—') else '—'
+    m = re.match(r'(\d{1,2})/(\d{1,2})/(\d{4})', rv)
+    if m: out['revDate'] = '%s-%02d-%02d' % (m.group(3), int(m.group(2)), int(m.group(1)))
     diet['edad'] = num(kv.get('Edad')) or ''
     diet['altura'] = num(kv.get('Altura (cm)')) or ''
     diet['diasTxt'] = kv.get('Días entreno / sem.', '').strip()

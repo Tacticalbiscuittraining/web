@@ -2736,8 +2736,13 @@ p.impbox-w{padding-left:0}
 #app .xsheet{box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:8px 0 16px;padding:clamp(10px,3vw,22px)}
 #app .xs-h b{font-size:clamp(15px,4.4vw,19px)}
 .del-doc{padding:12px;border:1px solid var(--line,#ddd);border-radius:12px;background:rgba(42,157,143,.06)}
-.lg-card .lg-demo{margin:0 26px 26px;text-align:center}
-.lg-demo .lg-btn{display:flex;color:inherit;justify-content:center;text-decoration:none}
+.lg-card .lg-demo{margin:0 26px 26px;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;padding:16px 18px;border:1.5px solid var(--teal);border-radius:14px;background:var(--teal-soft);color:var(--ink);text-decoration:none;transition:transform .15s,box-shadow .15s}
+.lg-card .lg-demo:hover{transform:translateY(-1px);box-shadow:0 10px 22px -14px var(--teal)}
+.lg-card .lg-demo:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.lgd-ic{grid-row:span 2;width:44px;height:44px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;padding-left:3px}
+.lgd-tx{display:flex;flex-direction:column;gap:2px;font-size:13.5px;line-height:1.4;color:var(--muted)}
+.lgd-tx b{font-size:15.5px;color:var(--teal-ink)}
+.lgd-go{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14.5px;color:var(--teal-ink)}
 
 </style>
 
@@ -5761,7 +5766,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014221654';let verT=0;
+const APP_VER='20261014222646';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -5785,7 +5790,9 @@ function renderLogin(msg){
    '<label class="cell"><span class="lbl show">Contraseña</span><div class="pw"><input id="lgP" class="in" type="password" autocomplete="current-password"><button type="button" class="linkbtn" data-act="togglePw">Mostrar</button></div></label>'+
    '<p id="lgErr" class="lg-err" role="alert"'+(msg?'':' hidden')+'>'+esc(msg||'')+'</p><button type="submit" class="btn primary lg-btn">Entrar</button>'+
    '<p class="muted lg-help"><button type="button" class="linkbtn" id="lgForgot">¿Has olvidado la contraseña?</button></p></form>'+
-   '<div class="lg-demo"><p>¿Aún no eres cliente? Mira cómo funciona la app con una clienta de ejemplo.</p><a class="btn lg-btn" href="demo.html">Ver demo</a></div>');
+   '<a class="lg-demo" href="demo.html"><span class="lgd-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>'+
+   '<span class="lgd-tx"><b>¿Aún no eres cliente?</b><span>Prueba la app por dentro con una clienta de ejemplo: entrenos, dieta y progreso.</span></span>'+
+   '<span class="lgd-go">Ver demo<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>');
   const f=$('#lgForgot');if(f)f.onclick=()=>renderForgot(($('#lgU')||{}).value||'');
   setTimeout(()=>{const u=$('#lgU');if(u)u.focus()},0);
 }

@@ -2617,6 +2617,15 @@ body[data-screen="client"] .pm{padding-bottom:64px}
 .cv .chead>div:first-child{flex:1 1 auto;min-width:0}
 .ch-cal[aria-expanded="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
 .ccal-box{margin:0 0 16px}
+/* cada nivel de la ficha con su estilo: modo (Ver = tinta, Editar = coral), pestañas = píldoras turquesa, subpestañas = subrayado */
+.ch-cal{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin-left:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--fg);cursor:pointer;flex:none}
+.ch-cal:hover{border-color:var(--teal)}
+.ch-cal[aria-expanded="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.cv .cmode .es-b[aria-selected="true"]{background:var(--fg);color:var(--surface);box-shadow:none}
+.cv.edit .cmode .es-b[aria-selected="true"]{background:var(--coral);color:#fff}
+.cv .esub.es2{background:transparent;padding:0;gap:0;border-radius:0;border-bottom:1px solid var(--line);margin:4px 0 14px}
+.cv .es2 .es-b{border-radius:0;min-height:40px;background:transparent;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px;box-shadow:none}
+.cv .es2 .es-b[aria-selected="true"]{background:transparent;color:var(--teal-ink);border-bottom-color:var(--teal);box-shadow:none}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -3128,7 +3137,7 @@ function chartSvg(w){
   return '<svg class="chart" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Evolución del peso en kilos">'+grid+'<path class="ar" d="'+area+'"/><polyline class="ln" points="'+pts+'"/>'+dots+'<text class="lastv" x="'+lx+'" y="'+(ly-11)+'" text-anchor="end">'+w[w.length-1].toFixed(1).replace('.',',')+' kg</text><text class="ax" x="'+pl+'" y="'+(Hh-8)+'">Inicio</text><text class="ax" x="'+(W-pr)+'" y="'+(Hh-8)+'" text-anchor="end">Último</text></svg>';
 }
 function headHtml(c){
-  return '<div class="chead"><div><p class="eyebrow" id="h-phase">'+esc(c.phase)+'</p><h1 id="h-name">'+esc(c.name)+'</h1><p class="goal" id="h-goal">'+esc(c.goal)+'</p>'+'<div class="ch-row">'+revChip(c,{all:1,head:1})+'<button type="button" class="btn sm ch-cal" data-act="ccal" aria-expanded="'+!!state.ccal+'">📅 '+(state.ccal?'Cerrar calendario':'Calendario')+'</button></div></div><div class="actions" style="margin:0"><button type="button" class="btn" data-act="preview">Ver como cliente</button><button type="button" class="btn danger" data-act="delClient">Eliminar cliente</button></div></div>';
+  return '<div class="chead"><div><p class="eyebrow" id="h-phase">'+esc(c.phase)+'</p><h1 id="h-name">'+esc(c.name)+'</h1><p class="goal" id="h-goal">'+esc(c.goal)+'</p>'+'<div class="ch-row">'+revChip(c,{all:1,head:1})+'<button type="button" class="ch-cal" data-act="ccal" aria-expanded="'+!!state.ccal+'" aria-label="'+(state.ccal?'Cerrar calendario':'Abrir calendario')+'" title="'+(state.ccal?'Cerrar calendario':'Calendario')+'"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 17.5h.01M12 17.5h.01"/></svg></button></div></div><div class="actions" style="margin:0"><button type="button" class="btn" data-act="preview">Ver como cliente</button><button type="button" class="btn danger" data-act="delClient">Eliminar cliente</button></div></div>';
 }
 function tabsHtml(c){
   const t=[['resumen','Resumen',0,''],['entrevista','Entrevista',0,''],['dieta','Dieta',0,''],['entreno','Entrenamiento',0,''],['registro','Registro',freshLogs(c),'reg-badge'],['seguimiento','Seguimiento',freshChk(c),'chk-badge'],...(c.run?[['carrera','Carrera',rFresh(c),'run-badge']]:[]),['revision',{today:'Revisión hoy',late:'Revisión vencida',soon:'Revisión en '+revSt(c).d+' d'}[revSt(c).k]||'Revisiones',0,''],['fotos','Fotos',freshPhotos(c),'photo-badge'],['mensajes','Mensajes',freshMsgs(c),'msg-badge']];
@@ -5159,7 +5168,7 @@ document.addEventListener('click',e=>{
   const a=t.dataset.act,c=cur();
   if(t.dataset.confirm!==undefined&&!arm(t))return;
   switch(a){
-    case 'ccal':state.ccal=!state.ccal;renderMain();if(state.ccal){const x=$('.ccal-box');if(x)window.scrollTo({top:Math.max(0,x.getBoundingClientRect().top+window.scrollY-12)})}break;
+    case 'ccal':state.ccal=!state.ccal;if(state.ccal&&CM_EDIT.indexOf(state.tab)>=0)state.tab=state.lastVer||'resumen';renderMain();if(state.ccal){const x=$('.ccal-box .cal-card')||$('.ccal-box');if(x){const r=x.getBoundingClientRect();window.scrollTo({top:Math.max(0,r.top+window.scrollY-Math.max(12,(window.innerHeight-r.height)/2))})}}break;
     case 'mList':state.mList=true;renderRail();window.scrollTo({top:0});break;
     case 'pick':state.mList=false;state.ccal=false;state.rnDet='';if(window.innerWidth<=880)setTimeout(()=>window.scrollTo({top:0}),0);state.sel=t.dataset.c;state.dayIdx=0;state.cday=null;state.sent={};state.cmp=[];state.view='clients';renderAll();break;
     case 'view':if(t.dataset.v==='clients')state.mList=window.innerWidth<=880;state.view=t.dataset.v;renderAll();break;
@@ -5754,7 +5763,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014214111';let verT=0;
+const APP_VER='20261014220457';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

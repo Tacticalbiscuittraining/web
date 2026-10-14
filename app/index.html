@@ -2568,6 +2568,18 @@ body[data-screen="client"] .pm{padding-bottom:64px}
   .dash .dk small{font-size:11.5px;line-height:1.25}
   .dsec>summary{padding:14px 14px}.dsb{padding:0 12px 14px}
 }
+/* salidas registradas: filas pulsables y detalle */
+.rn-hint{margin:-4px 0 8px;font-size:13px}
+.rn-log tr.rn-go{cursor:pointer}
+.rn-log tr.rn-go:hover td,.rn-log tr.rn-go:hover th{background:color-mix(in srgb,var(--teal-ink) 10%,var(--surface))}
+.rn-log tr.rn-go .linkbtn{font-weight:700;white-space:nowrap}
+.rn-detc{border-left:4px solid var(--rt,var(--line))}
+.rn-det-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.rn-det-h h2{margin:0}
+.rn-det-p{margin:14px 0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--fg) 5%,var(--surface))}
+.rn-det-p .rn-txt{margin:2px 0 0}
+.rn-dl .bad dd{color:#B42318}
+.rn-detc .rn-img{margin-top:12px}
 @media (prefers-reduced-motion:reduce){
   .live i,.entry.fresh,.msg.fresh{animation:none}
   .meter>i,.toast{transition:none}
@@ -4055,18 +4067,49 @@ function runGuide(R,open){const op=open?' open':'';
     ((S.prev||[]).length?'<p class="rn-sub">Días previos y material</p>'+rTable(['Cuándo','Qué hacer'],S.prev):'')+'</details>':'';
   return zones+rules+strat}
 function clientRun(c){return c.run?runView(c,'client'):'<div class="empty">Tu entrenador todavía no te ha preparado un plan de carrera.</div>'}
+const rKey=l=>l.id||'t'+l.ts;
+const rDay=iso=>{const d=rParse(iso);return d?DAYS[(d.getDay()+6)%7]+' '+d.getDate()+'/'+(d.getMonth()+1):''};
 function outTable(c){const A=(c.acts||[]).filter(isOut).sort((a,b)=>b.date<a.date?-1:1);if(!A.length)return '';
-  return '<div class="card"><h2>Salidas por su cuenta</h2><div class="ps-x"><table class="ps-t rn-tb rn-log"><thead class="nv"><tr><th>Fecha</th><th>Tipo</th><th>Tiempo</th><th>Km</th><th>Ritmo</th><th>Pulso</th><th>Dolor</th><th>Notas</th></tr></thead><tbody>'+
-   A.map(a=>{const d=rParse(a.date);return '<tr'+(a.pain>=2?' class="bad"':'')+'><th scope="row" class="ps-lb">'+(d?esc(DAYS_S[(d.getDay()+6)%7]+' '+dshort(d.getTime())):'')+'</th><td>'+actIc(a.type)+' '+esc(a.type)+'</td><td>'+(a.min?rHM(a.min):'')+'</td><td>'+(a.km?fmtKm(a.km):'')+'</td><td>'+esc(actPace(a)||'')+'</td><td>'+(a.hr?'♥ '+a.hr+(a.hrmax?' / '+a.hrmax:''):'')+'</td><td>'+(a.pain!=null&&a.pain!==''?esc(ACT_P[a.pain]||''):'')+'</td><td>'+esc(a.note||'')+'</td></tr>'}).join('')+'</tbody></table></div></div>'}
+  return '<div class="card"><h2>Salidas por su cuenta</h2><p class="muted rn-hint">Pulsa una salida para verla en detalle.</p><div class="ps-x"><table class="ps-t rn-tb rn-log"><thead class="nv"><tr><th>Fecha</th><th>Tipo</th><th>Tiempo</th><th>Km</th><th>Ritmo</th><th>Pulso</th><th>Dolor</th><th>Notas</th></tr></thead><tbody>'+
+   A.map(a=>{const d=rParse(a.date);return '<tr class="rn-go'+(a.pain>=2?' bad':'')+'" data-act="rnDet" data-id="a:'+esc(a.id)+'"><th scope="row" class="ps-lb"><button type="button" class="linkbtn" data-act="rnDet" data-id="a:'+esc(a.id)+'">'+(d?esc(DAYS_S[(d.getDay()+6)%7]+' '+dshort(d.getTime())):'Ver')+'</button></th><td>'+actIc(a.type)+' '+esc(a.type)+'</td><td>'+(a.min?rHM(a.min):'')+'</td><td>'+(a.km?fmtKm(a.km):'')+'</td><td>'+esc(actPace(a)||'')+'</td><td>'+(a.hr?'♥ '+a.hr+(a.hrmax?' / '+a.hrmax:''):'')+'</td><td>'+(a.pain!=null&&a.pain!==''?esc(ACT_P[a.pain]||''):'')+'</td><td>'+esc(a.note||'')+'</td></tr>'}).join('')+'</tbody></table></div></div>'}
+/* detalle de una salida (del plan o por su cuenta) al pulsarla en la tabla */
+function runDet(c,id){
+  const back='<div class="actions" style="margin:0 0 12px"><button type="button" class="btn sm" data-act="rnDet" data-id="">← Volver a Carrera</button></div>';
+  const row=r=>'<dl class="cal-dl rn-dl">'+r.filter(x=>x[1]!==''&&x[1]!=null).map(x=>'<div'+(x[2]?' class="'+x[2]+'"':'')+'><dt>'+x[0]+'</dt><dd>'+esc(String(x[1]))+'</dd></div>').join('')+'</dl>';
+  const when=ts=>ts?new Date(ts).toLocaleString('es-ES',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}):'';
+  if(id.slice(0,2)==='a:'){const a=(c.acts||[]).find(x=>String(x.id)===id.slice(2));if(!a)return '';
+    return back+'<div class="card rn-detc"><div class="rn-det-h"><h2>'+actIc(a.type)+' '+esc(a.type==='Otra'&&a.other?a.other:a.type)+'</h2>'+likeBtn(c,'a:'+a.id,'coach',a.type+' · '+rDay(a.date),{ts:rParse(a.date)?rParse(a.date).getTime():0})+'</div><p class="muted" style="margin:0">'+esc(rDay(a.date))+' · salida por su cuenta, fuera del plan</p>'+actDet(a)+(a.img?'<button type="button" class="rn-img" data-act="rnZoomA" data-src="'+esc(mediaSrc(a.img))+'"><img src="'+esc(mediaSrc(a.img))+'" alt="Captura del reloj"></button>':'')+'</div>'}
+  const L=c.run&&(c.run.logs||[]).find(l=>rKey(l)===id);if(!L)return '';
+  const w=L.w,i=L.i,S=rSes(c,w,i)||{},W=c.run.weeks[w]||{},T=RUN_T[S.t]||RUN_T.suave,real=rLogDate(c,L),pd=rDate(c,w,i),plan=pd?rIso(pd):'',key=w+'-'+i;
+  const head='<div class="rn-det-h"><div>'+rTypePill(S.t||'suave')+' <b class="rn-when">'+esc(rDay(real))+'</b></div>'+(L.st!=='no'?likeBtn(c,'r:'+key,'coach',T[0]+' · '+rDay(real),{ts:rParse(real)?rParse(real).getTime():0}):'')+'</div>'+
+   '<p class="muted" style="margin:4px 0 0">Semana '+(w+1)+' de '+c.run.weeks.length+(W.phase?' · '+esc(W.phase):'')+(plan&&plan!==real?' · pautada para el '+esc(rDay(plan).toLowerCase())+(real<plan?' (la adelantó)':''):'')+'</p>';
+  const pl='<div class="rn-det-p"><p class="rn-lab">Sesión pautada</p><p class="rn-txt">'+esc(S.txt||'')+'</p>'+(rChips(S.txt)?'<div class="rn-chips">'+rChips(S.txt)+'</div>':'')+'</div>';
+  let body;
+  if(state.rnEdit===key)body=rForm(c,w,i,S,L,true);
+  else body='<p class="rn-lab">Lo que hizo</p>'+row([['Estado',RUN_ST[L.st][0]+' '+RUN_ST[L.st][1]],['Duración',L.min?rHM(L.min):''],['Distancia',L.km?fmtKm(L.km)+' km':''],['Ritmo medio',rPace(L.min,L.km)],['Desnivel +',L.up?fmtN(L.up)+' m':''],['Pulso medio',L.hr?L.hr+' ppm':''],['Pulso máximo',L.hrmax?L.hrmax+' ppm':''],['Calorías',L.kcal?L.kcal+' kcal':''],['Efecto del entreno',L.te||''],['Sensación',L.rpe?L.rpe+'/10':''],['Dolor',L.pain?L.pain+'/10'+(L.painZ?' · '+L.painZ:''):'Sin dolor',L.pain>=3?'bad':''],['Registrada',when(L.ts)]])+
+   (L.note?'<p class="rn-lab">Notas</p><p class="rn-note">'+esc(L.note)+'</p>':'')+
+   (L.img?'<button type="button" class="rn-img" data-act="rnZoom" data-w="'+w+'" data-i="'+i+'"><img src="'+esc(mediaSrc(L.img))+'" alt="Captura del reloj"></button>':'')+
+   '<div class="actions" style="margin:12px 0 0"><button type="button" class="btn sm" data-act="rnEdit" data-w="'+w+'" data-i="'+i+'">✎ Corregir</button></div>';
+  return back+'<div class="card rn-detc" style="--rt:'+T[1]+'">'+head+pl+body+'</div>';
+}
 function runPanel(c){
+  if(state.rnDet){const d=runDet(c,state.rnDet);if(d)return d;state.rnDet=''}
   if(!c.run)return outTable(c)||'<div class="empty">Este cliente no tiene plan de carrera ni salidas registradas. Puedes cargar un plan con «Cargar archivo de plan» en el Resumen.</div>';
-  const L=(c.run.logs||[]).slice().sort((a,b)=>b.ts-a.ts);
+  const L=(c.run.logs||[]).filter(l=>RUN_ST[l.st]).slice().sort((a,b)=>b.ts-a.ts);
   const pain=L.filter(l=>l.pain>=3).slice(0,3);
   const al=pain.length?'<div class="pf-warn"><b>Dolor registrado:</b> '+pain.map(l=>esc(dshort(l.ts))+' · '+l.pain+'/10'+(l.painZ?' ('+esc(l.painZ)+')':'')).join(' · ')+'</div>':'';
-  const tb=L.length?'<div class="card"><h2>Salidas registradas</h2><div class="ps-x"><table class="ps-t rn-tb rn-log"><thead class="nv"><tr><th>Fecha</th><th>Sesión</th><th>Estado</th><th>Tiempo</th><th>Km</th><th>Ritmo</th><th>Pulso</th><th>Sens.</th><th>Dolor</th><th>Notas</th></tr></thead><tbody>'+
-   L.map(l=>{const S=rSes(c,l.w,l.i)||{};return '<tr'+(l.pain>=3?' class="bad"':'')+'><th scope="row" class="ps-lb">'+(()=>{const d=rParse(rLogDate(c,l));return d?esc(DAYS_S[(d.getDay()+6)%7]+' '+dshort(d.getTime())):''})()+'</th><td>'+rTypePill(S.t||'suave')+'</td><td>'+RUN_ST[l.st][0]+' '+RUN_ST[l.st][1]+'</td><td>'+(l.min?rHM(l.min):'')+'</td><td>'+(l.km?fmtKm(l.km):'')+'</td><td>'+rPace(l.min,l.km)+'</td><td>'+(l.hr||'')+(l.hrmax?' / '+l.hrmax:'')+'</td><td>'+(l.rpe||'')+'</td><td>'+(l.pain?l.pain+(l.painZ?' · '+esc(l.painZ):''):'')+'</td><td>'+esc(l.note||'')+(l.img?' <button type="button" class="linkbtn" data-act="rnZoom" data-w="'+l.w+'" data-i="'+l.i+'">📷 Ver captura</button>':'')+'</td></tr>'}).join('')+'</tbody></table></div></div>':'';
-  return al+tb+outTable(c)+runView(c,'coach');
+  const plan='<div class="plan-bar"><p class="muted" style="margin:0">Plan de carrera de '+esc(first(c.name))+', tal como lo ve en su app.</p><span><button type="button" class="btn primary" data-act="trPrint" data-v="carrera">Imprimir</button></span></div>'+trSheet(c,'carrera');
+  const tb=L.length?'<div class="card rn-logc"><h2>Salidas registradas</h2><p class="muted rn-hint">Pulsa una salida para verla en detalle.</p><div class="ps-x"><table class="ps-t rn-tb rn-log"><thead class="nv"><tr><th>Fecha</th><th>Sesión</th><th>Estado</th><th>Tiempo</th><th>Km</th><th>Ritmo</th><th>Pulso</th><th>Sens.</th><th>Dolor</th><th>Notas</th></tr></thead><tbody>'+
+   L.map(l=>{const S=rSes(c,l.w,l.i)||{},k=esc(rKey(l));return '<tr class="rn-go'+(l.pain>=3?' bad':'')+'" data-act="rnDet" data-id="'+k+'"><th scope="row" class="ps-lb"><button type="button" class="linkbtn" data-act="rnDet" data-id="'+k+'">'+(()=>{const d=rParse(rLogDate(c,l));return d?esc(DAYS_S[(d.getDay()+6)%7]+' '+dshort(d.getTime())):'Ver'})()+'</button></th><td>'+rTypePill(S.t||'suave')+'</td><td>'+RUN_ST[l.st][0]+' '+RUN_ST[l.st][1]+'</td><td>'+(l.min?rHM(l.min):'')+'</td><td>'+(l.km?fmtKm(l.km):'')+'</td><td>'+rPace(l.min,l.km)+'</td><td>'+(l.hr||'')+(l.hrmax?' / '+l.hrmax:'')+'</td><td>'+(l.rpe||'')+'</td><td>'+(l.pain?l.pain+(l.painZ?' · '+esc(l.painZ):''):'')+'</td><td>'+esc(l.note||'')+(l.img?' 📷':'')+'</td></tr>'}).join('')+'</tbody></table></div></div>':'';
+  const vol=L.some(l=>l.min)?'<details class="rn-d"><summary>Volumen de carrera por semana</summary>'+rVolChart(c)+'</details>':'';
+  const R=c.run,hist=R.hist&&R.hist.length?'<details class="rn-d"><summary>Lo que dicen sus últimos entrenos</summary>'+rTable(['Fecha','Sesión','Distancia','Ritmo','FC media / máx','Lectura'],R.hist)+(R.concl?'<p class="rn-concl">'+esc(R.concl)+'</p>':'')+'</details>':'';
+  return al+plan+tb+outTable(c)+vol+hist;
 }
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-act="rnDet"],[data-act="rnZoomA"]');if(!t)return;
+  if(t.dataset.act==='rnZoomA'){$('#lb img').src=t.dataset.src;$('#lb').hidden=false;return}
+  state.rnDet=t.dataset.id;state.rnEdit='';state.rpf=null;renderMain();window.scrollTo({top:0});
+});
 function rSave(c,w,i){
   const f=document.querySelector('.rn-form[data-w="'+w+'"][data-i="'+i+'"]');if(!f)return;
   const P=state.rpf||{},old=rLog(c,w,i),g=k=>{const e=f.querySelector('[data-rf="'+k+'"]');return e?e.value.trim():''};
@@ -5048,7 +5091,7 @@ document.addEventListener('click',e=>{
     case 'view':state.view=t.dataset.v;renderAll();break;
     case 'dashGo':{const k=t.dataset.k,d=$('#ds-'+k);if(d){d.open=true;state.dk=Object.assign(state.dk||{},{[k]:true});const y=d.getBoundingClientRect().top+window.scrollY-12;window.scrollTo({top:Math.max(0,y),behavior:'smooth'})}break}
     case 'toggleNew2':break;
-    case 'tab':state.tab=t.dataset.t;renderMain();break;
+    case 'tab':state.tab=t.dataset.t;state.rnDet='';state.rnEdit='';renderMain();break;
     case 'toggleNew':{const f=$('#newform');f.hidden=!f.hidden;if(!f.hidden){$('#nn').focus();$('#nPw').value=genPw()}break}
     case 'cancelNew':$('#newform').hidden=true;break;
     case 'addFood':{const m=findMeal(c,t.dataset.m);m.items.push(fd('',0));renderMain();focusLast('[data-r="food"][data-f="food"][data-m="'+m.id+'"]');break}
@@ -5291,6 +5334,7 @@ document.addEventListener('keydown',e=>{
   if(state.printOpen){state.printOpen=false;renderMain();return}
   if(state.planFs){state.planFs=false;renderMain();return}
   if(state.trFs){state.trFs='';renderMain();return}
+  if(state.rnDet&&!state.rnEdit&&!(($('#lb')||{}).hidden===false)){state.rnDet='';renderMain();return}
   const lb=$('#lb'),vm=$('#vm');
   if(vm&&!vm.hidden)closeVm();else if(lb&&!lb.hidden)lb.hidden=true;else if(state.bell){state.bell=false;renderBell()}
 });
@@ -5636,7 +5680,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261014184744';let verT=0;
+const APP_VER='20261014202104';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();

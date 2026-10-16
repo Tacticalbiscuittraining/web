@@ -484,7 +484,9 @@
 "src": "USDA: Yogurt, plain, skim milk",
 "sw": true,
 "al": [
-"yogur desnatado"
+"yogur desnatado",
+"yogur natural 0",
+"yogur 0"
 ]
 },
 {
@@ -565,6 +567,19 @@
 "sw": true,
 "al": [
 "leche"
+]
+},
+{
+"n": "Leche desnatada",
+"g": "k",
+"p": 3.4,
+"c": 4.9,
+"f": 0.2,
+"fib": 0,
+"src": "Tablas Moreiras 2013 (ficha MAPA)",
+"sw": true,
+"al": [
+"leche desnatada"
 ]
 },
 {
@@ -1024,7 +1039,8 @@
 "src": "USDA: Chocolate, dark, 70-85% cacao solids",
 "sw": true,
 "al": [
-"chocolate negro"
+"chocolate negro",
+"chocolate"
 ]
 },
 {

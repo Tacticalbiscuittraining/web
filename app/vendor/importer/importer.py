@@ -40,11 +40,12 @@ for x in FOODDB:
         FOOD.append((r'\b' + re.escape(_n(al)) + r'\b', disp, x['n'], [x['p'], x['c'], x['f']]))
 FOOD.sort(key=lambda r: -len(r[0]))
 EGG_G = 55  # huevo M sin cáscara
+CLARA_G = 33  # clara de huevo M
 
 def parse_compact(cell):
     """'3 huevos + 70g avena + 150g plátano' · '2 latas atún (160g), sin pan' · 'verdura (sin AOVE)'"""
     items, notes, names = [], [], []
-    for tok in re.split(r'\s*\+\s*|,\s*', cell):
+    for tok in re.split(r'\s*[+·]\s*|,\s*', cell):
         tok = tok.strip().rstrip('*').strip()
         if not tok: continue
         par = re.search(r'\((?!\d)([^)]*)\)', tok)
@@ -74,12 +75,12 @@ def parse_compact(cell):
     return dish[:1].upper() + dish[1:], items, notes
 
 def split_top(s):
-    """Separa por «+» y «,» fuera de paréntesis."""
+    """Separa por «+», «,» y «·» fuera de paréntesis."""
     out, depth, cur = [], 0, ''
     for ch in s:
         if ch == '(': depth += 1
         elif ch == ')': depth = max(0, depth - 1)
-        if ch in '+,' and depth == 0:
+        if ch in '+,·' and depth == 0:
             out.append(cur); cur = ''
         else: cur += ch
     out.append(cur)
@@ -100,8 +101,9 @@ def parse_free(cell):
     s = re.sub(r'(\d)\s*(g|ml)(?=[A-Za-zÁÉÍÓÚáéíóúñÑ])', r'\1\2 ', cell)
     toks = []
     for tok in split_top(s):
-        inner = re.search(r'\(([^()]*\d\s*(?:g|ml)[^()]*\+[^()]*)\)', tok)
-        if inner: toks += split_top(inner.group(1))
+        inner = re.search(r'\(([^()]*\+[^()]*)\)', tok)
+        parts = split_top(inner.group(1)) if inner else []
+        if parts and (re.search(r'\d\s*(?:g|ml)', inner.group(1)) or all(re.search(r'\d', x) and re.search(r'[^\W\d_]', x) for x in parts)): toks += parts  # «(4 claras + 1 huevo)», «(80g pan + 60g pavo)»; no «(2+1)»
         else: toks += [x for x in re.split(r'(?<=\))\s*(?:\by\b|\bcon\b)\s+(?=[^()]*\([^()]*\d)', tok) if x.strip()]
     items, notes, names = [], [], []
     for tok in toks:
@@ -109,12 +111,16 @@ def parse_free(cell):
         if not tok: continue
         low = _n(tok)
         m = re.search(r'(\d+(?:[.,]\d+)?)\s*(g|ml)\b', low)
-        eg = re.search(r'(\d+)\s*huevos?|huevos?[^()]*\((\d+)\s*ud', low)
+        eg = re.search(r'(\d+)\s*huevos?|huevos?[^()]*\((\d+)\s*(?:ud|unid)', low)
+        cl = re.search(r'(\d+)\s*claras?\b', low)
         name = re.sub(r'\([^)]*\)?', ' ', tok)
         name = re.sub(r'\d+(?:[.,]\d+)?\s*(g|ml)\b|\d+\s*(latas?|uds?|piezas?)|\b(crudo|cruda|escurrido|enteros?|aprox\.?)\b|~|%|^\s*\d+(/\d+)?\s*', ' ', name, flags=re.I)
         name = re.sub(r'.*:', '', name)
         name = re.sub(r'\s+', ' ', name).strip(' ,.-')
-        if eg and not m:
+        if cl and not m:
+            n = int(cl.group(1)); g = n * CLARA_G; unit = 'g'
+            f = ('Claras de huevo', 'Claras de huevo', next([x['p'], x['c'], x['f']] for x in FOODDB if x['n'] == 'Claras de huevo'))
+        elif eg and not m:
             n = int(eg.group(1) or eg.group(2)); g = n * EGG_G; unit = 'g'
             f = ('Huevos (%d)' % n, 'Huevos', next([x['p'], x['c'], x['f']] for x in FOODDB if x['n'] == 'Huevos'))
         elif m:

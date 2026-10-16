@@ -3,7 +3,7 @@
 Es lo contrario de importer.py: lo que sale se puede volver a importar.
 
 Uso:  python3 tools/exporter.py datos.json -o salida.docx|.xlsx
-datos.json = {"kind": "diet"|"training", "name", "goal", "review", "weight", "data": {"diet"|"training": …}}
+datos.json = {"kind": "diet"|"training"|"run", "name", "goal", "review", "weight", "data": {"diet"|"training": …}}
 En la app se ejecuta en el navegador (Pyodide), igual que el importador.
 """
 import copy, datetime as dt, io, json, os, re, sys, zipfile
@@ -537,9 +537,100 @@ def fill_training(J):
         for k, b in extra.items(): z.writestr(k, b)
     return out.getvalue(), left
 
+# ---------------------------------------------------------------- plan de carrera (Excel propio; importer.parse_run lo vuelve a leer)
+RUN_TN = {'suave': 'Suave', 'larga': 'Salida larga', 'calidad': 'Calidad', 'test': 'Test', 'carrera': 'Día de carrera', 'recup': 'Recuperación', 'fuerza': 'Fuerza', 'descanso': 'Descanso'}
+RUN_TC = {'suave': 'D5EEEB', 'larga': 'F4ECCB', 'calidad': 'F9DDD5', 'test': 'E4DCEF', 'carrera': 'F2D0CE', 'recup': 'DCE9E4', 'fuerza': 'E1E5E8', 'descanso': 'EEF0F2'}
+
+def fill_run(J):
+    import openpyxl
+    from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+    R = (J.get('data') or {}).get('run') or {}
+    race, WK = R.get('race') or {}, R.get('weeks') or []
+    dark, gold = PatternFill('solid', fgColor='1F2A33'), PatternFill('solid', fgColor='C9A227')
+    thin = Side(style='thin', color='C8CDD2'); box = Border(left=thin, right=thin, top=thin, bottom=thin)
+    wrap = Alignment(wrap_text=True, vertical='top')
+    def iso(s):
+        try: return dt.date.fromisoformat(str(s)[:10])
+        except Exception: return None
+    st = iso(R.get('start'))
+    wb = openpyxl.Workbook()
+    def title(ws, t, sub, width):
+        ws.append([None, t]); ws.cell(1, 2).font = Font(bold=True, size=16, color='FFFFFF')
+        for c in range(1, width + 1): ws.cell(1, c).fill = dark
+        ws.append([None, sub]); ws.cell(2, 2).font = Font(italic=True, color='5B6670'); ws.append([])
+    def head(ws, cols):
+        ws.append(cols); r = ws.max_row
+        for i, _ in enumerate(cols, 1):
+            c = ws.cell(r, i); c.font = Font(bold=True, color='FFFFFF'); c.fill = dark; c.alignment = Alignment(wrap_text=True, vertical='center', horizontal='center'); c.border = box
+    def body(ws, vals, fills=None):
+        ws.append(vals); r = ws.max_row
+        for i, _ in enumerate(vals, 1):
+            c = ws.cell(r, i); c.alignment = wrap; c.border = box
+            if fills and fills[i - 1]: c.fill = PatternFill('solid', fgColor=fills[i - 1])
+    def section(ws, t, width):
+        ws.append([]); ws.append([t]); r = ws.max_row
+        for c in range(1, width + 1): ws.cell(r, c).fill = gold
+        ws.cell(r, 1).font = Font(bold=True, color='1F2A33')
+    # ---- hoja 1: planificación semana a semana
+    ws = wb.active; ws.title = 'Plan carrera'
+    title(ws, 'PLAN DE CARRERA · ' + (race.get('name') or J.get('name') or ''), 'Tactical Biscuit Training · ' + (J.get('name') or ''), 12)
+    head(ws, ['SEMANA', 'FECHAS', 'FASE'] + DAYS + ['VOLUMEN', 'CLAVE DE LA SEMANA'])
+    for w, W in enumerate(WK):
+        dts = W.get('dates') or (('%s – %s' % ((st + dt.timedelta(7 * w)).strftime('%d/%m'), (st + dt.timedelta(7 * w + 6)).strftime('%d/%m'))) if st else '')
+        ds = W.get('days') or []
+        cells, fills = [], []
+        for i in range(7):
+            S = ds[i] if i < len(ds) else None
+            cells.append((S or {}).get('txt') or '—'); fills.append(RUN_TC.get((S or {}).get('t')) if S and S.get('txt') else None)
+        vol = W.get('vol') or ''
+        body(ws, ['Semana %d' % (w + 1), dts, W.get('phase') or ''] + cells + [('≈ ' + vol) if vol else '', W.get('key') or ''], [None, None, None] + fills + [None, None])
+    for x in R.get('legend') or []: ws.append(['• ' + x])
+    for col, wd in zip('ABCDEFGHIJKL', [11, 14, 16] + [26] * 7 + [12, 32]): ws.column_dimensions[col].width = wd
+    ws.freeze_panes = 'D5'
+    # ---- hoja 2: resumen (carrera, zonas, reglas)
+    ws = wb.create_sheet('Resumen')
+    title(ws, 'RESUMEN DEL PLAN', 'Tactical Biscuit Training', 4)
+    car = race.get('name') or ''
+    if race.get('place'): car += ' · ' + race['place']
+    rd = iso(race.get('date'))
+    for k, v in [('Cliente', J.get('name') or ''), ('Carrera', car), ('Fecha', dt.datetime(rd.year, rd.month, rd.day) if rd else ''), ('Distancia / desnivel', race.get('dist') or ''),
+                 ('Modalidad', race.get('mod') or ''), ('Tiempo estimado', race.get('est') or ''), ('Salida', race.get('salida') or ''), ('Obligatorio', race.get('oblig') or ''),
+                 ('Inicio del plan', dt.datetime(st.year, st.month, st.day) if st else ''), ('Semanas', len(WK))]:
+        if v in ('', None): continue
+        ws.append([k, v]); r = ws.max_row; ws.cell(r, 1).font = Font(bold=True)
+        if isinstance(v, dt.datetime): ws.cell(r, 2).number_format = 'DD/MM/YYYY'
+        ws.cell(r, 2).alignment = Alignment(horizontal='left')
+    if R.get('zones'):
+        section(ws, 'TUS ZONAS DE PULSO', 4); head(ws, ['ZONA', 'PULSO (ppm)', 'SENSACIÓN', 'PARA QUÉ LA USAMOS'])
+        for z in R['zones']: body(ws, [str(x) for x in (list(z) + ['', '', '', ''])[:4]])
+        if R.get('zonesNote'): ws.append([R['zonesNote']])
+    if R.get('rules'):
+        section(ws, 'REGLAS DEL PLAN', 4)
+        for i, x in enumerate(R['rules'], 1): body(ws, [str(i), x])
+    for col, wd in zip('ABCD', [22, 40, 30, 40]): ws.column_dimensions[col].width = wd
+    # ---- hoja 3: estrategia de carrera
+    S = R.get('strat') or {}
+    if S.get('segs'):
+        ws = wb.create_sheet('Estrategia')
+        title(ws, 'ESTRATEGIA DE CARRERA', race.get('name') or '', 8)
+        head(ws, ['KM', 'TRAMO', 'DESNIVEL', 'PULSO', 'CÓMO', 'CÓMO HACERLO', 'TIEMPO', 'ACUMULADO'])
+        for x in S['segs']: body(ws, [str(v) for v in (list(x) + [''] * 8)[:8]])
+        if S.get('total'): ws.append([S['total']])
+        for key, t, cols, n in [('food', 'COMIDA Y BEBIDA DURANTE LA CARRERA', ['MOMENTO', 'QUÉ TOMAR', 'NOTAS'], 'foodNote'), ('controls', 'CONTROLES Y TU PASO ESTIMADO', ['KM', 'CONTROL', 'HORARIO', 'TU PASO', 'QUÉ HACER'], 'controlsNote')]:
+            if not S.get(key): continue
+            ws.append([]); head(ws, cols)
+            for x in S[key]: body(ws, [str(v) for v in (list(x) + [''] * len(cols))[:len(cols)]])
+            if S.get(n): ws.append([S[n]])
+        if S.get('prev'):
+            section(ws, 'DÍAS PREVIOS Y MATERIAL', 8)
+            for x in S['prev']: body(ws, [str(v) for v in (list(x) + ['', ''])[:2]])
+        for col, wd in zip('ABCDEFGH', [12, 26, 14, 14, 18, 40, 12, 12]): ws.column_dimensions[col].width = wd
+    out = io.BytesIO(); wb.save(out); return out.getvalue()
+
 def export(J):
     """Devuelve (bytes, extensión, avisos)."""
     if J.get('kind') == 'diet': return fill_plan(J), 'docx', []
+    if J.get('kind') == 'run': return fill_run(J), 'xlsx', []
     b, left = fill_training(J)
     warn = ['No caben en la plantilla (4 días y 8 ejercicios por día): ' + '; '.join(left)] if left else []
     return b, 'xlsx', warn

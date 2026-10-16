@@ -15,10 +15,11 @@
 <link rel="alternate" hreflang="es" href="https://tacticalbiscuit.com/">
 <link rel="alternate" hreflang="en" href="https://tacticalbiscuit.com/en/">
 <link rel="alternate" hreflang="x-default" href="https://tacticalbiscuit.com/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"Tactical Biscuit Training","url":"https://tacticalbiscuit.com/","logo":"https://tacticalbiscuit.com/img/logo.jpg","image":"https://tacticalbiscuit.com/img/logo.jpg","description":"Entrenamiento personal y asesoría nutricional deportiva en un solo plan, presencial y online, con seguimiento desde la app Team Biscuit.","telephone":"+34601565820","email":"contacto@tacticalbiscuit.com","sameAs":["https://www.instagram.com/tacticalbiscuittraining/"],"knowsLanguage":["es","en"],"knowsAbout":["Entrenamiento personal","Nutrición deportiva","Entrenamiento de fuerza","Preparación de carreras"]}</script>
 <link rel="icon" type="image/png" href="app/icons/icon-192.png">
 <link rel="apple-touch-icon" href="app/icons/apple-touch-icon.png">
 <link rel="preload" href="fonts/big-shoulders-display-latin-900-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/site.css?v=74b831ea">
+<link rel="stylesheet" href="css/site.css?v=9403bcb3">
 <style>
 section { padding-block: 96px 0; }
 .sec-head { display: grid; gap: 14px; max-width: 720px; margin-bottom: 40px; }
@@ -55,7 +56,10 @@ section { padding-block: 96px 0; }
 .pillar p { color: var(--muted); font-size: 15px; }
 .goals { margin-top: 40px; display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 20px; align-items: start; }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 16px; font-size: 15px; font-weight: 600; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 10px 16px; font-size: 15px; font-weight: 600; text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 8px; transition: border-color .2s, color .2s; }
+.chip::after { content: "→"; color: var(--teal-ink); transition: transform .2s; }
+.chip:hover { border-color: var(--teal); }
+.chip:hover::after { transform: translateX(3px); }
 
 /* Método: línea de pasos */
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; position: relative; }
@@ -81,6 +85,9 @@ section { padding-block: 96px 0; }
 .phone { width: 34%; max-width: 220px; border-radius: 30px; padding: 7px; background: #1C2726; box-shadow: 0 0 0 1px #2C3A38, 0 40px 80px -30px #000; }
 .phone img { border-radius: 24px; width: 100%; height: auto; aspect-ratio: 390 / 650; object-fit: cover; object-position: top; }
 .phone:nth-child(2) { transform: translateY(-28px); }
+.demo-cta { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.demo-cta small { color: var(--band-muted); font-size: 14px; }
+.swipe-hint { display: none; }
 
 /* Sobre mí */
 .about { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: start; }
@@ -88,11 +95,6 @@ section { padding-block: 96px 0; }
 .about .txt p { max-width: 62ch; }
 .story { margin-top: 32px; padding: 26px 28px; border-radius: var(--radius); background: var(--teal-soft); border-left: 4px solid var(--teal); }
 .story .eyebrow { margin-bottom: 10px; }
-.stats { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-bottom: 24px; }
-.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 22px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; }
-.stat span { font-size: 15px !important; }
-.stat b { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: 1; white-space: nowrap; color: var(--teal-ink); }
-.stat span { font-size: 13px; color: var(--muted); line-height: 1.4; }
 .edu { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 22px 8px; }
 .edu ul { list-style: none; padding: 0; margin: 12px 0 0; }
 .edu li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; border-top: 1px solid var(--line); font-size: 15px; font-weight: 600; line-height: 1.4; }
@@ -109,7 +111,9 @@ section { padding-block: 96px 0; }
 .svc-feat .btn { position: relative; z-index: 1; }
 .tag { justify-self: start; display: inline-block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--teal-soft); color: var(--teal-ink); font-weight: 500; }
 .tag.coral { background: color-mix(in srgb, var(--coral) 16%, transparent); color: var(--coral); }
-.svc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.svc-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; align-items: start; }
+.svc-group { display: grid; gap: 12px; }
+.svc-group .faq-h { margin: 0 0 2px; }
 .svc { cursor: pointer; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; transition: border-color .2s, transform .2s; }
 .svc:hover { border-color: var(--teal); transform: translateY(-2px); }
 .svc { text-decoration: none; color: inherit; }
@@ -153,6 +157,19 @@ section { padding-block: 96px 0; }
 .ct-main { background: color-mix(in srgb, var(--teal) 12%, var(--band-2)); border-color: color-mix(in srgb, var(--teal) 45%, var(--band-line)); }
 .ct-main .ct-ic { background: #25D366; color: #fff; }
 
+/* Menú del móvil */
+.nav-btn { display: none; }
+@media (max-width: 860px) {
+  .site-head .wrap { gap: 10px; }
+  .nav-btn { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 1.5px solid var(--band-line); background: transparent; color: var(--band-fg); cursor: pointer; }
+  .nav-btn .x, .site-head.open .nav-btn .bars { display: none; }
+  .site-head.open .nav-btn .x { display: block; }
+  .site-head.open .site-nav { display: flex; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; right: 0; padding: 4px 20px 12px; background: var(--band); border-bottom: 1px solid var(--band-line); box-shadow: 0 24px 40px -20px #000; }
+  .site-head.open .site-nav a { padding: 14px 0; font-size: 18px; color: var(--band-fg); border-bottom: 1px solid var(--band-line); }
+  .site-head.open .site-nav a:last-child { border-bottom: 0; }
+}
+@media (max-width: 480px) { .site-head .brand b { display: none; } }
+
 /* WhatsApp flotante */
 .wa-float { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 60; width: 58px; height: 58px; border-radius: 50%; background: #25D366; color: #fff; display: grid; place-items: center; box-shadow: 0 10px 30px -6px rgba(0,0,0,.45); opacity: 0; transform: translateY(20px); transition: opacity .3s, transform .3s; pointer-events: none; }
 .wa-float.show { opacity: 1; transform: none; pointer-events: auto; }
@@ -169,7 +186,8 @@ section { padding-block: 96px 0; }
   .hero-logo { justify-self: start; max-width: 190px; order: -1; }
   .svc-feat::after { display: none; }
   .ct-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .pillars, .svc-grid { grid-template-columns: minmax(0, 1fr); }
+  .pillars, .svc-groups { grid-template-columns: minmax(0, 1fr); }
+  .svc-groups { gap: 26px; }
   .steps { grid-template-columns: minmax(0, 1fr); gap: 22px; }
   .steps::before { top: 28px; bottom: 28px; left: 27px; right: auto; width: 2px; height: auto; background: linear-gradient(180deg, var(--coral), var(--teal)); }
   .step { grid-template-columns: 56px minmax(0, 1fr); column-gap: 18px; row-gap: 4px; }
@@ -181,11 +199,21 @@ section { padding-block: 96px 0; }
 @media (max-width: 560px) {
   section { padding-block-start: 72px; }
   .app-band, .contact { margin-top: 72px; padding-block: 64px; }
-  .stat b { font-size: 34px; }
   .phones { gap: 10px; }
   .phone { padding: 5px; border-radius: 22px; }
   .phone img { border-radius: 18px; }
-  .phone:nth-child(2) { transform: translateY(-16px); }
+  .phones { justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: -20px; padding: 4px 20px 6px; gap: 14px; scrollbar-width: none; }
+  .phones::-webkit-scrollbar { display: none; }
+  .phone { flex: 0 0 74%; max-width: none; scroll-snap-align: center; }
+  .phone:nth-child(2) { transform: none; }
+  .swipe-hint { display: block; margin-top: 10px; text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--band-muted); }
+  .svc { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 14px; row-gap: 4px; padding: 16px 18px; }
+  .svc > * { grid-column: 1; }
+  .svc h3 { font-size: 18px; }
+  .svc p { font-size: 14px; line-height: 1.5; }
+  .svc .svc-go { grid-column: 2; grid-row: 1 / span 3; align-self: center; margin: 0; padding: 0; width: 38px; height: 38px; border-radius: 50%; background: var(--teal-soft); justify-content: center; align-items: center; font-size: 0; }
+  .svc .svc-go span { font-size: 18px; }
+  .svc-group { gap: 10px; }
   .brand b { font-size: 16px; }
   .ct { grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; padding: 16px; }
   .ct-ic { width: 44px; height: 44px; }
@@ -200,15 +228,15 @@ html.intro, html.intro body { overflow: hidden; }
 #intro { position: fixed; inset: 0; z-index: 9999; cursor: pointer; overflow: hidden; }
 #intro .i-bg { position: absolute; inset: 0; display: grid; place-items: center; background: var(--band); background-image: radial-gradient(circle at 50% 45%, #0F2B28 0%, var(--band) 62%); }
 #intro .i-core { position: relative; display: grid; justify-items: center; gap: 26px; }
-#intro .i-logo { width: min(46vw, 240px); height: auto; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 2px var(--teal); animation: iDrop .62s cubic-bezier(.55,0,.75,.2) both; }
-#intro .i-wave { position: absolute; left: 50%; top: calc(min(46vw, 240px) / 2); width: min(46vw, 240px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 3px solid var(--teal); opacity: 0; animation: iWave .9s cubic-bezier(.2,.7,.2,1) .62s; }
-#intro .i-wave.w2 { border-color: var(--coral); animation-delay: .78s; }
+#intro .i-logo { width: min(46vw, 240px); height: auto; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 2px var(--teal); animation: iDrop .45s cubic-bezier(.55,0,.75,.2) both; }
+#intro .i-wave { position: absolute; left: 50%; top: calc(min(46vw, 240px) / 2); width: min(46vw, 240px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 3px solid var(--teal); opacity: 0; animation: iWave .9s cubic-bezier(.2,.7,.2,1) .45s; }
+#intro .i-wave.w2 { border-color: var(--coral); animation-delay: .58s; }
 #intro .i-words { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-family: var(--font-display); font-weight: 900; font-size: clamp(20px, 5vw, 32px); letter-spacing: .16em; text-transform: uppercase; color: var(--band-fg); }
 #intro .i-words span { opacity: 0; animation: iStamp .35s cubic-bezier(.2,.9,.3,1.3) forwards; }
-#intro .i-words span:nth-child(1) { animation-delay: 1.25s; }
-#intro .i-words span:nth-child(2) { color: var(--teal); animation-delay: 1.6s; }
-#intro .i-words span:nth-child(3) { color: var(--coral); animation-delay: 1.95s; }
-#intro .i-shake { animation: iShake .35s linear .62s; }
+#intro .i-words span:nth-child(1) { animation-delay: .6s; }
+#intro .i-words span:nth-child(2) { color: var(--teal); animation-delay: .75s; }
+#intro .i-words span:nth-child(3) { color: var(--coral); animation-delay: .9s; }
+#intro .i-shake { animation: iShake .35s linear .45s; }
 #intro .i-skip { position: absolute; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--band-muted); opacity: .7; }
 #intro .i-wipe { position: absolute; top: -10%; bottom: -10%; left: -30%; right: -30%; transform: translateX(-130%) skewX(-14deg); z-index: 2; }
 #intro .i-wipe.w1 { background: var(--coral); } #intro .i-wipe.w2 { background: var(--teal); }
@@ -251,8 +279,8 @@ html.intro, html.intro body { overflow: hidden; }
   var out = false;
   function done() { h.classList.remove('intro'); el.remove(); }
   function exit() { if (out) return; out = true; el.classList.add('out'); setTimeout(function () { h.classList.remove('intro'); }, 560); setTimeout(done, 1350); }
-  setTimeout(exit, 2600);
-  setTimeout(done, 6000);
+  setTimeout(exit, 1400);
+  setTimeout(done, 4000);
   el.addEventListener('click', exit);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') exit(); });
 })();
@@ -265,7 +293,7 @@ html.intro, html.intro body { overflow: hidden; }
       <img src="img/logo-s.jpg" alt="" width="40" height="40">
       <b>Tactical Biscuit<br>Training</b>
     </a>
-    <nav class="site-nav" aria-label="Secciones">
+    <nav class="site-nav" id="siteNav" aria-label="Secciones">
       <a href="#que-hago">Qué hago</a>
       <a href="#metodo">Método</a>
       <a href="#app">La app</a>
@@ -275,6 +303,7 @@ html.intro, html.intro body { overflow: hidden; }
     </nav>
     <a class="btn-client" href="app/">Acceso clientes</a>
     <nav class="lang" aria-label="Idioma"><a href="./" lang="es" aria-current="page">ES</a><a href="en/" lang="en" hreflang="en">EN</a></nav>
+    <button class="nav-btn" id="navBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menú"><svg class="bars" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
 </header>
 
@@ -300,7 +329,8 @@ html.intro, html.intro body { overflow: hidden; }
 <div class="wrap">
   <section id="que-hago">
     <div class="sec-head rv">
-      <h2>Qué hago</h2>
+      <p class="eyebrow">Qué hago</p>
+      <h2>Entrenamiento y alimentación, juntos</h2>
       <p>Entrenamiento y alimentación en un mismo plan, pensados para que cada parte te acerque a tu objetivo.</p>
     </div>
     <div class="pillars">
@@ -323,17 +353,18 @@ html.intro, html.intro body { overflow: hidden; }
     <div class="goals rv">
       <p class="eyebrow" style="padding-top:10px">Para quién</p>
       <div class="chips">
-        <span class="chip">Perder grasa</span>
-        <span class="chip">Ganar fuerza y masa muscular</span>
-        <span class="chip">Preparar una carrera o prueba</span>
-        <span class="chip">Empezar desde cero</span>
-        <span class="chip">Recuperar la constancia</span>
+        <a class="chip" href="https://wa.me/34601565820?text=Hola%2C%20quiero%20perder%20grasa.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener">Perder grasa</a>
+        <a class="chip" href="https://wa.me/34601565820?text=Hola%2C%20quiero%20ganar%20fuerza%20y%20masa%20muscular.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener">Ganar fuerza y masa muscular</a>
+        <a class="chip" href="https://wa.me/34601565820?text=Hola%2C%20quiero%20preparar%20una%20carrera%20o%20prueba.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener">Preparar una carrera o prueba</a>
+        <a class="chip" href="https://wa.me/34601565820?text=Hola%2C%20quiero%20empezar%20desde%20cero.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener">Empezar desde cero</a>
+        <a class="chip" href="https://wa.me/34601565820?text=Hola%2C%20quiero%20recuperar%20la%20constancia.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener">Recuperar la constancia</a>
       </div>
     </div>
   </section>
 
   <section id="metodo">
     <div class="sec-head rv">
+      <p class="eyebrow">Método</p>
       <h2>Cómo trabajamos</h2>
       <p>Tres pasos, sin plantillas genéricas.</p>
     </div>
@@ -361,11 +392,15 @@ html.intro, html.intro body { overflow: hidden; }
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Carreras y progreso</b>: registra tus salidas y sigue tu semana de un vistazo.</span></li>
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Contacto directo</b> conmigo desde la propia app.</span></li>
         </ul>
+        <div class="demo-cta rv"><a class="btn primary" href="app/demo.html">Probar la demo</a><small>Una clienta de ejemplo, sin registrarte.</small></div>
       </div>
+      <div>
       <div class="phones rv" aria-label="Capturas de la app Team Biscuit">
         <div class="phone"><img src="img/app-home.webp" alt="Pantalla de inicio de la app (cliente de ejemplo)" width="390" height="650"></div>
         <div class="phone"><img src="img/app-ent.webp" alt="Pantalla de entrenamiento" width="390" height="650"></div>
         <div class="phone"><img src="img/app-diet.webp" alt="Pantalla de dieta" width="390" height="650"></div>
+      </div>
+      <p class="swipe-hint" aria-hidden="true">Desliza para ver más →</p>
       </div>
     </section>
   </div>
@@ -388,9 +423,6 @@ html.intro, html.intro body { overflow: hidden; }
         </div>
       </div>
       <div class="rv">
-        <div class="stats">
-          <div class="stat"><b>+15 años</b><span>de experiencia en culturismo</span></div>
-        </div>
         <div class="edu">
           <p class="eyebrow">Formación</p>
           <ul>
@@ -420,13 +452,22 @@ html.intro, html.intro body { overflow: hidden; }
       <a class="btn primary" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20el%20Pack%20%C2%ABCambio%20Total%C2%BB%20de%2090%20d%C3%ADas.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener">Me interesa</a>
     </div>
 
-    <div class="svc-grid">
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20el%20Pack%20de%20Bienvenida.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><span class="tag coral">Para empezar</span><h3>Pack de Bienvenida</h3><p>Entrevista, análisis de composición corporal y creación de tu ficha. El punto de partida de cualquier plan.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20la%20Asesor%C3%ADa%20Nutricional%20Deportiva%20online.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><span class="tag">Online</span><h3>Asesoría Nutricional Deportiva</h3><p>Pauta de alimentación adaptada a tu deporte y tu objetivo, con revisión mensual.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20la%20Planificaci%C3%B3n%20de%20Entrenamiento%20online.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><span class="tag">Online</span><h3>Planificación de Entrenamiento</h3><p>Programa de entrenamiento personalizado por fases, con revisión mensual.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20la%20Suscripci%C3%B3n%20Mensual%20H%C3%ADbrida.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><span class="tag">Online + presencial</span><h3>Suscripción Mensual Híbrida</h3><p>Tu plan online más una sesión presencial al mes. Sin permanencia.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20una%20sesi%C3%B3n%20presencial%20individual.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><span class="tag">Presencial</span><h3>Sesión individual</h3><p>Una sesión de entrenamiento uno a uno, centrada en técnica y en tu objetivo.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20el%20Bono%20de%2010%20sesiones.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><span class="tag">Presencial</span><h3>Bono 10 sesiones</h3><p>Diez sesiones individuales para entrenar conmigo de forma continuada.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
+    <div class="svc-groups">
+      <div class="svc-group">
+        <p class="faq-h">Para empezar</p>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20el%20Pack%20de%20Bienvenida.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><h3>Pack de Bienvenida</h3><p>Entrevista, análisis de composición corporal y creación de tu ficha. El punto de partida de cualquier plan.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
+      </div>
+      <div class="svc-group">
+        <p class="faq-h">Online</p>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20la%20Asesor%C3%ADa%20Nutricional%20Deportiva%20online.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><h3>Asesoría Nutricional Deportiva</h3><p>Pauta de alimentación adaptada a tu deporte y tu objetivo, con revisión mensual.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20la%20Planificaci%C3%B3n%20de%20Entrenamiento%20online.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><h3>Planificación de Entrenamiento</h3><p>Programa de entrenamiento personalizado por fases, con revisión mensual.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20la%20Suscripci%C3%B3n%20Mensual%20H%C3%ADbrida.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><span class="tag">Online + presencial</span><h3>Suscripción Mensual Híbrida</h3><p>Tu plan online más una sesión presencial al mes. Sin permanencia.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
+      </div>
+      <div class="svc-group">
+        <p class="faq-h">Presencial</p>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20una%20sesi%C3%B3n%20presencial%20individual.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><h3>Sesión individual</h3><p>Una sesión de entrenamiento uno a uno, centrada en técnica y en tu objetivo.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hola%2C%20me%20interesa%20el%20Bono%20de%2010%20sesiones.%20%C2%BFMe%20das%20m%C3%A1s%20informaci%C3%B3n%3F" target="_blank" rel="noopener"><h3>Bono 10 sesiones</h3><p>Diez sesiones individuales para entrenar conmigo de forma continuada.</p><span class="svc-go">Me interesa <span aria-hidden="true">→</span></span></a>
+      </div>
     </div>
 
     <div class="svc-cta rv">
@@ -458,12 +499,11 @@ html.intro, html.intro body { overflow: hidden; }
         <details><summary>¿Y si una semana no puedo entrenar lo previsto?</summary><p>No hay días fijos: entrenas cuando puedes dentro de la semana. Si cambia tu horario, viajas o tienes una semana complicada, lo hablamos y ajustamos el plan.</p></details>
         <details><summary>¿Tengo que tomar suplementos?</summary><p>No son obligatorios. La base es el entrenamiento, la alimentación y el descanso. Solo te recomendaré un suplemento si encaja con tu objetivo y tiene respaldo científico.</p></details>
         <details><summary>¿Sirve si preparo una carrera u otra prueba?</summary><p>Sí. Combino tu plan de carrera con el trabajo de fuerza y la alimentación, organizado por fases hasta el día de la prueba.</p></details>
+        <details><summary>¿Cuándo empezaré a notar resultados?</summary><p>Depende de tu punto de partida, tu objetivo y tu constancia. En cada revisión medimos tu progreso para que veas la evolución con datos y no solo en el espejo.</p></details>
       </div>
       <div class="faq rv">
         <p class="faq-h">Condiciones</p>
-        <details><summary>¿Cuándo empezaré a notar resultados?</summary><p>Depende de tu punto de partida, tu objetivo y tu constancia. En cada revisión medimos tu progreso para que veas la evolución con datos y no solo en el espejo.</p></details>
-        <details><summary>¿Hay permanencia?</summary><p>Las modalidades mensuales no tienen permanencia. El Pack «Cambio Total» es un programa cerrado de 90 días.</p></details>
-        <details><summary>¿Cuánto cuesta?</summary><p>Depende del servicio y de cómo quieras trabajar. Escríbeme por WhatsApp, Instagram o correo y te paso todas las condiciones sin compromiso.</p></details>
+        <details><summary>¿Cuánto cuesta? ¿Hay permanencia?</summary><p>Depende del servicio y de cómo quieras trabajar. Las modalidades mensuales no tienen permanencia y el Pack «Cambio Total» es un programa cerrado de 90 días. Escríbeme por WhatsApp, Instagram o correo y te paso todas las condiciones sin compromiso.</p></details>
       </div>
     </div>
   </section>
@@ -527,6 +567,11 @@ html.intro, html.intro body { overflow: hidden; }
     wa.classList.toggle('show', past && !inContact);
   }
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  var head = document.querySelector('.site-head'), nb = document.getElementById('navBtn');
+  function menu(open) { head.classList.toggle('open', open); nb.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+  nb.addEventListener('click', function () { menu(!head.classList.contains('open')); });
+  document.getElementById('siteNav').addEventListener('click', function (e) { if (e.target.closest('a')) menu(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') menu(false); });
 })();
 </script>
 </body>

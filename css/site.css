@@ -84,5 +84,7 @@ p { margin: 0; }
 .lang a[aria-current] { background: color-mix(in srgb, var(--teal) 28%, transparent); color: var(--band-fg); box-shadow: inset 0 0 0 1.5px var(--teal); }
 @media (max-width: 560px) { .site-head .wrap { gap: 10px; } .lang a { padding: 5px 6px; gap: 4px; } }
 @media (max-width: 400px) { .lang a { font-size: 0; gap: 0; padding: 6px 7px; } }
+/* Botones de la cabecera con tamaño cómodo para el dedo */
+@media (max-width: 860px) { .btn-client { min-height: 44px; display: inline-flex; align-items: center; } .lang a { min-height: 40px; } }
 .btn-client + .lang { margin-left: -12px; }
 @media (max-width: 560px) { .btn-client + .lang { margin-left: -4px; } }

@@ -16,10 +16,11 @@
 <link rel="alternate" hreflang="es" href="https://tacticalbiscuit.com/">
 <link rel="alternate" hreflang="en" href="https://tacticalbiscuit.com/en/">
 <link rel="alternate" hreflang="x-default" href="https://tacticalbiscuit.com/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"Tactical Biscuit Training","url":"https://tacticalbiscuit.com/en/","logo":"https://tacticalbiscuit.com/img/logo.jpg","image":"https://tacticalbiscuit.com/img/logo.jpg","description":"Personal training and sports nutrition coaching in one plan, in person and online, with support through the Team Biscuit app.","telephone":"+34601565820","email":"contacto@tacticalbiscuit.com","sameAs":["https://www.instagram.com/tacticalbiscuittraining/"],"knowsLanguage":["es","en"],"knowsAbout":["Personal training","Sports nutrition","Strength training","Race preparation"]}</script>
 <link rel="icon" type="image/png" href="../app/icons/icon-192.png">
 <link rel="apple-touch-icon" href="../app/icons/apple-touch-icon.png">
 <link rel="preload" href="../fonts/big-shoulders-display-latin-900-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../css/site.css?v=74b831ea">
+<link rel="stylesheet" href="../css/site.css?v=9403bcb3">
 <style>
 section { padding-block: 96px 0; }
 .sec-head { display: grid; gap: 14px; max-width: 720px; margin-bottom: 40px; }
@@ -56,7 +57,10 @@ section { padding-block: 96px 0; }
 .pillar p { color: var(--muted); font-size: 15px; }
 .goals { margin-top: 40px; display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 20px; align-items: start; }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 16px; font-size: 15px; font-weight: 600; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 10px 16px; font-size: 15px; font-weight: 600; text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 8px; transition: border-color .2s, color .2s; }
+.chip::after { content: "→"; color: var(--teal-ink); transition: transform .2s; }
+.chip:hover { border-color: var(--teal); }
+.chip:hover::after { transform: translateX(3px); }
 
 /* Método: línea de pasos */
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; position: relative; }
@@ -82,6 +86,9 @@ section { padding-block: 96px 0; }
 .phone { width: 34%; max-width: 220px; border-radius: 30px; padding: 7px; background: #1C2726; box-shadow: 0 0 0 1px #2C3A38, 0 40px 80px -30px #000; }
 .phone img { border-radius: 24px; width: 100%; height: auto; aspect-ratio: 390 / 650; object-fit: cover; object-position: top; }
 .phone:nth-child(2) { transform: translateY(-28px); }
+.demo-cta { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.demo-cta small { color: var(--band-muted); font-size: 14px; }
+.swipe-hint { display: none; }
 
 /* Sobre mí */
 .about { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: start; }
@@ -89,11 +96,6 @@ section { padding-block: 96px 0; }
 .about .txt p { max-width: 62ch; }
 .story { margin-top: 32px; padding: 26px 28px; border-radius: var(--radius); background: var(--teal-soft); border-left: 4px solid var(--teal); }
 .story .eyebrow { margin-bottom: 10px; }
-.stats { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-bottom: 24px; }
-.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 22px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; }
-.stat span { font-size: 15px !important; }
-.stat b { font-family: var(--font-display); font-weight: 900; font-size: 52px; line-height: 1; white-space: nowrap; color: var(--teal-ink); }
-.stat span { font-size: 13px; color: var(--muted); line-height: 1.4; }
 .edu { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 22px 8px; }
 .edu ul { list-style: none; padding: 0; margin: 12px 0 0; }
 .edu li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; border-top: 1px solid var(--line); font-size: 15px; font-weight: 600; line-height: 1.4; }
@@ -110,7 +112,9 @@ section { padding-block: 96px 0; }
 .svc-feat .btn { position: relative; z-index: 1; }
 .tag { justify-self: start; display: inline-block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--teal-soft); color: var(--teal-ink); font-weight: 500; }
 .tag.coral { background: color-mix(in srgb, var(--coral) 16%, transparent); color: var(--coral); }
-.svc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.svc-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; align-items: start; }
+.svc-group { display: grid; gap: 12px; }
+.svc-group .faq-h { margin: 0 0 2px; }
 .svc { cursor: pointer; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; transition: border-color .2s, transform .2s; }
 .svc:hover { border-color: var(--teal); transform: translateY(-2px); }
 .svc { text-decoration: none; color: inherit; }
@@ -154,6 +158,19 @@ section { padding-block: 96px 0; }
 .ct-main { background: color-mix(in srgb, var(--teal) 12%, var(--band-2)); border-color: color-mix(in srgb, var(--teal) 45%, var(--band-line)); }
 .ct-main .ct-ic { background: #25D366; color: #fff; }
 
+/* Menú del móvil */
+.nav-btn { display: none; }
+@media (max-width: 860px) {
+  .site-head .wrap { gap: 10px; }
+  .nav-btn { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 1.5px solid var(--band-line); background: transparent; color: var(--band-fg); cursor: pointer; }
+  .nav-btn .x, .site-head.open .nav-btn .bars { display: none; }
+  .site-head.open .nav-btn .x { display: block; }
+  .site-head.open .site-nav { display: flex; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; right: 0; padding: 4px 20px 12px; background: var(--band); border-bottom: 1px solid var(--band-line); box-shadow: 0 24px 40px -20px #000; }
+  .site-head.open .site-nav a { padding: 14px 0; font-size: 18px; color: var(--band-fg); border-bottom: 1px solid var(--band-line); }
+  .site-head.open .site-nav a:last-child { border-bottom: 0; }
+}
+@media (max-width: 480px) { .site-head .brand b { display: none; } }
+
 /* WhatsApp flotante */
 .wa-float { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 60; width: 58px; height: 58px; border-radius: 50%; background: #25D366; color: #fff; display: grid; place-items: center; box-shadow: 0 10px 30px -6px rgba(0,0,0,.45); opacity: 0; transform: translateY(20px); transition: opacity .3s, transform .3s; pointer-events: none; }
 .wa-float.show { opacity: 1; transform: none; pointer-events: auto; }
@@ -170,7 +187,8 @@ section { padding-block: 96px 0; }
   .hero-logo { justify-self: start; max-width: 190px; order: -1; }
   .svc-feat::after { display: none; }
   .ct-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .pillars, .svc-grid { grid-template-columns: minmax(0, 1fr); }
+  .pillars, .svc-groups { grid-template-columns: minmax(0, 1fr); }
+  .svc-groups { gap: 26px; }
   .steps { grid-template-columns: minmax(0, 1fr); gap: 22px; }
   .steps::before { top: 28px; bottom: 28px; left: 27px; right: auto; width: 2px; height: auto; background: linear-gradient(180deg, var(--coral), var(--teal)); }
   .step { grid-template-columns: 56px minmax(0, 1fr); column-gap: 18px; row-gap: 4px; }
@@ -182,11 +200,21 @@ section { padding-block: 96px 0; }
 @media (max-width: 560px) {
   section { padding-block-start: 72px; }
   .app-band, .contact { margin-top: 72px; padding-block: 64px; }
-  .stat b { font-size: 34px; }
   .phones { gap: 10px; }
   .phone { padding: 5px; border-radius: 22px; }
   .phone img { border-radius: 18px; }
-  .phone:nth-child(2) { transform: translateY(-16px); }
+  .phones { justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: -20px; padding: 4px 20px 6px; gap: 14px; scrollbar-width: none; }
+  .phones::-webkit-scrollbar { display: none; }
+  .phone { flex: 0 0 74%; max-width: none; scroll-snap-align: center; }
+  .phone:nth-child(2) { transform: none; }
+  .swipe-hint { display: block; margin-top: 10px; text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--band-muted); }
+  .svc { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 14px; row-gap: 4px; padding: 16px 18px; }
+  .svc > * { grid-column: 1; }
+  .svc h3 { font-size: 18px; }
+  .svc p { font-size: 14px; line-height: 1.5; }
+  .svc .svc-go { grid-column: 2; grid-row: 1 / span 3; align-self: center; margin: 0; padding: 0; width: 38px; height: 38px; border-radius: 50%; background: var(--teal-soft); justify-content: center; align-items: center; font-size: 0; }
+  .svc .svc-go span { font-size: 18px; }
+  .svc-group { gap: 10px; }
   .brand b { font-size: 16px; }
   .ct { grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; padding: 16px; }
   .ct-ic { width: 44px; height: 44px; }
@@ -201,15 +229,15 @@ html.intro, html.intro body { overflow: hidden; }
 #intro { position: fixed; inset: 0; z-index: 9999; cursor: pointer; overflow: hidden; }
 #intro .i-bg { position: absolute; inset: 0; display: grid; place-items: center; background: var(--band); background-image: radial-gradient(circle at 50% 45%, #0F2B28 0%, var(--band) 62%); }
 #intro .i-core { position: relative; display: grid; justify-items: center; gap: 26px; }
-#intro .i-logo { width: min(46vw, 240px); height: auto; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 2px var(--teal); animation: iDrop .62s cubic-bezier(.55,0,.75,.2) both; }
-#intro .i-wave { position: absolute; left: 50%; top: calc(min(46vw, 240px) / 2); width: min(46vw, 240px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 3px solid var(--teal); opacity: 0; animation: iWave .9s cubic-bezier(.2,.7,.2,1) .62s; }
-#intro .i-wave.w2 { border-color: var(--coral); animation-delay: .78s; }
+#intro .i-logo { width: min(46vw, 240px); height: auto; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 2px var(--teal); animation: iDrop .45s cubic-bezier(.55,0,.75,.2) both; }
+#intro .i-wave { position: absolute; left: 50%; top: calc(min(46vw, 240px) / 2); width: min(46vw, 240px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 3px solid var(--teal); opacity: 0; animation: iWave .9s cubic-bezier(.2,.7,.2,1) .45s; }
+#intro .i-wave.w2 { border-color: var(--coral); animation-delay: .58s; }
 #intro .i-words { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-family: var(--font-display); font-weight: 900; font-size: clamp(20px, 5vw, 32px); letter-spacing: .16em; text-transform: uppercase; color: var(--band-fg); }
 #intro .i-words span { opacity: 0; animation: iStamp .35s cubic-bezier(.2,.9,.3,1.3) forwards; }
-#intro .i-words span:nth-child(1) { animation-delay: 1.25s; }
-#intro .i-words span:nth-child(2) { color: var(--teal); animation-delay: 1.6s; }
-#intro .i-words span:nth-child(3) { color: var(--coral); animation-delay: 1.95s; }
-#intro .i-shake { animation: iShake .35s linear .62s; }
+#intro .i-words span:nth-child(1) { animation-delay: .6s; }
+#intro .i-words span:nth-child(2) { color: var(--teal); animation-delay: .75s; }
+#intro .i-words span:nth-child(3) { color: var(--coral); animation-delay: .9s; }
+#intro .i-shake { animation: iShake .35s linear .45s; }
 #intro .i-skip { position: absolute; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--band-muted); opacity: .7; }
 #intro .i-wipe { position: absolute; top: -10%; bottom: -10%; left: -30%; right: -30%; transform: translateX(-130%) skewX(-14deg); z-index: 2; }
 #intro .i-wipe.w1 { background: var(--coral); } #intro .i-wipe.w2 { background: var(--teal); }
@@ -252,8 +280,8 @@ html.intro, html.intro body { overflow: hidden; }
   var out = false;
   function done() { h.classList.remove('intro'); el.remove(); }
   function exit() { if (out) return; out = true; el.classList.add('out'); setTimeout(function () { h.classList.remove('intro'); }, 560); setTimeout(done, 1350); }
-  setTimeout(exit, 2600);
-  setTimeout(done, 6000);
+  setTimeout(exit, 1400);
+  setTimeout(done, 4000);
   el.addEventListener('click', exit);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') exit(); });
 })();
@@ -266,7 +294,7 @@ html.intro, html.intro body { overflow: hidden; }
       <img src="../img/logo-s.jpg" alt="" width="40" height="40">
       <b>Tactical Biscuit<br>Training</b>
     </a>
-    <nav class="site-nav" aria-label="Sections">
+    <nav class="site-nav" id="siteNav" aria-label="Sections">
       <a href="#que-hago">What I do</a>
       <a href="#metodo">Method</a>
       <a href="#app">The app</a>
@@ -276,6 +304,7 @@ html.intro, html.intro body { overflow: hidden; }
     </nav>
     <a class="btn-client" href="../app/">Client login</a>
     <nav class="lang" aria-label="Language"><a href="../" lang="es" hreflang="es">ES</a><a href="./" lang="en" aria-current="page">EN</a></nav>
+    <button class="nav-btn" id="navBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><svg class="bars" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
 </header>
 
@@ -301,7 +330,8 @@ html.intro, html.intro body { overflow: hidden; }
 <div class="wrap">
   <section id="que-hago">
     <div class="sec-head rv">
-      <h2>What I do</h2>
+      <p class="eyebrow">What I do</p>
+      <h2>Training and nutrition, together</h2>
       <p>Training and nutrition in a single plan, built so that every part brings you closer to your goal.</p>
     </div>
     <div class="pillars">
@@ -324,17 +354,18 @@ html.intro, html.intro body { overflow: hidden; }
     <div class="goals rv">
       <p class="eyebrow" style="padding-top:10px">Who it’s for</p>
       <div class="chips">
-        <span class="chip">Losing fat</span>
-        <span class="chip">Building strength and muscle</span>
-        <span class="chip">Preparing for a race or event</span>
-        <span class="chip">Starting from scratch</span>
-        <span class="chip">Getting back into a routine</span>
+        <a class="chip" href="https://wa.me/34601565820?text=Hi%2C%20I%20want%20to%20lose%20fat.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener">Losing fat</a>
+        <a class="chip" href="https://wa.me/34601565820?text=Hi%2C%20I%20want%20to%20build%20strength%20and%20muscle.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener">Building strength and muscle</a>
+        <a class="chip" href="https://wa.me/34601565820?text=Hi%2C%20I%20want%20to%20prepare%20for%20a%20race%20or%20event.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener">Preparing for a race or event</a>
+        <a class="chip" href="https://wa.me/34601565820?text=Hi%2C%20I%20want%20to%20start%20from%20scratch.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener">Starting from scratch</a>
+        <a class="chip" href="https://wa.me/34601565820?text=Hi%2C%20I%20want%20to%20get%20back%20into%20a%20routine.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener">Getting back into a routine</a>
       </div>
     </div>
   </section>
 
   <section id="metodo">
     <div class="sec-head rv">
+      <p class="eyebrow">Method</p>
       <h2>How we work</h2>
       <p>Three steps, no generic templates.</p>
     </div>
@@ -362,11 +393,15 @@ html.intro, html.intro body { overflow: hidden; }
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Runs and progress</b>: log your runs and follow your week at a glance.</span></li>
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Direct contact</b> with me from within the app.</span></li>
         </ul>
+        <div class="demo-cta rv"><a class="btn primary" href="../app/demo.html">Try the demo</a><small>A sample client, no sign-up needed (the app is in Spanish).</small></div>
       </div>
+      <div>
       <div class="phones rv" aria-label="Team Biscuit app screenshots">
         <div class="phone"><img src="../img/app-home.webp" alt="App home screen (sample client)" width="390" height="650"></div>
         <div class="phone"><img src="../img/app-ent.webp" alt="Training screen" width="390" height="650"></div>
         <div class="phone"><img src="../img/app-diet.webp" alt="Diet screen" width="390" height="650"></div>
+      </div>
+      <p class="swipe-hint" aria-hidden="true">Swipe to see more →</p>
       </div>
     </section>
   </div>
@@ -389,9 +424,6 @@ html.intro, html.intro body { overflow: hidden; }
         </div>
       </div>
       <div class="rv">
-        <div class="stats">
-          <div class="stat"><b>15+ years</b><span>of bodybuilding experience</span></div>
-        </div>
         <div class="edu">
           <p class="eyebrow">Qualifications</p>
           <ul>
@@ -421,13 +453,22 @@ html.intro, html.intro body { overflow: hidden; }
       <a class="btn primary" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%2090-day%20%E2%80%9CTotal%20Change%E2%80%9D%20Pack.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener">I’m interested</a>
     </div>
 
-    <div class="svc-grid">
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%20Welcome%20Pack.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag coral">To get started</span><h3>Welcome Pack</h3><p>Interview, body composition analysis and setting up your client profile. The starting point for any plan.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20online%20Sports%20Nutrition%20Coaching.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">Online</span><h3>Sports Nutrition Coaching</h3><p>An eating plan tailored to your sport and your goal, with a monthly review.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20online%20Training%20Programming.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">Online</span><h3>Training Programming</h3><p>A personalised, phase-based training programme, with a monthly review.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%20Hybrid%20Monthly%20Subscription.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">Online + in person</span><h3>Hybrid Monthly Subscription</h3><p>Your online plan plus one in-person session a month. No minimum term.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20a%20one-to-one%20in-person%20session.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">In person</span><h3>Single session</h3><p>A one-to-one training session focused on technique and your goal.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
-      <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%2010-session%20pass.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">In person</span><h3>10-session pass</h3><p>Ten one-to-one sessions to train with me on a regular basis.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+    <div class="svc-groups">
+      <div class="svc-group">
+        <p class="faq-h">To get started</p>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%20Welcome%20Pack.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><h3>Welcome Pack</h3><p>Interview, body composition analysis and setting up your client profile. The starting point for any plan.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+      </div>
+      <div class="svc-group">
+        <p class="faq-h">Online</p>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20online%20Sports%20Nutrition%20Coaching.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><h3>Sports Nutrition Coaching</h3><p>An eating plan tailored to your sport and your goal, with a monthly review.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20online%20Training%20Programming.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><h3>Training Programming</h3><p>A personalised, phase-based training programme, with a monthly review.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%20Hybrid%20Monthly%20Subscription.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">Online + in person</span><h3>Hybrid Monthly Subscription</h3><p>Your online plan plus one in-person session a month. No minimum term.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+      </div>
+      <div class="svc-group">
+        <p class="faq-h">In person</p>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20a%20one-to-one%20in-person%20session.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><h3>Single session</h3><p>A one-to-one training session focused on technique and your goal.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+        <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%2010-session%20pass.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><h3>10-session pass</h3><p>Ten one-to-one sessions to train with me on a regular basis.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+      </div>
     </div>
 
     <div class="svc-cta rv">
@@ -459,12 +500,11 @@ html.intro, html.intro body { overflow: hidden; }
         <details><summary>What if I can’t train as planned one week?</summary><p>There are no fixed days: you train when you can during the week. If your schedule changes, you travel or you have a tough week, we talk it through and adjust the plan.</p></details>
         <details><summary>Do I have to take supplements?</summary><p>They’re not compulsory. The foundation is training, nutrition and rest. I’ll only recommend a supplement if it fits your goal and is backed by science.</p></details>
         <details><summary>Is it suitable if I’m preparing for a race or other event?</summary><p>Yes. I combine your race plan with strength work and nutrition, organised in phases right up to race day.</p></details>
+        <details><summary>When will I start to see results?</summary><p>It depends on your starting point, your goal and your consistency. At every review we measure your progress, so you can see how you’re doing in the data and not just in the mirror.</p></details>
       </div>
       <div class="faq rv">
         <p class="faq-h">Terms</p>
-        <details><summary>When will I start to see results?</summary><p>It depends on your starting point, your goal and your consistency. At every review we measure your progress, so you can see how you’re doing in the data and not just in the mirror.</p></details>
-        <details><summary>Is there a minimum commitment?</summary><p>The monthly options have no minimum term. The “Total Change” Pack is a fixed 90-day programme.</p></details>
-        <details><summary>How much does it cost?</summary><p>It depends on the service and how you want to work. Message me on WhatsApp, Instagram or email and I’ll send you all the details, with no obligation.</p></details>
+        <details><summary>How much does it cost? Is there a minimum commitment?</summary><p>It depends on the service and how you want to work. The monthly options have no minimum term, and the “Total Change” Pack is a fixed 90-day programme. Message me on WhatsApp, Instagram or email and I’ll send you all the details, with no obligation.</p></details>
       </div>
     </div>
   </section>
@@ -528,6 +568,11 @@ html.intro, html.intro body { overflow: hidden; }
     wa.classList.toggle('show', past && !inContact);
   }
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  var head = document.querySelector('.site-head'), nb = document.getElementById('navBtn');
+  function menu(open) { head.classList.toggle('open', open); nb.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+  nb.addEventListener('click', function () { menu(!head.classList.contains('open')); });
+  document.getElementById('siteNav').addEventListener('click', function (e) { if (e.target.closest('a')) menu(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') menu(false); });
 })();
 </script>
 </body>

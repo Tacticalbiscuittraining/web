@@ -93,6 +93,23 @@ def norm_meal(s):
         if s.startswith(m.lower()): return m
     return None
 
+def place_meals(names, slots):
+    """Asigna cada toma a una fila/columna de la plantilla. Las que no tienen hueco propio
+    (p. ej. «Almuerzo») van al primer hueco libre después de la toma anterior y renombran esa fila.
+    Devuelve {nombre: índice de slot} y {índice: nombre nuevo}."""
+    pos, rename, used, last = {}, {}, set(), -1
+    for nm in names:
+        if nm in pos: last = max(last, pos[nm]); continue
+        k = norm_meal(nm)
+        i = slots.index(k) if k in slots else None
+        if i is not None and i in used and rename.get(i): i = None
+        if i is None:
+            i = next((j for j in range(last + 1, len(slots)) if j not in used and not any(norm_meal(n) == slots[j] for n in names)), None)
+            if i is not None: rename[i] = nm
+        if i is None: continue
+        pos[nm] = i; used.add(i); last = i
+    return pos, rename
+
 def mtot(m):
     P = sum(float(i.get('p') or 0) for i in m.get('items', []))
     C = sum(float(i.get('c') or 0) for i in m.get('items', []))
@@ -190,11 +207,14 @@ def fill_plan(J):
             key = 'train' if not getattr(fill_plan, '_t', None) else 'rest'
             fill_plan._t = True
             ms = (T.get(key) or {}).get('meals') or []
-            byrow = {norm_meal(ctext(cells(r)[0])): r for r in R[1:] if not ctext(cells(r)[0]).upper().startswith('TOTAL')}
+            body_rows = [r for r in R[1:] if not ctext(cells(r)[0]).upper().startswith('TOTAL')]
             total_row = next((r for r in R if ctext(cells(r)[0]).upper().startswith('TOTAL')), None)
+            pos, rename = place_meals([mm.get('name') or '' for mm in ms], [norm_meal(ctext(cells(r)[0])) for r in body_rows])
+            for i, nm in rename.items(): set_cell(cells(body_rows[i])[0], nm, body_rows[i])
             S = [0, 0, 0, 0]
             for mm in ms:
-                r = byrow.get(norm_meal(mm.get('name')))
+                i = pos.get(mm.get('name') or '')
+                r = body_rows[i] if i is not None else None
                 if r is None or ctext(cells(r)[2]):
                     r = add_row(t, R[1], before=total_row); set_cell(cells(r)[0], mm.get('name', ''), r)
                 P, C, F, K = mtot(mm)
@@ -211,6 +231,16 @@ def fill_plan(J):
         elif h in ('DÍA', 'DIA') and len(cells(R[0])) > 2 and ctext(cells(R[0])[1]).upper().startswith('DESAYUNO') and not menu_done:
             menu_done = True
             cols = [norm_meal(ctext(c)) for c in cells(R[0])[1:]]
+            # tomas con otro nombre (p. ej. «Almuerzo»): ocupan un hueco libre y renombran la columna
+            names = []
+            for i in range(7):
+                key = 'd%d' % i if ('d%d' % i) in T else ('train' if trainDays[i] else 'rest')
+                for mm in (T.get(key) or {}).get('meals') or []:
+                    if (mm.get('name') or '') not in names: names.append(mm.get('name') or '')
+            pos, rename = place_meals(names, cols)
+            hdr = cells(R[0])[1:]
+            for j, nm in rename.items(): set_cell(hdr[j], nm.upper(), R[0])
+            cols = [rename.get(j) or c for j, c in enumerate(cols)]
             for i, r in enumerate(R[1:8]):
                 cs = cells(r)
                 key = 'd%d' % i if ('d%d' % i) in T else ('train' if trainDays[i] else 'rest')
@@ -223,9 +253,12 @@ def fill_plan(J):
                 txt = {}
                 last = None
                 for mm in ms:
-                    k = norm_meal(mm.get('name'))
-                    if k in cols: txt[k] = meal_menu(mm); last = k
+                    j = pos.get(mm.get('name') or '')
+                    k = cols[j] if j is not None else None
+                    if k and k not in txt: txt[k] = meal_menu(mm); last = k
+                    elif k: txt[k] += '\n' + (mm.get('name') or '') + ': ' + meal_menu(mm)
                     elif last: txt[last] += '\n' + (mm.get('name') or '') + ': ' + meal_menu(mm)
+                    else: txt[cols[0]] = (mm.get('name') or '') + ': ' + meal_menu(mm) + ('\n' + txt[cols[0]] if cols[0] in txt else '')
                 for k, c in zip(cols, cs[1:]):
                     set_cell(c, txt.get(k, '—'), r)
         elif h.startswith('GRUPO') and d.get('exch'):

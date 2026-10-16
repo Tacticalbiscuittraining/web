@@ -378,6 +378,18 @@ def parse_plan(path):
                     S0 = [sum(it[k] for m in d for it in m['items']) for k in 'pcf']
                     bad = [(nm, a, b) for nm, a, b in zip(('P', 'HC', 'G'), T0, S0) if a and abs(a - b) > max(10, a * .12)]
                     if bad: warn('%s: con la tabla oficial sale %s (tu plan: %s)' % (['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'][i], ' · '.join('%s %g' % (nm, round(b)) for nm, a, b in bad), ' · '.join('%s %g' % (nm, a) for nm, a, b in bad)))
+        # tomas de la estructura del día que no salen en el menú semanal (p. ej. el pre-entreno): que no se pierdan
+        for key in ('train', 'rest'):
+            sm, ty = struct.get(key) or {}, types.get(key)
+            if not ty: continue
+            have = {m['name'] for m in ty['meals']}
+            for nm, v in sm.items():
+                if nm in have or not re.search(r'\w', v['text'] or ''): continue
+                r0 = len(REPORT); dish, items, notes = parse_compact(v['text']); del REPORT[r0:]
+                if not items: dish, notes = v['text'], []
+                o = MEALS.index(nm) if nm in MEALS else len(MEALS)
+                at = next((i for i, m in enumerate(ty['meals']) if (MEALS.index(m['name']) if m['name'] in MEALS else -1) > o), len(ty['meals']))
+                ty['meals'].insert(at, {'id': nid(), 'name': nm, 'dish': dish, 'time': '', 'note': ' · '.join(notes), 'items': items})
         for k, ty in types.items():
             K = sum(4 * i['p'] + 4 * i['c'] + 9 * i['f'] for m in ty['meals'] for i in m['items'])
             ty['kcal'] = round(K); ty['p'] = round(sum(i['p'] for m in ty['meals'] for i in m['items']))

@@ -1404,5 +1404,30 @@
 "src": "USDA: Honey",
 "sw": false,
 "al": []
+},
+{
+"n": "Bebida de avena",
+"g": "k",
+"p": 0.6,
+"c": 6.5,
+"f": 1.4,
+"fib": 0.8,
+"src": "Valor medio de etiquetas de bebida de avena sin azúcar añadido",
+"sw": true,
+"al": [
+"bebida de avena",
+"leche de avena"
+]
+},
+{
+"n": "Pepino",
+"g": "v",
+"p": 0.7,
+"c": 3.1,
+"f": 0.1,
+"fib": 0.5,
+"src": "USDA: Cucumber, with peel, raw",
+"sw": true,
+"al": []
 }
 ]

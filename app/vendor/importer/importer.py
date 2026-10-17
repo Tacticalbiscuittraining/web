@@ -317,7 +317,8 @@ def parse_plan(path):
                     lines = [x.strip() for x in cell.split('\n') if x.strip()]
                     if not lines or lines[0] in ('—', '-'): continue
                     dish, items, notes = lines[0], [], []
-                    if len(lines) == 1 and ('+' in lines[0] or ',' in lines[0] or re.match(r'^\d', lines[0])):
+                    # también texto libre con cantidades: «Tostada de pan integral (40g) con aguacate (70g) y pavo (80g)»
+                    if len(lines) == 1 and ('+' in lines[0] or ',' in lines[0] or re.match(r'^\d', lines[0]) or re.search(r'\d\s*(?:g|ml)\b', lines[0], re.I)):
                         r0 = len(REPORT); dish, items, notes = parse_compact(lines[0]); w1 = REPORT[r0:]; del REPORT[r0:]
                         d2, i2, n2 = parse_free(lines[0]); w2 = REPORT[r0:]; del REPORT[r0:]
                         q = lambda L: (len([x for x in L if x.get('ref')]), -len([x for x in L if not x.get('ref')]))
@@ -447,43 +448,61 @@ def parse_sets(series, reps, kg):
     K = [kv(ks[i] if i < len(ks) else ks[-1]) if ks else 0 for i in range(n)]
     return [[K[i], R[i]] for i in range(n)], ' · '.join(dict.fromkeys(note))
 
+V1_DAY = r'(?:D[ií]a|Sesi[oó]n)\s'
 def is_training_v1(wb):
-    return any(re.match(r'D[ií]a\s', n) for n in wb.sheetnames) and any(str(ws['D14'].value or '').upper().startswith('EJERCICIO') for ws in wb.worksheets)
+    return any(re.match(V1_DAY, n, re.I) for n in wb.sheetnames) and any(str(ws['D14'].value or '').upper().startswith('EJERCICIO') for ws in wb.worksheets)
 
 def parse_training_v1(wb):
-    """Formato antiguo: una hoja por día («Dia A - Fuerza Base») con una sola semana."""
+    """Formato antiguo: una hoja por día («Dia A - Fuerza Base» o «Sesion A») con una sola semana.
+    Los bloques de texto (calentamiento, vuelta a la calma, notas, indicaciones) se buscan por su título, no por la fila."""
     WD = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo']
     days, level, week = [], '', None
     for ws in wb.worksheets:
         if str(ws['D14'].value or '').upper()[:9] != 'EJERCICIO': continue
         v = lambda a: ws[a].value
         title = ws.title.strip()
-        m = re.match(r'(D[ií]a\s+\w+)\s*[-–]?\s*(.*)$', title)
-        dname = re.sub(r'^Dia', 'Día', m.group(1)) if m else title
+        m = re.match(r'((?:D[ií]a|Sesi[oó]n)\s+\w+)\s*[-–]?\s*(.*)$', title, re.I)
+        dname = re.sub(r'^(Dia|Sesi[oó]n)', 'Día', m.group(1), flags=re.I) if m else title
         ses = str(v('E7') or '')
         wm = re.search(r'\(([^)]+)\)', ses)
         wdn = (wm.group(1) if wm else '').strip().lower().replace('miercoles', 'miércoles').replace('sabado', 'sábado')
         rest = norm_rest(str(v('F9') or '').split('(')[0].strip().replace(' seg', ' s'))
         level = level or str(v('I9') or '').strip(' *')
         exs = []
+        # columna «Peso kg ✍» usada para el peso corporal (el mismo valor en todas las filas): no es lo que movió
+        jv = [str(v('J%d' % r)).strip() for r in range(15, 23) if v('D%d' % r) and v('J%d' % r) not in (None, '')]
+        body_w = len(jv) >= 3 and len(set(jv)) == 1
         for r in range(15, 23):
             name = v('D%d' % r)
             if not name: continue
             n = lambda x: (str(int(x)) if isinstance(x, float) and x.is_integer() else str(x)) if x not in (None, '') else ''
             e = {'id': nid(), 'name': str(name).strip(), 'sets': n(v('E%d' % r)), 'reps': n(v('F%d' % r)), 'kg': n(v('G%d' % r)), 'rest': rest, 'tempo': '', 'tech': ''}
             done = {k: n(v(c + str(r))) for k, c in (('sets', 'H'), ('reps', 'I'), ('kg', 'J'), ('rir', 'K'))}
+            if body_w: done['kg'] = ''
             if any(done.values()): e['done'] = done  # lo que hizo el cliente (solo para el historial)
             exs.append(e)
         if not exs: continue
         wk = re.search(r'\d+', str(v('G7') or ''))
         if wk: week = int(wk.group(0)) - 1
-        blk = lambda a, b: [str(v('B%d' % r)).strip() for r in range(a, b) if v('B%d' % r)]
-        note = blk(40, 43)
-        cli = blk(35, 38)
+        heads = {}
+        for r in range(23, 60):
+            t = str(v('B%d' % r) or '').upper()
+            for k, w in (('warm', 'CALENTAMIENTO'), ('cool', 'VUELTA A LA CALMA'), ('cli', 'NOTAS Y SENSACIONES'), ('note', 'INDICACIONES')):
+                if w in t and k not in heads: heads[k] = r
+        order = sorted(heads.values())
+        def blk(k, a0, b0):  # filas bajo el título hasta el siguiente título (o las fijas de siempre si no hay título)
+            if k in heads:
+                a0 = heads[k] + 1; nx = [x for x in order if x > heads[k]]; b0 = nx[0] if nx else a0 + 4
+            return [str(v('B%d' % r)).strip() for r in range(a0, b0) if v('B%d' % r) and str(v('B%d' % r)).strip()]
+        note = blk('note', 40, 43)
+        cli = blk('cli', 35, 38)
         if cli: note += ['Notas del cliente: ' + ' · '.join(cli)]
         days.append({'id': nid(), 'name': dname, 'focus': (m.group(2).strip() if m and m.group(2) else str(v('B9') or '')), 'wd': WD.index(wdn) if wdn in WD else -1,
-                     'dur': '60', 'place': 'Gimnasio', 'warm': ' · '.join(blk(25, 28)), 'cool': ' · '.join(blk(30, 33)), 'note': '\n'.join(note), 'exs': exs})
-    T = {'meso': {'n': 1, 'level': level, 'start': '', 'weeks': []}, 'auto': True, 'days': days}
+                     'dur': '60', 'place': 'Gimnasio', 'warm': ' · '.join(blk('warm', 25, 28)), 'cool': ' · '.join(blk('cool', 30, 33)), 'note': '\n'.join(note), 'exs': exs})
+    # sin semanas la app no sabe qué fase o RIR mostrar: las 4 de siempre
+    W4 = [{'phase': 'Adaptación', 'rir': 3, 'vol': '', 'int': '', 'notes': ''}, {'phase': 'Progresión', 'rir': 2, 'vol': '', 'int': '', 'notes': ''},
+          {'phase': 'Intensificación', 'rir': 1, 'vol': '', 'int': '', 'notes': ''}, {'phase': 'Descarga', 'rir': 4, 'vol': '', 'int': '', 'notes': ''}]
+    T = {'meso': {'n': 1, 'level': level, 'start': '', 'weeks': W4}, 'auto': True, 'days': days}
     if week is not None and 0 <= week < 4: T['onlyWeek'] = week
     return {'training': T, 'log': [], 'chk': []}
 

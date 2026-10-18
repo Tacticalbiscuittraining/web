@@ -418,7 +418,6 @@ def fill_training(J):
     left = []
     def fill_day(ws, d):
         exs = d['exs'][:8]
-        if len(d['exs']) > 8: left.append('%s: %s' % (d.get('name', ''), ', '.join(e.get('name', '') for e in d['exs'][8:])))
         for i, e in enumerate(exs):
             r = 10 + i
             ws.set('D%d' % r, e.get('name', '')); ws.set('E%d' % r, e.get('group') or '')
@@ -444,26 +443,13 @@ def fill_training(J):
         for k, top in (('warm', 20), ('cool', 89)):
             for j, x in enumerate([x for x in re.split(r'\s*·\s*', d.get(k) or '') if x][:3]): ws.set('B%d' % (top + j), x)
         for j, x in enumerate([x for x in (d.get('note') or '').split('\n') if x.strip()][:3]): ws.set('B%d' % (99 + j), x)
-    for di, d in enumerate(days):
-        if di >= len(day_sheets): left.append(d.get('name', '')); continue
-        ws = sh(day_sheets[di]); rr = 22 + di
-        wd = d.get('wd')
-        res.set('C%d' % rr, WD[wd] if isinstance(wd, int) and 0 <= wd < 7 else '')
-        res.set('D%d' % rr, d.get('focus') or '')
-        res.set('G%d' % rr, numish(d.get('dur') or ''))
-        res.set('H%d' % rr, d.get('place') or '')
-        fill_day(ws, d)
-    # variantes (p. ej. «Día B · Casa»): hoja propia «Día B (Casa)» copiada de la del día base, justo detrás
-    slot = {d['name']: day_sheets[i] for i, d in enumerate(days[:len(day_sheets)])}
-    extra, ct_add, rel_add, all_days = {}, [], [], list(zip(day_sheets, days))
+    # hojas nuevas copiadas de una de la plantilla (mismo diseño), justo detrás de «after»
+    extra, ct_add, rel_add = {}, [], []
     nsheet = max(int(re.search(r'(\d+)\.xml$', v).group(1)) for v in path.values()) + 1
     ndraw = 1 + max([int(m) for m in re.findall(r'xl/drawings/drawing(\d+)\.xml$', '\n'.join(zin.namelist()), re.M)] or [0])
     rel_ids = [int(r.get('Id')[3:]) for r in rels if r.get('Id', '').startswith('rId')]
-    for v in [d for d in (T.get('days') or []) if d.get('exs') and d.get('of')]:
-        base = slot.get(v['of'])
-        if not base: left.append('%s (variante de %s)' % (v.get('name', ''), v['of'])); continue
-        label = v.get('place') or v['name'].split('·')[-1].strip()
-        name = '%s (%s)' % (v['of'], label)
+    def clone(base, name, after):
+        nonlocal nsheet, ndraw
         part = 'xl/worksheets/sheet%d.xml' % nsheet
         sheets[name] = Sheet(zin.read(path[base])); path[name] = part
         brel = path[base].replace('worksheets/', 'worksheets/_rels/') + '.rels'
@@ -481,17 +467,60 @@ def fill_training(J):
         ct_add.append('<Override PartName="/%s" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' % part)
         rid_new = 'rId%d' % (max(rel_ids) + 1); rel_ids.append(max(rel_ids) + 1)
         rel_add.append('<Relationship Id="%s" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet%d.xml"/>' % (rid_new, nsheet))
-        S_ = wb.find(qs('sheets')); be = [s for s in S_ if s.get('name') == base][0]
-        while be.getnext() is not None and be.getnext().get('name', '').startswith(base + ' ('): be = be.getnext()
+        S_ = wb.find(qs('sheets')); be = [s for s in S_ if s.get('name') == after][0]
+        while be.getnext() is not None and be.getnext().get('name', '').startswith(after + ' ('): be = be.getnext()
         pos = list(S_).index(be) + 1
         ne = etree.Element(qs('sheet')); ne.set('name', name); ne.set('sheetId', str(max(int(s.get('sheetId')) for s in S_) + 1)); ne.set('state', 'visible'); ne.set(R, rid_new)
         be.addnext(ne)
         dn = wb.find(qs('definedNames'))
         for x in (dn if dn is not None else []):
             if x.get('localSheetId') is not None and int(x.get('localSheetId')) >= pos: x.set('localSheetId', str(int(x.get('localSheetId')) + 1))
-        ws = sheets[name]
-        ws.set('B2', 'PLAN DE ENTRENAMIENTO · %s' % name.upper())
-        fill_day(ws, v); all_days.append((name, v)); nsheet += 1
+        nsheet += 1
+        ws = sheets[name]; ws.set('B2', 'PLAN DE ENTRENAMIENTO · %s' % name.upper())
+        return ws
+    # más de 8 ejercicios: hoja «Día A (cont.)» con los siguientes, numerados a partir del 9
+    def more(name, d, base):
+        rest, k = d['exs'][8:], 1
+        while rest:
+            cn = name + ' (cont.)' if k == 1 else '%s (cont. %d)' % (name, k)
+            ws = clone(base, cn, name if k == 1 else prev); prev = cn
+            for i in range(8):
+                for top in (10, 28, 41, 54, 67): ws.set('B%d' % (top + i), 8 * k + i + 1)
+            if name not in day_sheets:
+                for ref in ('F5', 'K5'): ws.set(ref, cellval(sheets[name], ref))
+            dd = dict(d, exs=rest[:8], warm='', cool='', note=''); fill_day(ws, dd); all_days.append((cn, dd))
+            rest, k = rest[8:], k + 1
+    def cellval(ws, ref):
+        c = ws.find_cell(ref)
+        if c is None or c.find(qs('f')) is not None: return ''
+        return ''.join(x.text or '' for x in c.iter(qs('t')))
+    all_days, slot = [], {}
+    LET = 'ABCDEFGHIJKLMNOP'
+    for di, d in enumerate(days):
+        wd = d.get('wd'); wdn = WD[wd] if isinstance(wd, int) and 0 <= wd < 7 else ''
+        if di < len(day_sheets):
+            name = day_sheets[di]; ws = sh(name); rr = 22 + di
+            res.set('C%d' % rr, wdn); res.set('D%d' % rr, d.get('focus') or '')
+            res.set('G%d' % rr, numish(d.get('dur') or '')); res.set('H%d' % rr, d.get('place') or '')
+        else:  # más días que la plantilla: hoja nueva igual que la del último día
+            name = 'Día ' + LET[di] if di < len(LET) else 'Día %d' % (di + 1)
+            ws = clone(day_sheets[-1], name, all_days[-1][0] if all_days else day_sheets[-1])
+            ws.set('F5', d.get('focus') or ''); ws.set('K5', wdn)
+            ws.set('B3', 'Tactical Biscuit Training · %s min · %s' % (d.get('dur') or '60', d.get('place') or 'Gimnasio'))
+        slot[d['name']] = name
+        fill_day(ws, d); all_days.append((name, d))
+        if len(d['exs']) > 8: more(name, d, day_sheets[min(di, len(day_sheets) - 1)])
+    # variantes (p. ej. «Día B · Casa»): hoja propia «Día B (Casa)» copiada de la del día base, justo detrás
+    for v in [d for d in (T.get('days') or []) if d.get('exs') and d.get('of')]:
+        base = slot.get(v['of'])
+        if not base: left.append('%s (variante de %s)' % (v.get('name', ''), v['of'])); continue
+        label = v.get('place') or v['name'].split('·')[-1].strip()
+        name = '%s (%s)' % (base, label)
+        ws = clone(base if base in day_sheets else day_sheets[-1], name, base)
+        if base not in day_sheets:
+            for ref in ('F5', 'K5'): ws.set(ref, cellval(sheets[base], ref))
+        fill_day(ws, v); all_days.append((name, v))
+        if len(v['exs']) > 8: left.append('%s: %s' % (v.get('name', ''), ', '.join(e.get('name', '') for e in v['exs'][8:])))
     # resultados que no son =IF(X="","",Y): fechas de las semanas, cabeceras y enlaces a vídeo
     st = dt.date.fromisoformat(meso['start']) if re.match(r'\d{4}-\d\d-\d\d$', meso.get('start') or '') else None
     rng = lambda i: '%s – %s' % ((st + dt.timedelta(7 * i)).strftime('%d/%m'), (st + dt.timedelta(7 * i + 6)).strftime('%d/%m')) if st else ''
@@ -627,12 +656,53 @@ def fill_run(J):
         for col, wd in zip('ABCDEFGH', [12, 26, 14, 14, 18, 40, 12, 12]): ws.column_dimensions[col].width = wd
     out = io.BytesIO(); wb.save(out); return out.getvalue()
 
+# ---------------------------------------------------------------- composición corporal (Excel propio; importer.parse_comp lo vuelve a leer)
+def fill_comp(J):
+    """J['comp'] = {name, altura, nac, sexo, notas, fechas: [iso…], rows: [[etiqueta, 'h'|'in'|'calc', [valores…]], …]}"""
+    import openpyxl
+    from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+    C = J.get('comp') or {}
+    F = C.get('fechas') or []
+    n = max(1, len(F))
+    dark, gold, calc = PatternFill('solid', fgColor='1F2A33'), PatternFill('solid', fgColor='C9A227'), PatternFill('solid', fgColor='EEF0F2')
+    thin = Side(style='thin', color='C8CDD2'); box = Border(left=thin, right=thin, top=thin, bottom=thin)
+    wb = openpyxl.Workbook(); ws = wb.active; ws.title = 'Composición corporal'
+    ws.append(['Composición corporal · ' + (J.get('name') or '')]); ws.cell(1, 1).font = Font(bold=True, size=16, color='FFFFFF')
+    for c in range(1, n + 2): ws.cell(1, c).fill = dark
+    ws.append(['Tactical Biscuit Training']); ws.cell(2, 1).font = Font(italic=True, color='5B6670'); ws.append([])
+    def iso(s):
+        try: return dt.datetime.fromisoformat(str(s)[:10])
+        except Exception: return None
+    ws.append(['Fecha'] + [iso(x) for x in F]); r = ws.max_row
+    for c in range(1, n + 2):
+        x = ws.cell(r, c); x.font = Font(bold=True, color='FFFFFF'); x.fill = dark; x.border = box; x.alignment = Alignment(horizontal='center')
+        if c > 1: x.number_format = 'DD/MM/YYYY'
+    for lab, kind, vals in C.get('rows') or []:
+        if kind == 'h':
+            ws.append([str(lab).upper()]); r = ws.max_row
+            for c in range(1, n + 2): ws.cell(r, c).fill = gold
+            ws.cell(r, 1).font = Font(bold=True, color='1F2A33'); continue
+        ws.append([lab] + [v if v not in ('', None) else None for v in vals]); r = ws.max_row
+        for c in range(1, n + 2):
+            x = ws.cell(r, c); x.border = box
+            if kind == 'calc': x.fill = calc; x.font = Font(italic=True, color='5B6670')
+            if c > 1: x.alignment = Alignment(horizontal='center')
+    ws.column_dimensions['A'].width = 38
+    for c in range(2, n + 2): ws.column_dimensions[openpyxl.utils.get_column_letter(c)].width = 13
+    ws.freeze_panes = 'B5'
+    d = wb.create_sheet('Datos')
+    for k, v in [('Cliente', J.get('name') or ''), ('Fecha de nacimiento', C.get('nac') or ''), ('Sexo', C.get('sexo') or ''), ('Altura (cm)', C.get('altura') or ''), ('Notas', C.get('notas') or '')]:
+        d.append([k, v]); d.cell(d.max_row, 1).font = Font(bold=True)
+    d.column_dimensions['A'].width = 22; d.column_dimensions['B'].width = 60
+    out = io.BytesIO(); wb.save(out); return out.getvalue()
+
 def export(J):
     """Devuelve (bytes, extensión, avisos)."""
     if J.get('kind') == 'diet': return fill_plan(J), 'docx', []
     if J.get('kind') == 'run': return fill_run(J), 'xlsx', []
+    if J.get('kind') == 'comp': return fill_comp(J), 'xlsx', []
     b, left = fill_training(J)
-    warn = ['No caben en la plantilla (4 días y 8 ejercicios por día): ' + '; '.join(left)] if left else []
+    warn = ['No caben en la plantilla (más de 8 ejercicios en una variante): ' + '; '.join(left)] if left else []
     return b, 'xlsx', warn
 
 if __name__ == '__main__':

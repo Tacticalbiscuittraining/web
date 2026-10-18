@@ -535,6 +535,9 @@ def parse_training(path):
         # variante de otro día: hoja «Día B (Casa)» → el cliente elige entre el Día B y esta
         vm = re.match(r'^(D[ií]a\s+\S+)\s*(?:\((.+)\)|[·\-–]\s*(.+))$', dname)
         if vm and not any(x.strip() == vm.group(1) for x in wb.sheetnames): vm = None  # «Día A - Pierna» sin hoja «Día A»: día propio
+        # «Día A (cont.)»: los ejercicios del 9 en adelante del Día A
+        cont = bool(vm and re.match(r'^cont\.?(\s*\d+)?$', (vm.group(2) or '').strip(), re.I))
+        if cont: dname = vm.group(1).replace('Dia', 'Día'); vm = None
         of = vm.group(1).replace('Dia', 'Día') if vm else ''
         if vm: dname = '%s · %s' % (of, (vm.group(2) or vm.group(3)).strip())
         for wi, top in enumerate((28, 41, 54, 67)):
@@ -571,10 +574,14 @@ def parse_training(path):
         for e in exs:
             e.pop('_n', None)
             if not e['wk']: del e['wk']
+        base = next((d for d in days if d['name'] == dname), None) if cont else None
+        if base: base['exs'].extend(exs); continue
         rr = next((r for r in range(22, 30) if str(cells.get('B%d' % r, '')).strip() in (dname, of)), 22 + len(days))
         wdn = str(cells.get('C%d' % rr, '') or '').strip().lower()
         WD = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo']
         dur = str(cells.get('G%d' % rr, '') or '')
+        b3 = re.search(r'·\s*(\d+(?:\s*[-–]\s*\d+)?)\s*min\s*·\s*(.+)$', str(v('B3') or ''))  # días de más (sin fila en el Resumen)
+        if b3 and str(cells.get('B%d' % rr, '')).strip() != (of or dname): dur, cells = b3.group(1), dict(cells, **{'H%d' % rr: b3.group(2).strip()})
         days.append({'id': nid(), 'name': dname, 'focus': str(v('F5') or cells.get('D%d' % rr, '') or ''), 'wd': -1,
                      'dur': (re.search(r'\d+\s*[-–]\s*\d+', dur).group(0).replace(' ', '') if re.search(r'\d+\s*[-–]\s*\d+', dur) else (re.findall(r'\d+', dur) or ['60'])[-1]),
                      'place': (vm.group(2) or vm.group(3)).strip().capitalize() if vm else str(cells.get('H%d' % rr, '') or 'Gimnasio'), 'warm': ' · '.join(warm), 'cool': ' · '.join(cool), 'note': '\n'.join(note), 'exs': exs})
@@ -642,7 +649,7 @@ def parse_comp(path):
             revs.append({'fecha': d.strftime('%Y-%m-%d'), 'v': v})
     revs.sort(key=lambda r: r['fecha'])
     for s in sorted(skipped):
-        if not re.search(r'imc|masa .*\(kg\)|peso corporal sin grasa|masa grasa \(kg\)|nombre|objetivo|clasificaci|sexo|nacimiento', s, re.I):
+        if not re.search(r'imc|[ií]ndice|masa .*\(kg\)|peso corporal sin grasa|masa grasa \(kg\)|nombre|objetivo|clasificaci|sexo|nacimiento', s, re.I):
             warn('Composición: no he importado «%s» (no hay casilla equivalente)' % s)
     w = [num(r['v']['peso'].replace(',', '.')) for r in revs if r['v'].get('peso')]
     return {'comp': {'nac': '', 'sexo': '', 'altura': alt or '', 'notas': '', 'revs': revs}, 'weights': w}

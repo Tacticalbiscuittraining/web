@@ -113,6 +113,14 @@ section { padding-block: 96px 0; }
 .tag { justify-self: start; display: inline-block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--teal-soft); color: var(--teal-ink); font-weight: 500; }
 .tag.coral { background: color-mix(in srgb, var(--coral) 16%, transparent); color: var(--coral); }
 .svc-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; align-items: start; }
+.svc-main { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.svc-all { margin-top: 16px; }
+.svc-all > summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--teal-ink); padding: 8px 0; }
+.svc-all > summary::-webkit-details-marker { display: none; }
+.svc-all > summary::after { content: "+"; font-family: var(--font-display); font-size: 24px; line-height: 1; transition: transform .25s; }
+.svc-all[open] > summary::after { transform: rotate(45deg); }
+.svc-all .svc-groups { margin-top: 12px; }
+.svc-all .svc.rv { opacity: 1; transform: none; }
 .svc-group { display: grid; gap: 12px; }
 .svc-group .faq-h { margin: 0 0 2px; }
 .svc { cursor: pointer; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; transition: border-color .2s, transform .2s; }
@@ -187,7 +195,7 @@ section { padding-block: 96px 0; }
   .hero-logo { justify-self: start; max-width: 190px; order: -1; }
   .svc-feat::after { display: none; }
   .ct-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .pillars, .svc-groups { grid-template-columns: minmax(0, 1fr); }
+  .pillars, .svc-groups, .svc-main { grid-template-columns: minmax(0, 1fr); }
   .svc-groups { gap: 26px; }
   .steps { grid-template-columns: minmax(0, 1fr); gap: 22px; }
   .steps::before { top: 28px; bottom: 28px; left: 27px; right: auto; width: 2px; height: auto; background: linear-gradient(180deg, var(--coral), var(--teal)); }
@@ -453,6 +461,13 @@ html.intro, html.intro body { overflow: hidden; }
       <a class="btn primary" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%2090-day%20%E2%80%9CTotal%20Change%E2%80%9D%20Pack.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener">I’m interested</a>
     </div>
 
+    <div class="svc-main">
+      <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%20online%20plan.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">Online</span><h3>Online plan</h3><p>Your diet, your training or both, in the app with a monthly review, from anywhere.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+      <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20in-person%20training.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><span class="tag">In person</span><h3>In-person training</h3><p>One-to-one sessions with me, focused on technique and your goal, single or as a pass.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
+    </div>
+
+    <details class="svc-all">
+    <summary>See all options</summary>
     <div class="svc-groups">
       <div class="svc-group">
         <p class="faq-h">To get started</p>
@@ -470,6 +485,7 @@ html.intro, html.intro body { overflow: hidden; }
         <a class="svc rv" href="https://wa.me/34601565820?text=Hi%2C%20I%E2%80%99m%20interested%20in%20the%2010-session%20pass.%20Could%20you%20send%20me%20more%20information%3F" target="_blank" rel="noopener"><h3>10-session pass</h3><p>Ten one-to-one sessions to train with me on a regular basis.</p><span class="svc-go">I’m interested <span aria-hidden="true">→</span></span></a>
       </div>
     </div>
+    </details>
 
     <div class="svc-cta rv">
       <div>

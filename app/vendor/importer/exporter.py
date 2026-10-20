@@ -692,6 +692,7 @@ def fill_comp(J):
     ws.freeze_panes = 'B5'
     d = wb.create_sheet('Datos')
     for k, v in [('Cliente', J.get('name') or ''), ('Fecha de nacimiento', C.get('nac') or ''), ('Sexo', C.get('sexo') or ''), ('Altura (cm)', C.get('altura') or ''), ('Notas', C.get('notas') or '')]:
+        if not str(v).strip(): continue  # sin huecos vacíos
         d.append([k, v]); d.cell(d.max_row, 1).font = Font(bold=True)
     d.column_dimensions['A'].width = 22; d.column_dimensions['B'].width = 60
     out = io.BytesIO(); wb.save(out); return out.getvalue()

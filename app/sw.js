@@ -24,13 +24,16 @@ self.addEventListener('push', (e) => {
   try { d = e.data ? e.data.json() : {}; } catch (_) { d = { body: e.data ? e.data.text() : '' }; }
   e.waitUntil(self.registration.showNotification(d.title || 'Team Biscuit', {
     body: d.body || '', tag: d.tag || 'tb', renotify: true,
-    icon: 'icons/icon-192.png', badge: 'icons/icon-192.png', lang: 'es',
+    icon: 'icons/icon-192.png', badge: 'icons/icon-192.png', lang: 'es', data: { go: d.go || null },
   }));
 });
+/* al tocar el aviso: abre la app en el chat o la ficha de ese cliente (go), y si ya estaba abierta, la lleva allí */
 self.addEventListener('notificationclick', (e) => {
   e.notification.close();
+  const go = e.notification.data && e.notification.data.go;
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((ws) => {
     const w = ws.find((x) => x.url.startsWith(self.registration.scope));
-    return w ? w.focus() : self.clients.openWindow(self.registration.scope);
+    if (w) { if (go) w.postMessage({ tb: 'go', go }); return w.focus(); }
+    return self.clients.openWindow(self.registration.scope + (go ? '?go=' + encodeURIComponent(JSON.stringify(go)) : ''));
   }));
 });

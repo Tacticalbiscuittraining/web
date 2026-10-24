@@ -88,6 +88,15 @@ section { padding-block: 96px 0; }
 .demo-cta { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
 .demo-cta small { color: var(--band-muted); font-size: 14px; }
 .swipe-hint { display: none; }
+.app-more { margin-top: 72px; }
+.app-more .sec-head { margin-bottom: 28px; }
+.shots { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px; }
+.shot { margin: 0; display: grid; gap: 12px; align-content: start; }
+.shot .phone { width: 100%; max-width: none; border-radius: 24px; padding: 6px; transform: none; }
+.shot .phone img { border-radius: 19px; }
+.shot figcaption { font-size: 14px; line-height: 1.45; color: var(--band-muted); }
+.shot figcaption b { color: var(--band-fg); font-weight: 600; }
+@media (max-width: 1000px) { .shots { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 28px; } }
 
 /* Sobre mí */
 .about { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: start; }
@@ -214,6 +223,10 @@ section { padding-block: 96px 0; }
   .phones::-webkit-scrollbar { display: none; }
   .phone { flex: 0 0 74%; max-width: none; scroll-snap-align: center; }
   .phone:nth-child(2) { transform: none; }
+  .app-more { margin-top: 56px; }
+  .shots { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: -20px; padding: 4px 20px 6px; gap: 14px; scrollbar-width: none; }
+  .shots::-webkit-scrollbar { display: none; }
+  .shot { flex: 0 0 64%; scroll-snap-align: center; }
   .swipe-hint { display: block; margin-top: 10px; text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--band-muted); }
   .svc { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 14px; row-gap: 4px; padding: 16px 18px; }
   .svc > * { grid-column: 1; }
@@ -409,6 +422,23 @@ html.intro, html.intro body { overflow: hidden; }
         <div class="phone"><img src="img/app-diet.webp?v=2" alt="Pantalla de dieta" width="390" height="650"></div>
       </div>
       <p class="swipe-hint" aria-hidden="true">Desliza para ver más →</p>
+      </div>
+    </section>
+    <section class="app-more">
+      <div class="sec-head rv">
+        <p class="eyebrow">Lo último en la app</p>
+        <h2>Cada entreno suma</h2>
+      </div>
+      <div class="rv">
+        <div class="shots" aria-label="Más capturas de la app">
+          <figure class="shot"><div class="phone"><img src="img/app-nivel.webp?v=1" alt="Nivel y progreso de una clienta de ejemplo" width="390" height="650" loading="lazy"></div><figcaption><b>Tu nivel</b>, que sube con cada entreno.</figcaption></figure>
+          <figure class="shot"><div class="phone"><img src="img/app-logros.webp?v=1" alt="Vitrina de logros" width="390" height="650" loading="lazy"></div><figcaption><b>Logros y medallas</b> por constancia, fuerza y carrera.</figcaption></figure>
+          <figure class="shot"><div class="phone"><img src="img/app-medalla.webp?v=1" alt="Medalla de 5 km" width="390" height="650" loading="lazy"></div><figcaption><b>Cada medalla</b> con su propia escena.</figcaption></figure>
+          <figure class="shot"><div class="phone"><img src="img/app-semana.webp?v=1" alt="Tarjeta «Mi semana»" width="390" height="650" loading="lazy"></div><figcaption><b>Mi semana</b> en una tarjeta para compartir.</figcaption></figure>
+          <figure class="shot"><div class="phone"><img src="img/app-temporizador.webp?v=1" alt="Temporizador de descanso" width="390" height="650" loading="lazy"></div><figcaption><b>Descanso cronometrado</b>, con tu siguiente serie.</figcaption></figure>
+          <figure class="shot"><div class="phone"><img src="img/app-molestias.webp?v=1" alt="Mapa de molestias" width="390" height="650" loading="lazy"></div><figcaption><b>Molestias</b>: marcas la zona y lo veo al momento.</figcaption></figure>
+        </div>
+        <p class="swipe-hint" aria-hidden="true">Desliza para ver más →</p>
       </div>
     </section>
   </div>

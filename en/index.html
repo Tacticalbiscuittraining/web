@@ -89,6 +89,15 @@ section { padding-block: 96px 0; }
 .demo-cta { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
 .demo-cta small { color: var(--band-muted); font-size: 14px; }
 .swipe-hint { display: none; }
+.app-more { margin-top: 72px; }
+.app-more .sec-head { margin-bottom: 28px; }
+.shots { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px; }
+.shot { margin: 0; display: grid; gap: 12px; align-content: start; }
+.shot .phone { width: 100%; max-width: none; border-radius: 24px; padding: 6px; transform: none; }
+.shot .phone img { border-radius: 19px; }
+.shot figcaption { font-size: 14px; line-height: 1.45; color: var(--band-muted); }
+.shot figcaption b { color: var(--band-fg); font-weight: 600; }
+@media (max-width: 1000px) { .shots { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 28px; } }
 
 /* Sobre mí */
 .about { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: start; }
@@ -215,6 +224,10 @@ section { padding-block: 96px 0; }
   .phones::-webkit-scrollbar { display: none; }
   .phone { flex: 0 0 74%; max-width: none; scroll-snap-align: center; }
   .phone:nth-child(2) { transform: none; }
+  .app-more { margin-top: 56px; }
+  .shots { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: -20px; padding: 4px 20px 6px; gap: 14px; scrollbar-width: none; }
+  .shots::-webkit-scrollbar { display: none; }
+  .shot { flex: 0 0 64%; scroll-snap-align: center; }
   .swipe-hint { display: block; margin-top: 10px; text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--band-muted); }
   .svc { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 14px; row-gap: 4px; padding: 16px 18px; }
   .svc > * { grid-column: 1; }
@@ -410,6 +423,23 @@ html.intro, html.intro body { overflow: hidden; }
         <div class="phone"><img src="../img/app-diet.webp?v=2" alt="Diet screen" width="390" height="650"></div>
       </div>
       <p class="swipe-hint" aria-hidden="true">Swipe to see more →</p>
+      </div>
+    </section>
+    <section class="app-more">
+      <div class="sec-head rv">
+        <p class="eyebrow">Latest in the app</p>
+        <h2>Every workout counts</h2>
+      </div>
+      <div class="rv">
+        <div class="shots" aria-label="More app screenshots">
+          <figure class="shot"><div class="phone"><img src="../img/app-nivel.webp?v=1" alt="Level and progress of a sample client" width="390" height="650" loading="lazy"></div><figcaption><b>Your level</b>, rising with every workout.</figcaption></figure>
+          <figure class="shot"><div class="phone"><img src="../img/app-logros.webp?v=1" alt="Achievements showcase" width="390" height="650" loading="lazy"></div><figcaption><b>Achievements and medals</b> for consistency, strength and running.</figcaption></figure>
+          <figure class="shot"><div class="phone"><img src="../img/app-medalla.webp?v=1" alt="5K medal" width="390" height="650" loading="lazy"></div><figcaption><b>Every medal</b> with its own scene.</figcaption></figure>
+          <figure class="shot"><div class="phone"><img src="../img/app-semana.webp?v=1" alt="“My week” card" width="390" height="650" loading="lazy"></div><figcaption><b>My week</b> on a card to share.</figcaption></figure>
+          <figure class="shot"><div class="phone"><img src="../img/app-temporizador.webp?v=1" alt="Rest timer" width="390" height="650" loading="lazy"></div><figcaption><b>Timed rest</b>, showing your next set.</figcaption></figure>
+          <figure class="shot"><div class="phone"><img src="../img/app-molestias.webp?v=1" alt="Aches and pains map" width="390" height="650" loading="lazy"></div><figcaption><b>Aches and pains</b>: mark the spot and I see it right away.</figcaption></figure>
+        </div>
+        <p class="swipe-hint" aria-hidden="true">Swipe to see more →</p>
       </div>
     </section>
   </div>

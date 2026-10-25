@@ -606,21 +606,8 @@
 "sw": true,
 "al": [
 "arroz",
-"arroz blanco"
-]
-},
-{
-"n": "Arroz basmati (crudo)",
-"g": "c",
-"p": 8.0,
-"c": 78.0,
-"f": 0.6,
-"fib": 1.0,
-"src": "Valor medio de etiquetas de arroz basmati (Hacendado, SOS, Tilda)",
-"sw": true,
-"al": [
-"arroz basmati",
-"basmati"
+"arroz blanco",
+"arroz basmati"
 ]
 },
 {

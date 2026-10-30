@@ -1653,7 +1653,13 @@ body[data-tb-art="v1"] .xm-z{stroke:#203b40;stroke-width:4;stroke-linejoin:round
 body[data-tb-art="v1"] .xm-z.lg{fill:var(--xm-g,#3ba776)}body[data-tb-art="v1"] .xm-z.la{fill:var(--xm-a,#e9a23b)}body[data-tb-art="v1"] .xm-z.lr{fill:var(--xm-r,#d9534f)}
 body[data-tb-art="v1"] .xm-z.sel{fill:var(--teal);stroke:#fff;stroke-width:5}
 @media (hover:hover){body[data-tb-art="v1"] .xm-z[data-xa]:not(.sel):not(.lg):not(.la):not(.lr):hover{fill:#b8cecc}}
-body[data-tb-art="v1"] .xm-z[data-xa]:focus-visible{stroke:#fff;stroke-width:7;outline:2px solid var(--teal);outline-offset:3px}</style>
+body[data-tb-art="v1"] .xm-z[data-xa]:focus-visible{stroke:#fff;stroke-width:7;outline:2px solid var(--teal);outline-offset:3px}
+/* escaparate: elegir medalla; celebraciones bloqueadas: se ve su color, un poco apagado */
+.xv-fpk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.xv-fpk .xr-fm{color:#EDE6D3}.xv-fpk .xr-fm small{color:#EDE6D3}
+button.xr-fm.e{cursor:pointer;font:inherit;background:transparent}
+.xr-p.off .xr-pv>.xv-ce{filter:saturate(.75) brightness(.75)!important}
+.xv-ce{display:block;overflow:visible}</style>
 </head>
 <body>
 <style>
@@ -12243,7 +12249,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261030172227';let verT=0;
+const APP_VER='20261030174526';let verT=0;
 async function checkVersion(){
   if(Date.now()-verT<4*60e3)return;verT=Date.now();
   try{const r=await fetch('version.json',{cache:'no-store'});const j=await r.json();
@@ -17029,6 +17035,22 @@ document.body&&document.body.setAttribute('data-tb-art','v1');
 /* especiales sin medalla dibujada: fuera de la lista; si no queda ninguno, la estantería no sale */
 {const K=XSPEC.filter(a=>xMedShown(a[0]));XSPEC.length=0;K.forEach(a=>XSPEC.push(a));
   const V0=xMedView;xMedView=function(){return V0.apply(this,arguments).replace(/<section class="xg-shelf"><h2>[^<]*<small>0 de 0<\/small><\/h2><div class="xg-g"><\/div>(?:(?!<section)[\s\S])*?<\/section>/,'')}}
+/* escaparate: el hueco libre deja elegir entre las medallas que ya tienes (la mejor de cada logro) */
+{const F0=xFavRow;xFavRow=function(c,sz,btn){const h=F0.apply(this,arguments);return btn?h.split('<span class="xr-fm e"><i>+</i><small>Hueco libre</small></span>').join('<button type="button" class="xr-fm e" data-xa="favPick"><i>+</i><small>Hueco libre</small></button>'):h}}
+xOn('favPick',(b,c)=>{const E=xCosAll(c),B={};xGot(c).forEach(m=>{const id=m.t?m.t.id:m.s.id;if(!B[id]||(m.i||0)>(B[id].i||0))B[id]=m});
+  const L=Object.values(B).filter(m=>!E.sh.includes(m.key)).sort((a,b)=>(b.i||0)-(a.i||0)||b.ts-a.ts);
+  xSheet('Elige una medalla',L.length?'<p class="x-sub">Toca la que quieras enseñar en tu perfil y en «Mi semana».</p><div class="xv-fpk">'+L.map(m=>'<button type="button" class="xr-fm" data-xa="favSet" data-k="'+esc(m.key)+'">'+xCoin(m,{sz:64})+'<small>'+esc(m.t?m.t.name:m.name)+'</small></button>').join('')+'</div>':'<p class="x-sub">Aún no tienes medallas. La primera llega con tu primer entreno.</p>','',c.id)});
+/* celebraciones: vista previa dibujada con su forma y sus colores (antes, puntos que parecían un icono de carga) */
+{const SH={spark:'M0-5L1.2-1.2 5 0 1.2 1.2 0 5-1.2 1.2-5 0-1.2-1.2Z',star:'M0-5L1.5-1.6 5-1.5 2.3 .8 3.1 4.4 0 2.4-3.1 4.4-2.3 .8-5-1.5-1.5-1.6Z',hex:'M0-4.6L4-2.3V2.3L0 4.6-4 2.3V-2.3Z',
+  rect:'M-3.6-2H3.6V2H-3.6Z',dot:'',glow:'',snow:'M0-5V5M-4.3-2.5 4.3 2.5M-4.3 2.5 4.3-2.5',petal:'M0-5C3-3 3 3 0 5-3 3-3-3 0-5Z',leaf:'M0-5C4-2 3 3 0 5-3 3-4-2 0-5ZM0-5V5'};
+  const P=[[0,30,1],[40,22,.8],[78,33,1.1],[118,24,.7],[155,31,1],[196,21,.85],[235,34,1.05],[272,25,.75],[312,30,.95],[340,20,.7],[20,14,.6],[200,13,.6]];
+  const P0=xPiecePrev;xPiecePrev=function(c,x,sz){if(!x||x.sl!=='ce')return P0.apply(this,arguments);sz=sz||64;
+    const V=XCEV[x.id]||{c:['#D4AF37','#F3D27A','#B8860B','#fff'],sh:'rect'},C=V.c.filter(k=>k!=='#111'),s=V.sh||'rect',d=SH[s],g='xvce'+(++XA_N);
+    const parts=P.map(([a,r,k],i)=>{const col=C[i%C.length],x0=(50+r*Math.cos(a*Math.PI/180)).toFixed(1),y0=(50+r*Math.sin(a*Math.PI/180)).toFixed(1),rot=(a*1.7+i*23)%360;
+      if(s==='dot')return '<circle cx="'+x0+'" cy="'+y0+'" r="'+(3.2*k).toFixed(1)+'" fill="'+col+'"/>';
+      if(s==='glow')return '<ellipse cx="'+x0+'" cy="'+y0+'" rx="'+(7*k).toFixed(1)+'" ry="'+(2.4*k).toFixed(1)+'" fill="'+col+'" opacity=".8" transform="rotate('+rot+' '+x0+' '+y0+')" filter="url(#'+g+'b)"/>';
+      return '<path d="'+d+'" transform="translate('+x0+' '+y0+') rotate('+rot+') scale('+(1.15*k).toFixed(2)+')" fill="'+(s==='snow'?'none':col)+'"'+(s==='snow'||s==='leaf'?' stroke="'+col+'" stroke-width="1.1" stroke-linecap="round"':'')+'/>'}).join('');
+    return '<svg class="xv-ce" viewBox="0 0 100 100" style="width:'+sz+'px;height:'+sz+'px" aria-hidden="true"><defs><radialGradient id="'+g+'"><stop offset="0" stop-color="'+C[0]+'" stop-opacity=".55"/><stop offset="1" stop-color="'+C[0]+'" stop-opacity="0"/></radialGradient><filter id="'+g+'b"><feGaussianBlur stdDeviation="1.2"/></filter></defs><circle cx="50" cy="50" r="30" fill="url(#'+g+')"/>'+parts+'</svg>'}}
 
 /* aros del reloj (paquete RELOJES de Robert, 29 oct): catálogo y dibujo SVG de los 24 aros. Sin cambios respecto al original. */
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory();else root.TBRings=factory();})(typeof globalThis!=='undefined'?globalThis:this,function(){

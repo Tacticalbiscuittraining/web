@@ -3664,5 +3664,19 @@
 "src": "BEDCA: Turrón, tipo Alicante (id 785)",
 "sw": false,
 "al": []
+},
+{
+"n": "Hummus",
+"g": "x",
+"p": 7.9,
+"c": 8.3,
+"f": 9.6,
+"fib": 6.0,
+"src": "USDA: Hummus, commercial (SR28 16158)",
+"sw": false,
+"al": [
+"humus",
+"crema de garbanzos"
+]
 }
 ]

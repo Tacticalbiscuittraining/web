@@ -1,6 +1,7 @@
 /* Team Biscuit · service worker: avisos al móvil y copia de la app para abrirla sin cobertura.
-   Siempre pide primero la versión nueva; si no hay red (o tarda más de 4 s), usa la última guardada.
-   Solo guarda la página de la app, la librería de Supabase y las imágenes propias; los datos van aparte (real.js). */
+   Abre al instante con la última copia guardada y pide la nueva por detrás (la próxima vez ya sale la nueva);
+   la app mira version.json (nunca guardado) y, si hay versión nueva, la trae fresca antes de recargar (real.js, verFresh).
+   Sin copia guardada, espera a la red. Solo guarda la página de la app, la librería de Supabase y las imágenes propias; los datos van aparte (real.js). */
 const CACHE = 'tb-app-v1';
 const keep = (u) => (u.origin === self.location.origin && !/version\.json$/.test(u.pathname) && !/\/demo\.html$/.test(u.pathname))
   || (u.hostname === 'cdn.jsdelivr.net' && /supabase-js/.test(u.pathname));
@@ -14,7 +15,8 @@ self.addEventListener('fetch', (e) => {
     const net = fetch(r).then((res) => { if (res && (res.ok || res.type === 'opaque')) c.put(r, res.clone()).catch(() => {}); return res; });
     const old = await c.match(r, { ignoreSearch: r.mode === 'navigate' });
     if (!old) return net;
-    return Promise.race([net.catch(() => old), new Promise((ok) => setTimeout(() => ok(old), 4000))]);
+    e.waitUntil(net.catch(() => {}));
+    return old;
   })());
 });
 self.addEventListener('install', () => self.skipWaiting());

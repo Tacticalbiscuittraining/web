@@ -683,7 +683,9 @@ def parse_ficha(path):
                     return clean(r[i + 1])
         return ''
     def opt(label, mapping=None):
-        r = find(label)
+        # la ficha nueva repite etiquetas (p. ej. «Suplementación actual» de texto y de casillas): vale la primera fila con casillas
+        cand = [r for r in rows if r and r[0].strip().lower().startswith(label.lower())]
+        r = next((x for x in cand if any('☒' in c or '☐' in c for c in x[1:])), cand[0] if cand else None)
         if not r: return ''
         ch = checked(r[1:])
         if not ch: return ''
@@ -696,13 +698,20 @@ def parse_ficha(path):
                 rest = '\n'.join(r[0] for r in t[1:])
                 return clean((txt + '\n' + rest).strip())
         return ''
+    # cabecera de la ficha nueva (fecha de la entrevista, plan y modalidad)
+    fe = re.match(r'(\d{1,2})/(\d{1,2})/(\d{4})', pair('Fecha de la entrevista') or '')
+    if fe: I['fecha'] = '%s-%02d-%02d' % (fe.group(3), int(fe.group(2)), int(fe.group(1)))
+    I['plan'] = pair('Plan contratado')
+    md = opt('Modalidad')
+    if md: I['modalidad'] = md[0]
     I['nombre'] = val('Nombre completo')
     nac = pair('Fecha de nacimiento')
     m = re.match(r'(\d{1,2})/(\d{1,2})/(\d{4})', nac or '')
     if m: I['nac'] = '%s-%02d-%02d' % (m.group(3), int(m.group(2)), int(m.group(1)))
     I['sexo'] = next((re.sub(r'^\d*\s*☒\s*', '', c).strip() for r in rows for i, x in enumerate(r) if x.strip().lower().startswith('sexo') for c in r[i + 1:i + 4] if '☒' in c), '') or pick(pair('Sexo')); I['tel'] = val('Teléfono'); em = pair('Email')
     if '@' in em: I['email'] = em
-    I['ocupacion'] = re.sub(r'\s*/\s*', ' / ', val('Ocupación'))
+    I['ocupacion'] = re.sub(r'\s*/\s*', ' / ', val('Ocupación') or pair('Ocupación')); I['localidad'] = pair('Localidad')
+    if not I['tel']: I['tel'] = pair('Teléfono')
     t = opt('Tipo de trabajo', {'Activo (de pie / movimiento)': 'Activo (de pie / en movimiento)'})
     if t: I['trabajo'] = t[0]
     r = find('Nivel de estrés')
@@ -713,7 +722,7 @@ def parse_ficha(path):
     I['sueno'] = val('Horas de sueño'); I['descansa'] = pair('¿Descansas bien?')
     h = opt('Hábitos')
     if h: I['habitos'] = h[0]
-    al = val('Alcohol')
+    al = val('Alcohol') or pair('Alcohol (frecuencia')
     I['lesiones'] = block('Lesiones actuales'); I['patologias'] = block('Patologías')
     med = val('Medicación habitual'); I['medicacion'] = '' if 'nombre del medicamento' in med.lower() else med
     sup = val('Suplementación actual'); I['suplActual'] = '' if 'proteína, creatina' in sup.lower() else sup
@@ -723,21 +732,21 @@ def parse_ficha(path):
     n = opt('Nivel de experiencia')
     if n: I['nivel'] = n[0]
     I['deportes'] = block('Deportes o actividades')
-    an = val('Años de entrenamiento')
+    an = val('Años de entrenamiento') or pair('Años entrenando con pesas')
     if an and not an.lower().startswith('aproximad'): I['anosPesas'] = an
     rec = val('Récords personales'); I['records'] = '' if rec.lower().startswith('sentadilla, press') else rec
-    I['pasos'] = val('Pasos diarios').replace('/', '-')
+    I['pasos'] = re.sub(r'\s*/\s*', '-', val('Pasos diarios') or pair('Pasos diarios'))
     s = opt('¿Has tenido entrenador')
     if s: I['asesoria'] = s[0]
     I['asesoriaQue'] = block('Si tuviste asesoría')
     lg = opt('¿Dónde vas a entrenar?', {'Al aire libre': 'Aire libre'})
     if lg: I['lugar'] = lg[0] if len(lg) == 1 else 'Mixto'
     I['material'] = block('Material disponible')
-    I['diasSem'] = val('Días de entrenamiento'); I['minSes'] = pair('Minutos por sesión')
+    I['diasSem'] = val('Días de entrenamiento') or pair('Días de entreno / semana'); I['minSes'] = pair('Minutos por sesión')
     mo = opt('Mejor momento')
     if mo: I['momento'] = mo[0]
     I['limHorario'] = block('Limitaciones de horario')
-    I['comidasDia'] = val('Número de comidas'); I['comidasQuiere'] = pair('¿Cuántas te gustaría')
+    I['comidasDia'] = val('Número de comidas') or pair('Nº de comidas'); I['comidasQuiere'] = pair('¿Cuántas te gustaría')
     co = opt('¿Quién cocina', {'Mi pareja / familia': 'Pareja / familia'})
     if co: I['cocina'] = co[0] if len(co) == 1 else 'Mixto'
     tc = val('Tiempo disponible'); I['tCocinar'] = '' if tc.lower().startswith('minutos aprox') else tc
@@ -747,11 +756,23 @@ def parse_ficha(path):
     I['tentacion'] = block('¿Cuál es tu mayor')
     ax = opt('¿Comes por ansiedad')
     if ax: I['ansiedad'] = ax[0]
-    I['agua'] = val('Vasos de agua'); I['alcohol'] = pair('¿Consumes alcohol?') or al
-    sp = opt('Suplementación nutricional', {'Vitaminas': 'Vitaminas / minerales'})
+    I['agua'] = val('Vasos de agua') or pair('Agua al día'); I['alcohol'] = pair('¿Consumes alcohol?') or al
+    sp = opt('Suplementación nutricional', {'Vitaminas': 'Vitaminas / minerales'}) or opt('Suplementación actual', {'Vitaminas': 'Vitaminas / minerales'})
     if sp: I['suplem'] = sp
     I['obj3'] = block('¿Cuál es tu objetivo principal'); I['objLargo'] = block('¿Cuál es tu objetivo a largo')
     I['costado'] = block('¿Qué es lo que más'); I['porQueAhora'] = block('¿Por qué quieres'); I['dispuesto'] = block('¿Qué estás dispuesto')
+    # campos de la ficha nueva que antes no se importaban
+    for lab, k in (('Ciclo menstrual', 'ciclo'), ('Embarazo / posparto', 'embarazo'), ('Recomendaciones de carga', 'carga'),
+                   ('¿Tu alimentación cambia', 'cambiaFinde'), ('¿Tienes turnos irregulares', 'turnos'),
+                   ('¿Cómo me has conocido', 'conocido'), ('¿Cómo te ha conocido', 'conocido'),
+                   ('Consiento el tratamiento', 'consSalud'), ('Autorizo el uso de fotos', 'consFotos')):
+        o = opt(lab)
+        if o and not I.get(k): I[k] = o[0]
+    I['ansiedadQue'] = pair('¿Qué sueles comer cuando')
+    # zonas sensibles: filas sueltas de casillas (sin etiqueta delante)
+    ZON = ['Columna / lumbar', 'Cervical', 'Hombros', 'Codos / muñecas', 'Cadera', 'Rodillas', 'Tobillos / pies', 'Ninguna']
+    zs = [z for r in rows if r and re.match(r'^\s*[☒☐]', r[0]) for z in checked(r) if z in ZON]
+    if zs: I['zonas'] = zs
     for lab, k in (('Motivación actual', 'motivacion'), ('Compromiso', 'compromiso')):
         r = find(lab)
         if r:

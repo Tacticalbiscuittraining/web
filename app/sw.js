@@ -13,6 +13,9 @@ self.addEventListener('fetch', (e) => {
   e.respondWith((async () => {
     const c = await caches.open(CACHE);
     const net = fetch(r).then((res) => { if (res && (res.ok || res.type === 'opaque')) c.put(r, res.clone()).catch(() => {}); return res; });
+    /* 9 nov: la app pide la versión nueva con cache:'no-store' (verFresh): esa petición va siempre a la red.
+       Antes se le daba la copia vieja guardada y el botón «Actualizar» recargaba una y otra vez sin cambiar nada */
+    if (r.cache === 'no-store') return net.catch(async () => (await c.match(r)) || Response.error());
     const old = await c.match(r, { ignoreSearch: r.mode === 'navigate' });
     if (!old) return net;
     e.waitUntil(net.catch(() => {}));

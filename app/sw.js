@@ -16,10 +16,12 @@ self.addEventListener('fetch', (e) => {
        actualizar dejaba otra copia con ?go=…; al buscar sin mirar el ?…, salía una copia vieja y la app se recargaba en bucle */
     const nav = r.mode === 'navigate';
     const key = nav ? u.origin + u.pathname : r;
-    const net = fetch(r).then((res) => { if (res && (res.ok || res.type === 'opaque')) c.put(key, res.clone()).catch(() => {}); return res; });
+    if (r.cache === 'no-store') return fetch(r).catch(async () => (await c.match(u.origin + u.pathname)) || Response.error()); // la app lo guarda ella misma (sin ?t=)
+    /* 9 nov (3): la página se pide con ?t= para saltarse la copia del servidor de la web (GitHub Pages la guarda hasta 10 min):
+       si no, justo después de publicar podía bajar la vieja y pisar la nueva que acababa de guardar la app */
+    const net = (nav ? fetch(u.origin + u.pathname + '?t=' + Date.now(), { cache: 'no-store', credentials: 'same-origin' }) : fetch(r)).then((res) => { if (res && (res.ok || res.type === 'opaque')) c.put(key, res.clone()).catch(() => {}); return res; });
     /* 9 nov: la app pide la versión nueva con cache:'no-store' (verFresh): esa petición va siempre a la red.
        Antes se le daba la copia vieja guardada y el botón «Actualizar» recargaba una y otra vez sin cambiar nada */
-    if (r.cache === 'no-store') return net.catch(async () => (await c.match(r)) || Response.error());
     if (nav) for (const k of await c.keys()) { const ku = new URL(k.url); if (ku.search && ku.pathname === u.pathname) c.delete(k).catch(() => {}); }
     const old = await c.match(key);
     if (!old) return net;

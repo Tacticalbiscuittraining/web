@@ -144,6 +144,113 @@
 ]
 },
 {
+"n": "Secreto de cerdo",
+"g": "p",
+"p": 16.3,
+"c": 0.5,
+"f": 17.3,
+"fib": 0,
+"src": "Etiqueta Mercadona: Secreto de cerdo (malla)",
+"sw": true,
+"al": [
+"secreto",
+"secreto cerdo",
+"secreto de cerdo blanco"
+]
+},
+{
+"n": "Secreto ibérico",
+"g": "p",
+"p": 16.9,
+"c": 0,
+"f": 27.1,
+"fib": 0,
+"src": "Etiqueta Lidl: Secreto ibérico",
+"sw": true,
+"al": [
+"secreto iberico",
+"secreto de cerdo iberico"
+]
+},
+{
+"n": "Pluma ibérica",
+"g": "p",
+"p": 19.0,
+"c": 0,
+"f": 15.0,
+"fib": 0,
+"src": "Etiqueta Mercadona: Pluma de cerdo ibérico",
+"sw": true,
+"al": [
+"pluma",
+"pluma iberica",
+"pluma de cerdo"
+]
+},
+{
+"n": "Presa / aguja de cerdo",
+"g": "p",
+"p": 20.0,
+"c": 0,
+"f": 19.4,
+"fib": 0,
+"src": "BEDCA: Carne de cerdo de capa blanca, cabezada, partes grasa y magra, cruda (id 2700)",
+"sw": true,
+"al": [
+"presa",
+"presa iberica",
+"aguja de cerdo",
+"cabezada",
+"cinta de cerdo"
+]
+},
+{
+"n": "Chuleta de cerdo",
+"g": "p",
+"p": 19.0,
+"c": 0,
+"f": 15.0,
+"fib": 0,
+"src": "BEDCA: Cerdo, chuleta, crudo (id 2257)",
+"sw": true,
+"al": [
+"chuleta",
+"chuletas de cerdo",
+"chuleta de aguja"
+]
+},
+{
+"n": "Costillas de cerdo",
+"g": "p",
+"p": 17.1,
+"c": 0,
+"f": 23.6,
+"fib": 0,
+"src": "BEDCA: Cerdo, costilla, crudo (id 2258)",
+"sw": true,
+"al": [
+"costilla",
+"costillas",
+"costilla de cerdo",
+"costillar de cerdo"
+]
+},
+{
+"n": "Panceta de cerdo",
+"g": "p",
+"p": 12.5,
+"c": 0.5,
+"f": 46.6,
+"fib": 0,
+"src": "BEDCA: Cerdo, panceta, cruda (id 2260)",
+"sw": false,
+"al": [
+"panceta",
+"panceta fresca",
+"tocino"
+]
+},
+{
 "n": "Merluza",
 "g": "p",
 "p": 15.9,

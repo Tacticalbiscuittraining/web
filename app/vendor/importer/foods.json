@@ -4301,7 +4301,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001022807)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"hamburguesa"
+]
 },
 {
 "n": "Chistorra",
@@ -4334,7 +4338,11 @@
 "fib": 2.9,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8436039786349)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"hamburguesa"
+]
 },
 {
 "n": "Burger de pollo gruesa",
@@ -4345,7 +4353,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8436021419620)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+180,
+"hamburguesa"
+]
 },
 {
 "n": "Burger de vacuno y cerdo",
@@ -4367,7 +4379,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8436569262924)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"hamburguesa"
+]
 },
 {
 "n": "Hamburguesa de vaca madurada",
@@ -4378,7 +4394,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8436569263365)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+180,
+"hamburguesa"
+]
 },
 {
 "n": "Mini burgers de pollo",
@@ -4411,7 +4431,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8007640964060)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+60,
+"barrita"
+]
 },
 {
 "n": "Barritas de cereales plátano y cacao Hacendado 0% azúcares añadidos",
@@ -4587,7 +4611,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8436565363281)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+125,
+"paquete"
+]
 },
 {
 "n": "Lomo de cerdo cocido Hacendado finas lonchas",
@@ -4620,7 +4648,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8436565363380)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+150,
+"paquete"
+]
 },
 {
 "n": "Pechuga de pollo braseada extrafino Hacendado lonchas",
@@ -4664,7 +4696,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000566522)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+140,
+"paquete"
+]
 },
 {
 "n": "Bacón ahumado La Selva lonchas",
@@ -4840,7 +4876,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000505460)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+25,
+"loncha"
+]
 },
 {
 "n": "Queso lonchas cremoso de vaca Hacendado",
@@ -4906,7 +4946,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000512307)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+125,
+"unidad"
+]
 },
 {
 "n": "Mozzarella fresca di bufala campana Hacendado",
@@ -5412,7 +5456,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001031120)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"lata"
+]
 },
 {
 "n": "Filetes de caballa del sur contenido reducido en sal Hacendado en aceite de oliva",
@@ -5423,7 +5471,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001031090)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"lata"
+]
 },
 {
 "n": "Sardinillas reducidas en sal en aceite de oliva Hacendado",
@@ -5434,7 +5486,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000182142)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+90,
+"lata"
+]
 },
 {
 "n": "Almejones al natural Hacendado",
@@ -5445,7 +5501,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001020605)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+63,
+"lata"
+]
 },
 {
 "n": "Mejillones en salsa de vieira Hacendado pequeños",
@@ -5698,7 +5758,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001028618)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+200,
+"envase"
+]
 },
 {
 "n": "Bebida de arroz sin azúcares añadidos Hacendado",
@@ -5830,7 +5894,11 @@
 "fib": 7.1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001058561)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+45,
+"panecillo"
+]
 },
 {
 "n": "Barra pan integral 100% rebanado",
@@ -5863,7 +5931,11 @@
 "fib": 4.4,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8425514085619)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+77.5,
+"pan"
+]
 },
 {
 "n": "Barra pan de aceite de oliva rebanada",
@@ -5907,7 +5979,11 @@
 "fib": 3.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001000577)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+75,
+"pan"
+]
 },
 {
 "n": "Pan de burger Brioche Hacendado",
@@ -5918,7 +5994,11 @@
 "fib": 2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001013843)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+75,
+"pan"
+]
 },
 {
 "n": "Pan de molde blanco rebanada gruesa Hacendado",
@@ -5929,7 +6009,11 @@
 "fib": 3,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000823267)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+45,
+"rebanada"
+]
 },
 {
 "n": "Pan de molde integral con 20% avena 5% trigo sarraceno Hacendado",
@@ -5951,7 +6035,11 @@
 "fib": 2.6,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 5036034406834)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+60,
+"pan"
+]
 },
 {
 "n": "Maxi tortillas de trigo Hacendado",
@@ -5962,7 +6050,11 @@
 "fib": 4.2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000808707)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+60,
+"tortilla"
+]
 },
 {
 "n": "Tortillas de avena 51% Hacendado",
@@ -5973,7 +6065,11 @@
 "fib": 5.4,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000805317)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+60,
+"tortilla"
+]
 },
 {
 "n": "Piadina Hacendado",
@@ -5995,7 +6091,11 @@
 "fib": 2.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000823328)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+55,
+"pan"
+]
 },
 {
 "n": "Crackers integrales de espelta Bachman",
@@ -6072,7 +6172,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001040320)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+125,
+"unidad"
+]
 },
 {
 "n": "Bífidus natural cremoso edulcorado probióticos Hacendado 0% MG 0% azúcares añadidos",
@@ -6094,7 +6198,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001040368)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+125,
+"unidad"
+]
 },
 {
 "n": "Bífidus natural probióticos Activia 0% MG 0% azúcares añadidos",
@@ -6105,7 +6213,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8410500008871)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+125,
+"unidad"
+]
 },
 {
 "n": "Postre de soja sabor natural con coco Alpro",
@@ -6127,7 +6239,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000209962)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"postre"
+]
 },
 {
 "n": "Postre lácteo con puré mango y maracuya +Proteínas 10 g 0% MG",
@@ -6138,7 +6254,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000211514)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"postre"
+]
 },
 {
 "n": "Postre lácteo natural +Proteínas 12 g 0% MG",
@@ -6149,7 +6269,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000209085)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"postre"
+]
 },
 {
 "n": "Postre lácteo sabor coco +Proteínas 10 g 0% MG",
@@ -6160,7 +6284,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001019845)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"postre"
+]
 },
 {
 "n": "Postre lácteo cremoso natural edulcorado Hacendado 0% MG 0% azúcares añadidos",
@@ -6182,7 +6310,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000201645)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+125,
+"postre"
+]
 },
 {
 "n": "Yogur natural edulcorado Hacendado 0% MG 0% azúcares añadidos",
@@ -6204,7 +6336,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001036606)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+125,
+"yogur"
+]
 },
 {
 "n": "Batido lácteo sabor chocolate +Proteínas 30 g",
@@ -6215,7 +6351,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001025334)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+330,
+"envase"
+]
 },
 {
 "n": "Batido lácteo sabor vainilla +Proteínas 30 g",
@@ -6226,7 +6366,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001025341)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+330,
+"envase"
+]
 },
 {
 "n": "Batido lácteo sabor café +Proteínas 30 g",
@@ -6237,7 +6381,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001048111)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+330,
+"envase"
+]
 },
 {
 "n": "Bebida láctea sabor fresa +Proteínas 20 g 0% MG",
@@ -6248,7 +6396,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000213334)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+280,
+"botella"
+]
 },
 {
 "n": "Bebida láctea sabor stracciatella +Proteínas 20 g 0% azúcares añadidos",
@@ -6259,7 +6411,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001043819)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+280,
+"botella"
+]
 },
 {
 "n": "Bebida láctea sabor tropical +Proteínas 20 g 0% MG",
@@ -6270,7 +6426,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000213785)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+280,
+"botella"
+]
 },
 {
 "n": "Bebida láctea natural Actimel 0% MG 0% azúcares añadidos",
@@ -6281,7 +6441,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8410500012861)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+99,
+"unidad"
+]
 },
 {
 "n": "Yogur líquido frutos silvestres Hacendado 0% MG 0% azúcares añadidos",
@@ -6325,7 +6489,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8410500006105)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"yogur"
+]
 },
 {
 "n": "Aperitivo de patata con sabor a nata agria y cebolla",
@@ -6688,7 +6856,11 @@
 "fib": 1.1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001026324)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+80,
+"paquete"
+]
 },
 {
 "n": "Snack frito Binkies sabor queso Hacendado",
@@ -6699,7 +6871,11 @@
 "fib": 1.8,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001032455)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+80,
+"paquete"
+]
 },
 {
 "n": "Sticks de patata Hacendado",
@@ -6820,7 +6996,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001010545)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+7,
+"sobre"
+]
 },
 {
 "n": "Edulcorante en pastillas stevia Hacendado",
@@ -6930,7 +7110,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001013102)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+36,
+"barrita"
+]
 },
 {
 "n": "Barritas crujientes Crunchy Milk Hacendado con relleno de cereales y chocolate con leche",
@@ -6941,7 +7125,11 @@
 "fib": 1.3,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001057151)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+11.5,
+"barrita"
+]
 },
 {
 "n": "Barritas crujientes Hacendado recubiertas de chocolate con leche",
@@ -6963,7 +7151,11 @@
 "fib": 0.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001054037)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+23,
+"barrita"
+]
 },
 {
 "n": "Barritas de barquillo Hacendado con relleno de avellana cubiertas de chocolate con leche",
@@ -6974,7 +7166,11 @@
 "fib": 2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001023750)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+20.5,
+"barrita"
+]
 },
 {
 "n": "Barritas de barquillo Huesitos bañadas de chocolate con leche",
@@ -6985,7 +7181,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8410034075103)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+20,
+"barrita"
+]
 },
 {
 "n": "Barritas de barquillo Kit-Kat bañadas de chocolate con leche",
@@ -7018,7 +7218,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8410109102246)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+23.5,
+"barrita"
+]
 },
 {
 "n": "Barritas de chocolate con leche Hacendado rellenas de leche",
@@ -7062,7 +7266,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8000500003787)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+12.5,
+"bombón"
+]
 },
 {
 "n": "Bombones cereza al licor Hacendado con chocolate",
@@ -7106,7 +7314,11 @@
 "fib": 7.4,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001057793)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+13.5,
+"bombón"
+]
 },
 {
 "n": "Bombones delicias de avellana Delizze Hacendado",
@@ -7315,7 +7527,11 @@
 "fib": 9,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001033902)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+10,
+"onza"
+]
 },
 {
 "n": "Chocolate extrafino con leche Hacendado almendras enteras",
@@ -7337,7 +7553,11 @@
 "fib": 7.6,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000706522)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+12.5,
+"onza"
+]
 },
 {
 "n": "Chocolate negro 55% cacao Hacendado con almendras",
@@ -7348,7 +7568,11 @@
 "fib": 9.7,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000403582)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+12.5,
+"onza"
+]
 },
 {
 "n": "Chocolate negro 70% cacao fundir Hacendado 0% azúcares añadidos",
@@ -7381,7 +7605,11 @@
 "fib": 11,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000237736)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+10,
+"onza"
+]
 },
 {
 "n": "Chocolate negro 72% de cacao Hacendado con almendras enteras",
@@ -7414,7 +7642,11 @@
 "fib": 15,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001025594)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+10,
+"onza"
+]
 },
 {
 "n": "Chocolate negro fundir Hacendado",
@@ -7579,7 +7811,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000124210)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+50,
+"unidad"
+]
 },
 {
 "n": "Huevos sorpresa de chocolate Hacendado dibujo",
@@ -7590,7 +7826,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000123626)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+20,
+"unidad"
+]
 },
 {
 "n": "Mini bombones de chocolate con leche Peanut Cups Hacendado relleno de crema y pedazos de cacahuete",
@@ -7656,7 +7896,11 @@
 "fib": 14,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001016400)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+8,
+"onza"
+]
 },
 {
 "n": "Porciones de chocolate con leche classic Hacendado extrafino",
@@ -7667,7 +7911,11 @@
 "fib": 1.9,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001055348)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+8,
+"onza"
+]
 },
 {
 "n": "Porciones de chocolate negro 72% cacao extrafino Hacendado",
@@ -7678,7 +7926,11 @@
 "fib": 11,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001016394)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+8,
+"onza"
+]
 },
 {
 "n": "Surtido bombones Caja Roja Nestlé",
@@ -8008,7 +8260,11 @@
 "fib": 1.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000134417)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+25,
+"tarrina"
+]
 },
 {
 "n": "Mermelada de melocotón Hacendado",
@@ -8030,7 +8286,11 @@
 "fib": 1.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000134448)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+25,
+"tarrina"
+]
 },
 {
 "n": "Mermelada de tomate Hacendado",
@@ -8349,7 +8609,11 @@
 "fib": 3.1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 7622210660176)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+28,
+"barrita"
+]
 },
 {
 "n": "Bollitos glaseados Hacendado",
@@ -8426,7 +8690,11 @@
 "fib": 4.3,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000142122)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+18.75,
+"galleta"
+]
 },
 {
 "n": "Galletas Crunchy Choc Hacendado",
@@ -8448,7 +8716,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001013140)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+15,
+"galleta"
+]
 },
 {
 "n": "Galletas Digestive Hacendado",
@@ -8459,7 +8731,11 @@
 "fib": 3.6,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000142146)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+14.3,
+"galleta"
+]
 },
 {
 "n": "Galletas Digestive avena chocolate con leche Hacendado",
@@ -8492,7 +8768,11 @@
 "fib": 7.4,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000142153)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+48,
+"paquete"
+]
 },
 {
 "n": "Galletas Divertidas chocolate con leche Hacendado",
@@ -8536,7 +8816,11 @@
 "fib": 11,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001009648)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+6,
+"galleta"
+]
 },
 {
 "n": "Galletas María dorada Hacendado",
@@ -8547,7 +8831,11 @@
 "fib": 2.2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000141323)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+5.6,
+"galleta"
+]
 },
 {
 "n": "Galletas María dorada Hacendado 0% azúcares añadidos",
@@ -8558,7 +8846,11 @@
 "fib": 3.9,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000135025)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+5.6,
+"galleta"
+]
 },
 {
 "n": "Galletas María sin gluten y sin lactosa Hacendado",
@@ -8602,7 +8894,11 @@
 "fib": 6.8,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000142139)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+15.2,
+"galleta"
+]
 },
 {
 "n": "Galletas avena y semillas Hacendado",
@@ -8613,7 +8909,11 @@
 "fib": 9.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001056321)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+40,
+"paquete"
+]
 },
 {
 "n": "Galletas canela Hacendado",
@@ -8635,7 +8935,11 @@
 "fib": 1.3,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 5410126116236)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+7.75,
+"galleta"
+]
 },
 {
 "n": "Galletas con avena sabor Choco Orange con relleno de crema de chocolate Hacendado",
@@ -8646,7 +8950,11 @@
 "fib": 9.8,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001058882)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+42,
+"paquete"
+]
 },
 {
 "n": "Galletas con chocolate y crema de leche Hacendado",
@@ -8668,7 +8976,11 @@
 "fib": 1.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000146373)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+18.67,
+"galleta"
+]
 },
 {
 "n": "Galletas de cacao Caocream Hacendado rellenas de crema",
@@ -8679,7 +8991,11 @@
 "fib": 2.9,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000155979)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+44,
+"paquete"
+]
 },
 {
 "n": "Galletas de cacao Caocream bañadas de chocolate blanco Hacendado rellenas de crema",
@@ -8712,7 +9028,11 @@
 "fib": 0.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000145819)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+30,
+"bolsa"
+]
 },
 {
 "n": "Galletas rebuenas Hacendado rellenas de chocolate blanco",
@@ -8723,7 +9043,11 @@
 "fib": 2.1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001057335)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+25,
+"galleta"
+]
 },
 {
 "n": "Galletas rebuenas Hacendado rellenas sabor chocolate",
@@ -8800,7 +9124,11 @@
 "fib": 3,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000141613)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+40,
+"paquete"
+]
 },
 {
 "n": "Mini galletas caritas Hacendado con crema de cacao",
@@ -8943,7 +9271,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000641281)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+200,
+"vaso"
+]
 },
 {
 "n": "Granizado de limón Hacendado",
@@ -8954,7 +9286,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000647054)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+200,
+"vaso"
+]
 },
 {
 "n": "Granizado de limón Hacendado sin azúcares añadidos",
@@ -8965,7 +9301,11 @@
 "fib": 2.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000641274)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+200,
+"vaso"
+]
 },
 {
 "n": "Helado Dochi cheesecake Hacendado con salsa de frambuesa",
@@ -8976,7 +9316,11 @@
 "fib": 0.3,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001011696)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+35,
+"unidad"
+]
 },
 {
 "n": "Helado Mochi coco Hacendado",
@@ -8987,7 +9331,11 @@
 "fib": 0.4,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000644916)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+35,
+"unidad"
+]
 },
 {
 "n": "Helado Mochi mango Hacendado",
@@ -8998,7 +9346,11 @@
 "fib": 0.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000644923)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+35,
+"unidad"
+]
 },
 {
 "n": "Helado bombón almendrado Hacendado sabor vainilla",
@@ -9229,7 +9581,11 @@
 "fib": 6.1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000641472)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+56,
+"unidad"
+]
 },
 {
 "n": "Medios cocos helados Hacendado",
@@ -9251,7 +9607,11 @@
 "fib": 0.8,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001009235)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+44,
+"unidad"
+]
 },
 {
 "n": "Mini helado bombón sabor nocciola Hacendado",
@@ -9262,7 +9622,11 @@
 "fib": 1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000644992)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+50,
+"unidad"
+]
 },
 {
 "n": "Mini helado bombón surtido Hacendado",
@@ -9284,7 +9648,11 @@
 "fib": 0.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000641021)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+41,
+"unidad"
+]
 },
 {
 "n": "Mini helado bombón vegetal pistacho Hacendado a base de anacardos",
@@ -9317,7 +9685,11 @@
 "fib": 2.1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000642462)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+22,
+"unidad"
+]
 },
 {
 "n": "Mini helado sándwich sabor nata Hacendado",
@@ -9339,7 +9711,11 @@
 "fib": 0.8,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000645203)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+63,
+"unidad"
+]
 },
 {
 "n": "Mini helados hielo sorbetes Hacendado",
@@ -9361,7 +9737,11 @@
 "fib": 1.6,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000642004)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+103,
+"unidad"
+]
 },
 {
 "n": "Tarta helada sabor nata y chocolate Hacendado",
@@ -9416,7 +9796,11 @@
 "fib": 1.9,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 4009233003976)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+30,
+"unidad"
+]
 },
 {
 "n": "Pizza 4 quesos sin gluten y sin lactosa Hacendado ultracongelada",
@@ -9812,7 +10196,11 @@
 "fib": 1.8,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000635280)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+50,
+"crepe"
+]
 },
 {
 "n": "Mousse de queso Hacendado congelado",
@@ -10109,7 +10497,11 @@
 "fib": 1.4,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000826091)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+41.67,
+"unidad"
+]
 },
 {
 "n": "Crepes rellenos de chocolate Hacendado",
@@ -10120,7 +10512,11 @@
 "fib": 2.2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 3322680009706)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+32,
+"crepe"
+]
 },
 {
 "n": "Croissant Hacendado",
@@ -10131,7 +10527,11 @@
 "fib": 1.2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000829313)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+36,
+"unidad"
+]
 },
 {
 "n": "Croissant relleno de crema al cacao Hacendado",
@@ -10142,7 +10542,11 @@
 "fib": 2.9,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001018817)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+41.7,
+"unidad"
+]
 },
 {
 "n": "Ensaimadas Hacendado",
@@ -10164,7 +10568,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8410331000020)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+20,
+"unidad"
+]
 },
 {
 "n": "Figuritas de mazapán Hacendado",
@@ -10186,7 +10594,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001016851)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+110,
+"gofre"
+]
 },
 {
 "n": "Gofres con chocolate Hacendado",
@@ -10208,7 +10620,11 @@
 "fib": 1.4,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000364036)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+33,
+"unidad"
+]
 },
 {
 "n": "Magdalenas Hacendado",
@@ -10219,7 +10635,11 @@
 "fib": 1.2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001018824)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+34.4,
+"magdalena"
+]
 },
 {
 "n": "Magdalenas integrales 0% azúcares añadidos Hacendado",
@@ -10230,7 +10650,11 @@
 "fib": 3.3,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000827326)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+35,
+"magdalena"
+]
 },
 {
 "n": "Magdalenas sin gluten Hacendado",
@@ -10241,7 +10665,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000827579)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+35,
+"magdalena"
+]
 },
 {
 "n": "Mantecadas Hacendado",
@@ -10274,7 +10702,11 @@
 "fib": 1.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001011177)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+17,
+"magdalena"
+]
 },
 {
 "n": "Napolitanas con relleno de cacao Hacendado",
@@ -10285,7 +10717,11 @@
 "fib": 2.9,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000233738)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+46.3,
+"unidad"
+]
 },
 {
 "n": "Napolitanas con relleno sabor crema Hacendado",
@@ -10296,7 +10732,11 @@
 "fib": 27,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000233745)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+46.3,
+"unidad"
+]
 },
 {
 "n": "Palmeritas Hacendado",
@@ -10307,7 +10747,11 @@
 "fib": 1.8,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000829054)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+11.25,
+"unidad"
+]
 },
 {
 "n": "Pan de Cádiz Hacendado",
@@ -10329,7 +10773,11 @@
 "fib": 2.2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001018831)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+40,
+"unidad"
+]
 },
 {
 "n": "Pandoro Balocco",
@@ -10395,7 +10843,11 @@
 "fib": 3.6,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8410637112014)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+30,
+"torta"
+]
 },
 {
 "n": "Valencianas Hacendado",
@@ -10406,7 +10858,11 @@
 "fib": 1.9,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000820327)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+29,
+"unidad"
+]
 },
 {
 "n": "Grissini palitos de pan Hacendado",
@@ -10505,7 +10961,11 @@
 "fib": 3.3,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000223968)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+80,
+"paquete"
+]
 },
 {
 "n": "Panes especiales pipas calabaza Hacendado",
@@ -10538,7 +10998,11 @@
 "fib": 4.7,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000223975)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+80,
+"paquete"
+]
 },
 {
 "n": "Picatostes fritos Hacendado",
@@ -10703,7 +11167,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001023262)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+300,
+"envase"
+]
 },
 {
 "n": "Poke salmón",
@@ -10846,7 +11314,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000679475)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+400,
+"pizza"
+]
 },
 {
 "n": "Pizza Frankfurt Hacendado",
@@ -10868,7 +11340,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000223432)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+400,
+"pizza"
+]
 },
 {
 "n": "Pizza Tex-mex Hacendado con pollo asado marinado",
@@ -11033,7 +11509,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000635518)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+400,
+"pizza"
+]
 },
 {
 "n": "Rosca jamón serrano y queso emmental Hacendado",
@@ -11066,7 +11546,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000231383)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+420,
+"bote"
+]
 },
 {
 "n": "Albóndigas guisadas Hacendado",
@@ -11088,7 +11572,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000261144)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+420,
+"bote"
+]
 },
 {
 "n": "Alubias con tomate Heinz",
@@ -11110,7 +11598,11 @@
 "fib": 1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001045165)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+280,
+"bandeja"
+]
 },
 {
 "n": "Arroz de secreto ibérico con setas Hacendado",
@@ -11121,7 +11613,11 @@
 "fib": 1.7,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000227676)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+280,
+"bandeja"
+]
 },
 {
 "n": "Arroz de verduras Hacendado",
@@ -11132,7 +11628,11 @@
 "fib": 3.2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001019616)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+280,
+"bandeja"
+]
 },
 {
 "n": "Burgers vegetales Hacendado con calabaza",
@@ -11143,7 +11643,11 @@
 "fib": 4.3,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001041808)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+80,
+"hamburguesa"
+]
 },
 {
 "n": "Callos a la madrileña Hacendado",
@@ -11176,7 +11680,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8436021419484)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+200,
+"bandeja"
+]
 },
 {
 "n": "Cocido Hacendado",
@@ -11187,7 +11695,11 @@
 "fib": 2.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001018602)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+420,
+"bote"
+]
 },
 {
 "n": "Empanados vegetales con proteína de soja Tivall",
@@ -11198,7 +11710,11 @@
 "fib": 5.3,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 7613287424532)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+90,
+"unidad"
+]
 },
 {
 "n": "Fabada Hacendado",
@@ -11209,7 +11725,11 @@
 "fib": 3.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001008535)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+420,
+"lata"
+]
 },
 {
 "n": "Fideos orientales sabor pollo Hacendado",
@@ -11220,7 +11740,11 @@
 "fib": 0.7,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001021985)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+65,
+"paquete"
+]
 },
 {
 "n": "Flautas de bacón y queso",
@@ -11264,7 +11788,11 @@
 "fib": 2.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000261748)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+420,
+"bote"
+]
 },
 {
 "n": "Lasaña boloñesa Hacendado",
@@ -11275,7 +11803,11 @@
 "fib": 1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000044877)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+350,
+"bandeja"
+]
 },
 {
 "n": "Lasaña boloñesa familiar Hacendado",
@@ -11297,7 +11829,11 @@
 "fib": 1.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000044914)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+350,
+"bandeja"
+]
 },
 {
 "n": "Lasaña de pollo Hacendado",
@@ -11308,7 +11844,11 @@
 "fib": 1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001030963)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+350,
+"bandeja"
+]
 },
 {
 "n": "Lentejas a la jardinera Hacendado",
@@ -11319,7 +11859,11 @@
 "fib": 2.7,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000261168)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+420,
+"bote"
+]
 },
 {
 "n": "Lentejas a la riojana Hacendado",
@@ -11330,7 +11874,11 @@
 "fib": 2.2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000261014)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+420,
+"bote"
+]
 },
 {
 "n": "Macarrones Mac & Cheese Bacon Hacendado gratinados",
@@ -11341,7 +11889,11 @@
 "fib": 1,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001013522)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+280,
+"bandeja"
+]
 },
 {
 "n": "Migas Hacendado",
@@ -11363,7 +11915,11 @@
 "fib": 4.2,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000865113)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+50,
+"hamburguesa"
+]
 },
 {
 "n": "Pasta tiburón Mac & Cheese Hacendado con salsa de queso",
@@ -11374,7 +11930,11 @@
 "fib": 1.8,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001029264)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+190,
+"paquete"
+]
 },
 {
 "n": "Patatas bravas con allioli y salsa picante Hacendado",
@@ -11396,7 +11956,11 @@
 "fib": 1.7,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001021442)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+370,
+"bandeja"
+]
 },
 {
 "n": "Pollo al curry Hacendado con arroz basmati",
@@ -11440,7 +12004,11 @@
 "fib": 0.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000042651)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+280,
+"bandeja"
+]
 },
 {
 "n": "Sándwiches jamón y queso Hacendado",
@@ -11451,7 +12019,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000590329)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"unidad"
+]
 },
 {
 "n": "Tortilla de patata Hacendado",
@@ -11495,7 +12067,11 @@
 "fib": 1.4,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001054921)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+200,
+"tarrina"
+]
 },
 {
 "n": "Ensaladilla Delicias del mar Hacendado",
@@ -11583,7 +12159,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001056376)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+70,
+"unidad"
+]
 },
 {
 "n": "Pastel de atún Hacendado",
@@ -11616,7 +12196,11 @@
 "fib": 1.5,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001021176)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+185,
+"unidad"
+]
 },
 {
 "n": "Sándwich pollo y queso Hacendado",
@@ -11627,7 +12211,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000865885)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+185,
+"unidad"
+]
 },
 {
 "n": "Tabulé oriental Hacendado",
@@ -11715,7 +12303,11 @@
 "fib": 0.7,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8402001021053)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"natilla"
+]
 },
 {
 "n": "Natillas de chocolate con leche Hacendado",
@@ -11726,7 +12318,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000681386)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+125,
+"natilla"
+]
 },
 {
 "n": "Natillas sabor vainilla +Proteínas 12 g",
@@ -11737,7 +12333,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000223111)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+120,
+"natilla"
+]
 },
 {
 "n": "Natillas sabor vainilla Hacendado",
@@ -11748,7 +12348,11 @@
 "fib": 0,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000681379)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+125,
+"natilla"
+]
 },
 {
 "n": "Kaiku Caffè Latte Proteína Mr Big (vaso 370 ml)",
@@ -11764,6 +12368,10 @@
 "caffe latte proteina",
 "kaiku proteina",
 "cafe latte kaiku"
+],
+"ud": [
+370,
+"vaso"
 ]
 }
 ]

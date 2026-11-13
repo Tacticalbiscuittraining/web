@@ -11749,5 +11749,21 @@
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000681379)",
 "sw": false,
 "al": []
+},
+{
+"n": "Kaiku Caffè Latte Proteína Mr Big (vaso 370 ml)",
+"g": "k",
+"p": 7.7,
+"c": 3.7,
+"f": 1.1,
+"fib": 0,
+"src": "Kaiku: etiqueta por 100 ml (55 kcal; azúcares 3,2 g; sal 0,07 g)",
+"sw": false,
+"al": [
+"kaiku",
+"caffe latte proteina",
+"kaiku proteina",
+"cafe latte kaiku"
+]
 }
 ]

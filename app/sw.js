@@ -10,6 +10,7 @@ self.addEventListener('fetch', (e) => {
   if (r.method !== 'GET') return;
   const u = new URL(r.url);
   if (!keep(u)) return;
+  if (navigator.onLine !== false) e.waitUntil(warm());
   e.respondWith((async () => {
     const c = await caches.open(CACHE);
     /* 9 nov (2): la página se guarda siempre con su dirección limpia (sin ?go=…). Antes cada apertura desde un aviso o tras
@@ -19,7 +20,12 @@ self.addEventListener('fetch', (e) => {
     if (r.cache === 'no-store') return fetch(r).catch(async () => (await c.match(u.origin + u.pathname)) || Response.error()); // la app lo guarda ella misma (sin ?t=)
     /* 9 nov (3): la página se pide con ?t= para saltarse la copia del servidor de la web (GitHub Pages la guarda hasta 10 min):
        si no, justo después de publicar podía bajar la vieja y pisar la nueva que acababa de guardar la app */
-    const net = (nav ? fetch(u.origin + u.pathname + '?t=' + Date.now(), { cache: 'no-store', credentials: 'same-origin' }) : fetch(r)).then((res) => { if (res && (res.ok || res.type === 'opaque')) c.put(key, res.clone()).catch(() => {}); return res; });
+    /* 13 nov: el código y los estilos van aparte (app-<huella>.js/.css). La página nueva solo se guarda cuando ya están
+       guardados los suyos (si no, sin cobertura abriría en blanco); después se borran los de versiones anteriores */
+    const net = nav ? fetch(u.origin + u.pathname + '?t=' + Date.now(), { cache: 'no-store', credentials: 'same-origin' }).then(async (res) => {
+      if (res && res.ok) { try { const t = await res.clone().text(); if (await assets(c, t, u)) { await c.put(key, res.clone()); prune(c, t); } } catch (_) {} }
+      return res; })
+      : fetch(r).then((res) => { if (res && (res.ok || res.type === 'opaque')) c.put(key, res.clone()).catch(() => {}); return res; });
     /* 9 nov: la app pide la versión nueva con cache:'no-store' (verFresh): esa petición va siempre a la red.
        Antes se le daba la copia vieja guardada y el botón «Actualizar» recargaba una y otra vez sin cambiar nada */
     if (nav) for (const k of await c.keys()) { const ku = new URL(k.url); if (ku.search && ku.pathname === u.pathname) c.delete(k).catch(() => {}); }
@@ -29,8 +35,28 @@ self.addEventListener('fetch', (e) => {
     return old;
   })());
 });
+const APP = /app-[0-9a-f]{10}\.(?:js|css)/g;
+async function assets(c, t, u) {
+  for (const n of new Set(t.match(APP) || [])) {
+    const k = new URL(n, u).href; if (await c.match(k)) continue;
+    const r = await fetch(k); if (!r.ok) return false; await c.put(k, r);
+  }
+  return true;
+}
+async function prune(c, t) {
+  const L = new Set(t.match(APP) || []); if (!L.size) return;
+  for (const k of await c.keys()) { const m = new URL(k.url).pathname.match(/app-[0-9a-f]{10}\.(?:js|css)$/); if (m && !L.has(m[0])) c.delete(k).catch(() => {}); }
+}
 self.addEventListener('install', () => self.skipWaiting());
-self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+/* 13 nov: al pasar del service worker anterior (página todo en uno) a este, o si la app guardó ella sola la página nueva,
+   se asegura de que el código y los estilos de la página guardada también lo estén (para abrir sin cobertura). Como mucho 1 vez/min */
+let warmT = 0;
+async function warm() {
+  if (Date.now() - warmT < 60e3) return; warmT = Date.now();
+  try { const c = await caches.open(CACHE); for (const k of await c.keys()) { const u = new URL(k.url); if (u.search || !/\/$|\/index\.html$/.test(u.pathname)) continue;
+    const r = await c.match(k); if (r) await assets(c, await r.text(), u); } } catch (_) {}
+}
+self.addEventListener('activate', (e) => e.waitUntil(Promise.all([self.clients.claim(), warm()])));
 self.addEventListener('push', (e) => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (_) { d = { body: e.data ? e.data.text() : '' }; }

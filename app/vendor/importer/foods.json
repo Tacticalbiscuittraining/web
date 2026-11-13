@@ -10939,7 +10939,16 @@
 "fib": 3.4,
 "src": "Mercadona: etiqueta (Open Food Facts, EAN 8423102210153)",
 "sw": false,
-"al": []
+"al": [
+"pan de pipas",
+"pan pipas",
+"rosquillas pipas",
+"anitin pipas"
+],
+"ud": [
+83,
+"paquete"
+]
 },
 {
 "n": "Palitos de pan con queso Anitin",

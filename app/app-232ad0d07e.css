@@ -4048,6 +4048,11 @@ span.fx-ch{display:inline-flex;align-items:center;cursor:default}
 .rc-op:active{transform:scale(.98)}
 .rc-op:focus-visible{outline:2px solid var(--gold,#d8b14a);outline-offset:1px}
 .rc-back{justify-self:start;font-weight:600}
+.rc-th{position:relative}
+.rc-th img{position:absolute;inset:0}
+.rc-hero{display:block;margin:-12px -14px 2px;border-radius:14px 14px 0 0;overflow:hidden;aspect-ratio:3/2;background:color-mix(in srgb,var(--gold,#d8b14a) 12%,transparent)}
+.rc-hero:empty{display:none}
+.rc-hero img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

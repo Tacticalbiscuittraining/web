@@ -4138,6 +4138,15 @@ span.fx-ch{display:inline-flex;align-items:center;cursor:default}
 .rc-ctx b{font-size:14.5px;line-height:1.2;color:var(--fg);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .rc-ctx small{font-size:12px;color:var(--muted)}
 
+.gm-pf .pf-cb{display:grid;gap:10px}
+.gm-p{margin:0;line-height:1.45}
+.gm-s{margin:0;font-size:13px;color:var(--mut,#9a9a9a)}
+.gm-ok{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45;color:var(--fg)}
+.gm-ok input{width:20px;height:20px;flex:none;margin:1px 0 0;accent-color:var(--gold,#d8b14a)}
+.gm-ok a{color:var(--gold,#d8b14a)}
+.gm-go{width:100%}
+.gm-off{justify-self:start;color:var(--coral,#e57361)}
+
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{
   --bg:#ECF2F1; --surface:#FFFFFF; --surface-2:#F4F8F7;

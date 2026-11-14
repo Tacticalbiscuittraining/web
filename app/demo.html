@@ -4378,7 +4378,11 @@ circle.gm-re{fill:var(--gold,#d8b14a);stroke:#0d0f12;stroke-width:2.5}
 
 /* 14 nov: contenido de un desplegable de Perfil al abrirlo (src/perfil-fold.js) */
 @keyframes pfIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-.pf-cb.pf-in{animation:pfIn .22s ease-out both}</style>
+.pf-cb.pf-in{animation:pfIn .22s ease-out both}
+/* 14 nov: «Cerrar sesión» siempre a la vista al final de Perfil */
+.pf-out{display:flex;flex-direction:column;align-items:center;gap:6px;margin:18px 0 6px}
+.pf-out .pf-logout{min-width:220px;justify-content:center;color:#E76F51;border-color:#E76F5155;font-weight:700}
+.pf-out small{color:var(--muted);font-size:12.5px}</style>
 </head>
 <body>
 <style>
@@ -10267,11 +10271,13 @@ function clientProfile(c){
   const rem=card('🔔','Avisos',pst,pmsg+(pbtn?'<div class="actions" style="margin:0 0 10px">'+pbtn+'</div>':'')+'<div class="pf-tgs">'+tg('msg','Mensajes de tu entrenador','Cuando te escribe')+tg('plan','Plan nuevo','Cuando te cambia la rutina o la dieta')+tg('rev','Revisión','El día antes a las 18:00, 3 días antes el cuestionario y si cambia la fecha')+tg('wk','Tu semana en una tarjeta','Los domingos a las 18:00, si has entrenado algo')+(typeof cySit==='function'&&cySit(c)==='nat'?tg('cyc','Mi ciclo','A las 18:00, si tu regla se retrasa 3 días, te pregunta si ya te ha bajado')+'<button type="button" class="pf-tg" data-rem-cycp aria-pressed="'+(P.rem.cycp===true)+'"><span class="pf-sw" aria-hidden="true"></span><span><b>Mi ciclo: aviso antes de la regla</b><small>A las 18:00, 2 días antes de la fecha prevista. Desactivado salvo que lo actives.</small></span></button>':'')+'<button type="button" class="pf-tg" data-rem-ina aria-pressed="'+(P.rem.ina===true)+'"><span class="pf-sw" aria-hidden="true"></span><span><b>Recordatorio si llevo días sin entrenar</b><small>Un aviso suave a las 18:00 si pasa una semana sin que apuntes nada. Desactivado salvo que lo actives.</small></span></button>'+'</div>');
   const inp=(f,l,ph,type)=>'<label class="cell"><span class="lbl show">'+l+'</span><input class="in" '+(type?'type="'+type+'" ':'')+'data-r="prof" data-f="'+f+'" value="'+esc(P[f]||'')+'" placeholder="'+esc(ph||'')+'"></label>';
   const em=card('🆘','Contacto de emergencia',P.emNom?esc(P.emNom)+(P.emRel?' · '+esc(P.emRel):''):'Sin añadir · solo se usaría en una urgencia','<div class="pf-grid">'+inp('emNom','Nombre','Ej.: Ana Gómez')+inp('emTel','Teléfono','600 000 000','tel')+inp('emRel','Relación','Ej.: pareja, madre…')+'</div>');
-  const acc=card('🔒','Privacidad y cuenta','Fotos, contraseña, tus datos y sesión','<ul class="pf-list"><li><span>Fotos de progreso</span><b>'+(c.consent?'Consentimiento aceptado ('+dshort(c.consent.ts)+')':'Sin aceptar')+'</b><button type="button" class="btn sm" data-act="ctab" data-t="fotos">Ver</button></li>'+
+  const acc=card('🔒','Privacidad y cuenta','Fotos, contraseña y tus datos','<ul class="pf-list"><li><span>Fotos de progreso</span><b>'+(c.consent?'Consentimiento aceptado ('+dshort(c.consent.ts)+')':'Sin aceptar')+'</b><button type="button" class="btn sm" data-act="ctab" data-t="fotos">Ver</button></li>'+
     '<li><span>Contraseña</span><b>••••••••</b><button type="button" class="btn sm" data-act="pwOpen">Cambiar</button></li>'+(state.pwOpen?'<li class="pf-pw"><input class="in" type="password" placeholder="Contraseña actual" autocomplete="current-password"><input class="in" type="password" placeholder="Nueva contraseña" autocomplete="new-password"><button type="button" class="btn primary sm" data-act="pwSave">Guardar</button></li>':'')+
     '<li><span>Mis datos</span><b>Tu ficha, revisiones y registros en Word</b><button type="button" class="btn sm" data-act="dlData">Descargar</button></li>'+
-    '<li><span>Sesión</span><b>'+esc(c.name)+'</b><button type="button" class="btn sm" data-act="logout">Salir de la demo</button></li>'+(()=>{const v=$('.app-ver');return v?'<li class="pf-ver"><span>App</span><b>'+esc(v.textContent)+'</b></li>':''})()+'</ul>');
-  return '<div class="pf">'+hero+'<div class="pf-cols">'+mf+contacto+rem+em+card('🌗','Aspecto',themeTxt(),themeBox())+acc+bugCard(card)+'</div></div>';
+    (()=>{const v=$('.app-ver');return v?'<li class="pf-ver"><span>App</span><b>'+esc(v.textContent)+'</b></li>':''})()+'</ul>');
+  return '<div class="pf">'+hero+'<div class="pf-cols">'+mf+contacto+rem+em+card('🌗','Aspecto',themeTxt(),themeBox())+acc+bugCard(card)+'</div>'+
+   /* 14 nov: «Cerrar sesión» siempre a la vista, sin abrir ningún desplegable */
+   '<div class="pf-out"><button type="button" class="btn pf-logout" data-act="logout">Salir de la demo</button><small>Has entrado como '+esc(c.name)+'</small></div></div>';
 }
 function fichaCard(c){
   const I=intD(c),P=prof(c),yes=INT_PARQ.filter((_,i)=>I.parq[i]==='si').length,ans=Object.keys(I.parq).length;
@@ -15454,7 +15460,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261114180216';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261114194418';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -25702,8 +25708,21 @@ document.addEventListener('click',e=>{
     const cb=nw.querySelector('.pf-cb');
     if(cb&&!matchMedia('(prefers-reduced-motion: reduce)').matches){cb.classList.add('pf-in');cb.addEventListener('animationend',()=>cb.classList.remove('pf-in'),{once:true})}
     try{if(typeof tbDockTint==='function')tbDockTint()}catch(_){}
+    if(!was)pfShow(nw);
   }catch(err){console.warn(err)}
 },true);
+
+/* 14 nov (2): al abrir, si el contenido queda por debajo de la pantalla (o tapado por la isla), baja suave hasta verlo;
+   la cabecera de la tarjeta nunca sube más allá de la parte de arriba. */
+function pfShow(card){try{
+  /* la isla puede estar encogiéndose o escondida justo al tocar: se calcula su sitio con su «bottom» y su alto, no con dónde se ve ahora */
+  const r=card.getBoundingClientRect(),dk=document.querySelector('.p-dock'),cs=dk&&getComputedStyle(dk);
+  const isl=cs&&cs.display!=='none'?(parseFloat(cs.bottom)||0)+Math.max(dk.offsetHeight||0,56):0;
+  const lim=innerHeight-isl-14,top=104;/* 104: por debajo de la píldora de arriba */
+  let d=r.bottom-lim;if(d<=0)return;d=Math.min(d,r.top-top);if(d<=1)return;
+  const sm=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollBy({top:d,behavior:sm?'smooth':'auto'});
+}catch(err){console.warn(err)}}
 
 boot();
 })();

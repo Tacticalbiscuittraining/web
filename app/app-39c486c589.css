@@ -4007,6 +4007,27 @@ span.fx-ch{display:inline-flex;align-items:center;cursor:default}
 .fx-eb .btn{min-height:48px}
 .fx-sv{font-size:16px}
 
+/* 14 nov 2026: Dieta › «Cómo prepararlo» */
+.rc-b{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:8px;width:100%;margin:8px 0 2px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--gold,#d8b14a) 12%,transparent);color:var(--gold,#d8b14a);font-weight:600;font-size:14px;cursor:pointer}
+.rc-b svg{width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rc-b em{margin-left:auto;font-style:normal;font-weight:500;color:var(--muted)}
+.rc-b:focus-visible{outline:2px solid var(--gold,#d8b14a);outline-offset:2px}
+.rc-sub{margin:0;color:var(--muted);font-size:13px}
+.rc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.rc-chips .x-chip{flex:none;white-space:nowrap}
+.rc-card{display:grid;gap:10px;padding:12px 14px;border-radius:14px;background:var(--surface-2)}
+.rc-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.rc-h b{font-size:16px}
+.rc-h span{font-size:12px;color:var(--muted);white-space:nowrap}
+.rc-ing{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.rc-ing li{display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.rc-ing b{font-variant-numeric:tabular-nums;color:var(--gold,#d8b14a);white-space:nowrap}
+.rc-st{margin:0;padding-left:20px;display:grid;gap:5px;font-size:14px;line-height:1.4}
+.rc-x{margin:0;font-size:12.5px;color:var(--muted)}
+.rc-x span{font-weight:600}
+.rc-fb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.rc-fb span{margin-right:auto}
+
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{
   --bg:#ECF2F1; --surface:#FFFFFF; --surface-2:#F4F8F7;

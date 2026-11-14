@@ -4146,6 +4146,8 @@ span.fx-ch{display:inline-flex;align-items:center;cursor:default}
 .gm-ok a{color:var(--gold,#d8b14a)}
 .gm-go{width:100%}
 .gm-off{justify-self:start;color:var(--coral,#e57361)}
+.pf-ic.gm-ic{background:none;padding:0;overflow:hidden;border-radius:10px}
+.gm-ic img{width:100%;height:100%;display:block;object-fit:cover}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

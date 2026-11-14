@@ -4211,6 +4211,10 @@ span.fx-ch{display:inline-flex;align-items:center;cursor:default}
 .gm-mk{vertical-align:-2px;margin-left:5px;border-radius:3px}
 .gm-cd{align-items:center;justify-content:space-between;margin-top:12px}
 .gm-cd .gm-bd{margin:0}
+.gm-hd{display:flex;align-items:center;gap:6px;margin:4px 0 0;font-size:13px;color:var(--mut,#9a9a9a)}
+.gm-hd .gm-mk{margin:0;width:16px;height:16px;flex:none}
+.gm-hd.off{opacity:.8}
+.cl-name .gm-mk{margin-left:6px}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

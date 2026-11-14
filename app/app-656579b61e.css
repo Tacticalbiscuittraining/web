@@ -3588,6 +3588,20 @@ body:has(.p-dock) .rf2 .rf-act{bottom:calc(92px + env(safe-area-inset-bottom))}
 @media (max-width:360px){.esp b{font-size:15px}.esp{padding:3px 9px}.esh-pm .btn{min-width:44px}}
 /* 10 nov: con «antes 10×12» la fila de la serie pasaba a 3 líneas («11 kg» solo abajo); 1 px menos de hueco y cabe en una en iPhone normal */
 .setrow2.sp2>.sgoal{column-gap:3px}
+/* 14 nov (Adriana): rueda más grande y menos sensible (40 px por número, whH en wheel.js), − / + más grandes y «⌨ Escribir» */
+.esh .esh-g .whg,.esh .esh-g .whg .whx{height:120px}
+.esh .wh-s{padding:40px 0}
+.esh .whg .wh-i{height:40px}
+.esh .whg .wh-sp{height:calc(var(--n)*40px)}
+.esh .whg::before{top:40px;height:40px}
+.esh-pm{width:100%;max-width:190px}
+.esh-pm .btn{flex:1;min-width:0;min-height:46px;font-size:17px;border-radius:14px}
+.esh-kb{min-height:34px;margin:0;padding:0 12px;font-size:13.5px;font-weight:700;width:100%;max-width:190px}
+.esh .whg{position:relative}
+.esh .wh-in{font-size:24px;border-radius:12px;inset:40px 0 auto;height:40px}
+html.c4-kb .esh .esh-p{margin-bottom:calc(8px + var(--kb,0px))}
+@media (max-width:360px){.esh-pm .btn{min-width:0;font-size:15px}}
+.esh .whx{-webkit-mask-image:linear-gradient(rgba(0,0,0,.35),#000 30%,#000 70%,rgba(0,0,0,.35));mask-image:linear-gradient(rgba(0,0,0,.35),#000 30%,#000 70%,rgba(0,0,0,.35))}
 
 /* 8 nov · Controles de la derecha (e iconos de la izquierda) centrados en vertical respecto a toda la fila */
 /* Dieta: gramos y ✕ en medio de nombre + línea de kcal (si la 2ª línea es una etiqueta larga de cambio, se queda como estaba para no cortarla) */
@@ -3611,7 +3625,7 @@ body .hub-grid .hc .hc-ic,body .hub-grid .hc.big .hc-ic{grid-row:1/-1;align-self
 .wh-i,.wh-i.on{font-size:21px}
 .whg .wh-i,.whg .wh-i.on,.whg .whx.unset .wh-i.on{font-size:18px}
 .dsh .dwh .wh-i,.dsh .dwh .wh-i.on,.dsh .dwh .whx.unset .wh-i.on{font-size:20px}
-.esh .wh-i,.esh .wh-i.on,.esh .whx.unset .wh-i.on{font-size:20px}
+.esh .wh-i,.esh .wh-i.on,.esh .whx.unset .wh-i.on{font-size:24px}
 .wh-i.on{color:var(--fg)}
 
 /* pantalla completa (9 nov): en el móvil el cliente ya no ve un recuadro con bordes y márgenes alrededor de cada sección.

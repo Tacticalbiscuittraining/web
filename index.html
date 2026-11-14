@@ -96,6 +96,18 @@ section { padding-block: 96px 0; }
 .shot .phone img { border-radius: 19px; }
 .shot figcaption { font-size: 14px; line-height: 1.45; color: var(--band-muted); }
 .shot figcaption b { color: var(--band-fg); font-weight: 600; }
+/* Novedades: recetas y Garmin (14 nov) */
+.app-new { margin-top: 96px; display: grid; gap: 80px; }
+.nw { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+.nw + .nw .nw-txt { order: 2; }
+.nw h3 { font-size: clamp(28px, 3.4vw, 40px); font-weight: 800; line-height: 1.1; margin: 8px 0 14px; color: var(--band-fg); }
+.nw-txt > p { color: var(--band-muted); max-width: 52ch; }
+.nw .feats { margin-top: 22px; }
+.nw-ph { display: flex; justify-content: center; align-items: flex-start; gap: 18px; padding-bottom: 28px; }
+.nw-ph .phone { width: 46%; max-width: 240px; }
+.nw-ph .phone:nth-child(2) { transform: translateY(28px); }
+.nw-tm { margin: 0; font-size: 12px; line-height: 1.5; color: var(--band-muted); }
+@media (max-width: 800px) { .nw { grid-template-columns: minmax(0, 1fr); gap: 28px; } .nw + .nw .nw-txt { order: 0; } }
 @media (max-width: 1000px) { .shots { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 28px; } }
 
 /* Sobre mí */
@@ -227,6 +239,10 @@ section { padding-block: 96px 0; }
   .shots { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: -20px; padding: 4px 20px 6px; gap: 14px; scrollbar-width: none; }
   .shots::-webkit-scrollbar { display: none; }
   .shot { flex: 0 0 64%; scroll-snap-align: center; }
+  .app-new { margin-top: 64px; gap: 56px; }
+  .nw-ph { gap: 12px; padding-bottom: 0; }
+  .nw-ph .phone { flex: 1 1 0; width: auto; max-width: none; }
+  .nw-ph .phone:nth-child(2) { transform: none; }
   .swipe-hint { display: block; margin-top: 10px; text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--band-muted); }
   .svc { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 14px; row-gap: 4px; padding: 16px 18px; }
   .svc > * { grid-column: 1; }
@@ -408,7 +424,7 @@ html.intro, html.intro body { overflow: hidden; }
         </div>
         <ul class="feats rv">
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Entreno del día</b>, con series, repeticiones y el peso de tu última sesión.</span></li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Tu dieta en gramos</b>, con alternativas para cambiar alimentos sin salirte del plan.</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Tu dieta en gramos</b>, con alternativas para cambiar alimentos sin salirte del plan e ideas de recetas con esos mismos gramos.</span></li>
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Lista de la compra</b> preparada a partir de tu plan.</span></li>
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Carreras y progreso</b>: registra tus salidas y sigue tu semana de un vistazo.</span></li>
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Compatible con Garmin Connect</b>: si entrenas con reloj Garmin, conectas tu cuenta y tus salidas y actividades llegan solas a la app, sin apuntarlas a mano. Yo las veo al momento.</span></li>
@@ -420,7 +436,7 @@ html.intro, html.intro body { overflow: hidden; }
       <div class="phones rv" aria-label="Capturas de la app Team Biscuit">
         <div class="phone"><img src="img/app-home.webp?v=7" alt="Pantalla de inicio de la app (cliente de ejemplo)" width="390" height="650"></div>
         <div class="phone"><img src="img/app-ent.webp?v=7" alt="Pantalla de entrenamiento" width="390" height="650"></div>
-        <div class="phone"><img src="img/app-diet.webp?v=7" alt="Pantalla de dieta" width="390" height="650"></div>
+        <div class="phone"><img src="img/app-diet.webp?v=8" alt="Pantalla de dieta con ideas de recetas" width="390" height="650"></div>
       </div>
       <p class="swipe-hint" aria-hidden="true">Desliza para ver más →</p>
       </div>
@@ -441,6 +457,41 @@ html.intro, html.intro body { overflow: hidden; }
         </div>
         <p class="swipe-hint" aria-hidden="true">Desliza para ver más →</p>
       </div>
+    </section>
+    <section class="app-new" aria-label="Novedades de la app">
+      <div class="nw">
+        <div class="nw-txt rv">
+          <p class="eyebrow">Novedad · Dieta</p>
+          <h3>Cómo prepararlo</h3>
+          <p>Cada comida de tu dieta trae ideas de recetas hechas con tus mismos alimentos y gramos, así que tu plan no cambia. Con foto, ingredientes pesados y los pasos.</p>
+          <ul class="feats">
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Más de 170 recetas</b> para desayunos, comidas, meriendas y cenas.</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Modo cocinar</b> paso a paso, con la pantalla siempre encendida.</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Favoritas y tupper</b>: guarda las que más te gustan y cocina para dos o tres días.</span></li>
+          </ul>
+        </div>
+        <div class="nw-ph rv">
+          <div class="phone"><img src="img/app-receta.webp?v=1" alt="Receta con foto para la comida del día" width="390" height="650" loading="lazy"></div>
+          <div class="phone"><img src="img/app-receta-pasos.webp?v=1" alt="Ingredientes en gramos y pasos de la receta" width="390" height="650" loading="lazy"></div>
+        </div>
+      </div>
+      <div class="nw">
+        <div class="nw-txt rv">
+          <p class="eyebrow">Novedad · Carrera</p>
+          <h3>Conecta con Garmin Connect</h3>
+          <p>Si entrenas con reloj Garmin, conectas tu cuenta desde la app en un minuto. Tus salidas llegan solas y marcan la sesión de tu plan: tú solo me dices cómo te has sentido.</p>
+          <ul class="feats">
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>La actividad completa</b>: ritmo, pulso, zonas, kilómetro a kilómetro, desnivel y recorrido.</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Yo la veo al momento</b> y ajusto tu plan con datos reales.</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Tú decides</b>: lo conectas y desconectas cuando quieras.</span></li>
+          </ul>
+        </div>
+        <div class="nw-ph rv">
+          <div class="phone"><img src="img/app-garmin-sesion.webp?v=1" alt="Sesión de carrera completada sola con un reloj Garmin" width="390" height="650" loading="lazy"></div>
+          <div class="phone"><img src="img/app-garmin-ficha.webp?v=1" alt="Ficha completa de una salida con gráficas de ritmo y pulso" width="390" height="650" loading="lazy"></div>
+        </div>
+      </div>
+      <p class="nw-tm">Garmin y Garmin Connect son marcas de Garmin Ltd. o sus filiales. Tactical Biscuit Training no está patrocinado por Garmin.</p>
     </section>
   </div>
 </div>

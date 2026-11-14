@@ -4292,6 +4292,25 @@ html.rc-lock,html.rc-lock body{overflow:hidden!important;overscroll-behavior:non
 .gm-hd .gm-mk{margin:0;width:16px;height:16px;flex:none}
 .gm-hd.off{opacity:.8}
 .cl-name .gm-mk{margin-left:6px}
+/* 14 nov: recorrido sobre mapa real (OpenStreetMap oscurecido) */
+.gm-map{position:relative;aspect-ratio:360/230;border-radius:16px;overflow:hidden;background:#15171b;border:1px solid color-mix(in srgb,var(--gold,#d8b14a) 28%,var(--line))}
+.gm-map.gm-wait{background:linear-gradient(100deg,#15171b 30%,#1e2127 50%,#15171b 70%) 0 0/200% 100%;animation:gmw 1.4s linear infinite}
+@keyframes gmw{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.gm-map.gm-wait{animation:none}}
+.gm-tl{position:absolute;inset:0;filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.88) saturate(.35)}
+.gm-tl img{position:absolute;max-width:none;user-select:none;-webkit-user-select:none;pointer-events:none}
+.gm-map svg.gm-route{position:absolute;inset:0;width:100%;height:100%}
+.gm-rs{fill:none;stroke:#000;stroke-opacity:.55;stroke-width:7;stroke-linejoin:round;stroke-linecap:round}
+.gm-rl{fill:none;stroke:var(--gold,#d8b14a);stroke-width:3.6;stroke-linejoin:round;stroke-linecap:round}
+circle.gm-rb{fill:#4fc6b4;stroke:#0d0f12;stroke-width:2.5}
+circle.gm-re{fill:var(--gold,#d8b14a);stroke:#0d0f12;stroke-width:2.5}
+.gm-lg{position:absolute;left:8px;top:8px;display:flex;align-items:center;gap:5px;font-size:11px;color:#e9e6df;background:rgba(10,11,13,.66);padding:3px 8px;border-radius:99px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.gm-lg i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.gm-lg i.gm-re{background:var(--gold,#d8b14a);margin-left:6px}.gm-lg i.gm-rb{background:#4fc6b4}
+.gm-osm{position:absolute;right:0;bottom:0;font-size:10px;color:#cfcac0;background:rgba(10,11,13,.66);padding:2px 6px;border-top-left-radius:8px;text-decoration:none}
+/* la última cifra suelta ocupa el resto de la fila (sin huecos) */
+.gm-grid:not(.g2)>.gm-m:last-child:nth-child(3n+1){grid-column:span 3}
+.gm-grid:not(.g2)>.gm-m:last-child:nth-child(3n+2){grid-column:span 2}
 
 /* 14 nov: contenido de un desplegable de Perfil al abrirlo (src/perfil-fold.js) */
 @keyframes pfIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}

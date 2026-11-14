@@ -1984,6 +1984,11 @@ span.sg-chip{cursor:default}
 .cx-st .sg-dot,.cx-c .sg-dot{margin-right:4px}
 .bub .sg-wkr,.bub .sg-wkr p,.bub .sg-wkr .sg-wkh{color:var(--fg)}
 .bub .sg-wkr .sg-wkh small{color:var(--muted)}
+/* 14 nov: hora de entreno (solo entrenador) */
+.hr-hab{display:flex;gap:8px;align-items:flex-start;margin:2px 0 10px;font-size:13px;line-height:1.35;color:var(--fg)}
+.hr-hab .xi{flex:none;width:16px;height:16px;margin-top:1px;color:var(--teal)}
+.hr-hab small{display:block;font-size:11px;color:var(--muted)}
+.sg-c .hr-c{display:block;font-size:9.5px;font-weight:600;line-height:1.1;letter-spacing:-.02em;opacity:.85}
 
 /* Forma hacia la carrera (src/forma.js) */
 .fm{--fm-re:var(--coral,#E76F51);--fm-s2:#8A6FD1;--fm-ok:#2E9E5B;--fm-wa:#D9A200;--fm-ba:#D1495B}

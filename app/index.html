@@ -4382,7 +4382,10 @@ circle.gm-re{fill:var(--gold,#d8b14a);stroke:#0d0f12;stroke-width:2.5}
 /* 14 nov: «Cerrar sesión» siempre a la vista al final de Perfil */
 .pf-out{display:flex;flex-direction:column;align-items:center;gap:6px;margin:18px 0 6px}
 .pf-out .pf-logout{min-width:220px;justify-content:center;color:#E76F51;border-color:#E76F5155;font-weight:700}
-.pf-out small{color:var(--muted);font-size:12.5px}</style>
+.pf-out small{color:var(--muted);font-size:12.5px}
+/* 14 nov: al cerrar un desplegable, su contenido se desvanece antes de quitarse */
+@keyframes pfX{to{opacity:0;transform:translateY(-6px)}}
+.pf-cb.pf-x{animation:pfX .17s ease-in both;pointer-events:none}</style>
 </head>
 <body>
 <style>
@@ -15367,7 +15370,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261114194418';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261114195057';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -25604,20 +25607,46 @@ document.addEventListener('click',e=>{
   try{
     if(state.mode!=='client'||state.ctab!=='perfil')return;
     const c=cur(),old=b.parentElement,k=b.dataset.k;if(!c||!old||k==null)return;
-    state.pfO=state.pfO||{};const was=!!state.pfO[k];state.pfO[k]=!was;
+    state.pfO=state.pfO||{};
+    /* tocar otra vez mientras se cierra: se queda abierta, sin más */
+    if(old.__pfX){e.preventDefault();e.stopImmediatePropagation();clearTimeout(old.__pfX);old.__pfX=0;state.pfO[k]=true;
+      const x=old.querySelector('.pf-cb');if(x)x.classList.remove('pf-x');b.setAttribute('aria-expanded','true');return}
+    const was=!!state.pfO[k];state.pfO[k]=!was;
     const t=document.createElement('div');t.innerHTML=clientProfile(c);
-    const nb=[...t.querySelectorAll('.pf-card>.pf-hb[data-act=pfO]')].find(x=>x.dataset.k===k),nw=nb&&nb.parentElement;
-    if(!nw){state.pfO[k]=was;return}
+    if(![...t.querySelectorAll('.pf-card>.pf-hb[data-act=pfO]')].some(x=>x.dataset.k===k)){state.pfO[k]=was;return}
     e.preventDefault();e.stopImmediatePropagation();
-    const y=b.getBoundingClientRect().top;
-    old.replaceWith(nw);
-    const h=nw.querySelector('.pf-hb');const d=h.getBoundingClientRect().top-y;if(Math.abs(d)>=1)window.scrollBy(0,d);
-    const cb=nw.querySelector('.pf-cb');
-    if(cb&&!matchMedia('(prefers-reduced-motion: reduce)').matches){cb.classList.add('pf-in');cb.addEventListener('animationend',()=>cb.classList.remove('pf-in'),{once:true})}
-    try{if(typeof tbDockTint==='function')tbDockTint()}catch(_){}
-    if(!was)pfShow(nw);
+    const sm=!matchMedia('(prefers-reduced-motion: reduce)').matches,ocb=old.querySelector('.pf-cb');
+    /* 14 nov (3): al cerrar, el contenido se desvanece y lo de abajo sube suave (solo opacity/transform) */
+    if(was&&sm&&ocb){ocb.classList.add('pf-x');b.setAttribute('aria-expanded','false');old.__pfX=setTimeout(()=>{old.__pfX=0;pfSwap(c,old,k,0,sm)},170);return}
+    pfSwap(c,old,k,!was,sm,t);
   }catch(err){console.warn(err)}
 },true);
+/* cambia solo esa tarjeta; la cabecera se queda donde estaba */
+function pfSwap(c,old,k,open,sm,t){try{
+  if(!old.isConnected)return;
+  if(!t){t=document.createElement('div');t.innerHTML=clientProfile(c)}
+  const nb=[...t.querySelectorAll('.pf-card>.pf-hb[data-act=pfO]')].find(x=>x.dataset.k===k),nw=nb&&nb.parentElement;
+  if(!nw){renderMain();return}
+  /* lo que va debajo de la tarjeta (otras tarjetas y «Cerrar sesión»), para moverlo suave al cerrar */
+  const fol=[];if(!open&&sm){let n=old.nextElementSibling;while(n){fol.push(n);n=n.nextElementSibling}let p=old.parentElement;if(p&&p.classList.contains('pf-cols')){n=p.nextElementSibling;while(n){fol.push(n);n=n.nextElementSibling}}}
+  const y0=fol.map(x=>x.getBoundingClientRect().top+scrollY);
+  const y=old.querySelector('.pf-hb').getBoundingClientRect().top;
+  old.replaceWith(nw);
+  const h=nw.querySelector('.pf-hb');const d=h.getBoundingClientRect().top-y;if(Math.abs(d)>=1)window.scrollBy(0,d);
+  /* abajo del todo, al encoger la página el navegador no deja quedarse en el mismo sitio: todo baja suave en vez de saltar */
+  const rz=h.getBoundingClientRect().top-y,pf=nw.closest('.pf');
+  if(sm&&pf&&Math.abs(rz)>=1){pf.style.transition='none';pf.style.transform='translateY('+(-rz)+'px)';pf.getBoundingClientRect();
+    pf.style.transition='transform .26s cubic-bezier(.2,.8,.2,1)';pf.style.transform='';
+    const e2=()=>{pf.style.transition='';pf.style.transform=''};pf.addEventListener('transitionend',e2,{once:true});setTimeout(e2,400)}
+  fol.forEach((x,i)=>{const dy=y0[i]-(x.getBoundingClientRect().top+scrollY);if(Math.abs(dy)<1)return;
+    x.style.transition='none';x.style.transform='translateY('+dy+'px)';x.getBoundingClientRect();
+    x.style.transition='transform .26s cubic-bezier(.2,.8,.2,1)';x.style.transform='';
+    const end=()=>{x.style.transition='';x.style.transform=''};x.addEventListener('transitionend',end,{once:true});setTimeout(end,400)});
+  const cb=nw.querySelector('.pf-cb');
+  if(cb&&sm){cb.classList.add('pf-in');cb.addEventListener('animationend',()=>cb.classList.remove('pf-in'),{once:true})}
+  try{if(typeof tbDockTint==='function')tbDockTint()}catch(_){}
+  if(open)pfShow(nw);
+}catch(err){console.warn(err)}}
 
 /* 14 nov (2): al abrir, si el contenido queda por debajo de la pantalla (o tapado por la isla), baja suave hasta verlo;
    la cabecera de la tarjeta nunca sube más allá de la parte de arriba. */

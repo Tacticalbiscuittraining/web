@@ -4192,6 +4192,25 @@ span.fx-ch{display:inline-flex;align-items:center;cursor:default}
 .gm-km th,.gm-km td{padding:5px 4px;text-align:right;border-bottom:1px solid var(--line)}
 .gm-km th:first-child,.gm-km td:first-child{text-align:left}
 .gm-km th{color:var(--mut,#9a9a9a);font-weight:500}
+/* 14 nov tarde: prueba a fondo */
+.gm-ch.r4{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.gm-ch.r3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.gm-ch .x-chip{justify-content:center;text-align:center;margin:0}
+.gm-cw{position:relative}
+.gm-y{position:absolute;left:0;font-size:11px;line-height:1;color:var(--mut,#9a9a9a);font-variant-numeric:tabular-nums;background:color-mix(in srgb,var(--bg,#111) 70%,transparent);padding:2px 4px;border-radius:5px;pointer-events:none}
+.gm-y.t{top:0}.gm-y.b{bottom:2px}
+.gm-zn>div>span:first-child{display:grid;min-width:0}
+.gm-zn>div>span:first-child b{font-weight:600}
+.gm-chip{display:flex!important;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 10px;border-radius:14px;border:1px solid var(--line);background:var(--card,transparent);color:var(--fg);font:inherit;cursor:pointer}
+.gm-chip .gm-ii{width:30px;height:30px;font-size:15px}
+.gm-chip-t{display:grid;min-width:0;flex:1}
+.gm-chip-t b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gm-chip-t small{color:var(--mut,#9a9a9a);font-size:12.5px}
+.gm-chip img{border-radius:4px;flex:none}
+.gm-chip i{font-style:normal;color:var(--mut,#9a9a9a)}
+.gm-mk{vertical-align:-2px;margin-left:5px;border-radius:3px}
+.gm-cd{align-items:center;justify-content:space-between;margin-top:12px}
+.gm-cd .gm-bd{margin:0}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

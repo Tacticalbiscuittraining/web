@@ -2174,6 +2174,11 @@ body[data-ct=entreno]{--cl-mas:var(--pz-e)}
 .mc-bar s{position:absolute;top:-3px;bottom:-3px;width:2px;margin-left:-1px;background:color-mix(in srgb,var(--fg) 55%,transparent)}
 .mc-r em{font-style:normal;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 @media (max-width:380px){.mc-r{grid-template-columns:62px minmax(0,1fr) 108px;gap:8px;font-size:13px}.mc-k b{font-size:18px}}
+/* 14 nov: ficha › Dieta › Cumplimiento (src/dieta3.js) */
+.d3-al{border-left:4px solid var(--warn,#c98a1b);padding:12px 16px}
+.d3-al b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--warn,#c98a1b)}
+.d3-al p{margin:4px 0 0;font-size:14.5px;line-height:1.45}
+.d3-go{text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}
 
 /* 30 oct: ciclo menstrual (src/ciclo.js) */
 .cy-cfg{display:grid;gap:8px}
@@ -4027,6 +4032,22 @@ span.fx-ch{display:inline-flex;align-items:center;cursor:default}
 .rc-x span{font-weight:600}
 .rc-fb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
 .rc-fb span{margin-right:auto}
+.rc-intro{display:grid;gap:2px}
+.rc-ey{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold,#d8b14a)}
+.rc-intro small{font-size:12.5px;color:var(--muted)}
+.rc-list{display:grid;gap:10px}
+.rc-op{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px 10px 10px;border-radius:16px;background:var(--surface-2);border:1px solid var(--line);cursor:pointer}
+.rc-th{flex:none;width:52px;height:52px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--gold,#d8b14a) 16%,transparent);color:var(--gold,#d8b14a);overflow:hidden}
+.rc-th svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.rc-th img{width:100%;height:100%;object-fit:cover}
+.rc-tx{flex:1;min-width:0;display:grid;gap:6px}
+.rc-tx b{font-size:16px;line-height:1.25;color:var(--fg)}
+.rc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.rc-tags em{font-style:normal;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--bg,#111);color:var(--muted)}
+.rc-op>i{font-style:normal;font-size:22px;color:var(--gold,#d8b14a)}
+.rc-op:active{transform:scale(.98)}
+.rc-op:focus-visible{outline:2px solid var(--gold,#d8b14a);outline-offset:1px}
+.rc-back{justify-self:start;font-weight:600}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

@@ -4216,6 +4216,10 @@ span.fx-ch{display:inline-flex;align-items:center;cursor:default}
 .gm-hd.off{opacity:.8}
 .cl-name .gm-mk{margin-left:6px}
 
+/* 14 nov: contenido de un desplegable de Perfil al abrirlo (src/perfil-fold.js) */
+@keyframes pfIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.pf-cb.pf-in{animation:pfIn .22s ease-out both}
+
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{
   --bg:#ECF2F1; --surface:#FFFFFF; --surface-2:#F4F8F7;

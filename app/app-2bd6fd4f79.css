@@ -4054,6 +4054,90 @@ span.fx-ch{display:inline-flex;align-items:center;cursor:default}
 .rc-hero:empty{display:none}
 .rc-hero img{width:100%;height:100%;object-fit:cover;display:block}
 
+/* 14 nov 2026: «Cómo prepararlo» 2: favoritas, tupper y modo cocinar */
+.rc-cook{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:46px;padding:10px 14px;border-radius:14px;background:var(--gold,#d8b14a);color:#1a1405;font-weight:700;font-size:15px;cursor:pointer}
+.rc-cook svg{width:16px;height:16px;fill:currentColor}
+.rc-cook:active{transform:scale(.98)}
+.rc-cook:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.rc-tp{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.rc-tp span{margin-right:auto;font-weight:600}
+.rc-tpn{margin:0;font-size:12.5px;line-height:1.4;color:var(--fg);padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--gold,#d8b14a) 12%,transparent)}
+.rc-tags .rc-fv{color:var(--gold,#d8b14a)}
+.rc-tup{display:grid;gap:2px;margin:8px 0 0;padding:9px 12px;border-radius:12px;border:1px dashed color-mix(in srgb,var(--gold,#d8b14a) 55%,transparent);font-size:13.5px}
+.rc-tup b{color:var(--gold,#d8b14a)}
+.rc-tup span{font-size:12px;color:var(--muted)}
+.rc-coach h3{margin:0 0 8px;font-size:15px}
+.rc-cr{padding:8px 0;border-top:1px solid var(--line)}
+.rc-cr:first-of-type{border-top:0;padding-top:0}
+.rc-cr b{font-size:13px}
+.rc-cr p{margin:3px 0 0;font-size:13px;line-height:1.45;color:var(--muted)}
+/* modo cocinar: pantalla completa */
+#rcCook{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 16px calc(14px + env(safe-area-inset-bottom));background:var(--bg,#0d0d0f);color:var(--fg);animation:rkIn .22s ease-out}
+@keyframes rkIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#rcCook{animation:none}}
+.rk-h{display:flex;align-items:center;gap:10px}
+.rk-h>div{flex:1;min-width:0;display:grid}
+.rk-h small{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold,#d8b14a)}
+.rk-h b{font-size:18px;line-height:1.25}
+.rk-dots{display:flex;gap:5px}
+.rk-dots i{flex:1;height:4px;border-radius:4px;background:var(--line)}
+.rk-dots i.ok{background:color-mix(in srgb,var(--gold,#d8b14a) 55%,transparent)}
+.rk-dots i.on{background:var(--gold,#d8b14a)}
+.rk-tm{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}
+.rk-tm b{font-size:22px;font-variant-numeric:tabular-nums;color:var(--gold,#d8b14a)}
+.rk-tm span{margin-right:auto;font-size:13px;color:var(--muted)}
+.rk-tm button{all:unset;cursor:pointer;width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:var(--line)}
+.rk-tm.on{border-color:var(--gold,#d8b14a);animation:rkPulse 1s ease-in-out infinite}
+@keyframes rkPulse{50%{transform:scale(1.02)}}
+@media (prefers-reduced-motion:reduce){.rk-tm.on{animation:none}}
+.rk-b{flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;gap:16px;min-height:0}
+.rk-ey{margin:0;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.rk-st{margin:0;font-size:clamp(22px,6.4vw,30px);line-height:1.35;font-weight:600}
+.rk-ing{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rk-ing li{display:flex;justify-content:space-between;gap:12px;font-size:18px}
+.rk-ing b{color:var(--gold,#d8b14a);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rk-x{margin:0;font-size:14px;color:var(--muted)}
+.rk-x span{font-weight:600}
+.rk-tb{all:unset;box-sizing:border-box;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:10px 16px;border-radius:99px;border:1.5px solid var(--gold,#d8b14a);color:var(--gold,#d8b14a);font-weight:700;font-size:16px;cursor:pointer}
+.rk-tb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.rk-tb:active{transform:scale(.97)}
+.rk-f{display:grid;grid-template-columns:1fr 1.6fr;gap:10px}
+.rk-f button{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-height:54px;font-size:16px;font-weight:700;border-radius:16px;cursor:pointer;border:1px solid var(--line);background:var(--surface-2);color:var(--fg)}
+.rk-f button[data-rk=next]{background:var(--gold,#d8b14a);border-color:transparent;color:#1a1405}
+.rk-f button:active{transform:scale(.98)}
+.rk-f button:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.rk-f button:disabled{opacity:.35}
+.rk-wk{margin:0;text-align:center;font-size:11.5px;color:var(--muted)}
+.rk-wk:empty{display:none}
+.rk-tm[hidden]{display:none}
+/* diseño A: foto a todo lo ancho con el nombre encima */
+.rc-hero.ov{position:relative;aspect-ratio:4/3.4;margin:-12px -14px 0}
+.rc-hero.ov::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.28) 0%,rgba(0,0,0,0) 26%,rgba(0,0,0,0) 42%,rgba(10,8,5,.92) 100%);pointer-events:none}
+.rc-ov{position:absolute;left:16px;right:16px;bottom:14px;z-index:1;display:grid;gap:6px;color:#F3EEDF}
+.rc-ey2{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold,#d8b14a)}
+.rc-ov b{font-family:'Barlow Condensed',Barlow,sans-serif;font-size:30px;line-height:1.02;font-weight:700;text-wrap:balance}
+.rc-pl{display:flex;flex-wrap:wrap;gap:6px}
+.rc-pl em{font-style:normal;font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:99px;background:rgba(243,238,223,.16);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.rc-hero .rc-fvh{position:absolute;top:10px;right:10px;z-index:2;width:44px;height:44px;min-width:0;padding:0;display:grid;place-items:center;border-radius:50%;border:0;background:rgba(10,8,5,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:19px;filter:grayscale(1) brightness(1.6)}
+.rc-hero .rc-fvh[aria-pressed=true]{filter:none;background:rgba(10,8,5,.7)}
+.rc-hero.ov.nf{aspect-ratio:auto;margin:0}
+.rc-hero.ov.nf::after{display:none}
+.rc-hero.ov.nf .rc-ov{position:static;color:var(--fg)}
+.rc-hero.ov.nf .rc-fvh{position:static;margin-top:8px}
+/* diseño B: carrusel de ideas dentro de la comida */
+.rc-bh{background:none;border:0;padding:6px 2px 0;margin-top:10px}
+.rc-car{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:8px -4px 4px;padding:0 4px 4px;-webkit-overflow-scrolling:touch}
+.rc-car::-webkit-scrollbar{display:none}
+.rc-cd{all:unset;box-sizing:border-box;flex:none;width:156px;scroll-snap-align:start;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;background:var(--surface-2);border:1px solid var(--line);cursor:pointer}
+.rc-cd:active{transform:scale(.97)}
+.rc-cd:focus-visible{outline:2px solid var(--gold,#d8b14a);outline-offset:2px}
+.rc-cph{position:relative;height:104px;display:grid;place-items:center;background:color-mix(in srgb,var(--gold,#d8b14a) 14%,transparent);color:var(--gold,#d8b14a)}
+.rc-cph svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.rc-cph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.rc-ctx{display:grid;gap:3px;padding:9px 11px 11px}
+.rc-ctx b{font-size:14.5px;line-height:1.2;color:var(--fg);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rc-ctx small{font-size:12px;color:var(--muted)}
+
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{
   --bg:#ECF2F1; --surface:#FFFFFF; --surface-2:#F4F8F7;

@@ -3590,10 +3590,10 @@ body:has(.p-dock) .rf2 .rf-act{bottom:calc(92px + env(safe-area-inset-bottom))}
 .setrow2.sp2>.sgoal{column-gap:3px}
 /* 14 nov (Adriana): rueda más grande y menos sensible (40 px por número, whH en wheel.js), − / + más grandes y «⌨ Escribir» */
 .esh .esh-g .whg,.esh .esh-g .whg .whx{height:120px}
-.esh .wh-s{padding:40px 0}
-.esh .whg .wh-i{height:40px}
-.esh .whg .wh-sp{height:calc(var(--n)*40px)}
-.esh .whg::before{top:40px;height:40px}
+.esh .esh-g .whg .wh-s{padding:40px 0}
+.esh .esh-g .whg .wh-i{height:40px}
+.esh .esh-g .whg .wh-sp{height:calc(var(--n)*40px)}
+.esh .esh-g .whg::before{top:40px;height:40px}
 .esh-pm{width:100%;max-width:190px}
 .esh-pm .btn{flex:1;min-width:0;min-height:46px;font-size:17px;border-radius:14px}
 .esh-kb{min-height:34px;margin:0;padding:0 12px;font-size:13.5px;font-weight:700;width:100%;max-width:190px}
@@ -8242,6 +8242,9 @@ html[data-tbl] .p-dock .pd-ic svg{filter:drop-shadow(0 1px 0 #fff) drop-shadow(0
 .fl-ge.ch,.fl.xa .fl-ge.ch{color:var(--teal-ink)}
 .fl-chg{flex-basis:100%;font-size:12.5px;font-weight:700;color:var(--teal-ink);font-variant-numeric:tabular-nums}
 .fl-chg>span{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--teal-ink);color:var(--surface);font-size:10px;margin-right:2px;vertical-align:1px}
+/* 14 nov: «1 mancuerna · 2 mancuernas · Barra» en una fila entera, sin partir el texto */
+.eq-l .nb-seg{flex:1 0 100%;min-width:0}
+.eq-l .eq-b{white-space:nowrap}
 .rp{--rp-fg:#1d2b30;--rp-mu:#6B7C85;--rp-ln:#E3E9EA;--rp-ac:#2A9D8F;--rp-nv:#264653;--rp-up:#1B7F47;--rp-dn:#C2410C;color:var(--rp-fg);font:400 11.5px/1.5 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .rp *{box-sizing:border-box}
 .rp-pg{position:relative;width:210mm;min-height:297mm;padding:15mm 15mm 20mm;background:#fff;margin:0 auto 16px;box-shadow:0 2px 14px rgba(0,0,0,.12);overflow:hidden}

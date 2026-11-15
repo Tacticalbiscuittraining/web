@@ -4242,6 +4242,15 @@ html.rc-lock,html.rc-lock body{overflow:hidden!important;overscroll-behavior:non
 #rcCook .rk-b{justify-content:flex-start}
 .rk-card{margin-block:auto;flex:none}
 
+/* 15 nov (Robert, captura): en el iPhone, al buscar un alimento en el modo cocinar la pantalla se quedaba unos segundos mal
+   (barra del teclado encima del cuadro, texto doble). Con el buscador abierto o el teclado fuera: sin desenfoques ni animaciones
+   de fondo (muy pesados mientras el iPhone mueve la pantalla por el teclado) y la tarjeta casi opaca */
+.rk-card.rk-na{animation:none}
+#rcCook:has(.rc-add.on) .rk-bg img,html.c4-kb #rcCook .rk-bg img{animation:none}
+#rcCook:has(.rc-add.on) .rk-ico,html.c4-kb #rcCook .rk-ico{animation:none}
+#rcCook:has(.rc-add.on) .rk-card,html.c4-kb #rcCook .rk-card{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(22,19,14,.94)}
+#rcCook:has(.rc-add.on) :is(.rk-f button,.rk-tm),html.c4-kb #rcCook :is(.rk-f button,.rk-tm){-webkit-backdrop-filter:none;backdrop-filter:none}
+
 .gm-pf .pf-cb{display:grid;gap:10px}
 .gm-p{margin:0;line-height:1.45}
 .gm-s{margin:0;font-size:13px;color:var(--mut,#9a9a9a)}

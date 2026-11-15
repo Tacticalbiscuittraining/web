@@ -4504,6 +4504,12 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 .gh-pf span{display:grid;min-width:0}
 .gh-pf small{color:var(--mut,#9a9a9a);font-size:12.5px;line-height:1.4}
 .gh-pf .btn{flex:none;margin:0}
+.gh-home{display:flex;gap:12px;align-items:flex-start;border:1px solid color-mix(in srgb,var(--teal,#4fc6b4) 40%,var(--line));background:linear-gradient(120deg,color-mix(in srgb,var(--teal,#4fc6b4) 14%,transparent),transparent 70%),var(--card,transparent)}
+.gh-home img{border-radius:10px;flex:none}
+.gh-home p{margin:4px 0 8px;font-size:13.5px;line-height:1.45;color:var(--mut,#9a9a9a)}
+.gh-hb{display:flex;align-items:center;gap:14px}
+.gh-hb .btn{margin:0}
+.rn-rest{margin:2px 0 10px;padding:8px 12px;border-radius:12px;font-size:14px;color:var(--mut,#9aa3ad);background:color-mix(in srgb,var(--line,#2a3035) 45%,transparent)}
 
 /* 14 nov: contenido de un desplegable de Perfil al abrirlo (src/perfil-fold.js) */
 @keyframes pfIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}

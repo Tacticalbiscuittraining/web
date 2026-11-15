@@ -645,6 +645,8 @@ html.xw-on,html.xw-on body{overflow:hidden}
 .xw-sl.x-ex{padding:40px 24px;background:radial-gradient(120% 70% at 100% 0%,#4A3A12 0%,transparent 55%),#0B0B0B;color:#fff;animation:none}
 @media (prefers-reduced-motion:reduce){.x-adj,.xw-sl{animation:none}.xw-bars>i.now>i{animation:none;width:100%}}
 @media (max-width:420px){.cv .esub.es2:has(>.es-b:nth-child(6)){flex-wrap:wrap}.cv .esub.es2:has(>.es-b:nth-child(6))>.es-b{flex:1 1 calc(33.333% - 4px)}}
+/* 15 nov: con 5 pestañas (ficha › Progreso) en iPhone normal «Evolución» y «Revisiones» se tocaban y el «HOY» tapaba «Fotos»: también en dos filas */
+@media (max-width:420px){.cv .esub.es2:has(>.es-b:nth-child(5)){flex-wrap:wrap}.cv .esub.es2:has(>.es-b:nth-child(5))>.es-b{flex:1 1 calc(33.333% - 4px)}}
 /* lista de la carrera: barra de lo marcado */
 .x-ck summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
 .x-ckb{flex:1 1 100%;height:5px;border-radius:9px;background:color-mix(in srgb,var(--fg) 12%,transparent);overflow:hidden}
@@ -711,6 +713,8 @@ img:is(.exo-ph,.tx-ph,.phs-t,.bub-img,.rn-img,.exm-img),.ch-att img,.phv-img img
 .x-wkp.ok{background:color-mix(in srgb,#2E8B57 18%,transparent);color:#2E8B57}.x-wkp.low{background:color-mix(in srgb,#D9534F 16%,transparent);color:#C9423E}
 .x-wkl .xm-dt{flex:1;min-width:0}
 .es-b>span[aria-hidden] .xi{width:22px;height:22px}
+/* 15 nov: semanas del plan con nombres largos («S3 Semana de carrera») montaban el texto sobre la siguiente. Cada botón crece hasta 150 px y la fila se desliza. */
+.pl-wk>.pl-w{flex:1 0 auto;max-width:150px}.pl-wk>.pl-w span{white-space:normal}
 
 /* ---------- molestias ---------- */
 :root{--xm-g:#3BA776;--xm-a:#E9A23B;--xm-r:#D9534F}
@@ -2413,7 +2417,6 @@ body[data-desk="1"] #clist .client[aria-current="true"]{background:#1F3F3B;borde
 body[data-desk="1"] .dk-foot{display:grid;gap:2px;padding-top:8px;border-top:1px solid var(--line);flex:none}
 body[data-desk="1"] .dk-fb{display:flex;align-items:center;gap:10px;border:0;background:none;padding:7px 10px;border-radius:8px;color:#B7CBC7;font-size:13.5px;font-weight:600;text-align:left}
 body[data-desk="1"] .dk-fb:hover{background:#172A28;color:#fff}
-body[data-desk="1"] .dk-fb.dk-fo{color:#7F9692;font-weight:500;font-size:12.5px}
 
 /* la mesa de la derecha */
 .dk-mesa{display:none}

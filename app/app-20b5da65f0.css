@@ -4521,8 +4521,8 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 .gm-kmb td.gm-kbw{width:42%;padding-left:8px}
 .gm-kb{display:block;height:8px;border-radius:4px;background:var(--gx-l,rgba(255,255,255,.08));overflow:hidden}
 .gm-kb i{display:block;height:100%;border-radius:4px;background:#4fc6b4;transform-origin:left center;animation:gmKb .5s ease-out both}
-.gm-kmb tr.gm-kt .gm-kb i{background:#d8b14a}
-.gm-kmb tr.gm-kt td:nth-child(2){color:#d8b14a;font-weight:700}
+.gm-kmb tr.top .gm-kb i{background:#d8b14a}
+.gm-kmb tr.top td:nth-child(2){color:#d8b14a;font-weight:700}
 @keyframes gmKb{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @media (prefers-reduced-motion:reduce){.gm-kb i{animation:none}}
 /* 15 nov: tendencias de salud con el último valor, la media de 7 días y la flecha */

@@ -3832,6 +3832,19 @@ rect.nv-se{fill:var(--muted,#888)}
 .tw:has(>.tw-ph) .tw-b:not([aria-pressed=true]){background:rgba(7,14,13,.45)}
 @media print{.tw-ph{display:none}}
 .tw:has(>.tw-ph) .rn-cd{background:rgba(7,14,13,.5)}
+/* 14 nov: recuadro de Fuerza «Hoy · Semana · Día» siempre abierto y con la foto en todo el cuadro, igual que Caminar */
+.sx-sel.sx-fix>summary{cursor:default}
+.sx-sel.sx-fix>summary em{display:none}
+.sx-sel.sx-ph{position:relative;isolation:isolate;overflow:hidden;border:0;border-radius:16px;background:#0d1c1b;color:#fff;box-shadow:0 14px 30px -18px rgba(14,145,136,.7)}
+body[data-ct=entreno] .sx-sel.sx-ph{border-radius:4px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))}
+.sx-sel.sx-ph>summary{padding:14px 16px 10px}
+.sx-sel.sx-ph>summary small{opacity:1;color:#7fd6cb;font-family:var(--f-display);font-weight:600;letter-spacing:.12em}
+.sx-sel.sx-ph>summary b{color:#fff;font-family:var(--f-display);text-transform:uppercase;letter-spacing:.03em;font-size:22px;line-height:1.15;margin-top:2px}
+.sx-sel.sx-ph .sx-sb{padding:0 16px 14px}
+body .sx-sel.sx-ph .sx-sb .tw{background:none;box-shadow:none;clip-path:none;padding:0;margin:0 0 10px;border-radius:0}
+.sx-sel.sx-ph .tw-b:not([aria-pressed=true]){background:rgba(7,14,13,.45)}
+.sx-sel.sx-ph .td-p:not([aria-pressed=true]){background:rgba(7,14,13,.45);border-color:rgba(255,255,255,.3);color:#fff}
+.sx-sel.sx-ph .td-p.done:not([aria-pressed=true]){color:#7fd6cb}
 
 /* 11 nov: campanita de avisos (src/campana.js) */
 .cp-bell{position:relative;flex:none;width:42px;height:42px;display:grid;place-items:center;padding:0;cursor:pointer;color:#f5f3f7;border-radius:15px;
@@ -4329,6 +4342,13 @@ circle.gm-re{fill:var(--gold,#d8b14a);stroke:#0d0f12;stroke-width:2.5}
 /* 14 nov: contenido de un desplegable de Perfil al abrirlo (src/perfil-fold.js) */
 @keyframes pfIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .pf-cb.pf-in{animation:pfIn .22s ease-out both}
+/* 14 nov: «Cerrar sesión» siempre a la vista al final de Perfil */
+.pf-out{display:flex;flex-direction:column;align-items:center;gap:6px;margin:18px 0 6px}
+.pf-out .pf-logout{min-width:220px;justify-content:center;color:#E76F51;border-color:#E76F5155;font-weight:700}
+.pf-out small{color:var(--muted);font-size:12.5px}
+/* 14 nov: al cerrar un desplegable, su contenido se desvanece antes de quitarse */
+@keyframes pfX{to{opacity:0;transform:translateY(-6px)}}
+.pf-cb.pf-x{animation:pfX .17s ease-in both;pointer-events:none}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

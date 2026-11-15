@@ -4511,6 +4511,13 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 .gh-hb .btn{margin:0}
 .rn-rest{margin:2px 0 10px;padding:8px 12px;border-radius:12px;font-size:14px;color:var(--mut,#9aa3ad);background:color-mix(in srgb,var(--line,#2a3035) 45%,transparent)}
 
+/* 15 nov: fuerza del reloj unida con lo apuntado en Entreno (src/garmin4.js) */
+#gmx .gx-fzp{margin:0;color:var(--gx-m);font-size:13px;line-height:1.45}
+#gmx .gx-fzl{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+#gmx .gx-fzl li{font-size:12.5px;padding:4px 10px;border-radius:999px;background:var(--gx-l);color:inherit;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gm-fzt{display:grid;gap:8px;margin:0 0 12px}
+.gm-fzt .gm-chip{width:100%}
+
 /* 14 nov: contenido de un desplegable de Perfil al abrirlo (src/perfil-fold.js) */
 @keyframes pfIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .pf-cb.pf-in{animation:pfIn .22s ease-out both}

@@ -1817,7 +1817,9 @@ button.xr-fm.e{cursor:pointer;font:inherit;background:transparent}
 /* subpestañas: en Dieta y Cliente (acento claro en oscuro) el texto seleccionado no se oscurece */
 .cv .es2 .es-b[aria-selected="true"]{color:var(--teal-ink)!important}
 /* ordenador: el menú lateral es estrecho → 2 filas (Panel · Clientes · Mensajes / Biblioteca · Tú) */
-@media (min-width:881px){.seg.ft-seg{grid-template-columns:repeat(6,minmax(0,1fr));row-gap:3px}.seg.ft-seg>button{grid-column:span 2}.seg.ft-seg>button:nth-child(n+4){grid-column:span 3}}
+@media (min-width:881px){.seg.ft-seg{grid-template-columns:repeat(6,minmax(0,1fr));row-gap:3px}.seg.ft-seg>button{grid-column:span 2}.seg.ft-seg>button:nth-child(n+4){grid-column:span 3}
+  /* 15 nov: con el botón «Escritorio» escondido (.tb-nav, primero) las cuentas se corrían: Mensajes bajaba a la 2.ª fila y Tú quedaba sola */
+  .seg.ft-seg:has(>.tb-nav)>button:nth-child(4){grid-column:span 2}.seg.ft-seg:has(>.tb-nav)>button:nth-child(n+5){grid-column:span 3}}
 @media (min-width:1200px){
   .dash.ft-m{columns:auto}
   .dash .ft-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start;margin-bottom:16px}
@@ -2400,6 +2402,9 @@ body[data-desk="1"] .rail-head{display:flex!important;gap:6px;padding-top:8px;bo
 body[data-desk="1"] .rail-head[hidden]{display:none!important}
 body[data-desk="1"] .rail-head .search{flex:1;min-width:0}
 body[data-desk="1"] #newform{max-height:46vh;overflow:auto;flex:none}
+/* 15 nov: con «+ Cliente» abierto la lista de clientes quedaba en una franja de 12 px con los nombres montados: se esconde mientras das el alta y el formulario usa todo el alto */
+body[data-desk="1"] #newform:not([hidden]){max-height:none;flex:1 1 auto;min-height:0}
+body[data-desk="1"] #newform:not([hidden])~#clist{display:none!important}
 body[data-desk="1"] #clist{display:flex!important;flex-direction:column!important;flex:1 1 auto;min-height:0;overflow-y:auto!important;overflow-x:hidden!important;gap:2px;margin:0 -4px;padding:0 4px;scrollbar-width:thin}
 body[data-desk="1"] #clist[hidden]{display:none!important}
 body[data-desk="1"] #clist .client{width:100%;min-width:0;background:transparent;border-color:transparent}

@@ -4517,6 +4517,54 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 #gmx .gx-fzl li{font-size:12.5px;padding:4px 10px;border-radius:999px;background:var(--gx-l);color:inherit;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .gm-fzt{display:grid;gap:8px;margin:0 0 12px}
 .gm-fzt .gm-chip{width:100%}
+/* 15 nov: km a km con barras de ritmo */
+.gm-kmb td.gm-kbw{width:42%;padding-left:8px}
+.gm-kb{display:block;height:8px;border-radius:4px;background:var(--gx-l,rgba(255,255,255,.08));overflow:hidden}
+.gm-kb i{display:block;height:100%;border-radius:4px;background:#4fc6b4;transform-origin:left center;animation:gmKb .5s ease-out both}
+.gm-kmb tr.top .gm-kb i{background:#d8b14a}
+.gm-kmb tr.top td:nth-child(2){color:#d8b14a;font-weight:700}
+@keyframes gmKb{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.gm-kb i{animation:none}}
+/* 15 nov: tendencias de salud con el último valor, la media de 7 días y la flecha */
+#gmx .gh-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:nowrap}
+#gmx .gh-hd>span{display:grid;gap:2px;min-width:0}
+#gmx .gh-hd>span:first-child small{color:var(--gx-m);font-size:12px}
+#gmx .gh-now{text-align:right;justify-items:end}
+#gmx .gh-now b{font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
+#gmx .gh-now em{font-style:normal;color:var(--gx-m);font-size:12px;margin-left:3px}
+#gmx .gh-now>b,#gmx .gh-now>em{display:inline}
+#gmx .gh-now{display:block}
+#gmx .gh-tr{display:block;color:var(--gx-m);font-size:11.5px;margin-top:4px;white-space:nowrap}
+#gmx .gh-tr i{font-style:normal;margin-right:3px}
+#gmx .gh-tr.up i,#gmx .gh-tr.up{color:#4fc6b4}
+#gmx .gh-tr.dn i,#gmx .gh-tr.dn{color:#e8913f}
+#gmx .gh-card .gm-cw{color:var(--gx-t)}
+#gmx .gh-dot{position:absolute;width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 3px var(--gx-c);animation:ghDot .45s ease-out both}
+@keyframes ghDot{from{opacity:0;transform:translate(-50%,-50%) scale(.4)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@media (prefers-reduced-motion:reduce){#gmx .gh-dot{animation:none}}
+/* 15 nov: filtros en una sola fila deslizable, mismo color que las pestañas */
+#gmx .gx-f{min-height:44px;box-sizing:border-box;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+#gmx .gx-f::-webkit-scrollbar{display:none}
+#gmx .gx-f .x-chip{flex:0 0 auto;scroll-snap-align:start;background:var(--gx-c);border:1px solid var(--gx-l);color:var(--gx-t)}
+#gmx .gx-f .x-chip[aria-pressed=true]{background:var(--gx-a);border-color:var(--gx-a);color:#06201c}
+/* km por semana apilados por deporte */
+#gmx .gx-bars>div>.gx-stk{align-self:end;justify-self:center;width:70%;display:flex;flex-direction:column-reverse;border-radius:6px 6px 3px 3px;overflow:hidden;opacity:.5;transform-origin:bottom;animation:gxUp .5s ease-out both}
+#gmx .gx-bars>div.on>.gx-stk{opacity:1}
+#gmx .gx-stk i{display:block;min-height:2px}
+#gmx .gx-lg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--gx-m);align-items:center}
+#gmx .gx-lg span{display:inline-flex;align-items:center;gap:5px}
+#gmx .gx-lg i{width:9px;height:9px;border-radius:3px;display:inline-block}
+#gmx .gx-lg small{margin-left:auto;font-size:11px}
+@keyframes gxUp{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){#gmx .gx-bars>div>.gx-stk{animation:none}}
+/* 15 nov: aviso de recuperación (entrenador) */
+#gmx .gh-rec{border-color:rgba(232,145,63,.5);background:rgba(232,145,63,.1)}
+#gmx .gh-rec b{color:#e8913f}
+#gmx .gh-rec p{margin:0;font-size:13px;line-height:1.45;color:var(--gx-t)}
+.gh-recm{font-style:normal;color:#e8913f;font-weight:600}
+#gmx .gx-bars>div>span:last-child{position:relative;z-index:1}
+#gmx .gh-now{white-space:nowrap}
+#gmx .gh-now b{color:var(--gx-t)}
 
 /* 14 nov: contenido de un desplegable de Perfil al abrirlo (src/perfil-fold.js) */
 @keyframes pfIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
@@ -8444,6 +8492,14 @@ html[data-tbl] .p-dock .pd-ic svg{filter:drop-shadow(0 1px 0 #fff) drop-shadow(0
 /* 14 nov: «1 mancuerna · 2 mancuernas · Barra» en una fila entera, sin partir el texto */
 .eq-l .nb-seg{flex:1 0 100%;min-width:0}
 .eq-l .eq-b{white-space:nowrap}
+/* 15 nov: sesiones pasadas plegadas: el estado con palabras; las no hechas, apagadas */
+.rn-row-st{font-size:12.5px;font-weight:700;padding:4px 9px;border-radius:999px;white-space:nowrap;background:rgba(79,198,180,.15);color:#4fc6b4}
+.rn-row-st.part{background:rgba(232,145,63,.15);color:#e8913f}
+.rn-row-st.no{background:rgba(229,115,97,.15);color:#e57361}
+.rn-row-st.pend{background:transparent;border:1px dashed var(--line);color:var(--muted,#93a3a1);font-weight:600}
+.rn-row.rn-row-no{border-left-color:var(--line);background:transparent}
+.rn-row.rn-row-no .rn-row-t{opacity:.55}
+.rn-row.rn-row-pend{border-left-color:var(--line)}
 .rp{--rp-fg:#1d2b30;--rp-mu:#6B7C85;--rp-ln:#E3E9EA;--rp-ac:#2A9D8F;--rp-nv:#264653;--rp-up:#1B7F47;--rp-dn:#C2410C;color:var(--rp-fg);font:400 11.5px/1.5 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .rp *{box-sizing:border-box}
 .rp-pg{position:relative;width:210mm;min-height:297mm;padding:15mm 15mm 20mm;background:#fff;margin:0 auto 16px;box-shadow:0 2px 14px rgba(0,0,0,.12);overflow:hidden}

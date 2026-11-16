@@ -3519,6 +3519,14 @@ body:has(.p-dock) .rf2 .rf-act{bottom:calc(92px + env(safe-area-inset-bottom))}
 /* .portal recorta con overflow:hidden y eso anula «sticky»; clip recorta igual sin anularlo */
 .portal:has(.rf2 .rf-act){overflow:clip}
 .portal:has(.rf2 .rf-act) .tr-bars{position:relative;top:auto}
+/* 16 nov: escribir tiempo y distancia en dos casillas (min : s / km , m) */
+.wh-in2{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 8px;border-radius:11px;background:var(--surface);box-shadow:inset 0 0 0 2px var(--wc,var(--accent))}
+.wh-in2i{flex:1 1 0;min-width:0;max-width:5.2em;height:44px;border:1px solid var(--border,rgba(127,127,127,.35));border-radius:10px;background:var(--bg);color:var(--fg);font:inherit;font-size:22px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;outline:none;padding:0 4px}
+.wh-in2i:focus{border-color:var(--wc,var(--accent));box-shadow:0 0 0 2px color-mix(in srgb,var(--wc,var(--accent)) 35%,transparent)}
+.wh-in2s{font-size:22px;font-weight:800;color:var(--muted)}
+.wh-in2u{font-size:12px;font-weight:700;color:var(--muted);align-self:center}
+.rf2 .rf-auto{margin:6px 2px 0;font-size:12.5px;color:var(--muted)}
+.rf2 .rf-auto b{color:var(--fg)}
 
 /* ---------- 7 nov 2026 · Entreno del cliente: «Tu turno» más compacto, sin huecos ---------- */
 .tx-b .exo-r.todo{padding:12px 10px 10px 12px;gap:6px;align-self:stretch}

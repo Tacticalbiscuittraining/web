@@ -3170,12 +3170,13 @@ body.c4-fs .chat-card:has(#chBody):not(.dk-chat *):not(.tb-chat *){overflow:visi
 .vm .lb-x{display:none}
 /* 10 nov: los avisos cortos (toast) salían por debajo de las hojas y ventanas abiertas */
 #toast.toast{z-index:100030}
+/* 16 nov noche: solo si la ventana está a la vista (la tarjeta «Sesión terminada» #sesx se queda escondida con hidden al cerrarla y bloqueaba la pantalla) */
 /* 16 nov: con un panel o ventana encima (avisos de la campana, hojas, fotos…) la pantalla de detrás no se desliza;
    el panel se desplaza él solo si es largo. Las hojas de gramos/series (.dsh/.esh) no: dejan tocar lo de detrás a propósito. */
 #notif,.cp-p,.c2-sh,.pmod,.impbox,.pdfov,.wkm,#sesx{overscroll-behavior:contain}
 @media (max-width:760px){html:has(#notif:not([hidden])),html:has(#notif:not([hidden])) body{overflow:hidden!important;overscroll-behavior:none}}
-html:has(.cp-sh,.c2-sh,.pmod,.impbox,.pcam,.phv,.c3-gal,.pdfov,#sesx,.wkm,.wsheet,.cal-sh.on,#lb:not([hidden]),#vm:not([hidden])),
-html:has(.cp-sh,.c2-sh,.pmod,.impbox,.pcam,.phv,.c3-gal,.pdfov,#sesx,.wkm,.wsheet,.cal-sh.on,#lb:not([hidden]),#vm:not([hidden])) body{overflow:hidden!important;overscroll-behavior:none}
+html:has(.cp-sh:not([hidden]),.c2-sh:not([hidden]),.pmod:not([hidden]),.impbox:not([hidden]),.pcam:not([hidden]),.phv:not([hidden]),.c3-gal:not([hidden]),.pdfov:not([hidden]),#sesx:not([hidden]),.wkm:not([hidden]),.wsheet:not([hidden]),.cal-sh.on,#lb:not([hidden]),#vm:not([hidden])),
+html:has(.cp-sh:not([hidden]),.c2-sh:not([hidden]),.pmod:not([hidden]),.impbox:not([hidden]),.pcam:not([hidden]),.phv:not([hidden]),.c3-gal:not([hidden]),.pdfov:not([hidden]),#sesx:not([hidden]),.wkm:not([hidden]),.wsheet:not([hidden]),.cal-sh.on,#lb:not([hidden]),#vm:not([hidden])) body{overflow:hidden!important;overscroll-behavior:none}
 
 /* ---------- diseño de las apps de ahora (6 nov 2026): ver src/moderno.js ---------- */
 /* 1 · isla que se encoge al bajar: la isla se aparta y queda un botón con la pestaña actual */

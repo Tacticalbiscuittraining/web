@@ -4596,6 +4596,10 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 #gmxm .leaflet-control-attribution{background:rgba(10,11,13,.66);color:#cfcac0}
 #gmxm .leaflet-control-attribution a{color:#cfcac0}
 .gxm-err{color:#93a3a1;text-align:center;margin-top:45vh}
+/* 16 nov: en la ficha del móvil, «Garmin conectado · …  Ver todo ›» en una sola línea */
+.cv .chead .gm-hd{max-width:100%;min-width:0;white-space:nowrap;font-size:13px}
+.cv .chead .gm-hd>span{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.cv .chead .gm-hd>i{flex:none;white-space:nowrap}
 
 /* 15 nov: Garmin › Salud (src/garmin3.js) */
 .gx-main{position:static}
@@ -8410,8 +8414,11 @@ body:has(.p-dock) .sync{bottom:calc(71px + env(safe-area-inset-bottom));padding:
 @media (max-width:880px){
   .cv .chead{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:8px;align-items:start}
   .cv .chead>div:first-child{display:contents}
-  .cv .chead>div:first-child>*:not(.ch-row){grid-column:1}
-  .cv .chead>.actions{grid-column:2;grid-row:1/span 2}
+  .cv .chead>div:first-child>*:not(.ch-row){grid-column:1/-1}
+  /* 16 nov: «Ver como cliente» solo en la fila del nombre; fase, Garmin y objetivo usan todo el ancho */
+  .cv .chead>div:first-child>h1:not(.ch-row){grid-column:1}
+  .cv .chead>.actions{grid-column:2;grid-row:2;align-self:center}
+  .cv .chead .goal{-webkit-line-clamp:2}
   .cv .chead .ch-row{grid-column:1/-1}
   .cv .ch-row .cmode .es-b{padding:0 10px}}
 /* Panel 22/10: acciones de cada aviso, «Esta semana», campana, respuesta rápida y mensaje a varios */

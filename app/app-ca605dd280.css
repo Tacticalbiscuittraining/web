@@ -4692,6 +4692,36 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 #gmx .gh-now{white-space:nowrap}
 #gmx .gh-now b{color:var(--gx-t)}
 
+/* 16 nov: recorrido animado en la ficha de actividad Garmin (src/garmin5.js). Solo transform/opacidad y el trazo del SVG. */
+.gm-anw .gm-rs.gm-ghost{stroke:#fff;stroke-opacity:.16;stroke-width:5}
+.gm-anw circle.gm-re{opacity:0;transition:opacity .4s}
+.gm-anw.gm-fin circle.gm-re{opacity:1}
+.gm-kms .gm-kp{transform-box:fill-box;transform-origin:center;transform:scale(.3);opacity:0;transition:transform .35s cubic-bezier(.2,1.6,.4,1),opacity .25s}
+.gm-kms .gm-kp.on{transform:scale(1);opacity:1}
+.gm-kms circle{fill:#0d0f12;stroke:var(--gold,#d8b14a);stroke-width:2}
+.gm-kms text{fill:#f3efe6;font:700 9.5px/1 system-ui,-apple-system,sans-serif;text-anchor:middle}
+.gm-dot{pointer-events:none}
+.gm-dot .gm-dc{fill:#fff;stroke:var(--gold,#d8b14a);stroke-width:3}
+.gm-dot .gm-dh{fill:var(--gold,#d8b14a);opacity:.35;transform-box:fill-box;transform-origin:center;animation:gmdh 1.2s ease-out infinite}
+@keyframes gmdh{0%{transform:scale(.5);opacity:.55}100%{transform:scale(1.5);opacity:0}}
+.gm-anw.gm-fin .gm-dot{opacity:0;transition:opacity .5s .3s}
+.gm-anw:not(.gm-run):not(.gm-fin) .gm-dot{opacity:0}
+.gm-an{position:absolute;inset:0;pointer-events:none}
+.gm-kc{position:absolute;transform:scale(.6);transform-origin:center;opacity:0;transition:transform .35s cubic-bezier(.2,1.5,.4,1),opacity .25s;display:flex;align-items:baseline;gap:5px;white-space:nowrap;font-size:11.5px;font-weight:600;color:#f3efe6;background:rgba(10,11,13,.86);border:1px solid rgba(216,177,74,.5);padding:3px 8px;border-radius:99px;font-variant-numeric:tabular-nums}
+.gm-kc b{color:var(--gold,#d8b14a);font-weight:800}
+.gm-kc.on{transform:none;opacity:1}
+.gm-hud{position:absolute;left:10px;bottom:10px;display:flex;align-items:baseline;gap:4px;padding:6px 12px;border-radius:14px;background:rgba(10,11,13,.84);border:1px solid rgba(255,255,255,.1);color:#f3efe6;font-variant-numeric:tabular-nums;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+.gm-anw.gm-run .gm-hud,.gm-anw.gm-fin .gm-hud{opacity:1;transform:none}
+.gm-hud b{font-size:19px;font-weight:800;line-height:1}
+.gm-hud small{font-size:11px;color:#bfb9ad}
+.gm-hud i{width:1px;height:14px;background:rgba(255,255,255,.2);margin:0 6px;align-self:center}
+.gm-hud span{font-size:15px;font-weight:700;color:var(--gold,#d8b14a)}
+.gm-rp{position:absolute;right:10px;bottom:24px;border:1px solid rgba(255,255,255,.14);background:rgba(10,11,13,.86);color:#f3efe6;font:inherit;font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:99px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s}
+.gm-anw.gm-fin .gm-rp{opacity:1;pointer-events:auto}
+.gm-anw .gm-lg{transition:opacity .3s}
+.gm-anw.gm-run .gm-lg{opacity:0}
+@media (prefers-reduced-motion:reduce){.gm-dot .gm-dh{animation:none}.gm-kms .gm-kp,.gm-kc,.gm-hud{transition:none}}
+
 /* 14 nov: contenido de un desplegable de Perfil al abrirlo (src/perfil-fold.js) */
 @keyframes pfIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .pf-cb.pf-in{animation:pfIn .22s ease-out both}

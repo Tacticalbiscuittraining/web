@@ -3697,6 +3697,20 @@ html.c4-kb .esh .esh-p{margin-bottom:calc(8px + var(--kb,0px))}
 /* 15 nov (Robert): objetivo sin repetir cuando las píldoras ya lo dicen (ver esEq en entreno3.js) */
 .setrow2.sp2.sg-eq>.sgoal .sg-r,.setrow2.sp2.sg-eq>.sgoal .sg-ob{display:none}
 
+/* 16 nov (Robert): sin huecos entre el título y «Tu turno». Foto sola (sin técnica ni grupo) al lado de la pauta, no en una fila vacía;
+   y si la fila de abajo de la pauta solo tiene el botón de descanso, el botón va justo debajo del texto, sin fila vacía ni raya */
+@media (max-width:899px){
+.tx-b .exo-body.bare{display:grid;grid-template-columns:60px minmax(0,1fr);gap:10px;align-items:start}
+.tx-b .exo-body.bare>.exo-l{grid-column:1;grid-row:1;display:block}
+.tx-b .exo-body.bare>.exo-l .exo-vid{display:none}
+.tx-b .exo-body.bare>.rx{grid-column:2;grid-row:1}
+.tx-b .exo-body.bare>:not(.exo-l):not(.rx){grid-column:1/-1}
+}
+.tx-b .rx:has(.rt-go):not(:has(.rx-m span:nth-child(2))) .rx-m{display:none}
+.tx-b .rx:has(.rt-go):not(:has(.rx-m span:nth-child(2))) .rx-h{grid-column:1/-1;grid-row:2;justify-content:flex-end;border-top:0;padding:0 10px 8px}
+.tx-b .rx:has(.rt-go):not(:has(.rx-m span:nth-child(2))):has(.rx-why) .rx-why{grid-row:1;padding-bottom:6px;background:none}
+.tx-b .rx:has(.rt-go):not(:has(.rx-m span:nth-child(2))):not(:has(.rx-why)) .rx-h{padding-top:8px}
+
 /* 8 nov · Controles de la derecha (e iconos de la izquierda) centrados en vertical respecto a toda la fila */
 /* Dieta: gramos y ✕ en medio de nombre + línea de kcal (si la 2ª línea es una etiqueta larga de cambio, se queda como estaba para no cortarla) */
 .mx .fl.d2:not(:has(.fl-chg)){grid-template-areas:'t g a' 's g a'}

@@ -8286,6 +8286,12 @@ body:has(.rt2.big:not([hidden])) .tr2{padding-bottom:min(460px,60vh)}
 /* reloj de la sesión en la cabecera del día */
 .ses-clk{cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-left:8px;padding:1px 9px;border-radius:99px;background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal-ink);font-weight:600;vertical-align:1px}
 .ses-clk b{font-variant-numeric:tabular-nums}.ses-clk i{font-style:normal}
+.ses-clk.pau{opacity:.7}.ses-clk.pau b{animation:sesPau 1.6s ease-in-out infinite}
+@keyframes sesPau{50%{opacity:.35}}
+#sesMenu{position:fixed;z-index:9000;min-width:190px;padding:8px;border-radius:16px;background:color-mix(in srgb,var(--surface) 88%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);border:1px solid var(--line);box-shadow:0 12px 32px rgba(0,0,0,.35);display:grid;gap:6px}
+#sesMenu p{margin:2px 6px 2px;font-size:12px;color:var(--muted);font-weight:600}
+#sesMenu button{min-height:44px;border-radius:11px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink,inherit);font:inherit;font-weight:600;text-align:left;padding:0 14px;cursor:pointer}
+#sesMenu .sm-del{color:var(--coral,#e5654b)}
 /* resumen al terminar la sesión (negro y dorado, como el informe) */
 #sesx{position:fixed;inset:0;z-index:95;overflow:auto;background:radial-gradient(90% 50% at 50% 20%,rgba(212,175,55,.14),transparent 70%),#07090A;color:#fff;font-family:var(--f-body)}
 #sesx[hidden]{display:none}

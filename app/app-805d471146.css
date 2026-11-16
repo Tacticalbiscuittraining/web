@@ -4699,6 +4699,26 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 @keyframes pfX{to{opacity:0;transform:translateY(-6px)}}
 .pf-cb.pf-x{animation:pfX .17s ease-in both;pointer-events:none}
 
+/* 16 nov: ventana de Avisos (campana del entrenador) por encima de la ficha. La cabecera (.top, z-index 3) dejaba a #notif por debajo
+   de la barra de subpestañas de la ficha (.esub, z-index 20) */
+.top:has(#notif:not([hidden])){z-index:95}
+@media (max-width:760px){#notif{max-height:calc(100dvh - 64px - env(safe-area-inset-top) - 112px - env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}}
+/* fecha y hora de cada aviso */
+#notif .ntime{display:flex;flex-direction:column;align-items:flex-end;gap:1px;text-align:right}
+#notif .ntime b{font-size:12.5px;font-weight:700;color:var(--fg)}
+#notif .ntime small{font-size:11px;color:var(--muted)}
+.da-ts{display:block;margin-top:3px;font-size:12px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+/* deslizar un aviso */
+#notif .da,#notif .nitem[data-nk]{touch-action:pan-y;position:relative;z-index:1;will-change:transform}
+#notif .nitem[data-nk]{background:var(--surface,#151a24)}
+#notif .da-w{position:relative}
+.sw-bg{position:absolute;z-index:0;border-radius:16px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-weight:800;font-size:14px;color:#fff;background:var(--line);pointer-events:none;transition:background .15s}
+.sw-bg span{opacity:0;transition:opacity .15s,transform .15s}
+.sw-bg.r{background:#a8741d}.sw-bg.r .sw-r{opacity:1}
+.sw-bg.l{background:#2f8a57}.sw-bg.l .sw-l{opacity:1}
+.sw-bg.go span{transform:scale(1.12)}
+.sw-bg.r.go{background:#d18f22}.sw-bg.l.go{background:#33a465}
+
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{
   --bg:#ECF2F1; --surface:#FFFFFF; --surface-2:#F4F8F7;

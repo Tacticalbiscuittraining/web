@@ -1017,6 +1017,14 @@ img:is(.exo-ph,.tx-ph,.phs-t,.bub-img,.rn-img,.exm-img),.ch-att img,.phv-img img
 @keyframes xaPout{to{transform:translate(-50%,-140%);opacity:0}}
 @media (prefers-reduced-motion:reduce){.xa-sp path{animation:none;opacity:.8}.xg-rar.r4,.xg-ping,.xg-ping.out{animation:none}.xa-c .xa-l{transition:none}}
 
+/* 16 nov: reverso de la medalla en la celebración (en qué consiste) */
+.xg-cfl{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.xg-bkd.xg-bkc{width:230px;height:230px;padding:30px 28px;gap:6px}
+.xg-bkc .xg-bkh{font:600 12.5px/1.3 var(--f-body,inherit);text-wrap:balance}
+.xg-bkc em{font:800 12px/1.2 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
+.xg-cb .xg-ctip{font-size:12px;opacity:.75;margin-top:-4px}
+.xg-cfl.on~.xg-ctip{opacity:0;transition:opacity .3s}
+
 /* ---------- progreso tipo juego ---------- */
 .xj-nav{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0 10px;margin:0 0 2px;-webkit-overflow-scrolling:touch}
 .xj-nav::-webkit-scrollbar{display:none}

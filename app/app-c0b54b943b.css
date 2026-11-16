@@ -851,6 +851,7 @@ img:is(.exo-ph,.tx-ph,.phs-t,.bub-img,.rn-img,.exm-img),.ch-att img,.phv-img img
 .xm-askd{color:var(--muted)}
 .xm-askc{display:flex;align-items:center;gap:12px;justify-content:space-between;border:1px solid var(--xm-a);border-radius:16px}
 .xm-askc p{margin:0;min-width:0}.xm-askc small{display:block;color:var(--muted)}
+.xm-dt .xm-ok{display:inline-block;margin-top:6px;font-size:13.5px}
 
 /* ---------- logros ---------- */
 /* medalla de vitrina: canto de metal, centro con anillo punteado, brillo que pasa */

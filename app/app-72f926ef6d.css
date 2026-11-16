@@ -1804,6 +1804,9 @@ button.xr-fm.e{cursor:pointer;font:inherit;background:transparent}
 @media (max-width:360px){.dh2 .sx-dh h3{font-size:21px}.sx-da{width:26px;height:26px;font-size:20px}.sx-dnav{gap:3px}.dh2-r,.dh2-r svg{width:74px;height:74px}.dh2-r b{font-size:17px}.sx-wk{gap:2px}.sx-hoy{padding:6px 6px}}
 @media (prefers-reduced-motion:reduce){.sx-hoy{animation:none}}
 
+/* 16 nov: el lunes, «‹D» = domingo pasado (apuntar la cena de anoche) */
+.sx-wd.sx-wdp{flex:.85;font-size:12px}
+
 /* 30 oct: vista del entrenador por temas (src/ficha.js) */
 .ft-tabs .tab{flex:1 1 auto}
 .ft-row{display:flex;justify-content:flex-end;align-items:center;gap:8px;flex-wrap:wrap;margin:-4px 0 12px}

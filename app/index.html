@@ -4943,6 +4943,9 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   body[data-ct] .p-top .p-hello,body[data-ct] .hub-id{will-change:transform,opacity}}
 /* C · lista de ejercicios como lista de iPhone: flecha a la derecha */
 @media (max-width:880px){
+  /* al tocar un ejercicio la fila responde al momento (se hunde un poco), antes de que entre su pantalla */
+  body[data-ct=entreno] #main .tx-l>.tx:not(.open){transition:scale .12s ease-out}
+  body[data-ct=entreno] #main .tx-l>.tx:not(.open):has(>.tx-h:active){scale:.97}
   body[data-ct=entreno] .tx:not(.open) .tx-ch{transform:rotate(-45deg);margin:0 6px 0 0}
   /* C · el ejercicio abierto es una pantalla entera encima de la lista */
   html.nx-on{overflow:hidden}
@@ -16235,7 +16238,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117153459';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117154405';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -27450,7 +27453,8 @@ function nxPh(el){let ph=el.previousElementSibling;if(ph&&ph.classList.contains(
   const h=el.querySelector(':scope>.tx-h');if(h){const c=h.cloneNode(true);c.removeAttribute('data-act');c.removeAttribute('data-e');c.removeAttribute('data-k');c.setAttribute('tabindex','-1');c.setAttribute('aria-expanded','false');ph.appendChild(c)}
   el.parentElement.insertBefore(ph,el);return ph}
 /* la tarjeta crece desde su fila hasta la pantalla entera (y al volver se encoge hasta ella) */
-const plClip=(r)=>'inset('+Math.max(0,r.top).toFixed(1)+'px '+Math.max(0,innerWidth-r.right).toFixed(1)+'px '+Math.max(0,innerHeight-r.bottom).toFixed(1)+'px '+Math.max(0,r.left).toFixed(1)+'px round 16px)';
+/* 17 nov (4): solo transform y opacidad (lo mueve la gráfica del móvil, sin repintar): antes era un recorte (clip-path) y daba tirones */
+const plZoom=r=>'translate3d('+r.left.toFixed(1)+'px,'+r.top.toFixed(1)+'px,0) scale('+(r.width/innerWidth).toFixed(4)+')';
 const plVis=r=>r&&r.height>0&&r.top>40&&r.bottom<innerHeight-60;
 /* después de cada pintado: el ejercicio abierto es la pantalla de encima */
 function nxSync(){
@@ -27476,8 +27480,8 @@ function nxSync(){
     el.appendChild(w)}
   if(isNew){el.scrollTop=0;if(!PL_RM.matches){const r=ph.getBoundingClientRect();
     if(first&&plVis(r)){
-      el.animate([{clipPath:plClip(r),opacity:0},{opacity:1,offset:.28},{clipPath:'inset(0px 0px 0px 0px round 0px)',opacity:1}],{duration:440,easing:'cubic-bezier(.32,.72,0,1)'});
-      [...el.children].forEach(x=>x.animate([{opacity:0,transform:'translate3d(0,'+Math.round((r.top-60)*.12)+'px,0)'},{opacity:0,offset:.2},{opacity:1,transform:'none'}],{duration:440,easing:'cubic-bezier(.32,.72,0,1)'}))}
+      el.style.transformOrigin='0 0';el.style.willChange='transform,opacity';
+      el.animate([{transform:plZoom(r),opacity:0},{opacity:1,offset:.35},{transform:'none',opacity:1}],{duration:420,easing:'cubic-bezier(.32,.72,0,1)'}).finished.then(()=>{el.style.transformOrigin='';el.style.willChange=''},()=>{})}
     else el.animate([{transform:'translate3d(100%,0,0)'},{transform:'none'}],{duration:first?360:300,easing:PEASE});
     if(first){b.animate([{opacity:0},{opacity:0,offset:.4},{opacity:1}],{duration:380,easing:'ease-out'});document.getElementById('nxDim').animate([{opacity:0},{opacity:1}],{duration:440,easing:'ease-out'})}}}
 }
@@ -27492,11 +27496,11 @@ function nxClose(slide){if(!NX||plBusy)return;const el=nxEl(),b=document.getElem
   /* la fila de la lista a la vista (detrás no se ve: la tapa la pantalla del ejercicio) */
   if(ph&&!slide){let r=ph.getBoundingClientRect();if(!plVis(r)){window.scrollBy(0,r.top-innerHeight*.4);r=ph.getBoundingClientRect()}}
   const r=ph&&ph.getBoundingClientRect(),shrink=!slide&&cur==='none'&&plVis(r);let A;
-  if(shrink){A=el.animate([{clipPath:'inset(0px 0px 0px 0px round 0px)',opacity:1},{opacity:1,offset:.7},{clipPath:plClip(r),opacity:0}],{duration:420,easing:'cubic-bezier(.32,.72,0,1)',fill:'forwards'});
-    [...el.children].forEach(x=>x.animate([{opacity:1},{opacity:0,offset:.28},{opacity:0}],{duration:420,fill:'forwards'}))}
+  if(shrink){el.style.transformOrigin='0 0';el.style.willChange='transform,opacity';
+    A=el.animate([{transform:'none',opacity:1},{opacity:1,offset:.3},{transform:plZoom(r),opacity:0}],{duration:380,easing:'cubic-bezier(.32,.72,0,1)',fill:'forwards'})}
   else A=el.animate([{transform:cur==='none'?'none':cur},{transform:'translate3d(100%,0,0)'}],{duration:260,easing:'cubic-bezier(.3,.6,.6,1)',fill:'forwards'});
-  if(b)b.animate([{opacity:1},{opacity:0}],{duration:160,fill:'forwards'});if(dm)dm.animate([{opacity:1},{opacity:0}],{duration:shrink?420:260,fill:'forwards'});
-  const end=()=>{plBusy=0;A.cancel();[...el.children].forEach(x=>x.getAnimations().forEach(a=>a.cancel()));if(b)b.getAnimations().forEach(a=>a.cancel());if(dm)dm.getAnimations().forEach(a=>a.cancel());fin()};A.finished.then(end,end)}
+  if(b)b.animate([{opacity:1},{opacity:0}],{duration:160,fill:'forwards'});if(dm)dm.animate([{opacity:1},{opacity:0}],{duration:shrink?380:260,fill:'forwards'});
+  const end=()=>{plBusy=0;A.cancel();el.style.transformOrigin='';el.style.willChange='';if(b)b.getAnimations().forEach(a=>a.cancel());if(dm)dm.getAnimations().forEach(a=>a.cancel());fin()};A.finished.then(end,end)}
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest||!plNx())return;
   if(t.closest('#nxBar .nx-bk')||t.closest('[data-nxback]')){e.preventDefault();nxClose();return}
   const g=t.closest('.nx-go[data-nx]');if(g&&NX){e.preventDefault();state.exO[NX.k]=g.dataset.nx;renderMain();nxSync();return}
@@ -27521,6 +27525,23 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&NX&&!e.defaultPreve
     if(S.dx>innerWidth*.33||S.v>.4&&S.dx>30){if(dm)dm.style.opacity='';nxClose(1);return}
     S.el.animate([{transform:'translate3d('+S.dx+'px,0,0)'},{transform:'none'}],{duration:220,easing:PEASE});S.el.style.transform='';if(dm)dm.style.opacity=''};
   addEventListener('touchend',end,{passive:true});addEventListener('touchcancel',end,{passive:true})}
+
+/* ---- 17 nov (5): minimizar y sacar el descanso con movimiento: la hoja se encoge hasta el círculo y el círculo crece hasta la hoja
+   (solo transform y opacidad; antes cambiaba de golpe). Va antes que el clic de entreno3.js (window, captura) y hace lo mismo: clase .mini y tb-rtmini */
+addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest('#rt [data-rtm]');if(!b)return;const el=document.getElementById('rt'),sh=el&&el.querySelector('.rt-sh'),m=el&&el.querySelector('.rt-mini');
+  if(!el||!sh||!m||PL_RM.matches)return;/* sin hoja o sin movimiento: lo hace entreno3.js como siempre */
+  e.preventDefault();e.stopImmediatePropagation();const on=b.dataset.rtm==='min';try{localStorage.setItem('tb-rtmini',on?'1':'0')}catch(_){}try{haptic()}catch(_){}
+  sh.getAnimations().forEach(a=>a.cancel());m.getAnimations().forEach(a=>a.cancel());
+  const SP='cubic-bezier(.32,.72,0,1)';
+  const to=(a,c)=>{const s=Math.max(.08,c.width/a.width);return 'translate3d('+(c.left+c.width/2-(a.left+a.width/2)).toFixed(1)+'px,'+(c.top+c.height/2-(a.top+a.height/2)).toFixed(1)+'px,0) scale('+s.toFixed(3)+')'};
+  if(on){const A=sh.getBoundingClientRect();el.classList.add('mini');const C=m.getBoundingClientRect();el.classList.remove('mini');
+    sh.style.transformOrigin='50% 50%';
+    sh.animate([{transform:'none',opacity:1},{transform:to(A,C),opacity:0}],{duration:320,easing:SP,fill:'forwards'}).finished.then(()=>{
+      el.classList.add('mini');sh.getAnimations().forEach(a=>a.cancel());sh.style.transformOrigin='';
+      m.animate([{transform:'scale(.55)',opacity:0},{transform:'scale(1.06)',opacity:1,offset:.7},{transform:'none',opacity:1}],{duration:300,easing:'ease-out'})},()=>{})}
+  else{const C=m.getBoundingClientRect();el.classList.remove('mini');const A=sh.getBoundingClientRect();sh.style.transformOrigin='50% 50%';
+    sh.animate([{transform:to(A,C),opacity:0},{opacity:1,offset:.45},{transform:'none',opacity:1}],{duration:380,easing:SP}).finished.then(()=>{sh.style.transformOrigin=''},()=>{})}
+},true);
 
 /* ---- A · degradado bajo la isla: lo que pasa por detrás se funde en vez de verse cortado ---- */
 plMk('plFade');

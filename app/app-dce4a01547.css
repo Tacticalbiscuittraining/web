@@ -4906,6 +4906,9 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   body[data-ct] .p-top .p-hello,body[data-ct] .hub-id{will-change:transform,opacity}}
 /* C · lista de ejercicios como lista de iPhone: flecha a la derecha */
 @media (max-width:880px){
+  /* al tocar un ejercicio la fila responde al momento (se hunde un poco), antes de que entre su pantalla */
+  body[data-ct=entreno] #main .tx-l>.tx:not(.open){transition:scale .12s ease-out}
+  body[data-ct=entreno] #main .tx-l>.tx:not(.open):has(>.tx-h:active){scale:.97}
   body[data-ct=entreno] .tx:not(.open) .tx-ch{transform:rotate(-45deg);margin:0 6px 0 0}
   /* C · el ejercicio abierto es una pantalla entera encima de la lista */
   html.nx-on{overflow:hidden}

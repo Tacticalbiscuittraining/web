@@ -12382,5 +12382,44 @@
 370,
 "vaso"
 ]
+},
+{
+"n": "Pan tostado de ajo y perejil Hacendado",
+"g": "c",
+"p": 8.2,
+"c": 54,
+"f": 33,
+"fib": 2.5,
+"src": "Mercadona: etiqueta (545 kcal; saturadas 3,6 g; azúcares 1,8 g; sal 1,5 g; bolsa 170 g = 19 tostas de ~9 g)",
+"sw": false,
+"al": [
+"pan de ajo",
+"tostas de ajo",
+"tostadas de ajo y perejil",
+"pan tostado ajo"
+],
+"ud": [
+9,
+"tosta"
+]
+},
+{
+"n": "Yuppie Choco barquillo con cobertura de cacao",
+"g": "x",
+"p": 4.2,
+"c": 62,
+"f": 29,
+"fib": 0.7,
+"src": "Etiqueta Day and Night (526 kcal; saturadas 13 g; azúcares 38 g; sal 0,07 g); bolsa = 12 de 15 g",
+"sw": false,
+"al": [
+"yuppie",
+"yuppie choco",
+"barquillo de cacao"
+],
+"ud": [
+15,
+"barquillo"
+]
 }
 ]

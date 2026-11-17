@@ -22,8 +22,13 @@ self.addEventListener('fetch', (e) => {
        si no, justo después de publicar podía bajar la vieja y pisar la nueva que acababa de guardar la app */
     /* 13 nov: el código y los estilos van aparte (app-<huella>.js/.css). La página nueva solo se guarda cuando ya están
        guardados los suyos (si no, sin cobertura abriría en blanco); después se borran los de versiones anteriores */
+    const old0 = nav ? await c.match(key) : null;
+    /* 17 nov: la página guardada que se va a dar todavía pedirá SU código: no se borra hasta la próxima apertura.
+       Antes, con buena red, la nueva llegaba y borraba el código viejo antes de que la página vieja lo pidiera →
+       salía «Hay una versión nueva de la app» (y había que tocar Reintentar) justo en la primera apertura tras publicar */
+    const oldT = old0 ? await old0.clone().text().catch(() => '') : '';
     const net = nav ? fetch(u.origin + u.pathname + '?t=' + Date.now(), { cache: 'no-store', credentials: 'same-origin' }).then(async (res) => {
-      if (res && res.ok) { try { const t = await res.clone().text(); if (await assets(c, t, u)) { await c.put(key, res.clone()); prune(c, t); } } catch (_) {} }
+      if (res && res.ok) { try { const t = await res.clone().text(); if (await assets(c, t, u)) { await c.put(key, res.clone()); prune(c, t, oldT); } } catch (_) {} }
       return res; })
       : fetch(r).then((res) => { if (res && (res.ok || res.type === 'opaque')) c.put(key, res.clone()).catch(() => {}); return res; });
     /* 9 nov: la app pide la versión nueva con cache:'no-store' (verFresh): esa petición va siempre a la red.
@@ -43,8 +48,8 @@ async function assets(c, t, u) {
   }
   return true;
 }
-async function prune(c, t) {
-  const L = new Set(t.match(APP) || []); if (!L.size) return;
+async function prune(c, t, keepT) {
+  const L = new Set((t.match(APP) || []).concat(keepT ? keepT.match(APP) || [] : [])); if (!L.size) return;
   for (const k of await c.keys()) { const m = new URL(k.url).pathname.match(/app-[0-9a-f]{10}\.(?:js|css)$/); if (m && !L.has(m[0])) c.delete(k).catch(() => {}); }
 }
 self.addEventListener('install', () => self.skipWaiting());

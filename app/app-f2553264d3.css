@@ -4162,6 +4162,8 @@ html.selc #main .tr-bars>.esub.es2 .es-b>.selc-ic{width:15px;height:15px}
 .p-dock .pd.on{perspective:300px}
 /* arrastrar el dedo por la isla no mueve la página (para soltar sobre una pestaña) */
 .p-dock .pd-in{touch-action:none}
+/* 17 nov: móviles estrechos (iPhone SE 1.ª, 320 px) y letra grande de Android: «Pautas» se salía de la píldora de Entreno */
+@media (max-width:360px){html.selc #main .tr-bars>.esub.es2 .es-b>.selc-ic{display:none}#main .tr-bars>.esub.es2 .es-b{padding:0 3px;font-size:12.5px}#main .tr-bars{gap:4px}}
 
 /* 13 nov 2026 · Fuera de horario (src/fuera.js). Lila suave: ni rojo ni «error», sin culpa. */
 :root{--fx:#6B5CA5;--fx-l:color-mix(in srgb,#6B5CA5 9%,var(--surface))}
@@ -4949,6 +4951,23 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   .nx-go.nx-end{display:flex;justify-content:center}
 }
 @media (prefers-reduced-motion:reduce){body[data-ct] .p-top .p-hello,body[data-ct] .hub-id{transform:none!important;opacity:1!important}}
+
+/* 18 nov (Robert, A + B): botones fáciles de tocar en el móvil y más contraste en textos que se leían mal */
+/* A · botones pequeños a 40 px de alto en pantallas táctiles */
+@media (max-width:880px) and (pointer:coarse){.btn.sm{min-height:40px;padding-top:6px;padding-bottom:6px}}
+/* A · escala de molestia 0–10 en dos filas (6 + 5) en móviles estrechos */
+@media (max-width:420px){.xm-q{grid-template-columns:repeat(6,1fr);gap:6px}.xm-q .xm-qb{min-height:40px;font-size:14px}}
+/* B · contraste ≥ 4,5 con el mismo tono, más oscuro */
+:root .es-hoy{background:#C4472B}:root #main .tr-bars>.esub:first-child .es-hoy{font-size:10px}
+:root .hc-pill.hot{background:#C4472B;border-color:#C4472B}
+:root .nv-hc .nv-go{background:#207D72}
+:root .tw-b small{opacity:1}:root .tw-b[aria-pressed="true"]{background:#207D72;border-color:#207D72}
+:root .pf-out .pf-logout{color:#C4472B;border-color:#C4472B66}
+:root[data-theme="dark"] .pf-out .pf-logout{color:#F08A70;border-color:#F08A7066}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pf-out .pf-logout{color:#F08A70;border-color:#F08A7066}}
+:root[data-theme="dark"] .pf-out .pf-logout{color:#F08A70;border-color:#F08A7066}
+:root .tx-b .rt-go{background:#207D72;border-color:#207D72}
+:root .rv-cli.today .rv-n,:root .rv-t.today .rv-n,:root .rv-bar.today .rv-n{background:#C4472B}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

@@ -3759,6 +3759,25 @@ body:has(.p-dock) .rt2.mini .rt-mini{bottom:calc(150px + env(safe-area-inset-bot
 #main .tx-l .tx-h,#main .fl.d2{touch-action:pan-y}
 .sw-bg.dz-bg{border-radius:14px}.sw-bg.dz-bg.l{background:#b5473a}.sw-bg.dz-bg.l.go{background:#d4543f}.sw-bg.dz-bg.r{background:#2f8a57}.sw-bg.dz-bg.r.go{background:#33a465}
 
+/* 17 nov: «↺ Repetir hoy» en la cabecera del día ya hecho otro día */
+.td-rep{margin-top:8px;display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:4px 12px;border-radius:999px;border:1px solid color-mix(in srgb,var(--teal,#2A9D8F) 55%,transparent);background:color-mix(in srgb,var(--teal,#2A9D8F) 14%,transparent);color:inherit;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.td-rep:active{transform:scale(.96)}
+/* 17 nov: días hechos apartados en «✓ Hechos» */
+.td-p.td-dn{border-style:dashed;opacity:.85;font-weight:600}
+.td-p.td-dn.open{opacity:1;border-color:color-mix(in srgb,var(--teal,#2A9D8F) 70%,transparent)}
+.td-dl{display:grid;gap:6px;margin-top:8px}
+.td-dr{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
+.td-dr.on{border-color:color-mix(in srgb,var(--teal,#2A9D8F) 70%,transparent)}
+.td-dn-t{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;min-width:0}
+.td-dn-t i{font-style:normal;color:#3FE0CC;font-weight:800}
+.td-dn-t small{opacity:.7}
+.td-dr-a{display:flex;gap:6px;flex:none}
+.td-dr-b{min-height:32px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.td-dr-b.rep{border-color:color-mix(in srgb,var(--teal,#2A9D8F) 55%,transparent);background:color-mix(in srgb,var(--teal,#2A9D8F) 14%,transparent)}
+.td-dr-b:active{transform:scale(.96)}
+.td-full{display:grid;gap:6px;justify-items:start;padding:12px 14px;margin-bottom:8px;border-radius:14px;border:1px dashed color-mix(in srgb,#3FE0CC 60%,transparent)}
+.td-full b{font-size:17px}.td-full span{font-size:14px;opacity:.8}
+
 /* 8 nov · Controles de la derecha (e iconos de la izquierda) centrados en vertical respecto a toda la fila */
 /* Dieta: gramos y ✕ en medio de nombre + línea de kcal (si la 2ª línea es una etiqueta larga de cambio, se queda como estaba para no cortarla) */
 .mx .fl.d2:not(:has(.fl-chg)){grid-template-areas:'t g a' 's g a'}

@@ -9529,3 +9529,19 @@ body .p-cal.tb-calendar-pro{position:relative;left:auto;right:auto;top:auto}
 @media (max-width:560px){.sm-st .sm-sta{margin-left:52px}.sm-st .sm-sta .btn{margin-left:0}}
 .sm-ks{grid-template-columns:repeat(2,minmax(0,1fr))}
 button.rvc{font-family:inherit;cursor:pointer}
+/* 17 nov · revisión a fondo: el hueco entre bloques del cliente es solo el gap (18px);
+   los márgenes propios se sumaban y dejaban 30-40px entre «Hoy», comidas, compra, carrera… */
+.p-body>.tr-bars,.p-body>.esub{margin-bottom:0}
+.p-body>.mx-l,.p-body>.shgs,.p-body>.tfold:first-of-type{margin-top:0}
+.p-body>.tfold+.tfold{margin-top:-10px}
+.tr2>.sx-sel,.tr2>.sx-more{margin-bottom:0}.tr2>.sx-go{margin-top:0;margin-bottom:0}
+.rn>.rn-free+.rn-lab{margin-top:0}
+/* 17 nov · editor de dieta del entrenador en móvil: cada alimento en 2 filas (nombre + ✕ / gramos, P, HC, G, kcal) en vez de 3 */
+@media (max-width:620px){
+  .food-row:not(.head){grid-template-columns:repeat(5,minmax(0,1fr));column-gap:6px}
+  .food-row:not(.head) .cell.name{grid-column:1/5}
+  .food-row:not(.head) .cell.m3,.food-row:not(.head) .cell.m2{grid-column:span 1}
+  .food-row:not(.head) .icon-btn{grid-column:5;grid-row:1}
+  .food-row:not(.head) .cell .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;letter-spacing:.02em}
+  .food-row:not(.head) .in.num,.food-row:not(.head) .ro{padding-left:6px;padding-right:6px;min-width:0}
+}

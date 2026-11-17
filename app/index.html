@@ -4959,6 +4959,8 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   #main .tx.nx>.tx-h .tx-t b{font-size:28px;line-height:1.1}
   #main .tx.nx>.tx-h .tx-t>span{font-size:15px}
   #main .tx.nx>.tx-h .tx-ch,#main .tx.nx>.tx-h .tx-ok{display:none}
+  /* 17 nov (6): sin el brillo de «abierto» (ambiente.css): con la pantalla desplazada su borde de abajo cruzaba las series como una línea */
+  #main .tx.nx::before,#main .nx-snap::before{display:none!important;animation:none!important}
   #main .tx.nx>.tx-b{border-top:0}
   #nxBar,#nxDim{display:none}
   html.nx-on #nxBar{display:flex;position:fixed;z-index:59;top:0;left:0;right:0;height:calc(env(safe-area-inset-top) + 48px);padding-top:env(safe-area-inset-top);
@@ -16238,7 +16240,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117154405';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117161132';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -27460,7 +27462,7 @@ const plVis=r=>r&&r.height>0&&r.top>40&&r.bottom<innerHeight-60;
 function nxSync(){
   if(plBusy)return;
   if(!plNx()||state.ctab!=='entreno'){if(NX||PH.classList.contains('nx-on'))nxClean();return}
-  const opens=[...document.querySelectorAll('#main .tx.open')];
+  const opens=[...document.querySelectorAll('#main .tx.open:not(.nx-snap)')];
   /* el ejercicio que la app abría sola al entrar se queda cerrado: la lista se ve entera */
   let fix=false;opens.forEach(el=>{const h=el.querySelector(':scope>.tx-h'),k=h&&h.dataset.k;if(k&&state.exO&&state.exO[k]===undefined){state.exO[k]='';fix=true}});
   if(fix){plBusy=1;try{renderMain()}finally{plBusy=0}nxSync();return}
@@ -27506,6 +27508,28 @@ document.addEventListener('click',e=>{const t=e.target;if(!t.closest||!plNx())re
   const g=t.closest('.nx-go[data-nx]');if(g&&NX){e.preventDefault();state.exO[NX.k]=g.dataset.nx;renderMain();nxSync();return}
   const h=t.closest('.tx-h[data-act=exT]');if(!h||state.ctab!=='entreno')return;const tx=h.closest('.tx');if(!tx)return;
   e.preventDefault();e.stopImmediatePropagation();if(tx.classList.contains('nx'))return;nxOpen(h.dataset.e,h.dataset.k)},true);
+/* 17 nov (6): «Terminar ejercicio» dentro de la pantalla del ejercicio: antes la lista aparecía de golpe.
+   Se guarda una copia de la pantalla tal cual, se envía como siempre y la copia se encoge hasta la fila del ejercicio ya hecho */
+document.addEventListener('click',e=>{const s=e.target.closest&&e.target.closest('[data-act=send]');if(!s||!NX||!plNx()||PL_RM.matches||plBusy)return;
+  const el=nxEl();if(!el||!el.contains(s))return;const id=NX.id,st=el.scrollTop,snap=el.cloneNode(true);
+  snap.removeAttribute('id');snap.classList.add('nx-snap');snap.setAttribute('aria-hidden','true');snap.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));
+  let done=0;const go=()=>{if(done)return;done=1;
+    if(NX&&NX.id===id){return}/* no se cerró (faltan datos o sigue abierto): nada que animar */
+    const m=document.getElementById('main'),row=document.getElementById('tx-'+id);if(!m||!row)return;
+    m.appendChild(snap);snap.scrollTop=st;nxMark(true);plBusy=1;
+    let r=row.getBoundingClientRect();if(!plVis(r)){window.scrollBy(0,r.top-innerHeight*.4);r=row.getBoundingClientRect()}
+    const b=document.getElementById('nxBar'),dm=document.getElementById('nxDim'),ok=plVis(r);snap.style.transformOrigin='0 0';snap.style.willChange='transform,opacity';
+    const A=snap.animate(ok?[{transform:'none',opacity:1},{opacity:1,offset:.3},{transform:plZoom(r),opacity:0}]:[{transform:'none'},{transform:'translate3d(100%,0,0)'}],{duration:ok?400:260,easing:'cubic-bezier(.32,.72,0,1)',fill:'forwards'});
+    if(b)b.animate([{opacity:1},{opacity:0}],{duration:160,fill:'forwards'});if(dm)dm.animate([{opacity:1},{opacity:0}],{duration:400,fill:'forwards'});
+    const end=()=>{plBusy=0;snap.remove();if(b)b.getAnimations().forEach(a=>a.cancel());if(dm)dm.getAnimations().forEach(a=>a.cancel());if(!NX)nxMark(false);plShut=Date.now()};A.finished.then(end,end)};
+  addEventListener('click',go,{once:true});setTimeout(go,0)},true);
+/* 17 nov (6): una cuenta atrás de isométrico que acaba (o el «¡Tiempo!» de 4 s) con el ejercicio ya cerrado no perdía la serie:
+   antes la marca buscaba la fila en pantalla y, cerrado el ejercicio, no estaba. Ahora se marca en la copia y se guarda el borrador */
+if(typeof holdMark==='function'){const H0=holdMark;holdMark=function(){const r0=HOLDOK;H0.apply(this,arguments);
+  try{if(!r0||r0.isConnected||!r0._ex||document.querySelector('.exo[data-ex="'+r0._ex+'"][data-w="'+r0._w+'"]'))return;
+    const ok=r0.querySelector('.setok'),ex=r0.closest('.exo');if(!ok||ok.checked||ok.disabled||!ex)return;ok.checked=true;
+    const k=r0.querySelector('.setkg'),rp=r0.querySelector('.setreps');if(k&&!k.value&&k.dataset.t)k.value=String(num(k.dataset.t));if(rp&&!rp.value&&rp.dataset.t)rp.value=rp.dataset.t;
+    draftSave(ex)}catch(e){console.warn(e)}}}
 /* «atrás» del móvil y Esc (atras.js manda un Esc y mira si algo cambió) */
 /* el «atrás» que llega justo después de cerrar (el gesto del iPhone desde el borde y el nuestro a la vez) no lleva además a Inicio:
    se marca un cambio en body para que atras.js lo dé por hecho */

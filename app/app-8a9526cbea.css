@@ -4922,6 +4922,8 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   #main .tx.nx>.tx-h .tx-t b{font-size:28px;line-height:1.1}
   #main .tx.nx>.tx-h .tx-t>span{font-size:15px}
   #main .tx.nx>.tx-h .tx-ch,#main .tx.nx>.tx-h .tx-ok{display:none}
+  /* 17 nov (6): sin el brillo de «abierto» (ambiente.css): con la pantalla desplazada su borde de abajo cruzaba las series como una línea */
+  #main .tx.nx::before,#main .nx-snap::before{display:none!important;animation:none!important}
   #main .tx.nx>.tx-b{border-top:0}
   #nxBar,#nxDim{display:none}
   html.nx-on #nxBar{display:flex;position:fixed;z-index:59;top:0;left:0;right:0;height:calc(env(safe-area-inset-top) + 48px);padding-top:env(safe-area-inset-top);

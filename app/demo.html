@@ -3793,7 +3793,7 @@ body:has(.p-dock) .rt2.mini .rt-mini{bottom:calc(150px + env(safe-area-inset-bot
 .xskip{padding:4px 2px 2px}.xskip p{margin:0 0 10px;font-size:14px;color:var(--muted)}
 .cal-ex li.skip b,.sd-ex.skip b{opacity:.7}.cal-ex .x-add,.sd-ex .x-add{font-weight:600;color:var(--teal-ink)}
 /* 17 nov: deslizar para quitar (src/deslizar.js) */
-#main .tx-l .tx-h,#main .fl.d2{touch-action:pan-y}
+#main .tx-l .tx-h,#main .fl.d2,#main .mx.sx-mx:not(.open){touch-action:pan-y}
 .sw-bg.dz-bg{border-radius:14px}.sw-bg.dz-bg.l{background:#b5473a}.sw-bg.dz-bg.l.go{background:#d4543f}.sw-bg.dz-bg.r{background:#2f8a57}.sw-bg.dz-bg.r.go{background:#33a465}
 
 /* 17 nov: «↺ Repetir hoy» en la cabecera del día ya hecho otro día */
@@ -13706,7 +13706,7 @@ function bugSend(){const c=cur(),P=BUGP;if(!c||!P)return;const v=($('#bugTxt').v
      se desplaza a la vez hacia la pestaña de destino; al soltar, la pantalla sale por ese lado y la nueva entra por el contrario.
      Solo se mueven transform y opacity (sin recalcular la página) y el movimiento se pinta una vez por fotograma */
   /* 16 nov: tampoco dentro de hojas, avisos y ventanas (deslizar de lado en la hoja de gramos o de la serie cambiaba de pestaña) */
-  const NOSW='input,select,textarea,.wh,.whg,.wf,svg.wch,canvas,.phv-img,#chBody,.wkm,.cal-sh,.fsov,.pmod,.wsheet,.dsh,.esh,.cp-sh,#notif,.c2-sh,.impbox,.phv,.c3-gal,#lb,#vm,[data-noswipe],.tx-l .tx-h,.fl.d2';
+  const NOSW='input,select,textarea,.wh,.whg,.wf,svg.wch,canvas,.phv-img,#chBody,.wkm,.cal-sh,.fsov,.pmod,.wsheet,.dsh,.esh,.cp-sh,#notif,.c2-sh,.impbox,.phv,.c3-gal,#lb,#vm,[data-noswipe],.tx-l .tx-h,.fl.d2,.mx.sx-mx:not(.open)';
   const DK=()=>'.p-dock .pd-s [data-act=ctab]';/* 9 nov: el círculo de Mensajes (fuera de la isla) no entra al deslizar */
   const hScroll=el=>{for(let a=el;a&&a!==document.body;a=a.parentElement){const o=getComputedStyle(a).overflowX;if((o==='auto'||o==='scroll')&&a.scrollWidth>a.clientWidth+2)return true}return false};
   const ist=document.createElement('style');ist.textContent=
@@ -16271,7 +16271,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117134049';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117134525';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -27383,8 +27383,9 @@ document.addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.targ
 /* 17 nov: deslizar para quitar, como los chats de WhatsApp (además de los botones de siempre).
    · Entreno: ejercicio pendiente (cerrado) ← izquierda = quitar de esta sesión · uno quitado → derecha = volver a ponerlo
    · Dieta: alimento ← izquierda = su ✕ · uno quitado → derecha = «Volver a ponerlo»
+   · Dieta (17 nov, 2): comida cerrada ← izquierda = «No hecha» · → derecha = «Hecha»; ya marcada → derecha = vuelve como estaba
    Arrastre en vertical = la página se desplaza como siempre. */
-{const SEL='#main .tx-l .tx:not(.open)>.tx-h,#main .fl.d2';let G=null,noClick=0;
+{const SEL='#main .tx-l .tx:not(.open)>.tx-h,#main .fl.d2,#main .mx.sx-mx:not(.open)';let G=null,noClick=0;
   /* qué hace cada fila hacia cada lado: devuelve una función o null */
   const what=el=>{
     const tx=el.closest('.tx');
@@ -27393,12 +27394,19 @@ document.addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.targ
       if(tx.classList.contains('skip')){const s=(cur().xSkip||[]).filter(s=>s.e===id&&String(s.w)===w).sort((a,b)=>b.ts-a.ts)[0];return{r:s?fire('exUnskip',{s:s.id}):null,rt:'↺ Volver a ponerlo'}}
       if(tx.classList.contains('done'))return{};
       return{l:/^x/.test(id)&&(cur().xEx||[]).some(x=>x.id===id)?fire('xDel',{e:id,w}):fire('exSkip',{e:id,w}),lt:'Quitar de hoy'}}
+    const mx=el.classList.contains('mx')?el:null;
+    if(mx){const h=mx.querySelector('.mx-h'),id=h&&h.dataset.m,e=mx.querySelector('.sx-eat');if(!id||!e)return{};
+      const fire=(a,v)=>()=>{const b=document.createElement('button');b.type='button';b.hidden=true;b.dataset.act=a;b.dataset.m=id;if(v)b.dataset.v=v;mx.appendChild(b);b.click();b.remove()};
+      const al=mx.querySelector('.mx-st.off');
+      if(mx.classList.contains('done'))return{r:fire('eat'),rt:'↩ Como estaba'};
+      if(mx.classList.contains('off')){const v=al&&Object.keys(ALT).find(k=>al.title===ALT[k][1]);return{r:v?fire('eatAlt',v):null,rt:'↩ Como estaba'}}
+      return{l:fire('eatAlt','no'),lt:'✕ No hecha',r:fire('eat'),rt:'✓ Hecha'}}
     const q=el.querySelector('.sw-x'),bk=el.querySelector('.sw-back');
     return{l:q?()=>q.click():null,lt:'✕ Quitar',r:bk?()=>bk.click():null,rt:'↩ Volver a ponerlo'}};
   const bgFor=(row,el,W)=>{const p=row.parentNode;if(getComputedStyle(p).position==='static')p.style.position='relative';
     const b=document.createElement('div');b.className='sw-bg dz-bg';b.setAttribute('aria-hidden','true');
     b.innerHTML='<span class="sw-r">'+(W.rt||'')+'</span><span class="sw-l">'+(W.lt||'')+'</span>';
-    b.style.cssText='top:'+row.offsetTop+'px;left:'+row.offsetLeft+'px;width:'+row.offsetWidth+'px;height:'+row.offsetHeight+'px';
+    b.style.cssText='border-radius:'+getComputedStyle(row).borderRadius+';top:'+row.offsetTop+'px;left:'+row.offsetLeft+'px;width:'+row.offsetWidth+'px;height:'+row.offsetHeight+'px';
     p.insertBefore(b,row);return b};
   const reset=(row,b)=>{row.style.transition='transform .22s cubic-bezier(.2,.9,.3,1)';row.style.transform='';setTimeout(()=>{row.style.transition='';row.style.willChange='';row.style.zIndex='';if(b&&b.isConnected)b.remove()},230)};
   document.addEventListener('pointerdown',e=>{G=null;if(e.isPrimary===false||(e.pointerType==='mouse'&&e.button!==0))return;

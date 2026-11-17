@@ -3764,6 +3764,13 @@ html.c4-kb .esh .esh-p{margin-bottom:calc(8px + var(--kb,0px))}
 .rt-mn{flex:none;align-self:flex-start;width:34px;height:34px;display:grid;place-items:center;padding:0;margin-right:-6px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .rt-mn svg{width:18px;height:18px}
 body:has(.tx-l) .rt2.big .rt-mn{position:absolute;top:0;right:40px}
+/* 17 nov: pausa del descanso (botón entre −15 y Saltar; en isométricos ya está «Pausa» en medio) */
+.rt-ctl:has(.rt-pzb){grid-template-columns:1fr 46px 1.25fr 1fr}
+.rt2.iso .rt-ctl:has(.rt-pzb){grid-template-columns:1fr 1.25fr 1fr}
+.rt-pzb{display:grid;place-items:center;padding:0;border:0;border-radius:14px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.rt-pzb svg{width:18px;height:18px;fill:currentColor}
+.rt2.iso .rt-pzb{display:none}
+.rt2.pz .rt-pzb{background:#fff;color:#06201e}
 .rt-mini{display:none}
 .rt2.mini .rt-sh{display:none}
 .rt2.mini .rt-mini{position:absolute;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));display:grid;place-items:center;width:46px;height:46px;padding:0;border:0;border-radius:50%;cursor:pointer;color:#fff;
@@ -10956,7 +10963,9 @@ function rtBig(){const el=$('#rt');if(!el)return;const b=!el.classList.contains(
 function rtAdd(v){if(!RT)return;if(RT.pz!=null)RT.pz=Math.max(0,RT.pz+v*1000);else RT.end+=v*1000;RT.tot=Math.max(1,RT.tot+v);const of=$('#rt .rt-of');if(of)of.textContent='de '+mmss(RT.tot);RT.tk()}
 function rtSkip(){if(!RT)return;RT.pz=null;RT.end=Date.now();RT.tk()}
 function rtPause(){if(!RT)return;if(RT.pz!=null){RT.end=Date.now()+RT.pz;RT.pz=null}else RT.pz=Math.max(0,RT.end-Date.now());
-  const el=$('#rt'),b=el&&$('[data-act=rtPause]',el);if(el)el.classList.toggle('pz',RT.pz!=null);if(b)b.textContent=RT.pz!=null?'Seguir':'Pausa'}
+  const el=$('#rt'),b=el&&$('.rt-ctl .rt-b[data-act=rtPause]',el);if(el)el.classList.toggle('pz',RT.pz!=null);if(b&&!b.classList.contains('rt-pzb'))b.textContent=RT.pz!=null?'Seguir':'Pausa';
+  const pb=el&&$('.rt-pzb',el);if(pb){pb.innerHTML=RTPZ[RT.pz!=null?1:0];pb.setAttribute('aria-label',RT.pz!=null?'Seguir con el descanso':'Pausar el descanso')}}
+const RTPZ=['<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/></svg>','<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>'];
 function rtArc(el,p){$$('.rt-arc',el).forEach(a=>{a.style.strokeDashoffset=(100-p*100).toFixed(2)});const n=Math.round(p*60);
   if(el._on!==n){el._on=n;$$('.rt-tk line',el).forEach((l,i)=>l.classList.toggle('on',i<n))}}
 function rtEl(){let el=$('#rt');if(el)return el;
@@ -10966,7 +10975,7 @@ function rtEl(){let el=$('#rt');if(el)return el;
     '<div class="rt-info"><div class="rt-top"><span class="rt-l"></span><span class="rt-chip"></span></div><div class="rt-sd" aria-hidden="true"><i></i><i></i></div>'+
     '<button type="button" class="rt-nx" data-act="rtNext"><small></small><b></b><span class="rt-n2"></span></button></div>'+
     '<button type="button" class="rt-i" data-act="rtStop" aria-label="Cerrar el temporizador">✕</button></div>'+
-    '<div class="rt-ctl"><button type="button" class="rt-b" data-act="rtAdd" data-v="-15"></button><button type="button" class="rt-b rt-sk" data-act="rtSkip"></button><button type="button" class="rt-b" data-act="rtAdd" data-v="15"></button></div></div>';
+    '<div class="rt-ctl"><button type="button" class="rt-b" data-act="rtAdd" data-v="-15"></button><button type="button" class="rt-pzb" data-act="rtPause" aria-label="Pausar el descanso">'+RTPZ[0]+'</button><button type="button" class="rt-b rt-sk" data-act="rtSkip"></button><button type="button" class="rt-b" data-act="rtAdd" data-v="15"></button></div></div>';
   document.body.appendChild(el);return el}
 /* encadenar (isométricos): al acabar el descanso, aviso de 3 s y empieza solo la siguiente serie */
 function holdGo(row){const rp=row.querySelector('.setreps'),sec=parseInt(rp.value||rp.dataset.t)||30,ex=row.closest('.exo'),u=ex&&ex.dataset.uni;
@@ -10982,7 +10991,7 @@ function chainNext(sel){const ex=$(sel),row=ex&&$$('.setrow2',ex).find(r=>{const
 function restStart(sec,label,doneTxt,snd,row,then,o){
   holdMark();restStop(1);HOLD=row||null;if(!(sec>0))return;o=o||{};
   const el=rtEl(),iso=!!o.iso,L=String(label||'Descanso').split('\n');
-  el.hidden=false;el.classList.remove('done','last','pz','warn');el.classList.toggle('iso',iso);el.classList.toggle('big',rtBigOf(iso));
+  el.hidden=false;el.classList.remove('done','last','pz','warn');{const pb=$('.rt-pzb',el);if(pb){pb.innerHTML=RTPZ[0];pb.setAttribute('aria-label','Pausar el descanso')}}el.classList.toggle('iso',iso);el.classList.toggle('big',rtBigOf(iso));
   $('.rt-l',el).textContent=L.join(' · ');
   const ch=$('.rt-chip',el);ch.textContent=o.chip||'';ch.hidden=!o.chip;
   const sd=$('.rt-sd',el);sd.hidden=!o.side;if(o.side)$$('i',sd).forEach((x,i)=>x.classList.toggle('on',i<=o.side[0]));
@@ -16166,7 +16175,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117105910';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117110906';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);

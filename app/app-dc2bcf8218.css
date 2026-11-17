@@ -3727,6 +3727,13 @@ html.c4-kb .esh .esh-p{margin-bottom:calc(8px + var(--kb,0px))}
 .rt-mn{flex:none;align-self:flex-start;width:34px;height:34px;display:grid;place-items:center;padding:0;margin-right:-6px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .rt-mn svg{width:18px;height:18px}
 body:has(.tx-l) .rt2.big .rt-mn{position:absolute;top:0;right:40px}
+/* 17 nov: pausa del descanso (botón entre −15 y Saltar; en isométricos ya está «Pausa» en medio) */
+.rt-ctl:has(.rt-pzb){grid-template-columns:1fr 46px 1.25fr 1fr}
+.rt2.iso .rt-ctl:has(.rt-pzb){grid-template-columns:1fr 1.25fr 1fr}
+.rt-pzb{display:grid;place-items:center;padding:0;border:0;border-radius:14px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.rt-pzb svg{width:18px;height:18px;fill:currentColor}
+.rt2.iso .rt-pzb{display:none}
+.rt2.pz .rt-pzb{background:#fff;color:#06201e}
 .rt-mini{display:none}
 .rt2.mini .rt-sh{display:none}
 .rt2.mini .rt-mini{position:absolute;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));display:grid;place-items:center;width:46px;height:46px;padding:0;border:0;border-radius:50%;cursor:pointer;color:#fff;

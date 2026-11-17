@@ -3757,7 +3757,7 @@ body:has(.p-dock) .rt2.mini .rt-mini{bottom:calc(150px + env(safe-area-inset-bot
 .cal-ex li.skip b,.sd-ex.skip b{opacity:.7}.cal-ex .x-add,.sd-ex .x-add{font-weight:600;color:var(--teal-ink)}
 /* 17 nov: deslizar para quitar (src/deslizar.js) */
 #main .tx-l .tx-h,#main .fl.d2,#main .mx.sx-mx:not(.open){touch-action:pan-y}
-#main .mx.dz-pop{animation:dzPop .4s cubic-bezier(.3,1.4,.5,1)}@keyframes dzPop{0%{transform:scale(.97)}60%{transform:scale(1.015)}100%{transform:scale(1)}}
+#main .dz-pop{animation:dzPop .4s cubic-bezier(.3,1.4,.5,1)}@keyframes dzPop{0%{transform:scale(.97)}60%{transform:scale(1.015)}100%{transform:scale(1)}}
 .sw-bg.dz-bg{border-radius:14px}.sw-bg.dz-bg.l{background:#b5473a}.sw-bg.dz-bg.l.go{background:#d4543f}.sw-bg.dz-bg.r{background:#2f8a57}.sw-bg.dz-bg.r.go{background:#33a465}
 
 /* 17 nov: «↺ Repetir hoy» en la cabecera del día ya hecho otro día */

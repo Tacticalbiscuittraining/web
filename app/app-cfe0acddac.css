@@ -4909,9 +4909,10 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   body[data-ct=entreno] .tx:not(.open) .tx-ch{transform:rotate(-45deg);margin:0 6px 0 0}
   /* C · el ejercicio abierto es una pantalla entera encima de la lista */
   html.nx-on{overflow:hidden}
-  #main .tx.nx{position:fixed!important;inset:0;z-index:58;margin:0!important;border:0!important;border-radius:0!important;clip-path:none!important;
+  #main .tx.nx{position:fixed!important;inset:0;z-index:58;margin:0!important;border:0!important;border-radius:0!important;clip-path:none;
     overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--bg)!important;animation:none!important;
     padding:calc(env(safe-area-inset-top) + 52px) 0 calc(env(safe-area-inset-bottom) + 110px);box-shadow:-14px 0 34px rgba(0,0,0,.45)!important}
+  #main .nx-ph{pointer-events:none;animation:none!important}
   #main .tx.nx>.tx-h{pointer-events:none;display:block;padding:4px 16px 12px}
   #main .tx.nx>.tx-h .tx-ph{display:block;width:100%;height:auto;aspect-ratio:4/3;max-height:40vh;border-radius:18px;margin-bottom:14px}
   #main .tx.nx>.tx-h .tx-ph.none{display:none}

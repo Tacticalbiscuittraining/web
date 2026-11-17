@@ -4946,9 +4946,10 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   body[data-ct=entreno] .tx:not(.open) .tx-ch{transform:rotate(-45deg);margin:0 6px 0 0}
   /* C · el ejercicio abierto es una pantalla entera encima de la lista */
   html.nx-on{overflow:hidden}
-  #main .tx.nx{position:fixed!important;inset:0;z-index:58;margin:0!important;border:0!important;border-radius:0!important;clip-path:none!important;
+  #main .tx.nx{position:fixed!important;inset:0;z-index:58;margin:0!important;border:0!important;border-radius:0!important;clip-path:none;
     overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--bg)!important;animation:none!important;
     padding:calc(env(safe-area-inset-top) + 52px) 0 calc(env(safe-area-inset-bottom) + 110px);box-shadow:-14px 0 34px rgba(0,0,0,.45)!important}
+  #main .nx-ph{pointer-events:none;animation:none!important}
   #main .tx.nx>.tx-h{pointer-events:none;display:block;padding:4px 16px 12px}
   #main .tx.nx>.tx-h .tx-ph{display:block;width:100%;height:auto;aspect-ratio:4/3;max-height:40vh;border-radius:18px;margin-bottom:14px}
   #main .tx.nx>.tx-h .tx-ph.none{display:none}
@@ -16234,7 +16235,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117150537';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117152049';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -27435,13 +27436,22 @@ const plCli=()=>typeof state!=='undefined'&&state.mode==='client'&&innerWidth<=8
 /* en las pruebas automáticas (navigator.webdriver) la pantalla de ejercicio no se usa salvo window.__tbPila=1 (igual que moderno.js con __tbMin) */
 const plNx=()=>plCli()&&(!navigator.webdriver||window.__tbPila===1);
 const PH=document.documentElement,PEASE='cubic-bezier(.2,.8,.2,1)';
-let NX=null,plBusy=0;
+let NX=null,plBusy=0,plShut=0;
 const nxEl=()=>NX&&document.getElementById('tx-'+NX.id);
 const plMk=(id,html)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;if(html)e.innerHTML=html;document.body.appendChild(e)}return e};
 const nxBar=()=>plMk('nxBar','<button type="button" class="nx-bk" aria-label="Volver a la lista"><svg viewBox="0 0 12 20" aria-hidden="true"><path d="M10 2 2 10l8 8"/></svg><span></span></button><b class="nx-n"></b>');
 const nxDim=()=>plMk('nxDim');
 function nxMark(on){PH.classList.toggle('nx-on',on);document.body.classList.toggle('nx-on',on)}
-function nxClean(){NX=null;nxMark(false);document.querySelectorAll('.tx.nx').forEach(x=>{x.classList.remove('nx');x.removeAttribute('data-noswipe');x.style.transform=''})}
+function nxClean(){if(NX)plShut=Date.now();NX=null;nxMark(false);document.querySelectorAll('.tx.nx').forEach(x=>{x.classList.remove('nx');x.removeAttribute('data-noswipe');x.style.transform=''});document.querySelectorAll('#main .nx-ph').forEach(x=>x.remove())}
+/* 17 nov (2): mientras el ejercicio está a pantalla completa, en la lista queda su fila (copia sin botones): al volver no hay hueco ni salto */
+function nxPh(el){let ph=el.previousElementSibling;if(ph&&ph.classList.contains('nx-ph'))return ph;
+  document.querySelectorAll('#main .nx-ph').forEach(x=>x.remove());
+  ph=document.createElement('article');ph.className=el.className.replace(/\b(open|nx)\b/g,'')+' nx-ph';ph.setAttribute('aria-hidden','true');
+  const h=el.querySelector(':scope>.tx-h');if(h){const c=h.cloneNode(true);c.removeAttribute('data-act');c.removeAttribute('data-e');c.removeAttribute('data-k');c.setAttribute('tabindex','-1');c.setAttribute('aria-expanded','false');ph.appendChild(c)}
+  el.parentElement.insertBefore(ph,el);return ph}
+/* la tarjeta crece desde su fila hasta la pantalla entera (y al volver se encoge hasta ella) */
+const plClip=(r)=>'inset('+Math.max(0,r.top).toFixed(1)+'px '+Math.max(0,innerWidth-r.right).toFixed(1)+'px '+Math.max(0,innerHeight-r.bottom).toFixed(1)+'px '+Math.max(0,r.left).toFixed(1)+'px round 16px)';
+const plVis=r=>r&&r.height>0&&r.top>40&&r.bottom<innerHeight-60;
 /* después de cada pintado: el ejercicio abierto es la pantalla de encima */
 function nxSync(){
   if(plBusy)return;
@@ -27457,35 +27467,46 @@ function nxSync(){
   document.querySelectorAll('.tx.nx').forEach(x=>{if(x!==el){x.classList.remove('nx');x.removeAttribute('data-noswipe')}});
   if(!el.classList.contains('nx')){el.classList.add('nx');el.setAttribute('data-noswipe','')}
   nxMark(true);
-  const list=[...el.parentElement.children].filter(x=>x.classList.contains('tx')),i=list.indexOf(el),b=nxBar();nxDim();
+  const ph=nxPh(el),list=[...el.parentElement.children].filter(x=>x.classList.contains('tx')&&!x.classList.contains('nx-ph')),i=list.indexOf(el),b=nxBar();nxDim();
   const t=b.querySelector('span'),n=b.querySelector('.nx-n'),bt=el.dataset.dn||'Entreno',nt=list.length>1?(i+1)+' de '+list.length:'';
   if(t.textContent!==bt)t.textContent=bt;if(n.textContent!==nt)n.textContent=nt;
   if(!el.querySelector(':scope>.nx-next')){const nx=list[i+1],w=document.createElement('div');w.className='nx-next';
     const nb=nx&&nx.querySelector('.tx-t b');
     w.innerHTML=nx?'<button type="button" class="nx-go" data-nx="'+esc(nx.querySelector('.tx-h').dataset.e)+'"><small>Siguiente</small><b>'+esc(nb?nb.textContent.replace(/^\d+\.\s*/,''):'Siguiente ejercicio')+'</b><svg viewBox="0 0 7 12" aria-hidden="true"><path d="m1 1 5 5-5 5"/></svg></button>':'<button type="button" class="nx-go nx-end" data-nxback="1"><b>Volver a la lista</b></button>';
     el.appendChild(w)}
-  if(isNew){el.scrollTop=0;if(!PL_RM.matches){
-    el.animate([{transform:'translate3d(100%,0,0)'},{transform:'none'}],{duration:first?360:300,easing:PEASE});
-    if(first){b.animate([{opacity:0},{opacity:1}],{duration:260,easing:'ease-out'});document.getElementById('nxDim').animate([{opacity:0},{opacity:1}],{duration:340,easing:'ease-out'})}}}
+  if(isNew){el.scrollTop=0;if(!PL_RM.matches){const r=ph.getBoundingClientRect();
+    if(first&&plVis(r)){
+      el.animate([{clipPath:plClip(r),opacity:0},{opacity:1,offset:.28},{clipPath:'inset(0px 0px 0px 0px round 0px)',opacity:1}],{duration:440,easing:'cubic-bezier(.32,.72,0,1)'});
+      [...el.children].forEach(x=>x.animate([{opacity:0,transform:'translate3d(0,'+Math.round((r.top-60)*.12)+'px,0)'},{opacity:0,offset:.2},{opacity:1,transform:'none'}],{duration:440,easing:'cubic-bezier(.32,.72,0,1)'}))}
+    else el.animate([{transform:'translate3d(100%,0,0)'},{transform:'none'}],{duration:first?360:300,easing:PEASE});
+    if(first){b.animate([{opacity:0},{opacity:0,offset:.4},{opacity:1}],{duration:380,easing:'ease-out'});document.getElementById('nxDim').animate([{opacity:0},{opacity:1}],{duration:440,easing:'ease-out'})}}}
 }
 new MutationObserver(()=>{try{nxSync()}catch(e){}}).observe(document.documentElement,{childList:true,subtree:true});
 /* abrir: sin desplegar dentro de la lista */
 function nxOpen(id,k){if(!state.exO)state.exO={};state.exO[k]=id;const y=scrollY;renderMain();window.scrollTo(0,y);nxSync()}
-function nxClose(){if(!NX)return;const el=nxEl(),b=document.getElementById('nxBar'),dm=document.getElementById('nxDim'),{id,k}=NX;
-  const fin=()=>{nxClean();if(state.exO&&state.exO[k]===id){state.exO[k]='';const y=scrollY;renderMain();window.scrollTo(0,y)}
-    const r=document.getElementById('tx-'+id);if(r){const q=r.getBoundingClientRect();if(q.top<70||q.bottom>innerHeight-110)r.scrollIntoView({block:'center'})}};
+function nxClose(slide){if(!NX||plBusy)return;const el=nxEl(),b=document.getElementById('nxBar'),dm=document.getElementById('nxDim'),{id,k}=NX;
+  const fin=()=>{nxClean();if(state.exO&&state.exO[k]===id){state.exO[k]='';const y=scrollY;renderMain();window.scrollTo(0,y)}};
   if(!el||PL_RM.matches){fin();return}
   document.body.classList.remove('nx-on');/* al momento: el «atrás» (atras.js) mira si cambió algo para no ir además a Inicio */
-  plBusy=1;const cur=getComputedStyle(el).transform,A=el.animate([{transform:cur==='none'?'none':cur},{transform:'translate3d(100%,0,0)'}],{duration:260,easing:'cubic-bezier(.3,.6,.6,1)',fill:'forwards'});
-  if(b)b.animate([{opacity:1},{opacity:0}],{duration:200,fill:'forwards'});if(dm)dm.animate([{opacity:1},{opacity:0}],{duration:260,fill:'forwards'});
-  const end=()=>{plBusy=0;A.cancel();if(b)b.getAnimations().forEach(a=>a.cancel());if(dm)dm.getAnimations().forEach(a=>a.cancel());fin()};A.finished.then(end,end)}
+  plBusy=1;const cur=getComputedStyle(el).transform,ph=el.previousElementSibling&&el.previousElementSibling.classList.contains('nx-ph')?el.previousElementSibling:null;
+  /* la fila de la lista a la vista (detrás no se ve: la tapa la pantalla del ejercicio) */
+  if(ph&&!slide){let r=ph.getBoundingClientRect();if(!plVis(r)){window.scrollBy(0,r.top-innerHeight*.4);r=ph.getBoundingClientRect()}}
+  const r=ph&&ph.getBoundingClientRect(),shrink=!slide&&cur==='none'&&plVis(r);let A;
+  if(shrink){A=el.animate([{clipPath:'inset(0px 0px 0px 0px round 0px)',opacity:1},{opacity:1,offset:.7},{clipPath:plClip(r),opacity:0}],{duration:420,easing:'cubic-bezier(.32,.72,0,1)',fill:'forwards'});
+    [...el.children].forEach(x=>x.animate([{opacity:1},{opacity:0,offset:.28},{opacity:0}],{duration:420,fill:'forwards'}))}
+  else A=el.animate([{transform:cur==='none'?'none':cur},{transform:'translate3d(100%,0,0)'}],{duration:260,easing:'cubic-bezier(.3,.6,.6,1)',fill:'forwards'});
+  if(b)b.animate([{opacity:1},{opacity:0}],{duration:160,fill:'forwards'});if(dm)dm.animate([{opacity:1},{opacity:0}],{duration:shrink?420:260,fill:'forwards'});
+  const end=()=>{plBusy=0;A.cancel();[...el.children].forEach(x=>x.getAnimations().forEach(a=>a.cancel()));if(b)b.getAnimations().forEach(a=>a.cancel());if(dm)dm.getAnimations().forEach(a=>a.cancel());fin()};A.finished.then(end,end)}
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest||!plNx())return;
   if(t.closest('#nxBar .nx-bk')||t.closest('[data-nxback]')){e.preventDefault();nxClose();return}
   const g=t.closest('.nx-go[data-nx]');if(g&&NX){e.preventDefault();state.exO[NX.k]=g.dataset.nx;renderMain();nxSync();return}
   const h=t.closest('.tx-h[data-act=exT]');if(!h||state.ctab!=='entreno')return;const tx=h.closest('.tx');if(!tx)return;
   e.preventDefault();e.stopImmediatePropagation();if(tx.classList.contains('nx'))return;nxOpen(h.dataset.e,h.dataset.k)},true);
 /* «atrás» del móvil y Esc (atras.js manda un Esc y mira si algo cambió) */
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&NX&&!e.defaultPrevented&&!document.querySelector('.esh:not([hidden]) .esh-p,.wsheet,.dsh,.fsov,.pmod,#impbox')){e.preventDefault();e.stopImmediatePropagation();nxClose()}},true);
+/* el «atrás» que llega justo después de cerrar (el gesto del iPhone desde el borde y el nuestro a la vez) no lleva además a Inicio:
+   se marca un cambio en body para que atras.js lo dé por hecho */
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!NX&&plShut&&Date.now()-plShut<1500&&!e.defaultPrevented&&state.ctab==='entreno'){e.preventDefault();e.stopImmediatePropagation();plShut=0;document.body.classList.toggle('nx-was')}},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&NX&&!e.defaultPrevented&&!document.querySelector('.esh:not([hidden]) .esh-p,.wsheet,.dsh,.fsov,.pmod,#impbox')){e.preventDefault();e.stopImmediatePropagation();if(plBusy)document.body.classList.toggle('nx-was');else nxClose()}},true);
 /* deslizar desde el borde izquierdo para volver: la pantalla sigue al dedo */
 {let D=null;
   addEventListener('touchstart',e=>{D=null;const el=nxEl();if(!el||plBusy||e.touches.length!==1||PL_RM.matches)return;const x=e.touches[0].clientX;if(x>28||!el.contains(e.target))return;
@@ -27495,7 +27516,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&NX&&!e.defaultPreve
     if(e.cancelable)e.preventDefault();const n=Date.now();D.v=(dx-D.dx)/Math.max(1,n-D.t);D.t=n;D.dx=Math.max(0,dx);
     D.el.style.transform='translate3d('+D.dx+'px,0,0)';const dm=document.getElementById('nxDim');if(dm)dm.style.opacity=String(1-D.dx/innerWidth)},{passive:false});
   const end=()=>{if(!D)return;const S=D;D=null;if(!S.h)return;const dm=document.getElementById('nxDim');
-    if(S.dx>innerWidth*.33||S.v>.4&&S.dx>30){if(dm)dm.style.opacity='';nxClose();return}
+    if(S.dx>innerWidth*.33||S.v>.4&&S.dx>30){if(dm)dm.style.opacity='';nxClose(1);return}
     S.el.animate([{transform:'translate3d('+S.dx+'px,0,0)'},{transform:'none'}],{duration:220,easing:PEASE});S.el.style.transform='';if(dm)dm.style.opacity=''};
   addEventListener('touchend',end,{passive:true});addEventListener('touchcancel',end,{passive:true})}
 

@@ -3784,6 +3784,14 @@ body:has(.tx-l) .rt2.big .rt-mn{position:absolute;top:0;right:40px}
 .rt2.mini .rt-mini b{position:relative;font:700 16px/1 var(--f-body);font-variant-numeric:tabular-nums}
 body:has(.p-dock) .rt2.mini .rt-mini{bottom:calc(150px + env(safe-area-inset-bottom))}
 .rt2.mini.last .rt-mini b{color:var(--rc2)}
+/* 17 nov: quitar un ejercicio solo de esta sesión */
+.exo-r .ex-skip{display:block;margin:10px auto 0;font-size:13px;font-weight:500;color:var(--muted)}
+.tx.skip:not(.open){background:var(--surface)}
+.tx.skip .tx-t b{text-decoration:line-through;opacity:.7}
+.tx.done.skip .tx-t>span{color:var(--muted)}
+.tx-ok.sk{background:var(--muted);font-size:18px}
+.xskip{padding:4px 2px 2px}.xskip p{margin:0 0 10px;font-size:14px;color:var(--muted)}
+.cal-ex li.skip b,.sd-ex.skip b{opacity:.7}.cal-ex .x-add,.sd-ex .x-add{font-weight:600;color:var(--teal-ink)}
 
 /* 8 nov · Controles de la derecha (e iconos de la izquierda) centrados en vertical respecto a toda la fila */
 /* Dieta: gramos y ✕ en medio de nombre + línea de kcal (si la 2ª línea es una etiqueta larga de cambio, se queda como estaba para no cortarla) */
@@ -9758,17 +9766,20 @@ function wkWin(c,w){const s=mesoStart(c),add=k=>new Date(s.getFullYear(),s.getMo
   // semana pasada: lo que el cliente complete después («te quedaron pendientes») también cuenta en esa semana
   return s?[add(w),w<clientWeek(c)?Infinity:add(w+1)]:null}
 const logIn=(c,l,e,w,r)=>l.w===w&&(!r||l.ts>=r[0]&&l.ts<r[1])&&lxId(c,l)===e.id;
-const doneExW=(c,e,w)=>{const r=wkWin(c,w);return c.log.some(l=>logIn(c,l,e,w,r))};
+/* 17 nov: ejercicio quitado solo en esta sesión (c.xSkip [{id,e,d,dn,ex,w,ts}]): cuenta como hecho, el plan no cambia y la próxima vez vuelve a salir */
+const skipIn=(c,e,w,r)=>!!c.xSkip&&c.xSkip.some(s=>s.e===e.id&&s.w===w&&(!r||s.ts>=r[0]&&s.ts<r[1]));
+function skipOf(c,e,w){if(!c.xSkip)return null;const r=ctxRange(c,w)||repR(c,e.id,w)||wkWin(c,w);return c.xSkip.find(s=>s.e===e.id&&s.w===w&&(!r||s.ts>=r[0]&&s.ts<r[1]))||null}
+const doneExW=(c,e,w,ns)=>{const r=wkWin(c,w);return c.log.some(l=>logIn(c,l,e,w,r))||!ns&&skipIn(c,e,w,r)};
 /* 17 nov: «Repetir este día hoy»: desde que se pulsa, ese día sale en blanco y lo de antes queda como «La última vez» (solo hoy; se guarda en este móvil) */
 function repAll(){if(!state.repC){try{state.repC=JSON.parse(localStorage.getItem('tb-rep')||'{}')||{}}catch(e){state.repC={}}}return state.repC}
 function repOf(c){const R=c&&repAll()[c.id];return R&&R.ts>=dayStart(0,todayIdx())?R:null}
 function repSet(c,R){const A=repAll();if(R)A[c.id]=R;else delete A[c.id];try{localStorage.setItem('tb-rep',JSON.stringify(A))}catch(e){}}
 function repR(c,exId,w){if(state.logTs)return null;const R=repOf(c);if(!R||R.w!==w)return null;const f=findEx(c,exId),x=!f&&(c.xEx||[]).find(x=>x.id===exId),did=f?f.d.id:x?x.d:null;return did!=null&&R.d.indexOf(did)>=0?[R.ts,Infinity]:null}
-const doneEx=(c,e,w)=>{const r=ctxRange(c,w)||repR(c,e.id,w);if(r)return c.log.some(l=>l.ts>=r[0]&&l.ts<r[1]&&lxId(c,l)===e.id);return !!state.sent[e.id+'@'+w]||doneExW(c,e,w)};
-const dayDoneW1=(c,d,w)=>d.exs.length>0&&d.exs.every(e=>doneExW(c,e,w));
-const dayDoneC1=(c,d,w)=>d.exs.length>0&&d.exs.every(e=>doneEx(c,e,w));
+const doneEx=(c,e,w,ns)=>{const r=ctxRange(c,w)||repR(c,e.id,w);if(r)return c.log.some(l=>l.ts>=r[0]&&l.ts<r[1]&&lxId(c,l)===e.id)||!ns&&skipIn(c,e,w,r);return !!state.sent[e.id+'@'+w]||doneExW(c,e,w,ns)};
+const dayDoneW1=(c,d,w)=>d.exs.length>0&&d.exs.every(e=>doneExW(c,e,w))&&d.exs.some(e=>doneExW(c,e,w,1));
+const dayDoneC1=(c,d,w)=>d.exs.length>0&&d.exs.every(e=>doneEx(c,e,w))&&d.exs.some(e=>doneEx(c,e,w,1));
 const dayDoneW=(c,d,w)=>dayDoneW1(c,d,w)||varsOf(c,d).some(v=>dayDoneW1(c,v,w));
-const dayGoW=(c,d,w)=>[d].concat(varsOf(c,d)).some(v=>v.exs.some(e=>doneExW(c,e,w)));
+const dayGoW=(c,d,w)=>[d].concat(varsOf(c,d)).some(v=>v.exs.some(e=>doneExW(c,e,w,1)));
 const dayDoneC=(c,d,w)=>dayDoneC1(c,d,w)||varsOf(c,d).some(v=>dayDoneC1(c,v,w));
 function ctxRange(c,w){const day=ts=>{const d=new Date(ts),a=new Date(d.getFullYear(),d.getMonth(),d.getDate());return [a.getTime(),new Date(d.getFullYear(),d.getMonth(),d.getDate()+1).getTime()]};
   if(state.logTs)return day(state.logTs);return null}
@@ -11736,7 +11747,7 @@ function strDet(c,id){const A=strSessions(c),S=A.find(x=>x.id===id);if(!S)return
       if(kgP&&mk>kgP*1.025)fl.push(['ok','+'+f1n(mk-kgP)+' kg sobre la pauta']);else if(kgP&&mk&&mk<kgP*.95)fl.push(['wa',f1n(mk-kgP)+' kg']);
       if(rir!=null&&l.rir!=null&&l.rir!==''&&num(l.rir)<rir-.25)fl.push(['ba','RIR '+fmtN(num(l.rir))+' (obj. '+fmtN(rir)+')'])}
     const bad=fl.some(f=>f[0]!=='ok');if(bad)low.push(l.ex);
-    const tag=!e?'<span class="ld-p sd-na">Fuera del plan</span>':bad?'<span class="ld-p wa">Por debajo de la pauta</span>':fl.length?'<span class="ld-p ok">↑ Por encima de la pauta</span>':'<span class="ld-p ok">✓ Según la pauta</span>';
+    const tag=!e?((c.xEx||[]).some(x=>x.id===l.exId)?'<span class="ld-p sd-na">➕ Añadido</span>':'<span class="ld-p sd-na">Fuera del plan</span>'):bad?'<span class="ld-p wa">Por debajo de la pauta</span>':fl.length?'<span class="ld-p ok">↑ Por encima de la pauta</span>':'<span class="ld-p ok">✓ Según la pauta</span>';
     const plR=e?[(st||'?')+'×'+String(e.reps||'?'),kgP?fmtN(kgP)+' kg':'',rir!=null?'RIR '+fmtN(rir):''].filter(Boolean).join(' · '):'',pl=e?[(st||'?')+' × '+esc(String(e.reps||'?')),kgP?fmtN(kgP)+' kg':'',rir!=null?'RIR '+fmtN(rir):''].filter(Boolean).join(' · '):'';
     const NB=exnEx(c,S,l,e,X.map(x=>setTxt(x,l.u)).join(' · '),plR);
     /* la vez anterior que hizo este ejercicio */
@@ -11764,9 +11775,12 @@ function strDet(c,id){const A=strSessions(c),S=A.find(x=>x.id===id);if(!S)return
     tile('Esfuerzo',R?R.v+'/10':rm!=null?'RIR '+f1n(rm):'—',R?'lo marcó al acabar':rm!=null?(rT!=null?'objetivo RIR '+fmtN(rT):'medio'):'sin dato',R&&R.v>=9||rm!=null&&rT!=null&&rm<rT-.5?'wa':'')+
     (TS.dur?tile('Duración',hms(TS.dur),'real, de la 1.ª serie al final'+(D0&&+D0.dur?' · pautado '+D0.dur+' min':'')):min>=15&&min<=180?tile('Duración','≈ '+min+' min','del 1.º al último registro'):'')+
     (TS.rest?tile('Descanso medio',mmss(TS.rest),TS.restP?'pautado '+mmss(TS.restP):'entre series',TS.restP&&Math.abs(TS.rest-TS.restP)>TS.restP*.3?'wa':''):'')+'</div>';
+  /* 17 nov: ejercicios que quitó solo de esta sesión */
+  const SK=(c.xSkip||[]).filter(x=>isoOf(x.ts)===S.iso&&libN(String(x.dn||''))===libN(S.k)&&!logs.some(l=>lxId(c,l)===x.e));
+  SK.forEach(x=>cards.push('<li class="sd-ex skip"><div class="sd-eh"><b><s>'+esc(x.ex)+'</s></b></div><span class="ld-p sd-na">✕ Quitado</span><p class="sd-pl muted">Lo quitó solo de esta sesión: el plan no cambia.</p></li>'));
   const n=logs.length,verdict=low.length?'<p class="sd-v wa">⚠️ '+low.length+' de '+n+' ejercicios por debajo de la pauta: '+esc(low.join(', '))+'.</p>':'<p class="sd-v ok">✅ Sesión completa según la pauta.</p>';
   return '<div class="rn-dtop"><div class="actions" style="margin:0 0 12px"><button type="button" class="btn sm" data-act="rnDet" data-id="">← Volver a Fuerza</button></div><div class="card rn-detc sd"><div class="rn-det-h"><h2>🏋️ '+esc(S.k)+'</h2>'+likeBtn(c,S.id,'coach',S.k+' · '+(d?DAYS[(d.getDay()+6)%7].toLowerCase()+' '+d.getDate()+'/'+(d.getMonth()+1):''),{ts:d?d.getTime():0})+'</div><p class="muted" style="margin:0 0 10px">'+esc(rDay(S.iso))+' · '+n+(n===1?' ejercicio':' ejercicios')+'</p>'+
-   verdict+(up?'<p class="sd-v up">📈 Mejora en '+up+' de '+n+' ejercicios respecto a la vez anterior.</p>':'')+tiles+'<ul class="sd-exs">'+cards.join('')+'</ul></div>'+exnBar(c,S)+'</div>'}
+   verdict+(up?'<p class="sd-v up">📈 Mejora en '+up+' de '+n+' ejercicios respecto a la vez anterior.</p>':'')+tiles+(SK.length?'<p class="sd-v">✕ Quitó '+SK.length+(SK.length===1?' ejercicio':' ejercicios')+' de esta sesión: '+esc(SK.map(x=>x.ex).join(', '))+'.</p>':'')+'<ul class="sd-exs">'+cards.join('')+'</ul></div>'+exnBar(c,S)+'</div>'}
 const f1n=v=>fmtN(Math.round(v*10)/10);
 const rDay=iso=>{const d=rParse(iso);return d?DAYS[(d.getDay()+6)%7]+' '+d.getDate()+'/'+(d.getMonth()+1):''};
 function outTable(c){const A=(c.acts||[]).filter(isOut).sort((a,b)=>b.date<a.date?-1:1);if(!A.length)return '';
@@ -12280,7 +12294,10 @@ function calDetail(c,I,who){
   // fuerza
   if(I.str){
     const g={};I.logs.forEach(l=>{const k=String(l.day||'Entreno').replace(/ · S\d+$/,'');(g[k]=g[k]||[]).push(l)});
-    h+=Object.keys(g).map(k=>'<section class="cal-b str"><header><span class="cal-ic" aria-hidden="true">🏋️</span><b>'+esc(k)+'</b><span class="muted">'+g[k].length+(g[k].length===1?' ejercicio':' ejercicios')+'</span>'+likeBtn(c,'s:'+I.iso+':'+k,who,k+' · '+dl,I)+'</header><ul class="cal-ex">'+g[k].map(l=>'<li><span><b>'+esc(l.ex)+'</b><small>'+esc((l.sets||[]).map(s=>setTxt(s,l.u)).join(' · '))+(l.eq?' · '+esc(eqName(l.eq)):'')+(l.rir!=null?' · RIR '+esc(l.rir):'')+(l.edited?' · corregido':'')+(l.pr?' · 🏆':'')+'</small>'+(l.note?'<em>'+esc(l.note)+'</em>':'')+'</span>'+(cli&&l.exId&&l.w!=null?'<button type="button" class="linkbtn" data-act="calGo" data-w="'+l.w+'" data-e="'+esc(l.exId)+'" data-ts="'+l.ts+'">Ver / corregir</button>':'')+'</li>').join('')+'</ul>'+(cli?'<div class="cal-del"><button type="button" class="btn sm danger-l" data-act="calDelStr" data-ts="'+I.ts+'" data-k="'+esc(k)+'" data-confirm>🗑 Borrar este entreno de gimnasio</button></div>':'')+'</section>').join('');
+    /* 17 nov: lo que quitó solo de esta sesión */
+    (c.xSkip||[]).forEach(x=>{const k=String(x.dn||'');if(g[k]&&isoOf(x.ts)===I.iso&&!g[k].some(l=>l.exId===x.e))g[k].push({skip:1,ex:x.ex})});
+    const nL=k=>g[k].filter(l=>!l.skip).length,isX=l=>!!l.exId&&(c.xEx||[]).some(x=>x.id===l.exId);
+    h+=Object.keys(g).map(k=>'<section class="cal-b str"><header><span class="cal-ic" aria-hidden="true">🏋️</span><b>'+esc(k)+'</b><span class="muted">'+nL(k)+(nL(k)===1?' ejercicio':' ejercicios')+'</span>'+likeBtn(c,'s:'+I.iso+':'+k,who,k+' · '+dl,I)+'</header><ul class="cal-ex">'+g[k].map(l=>l.skip?'<li class="skip"><span><b><s>'+esc(l.ex)+'</s></b><small>Quitado de esta sesión · el plan no cambia</small></span></li>':'<li><span><b>'+esc(l.ex)+(isX(l)?' <small class="x-add">➕ Añadido</small>':'')+'</b><small>'+esc((l.sets||[]).map(s=>setTxt(s,l.u)).join(' · '))+(l.eq?' · '+esc(eqName(l.eq)):'')+(l.rir!=null?' · RIR '+esc(l.rir):'')+(l.edited?' · corregido':'')+(l.pr?' · 🏆':'')+'</small>'+(l.note?'<em>'+esc(l.note)+'</em>':'')+'</span>'+(cli&&l.exId&&l.w!=null?'<button type="button" class="linkbtn" data-act="calGo" data-w="'+l.w+'" data-e="'+esc(l.exId)+'" data-ts="'+l.ts+'">Ver / corregir</button>':'')+'</li>').join('')+'</ul>'+(cli?'<div class="cal-del"><button type="button" class="btn sm danger-l" data-act="calDelStr" data-ts="'+I.ts+'" data-k="'+esc(k)+'" data-confirm>🗑 Borrar este entreno de gimnasio</button></div>':'')+'</section>').join('');
   }else if((fut||isT||!cli)&&(((I.planned||I.runFz)&&I.mark!==false)||(I.mark===true&&(!I.act||!cli))||(cli&&isT&&I.mark!==false))){
     const mk=I.mark===true&&!fut,can=!!(I.planned||I.runFz),o=can&&X('f');
     const nm=I.planned?I.planned.name:I.runFz?'Fuerza':'Entreno de fuerza',sub=I.planned?(I.planned.focus||''):I.runFz&&I.runFz!=='Fuerza'?I.runFz:'';
@@ -14472,7 +14489,7 @@ function exoCard(e,idx,week,wi,c,e0){e0=e0||e;
   return '<div class="exo'+(done&&!ed?' done':'')+(ed?' editing':'')+'" data-ex="'+e.id+'" data-w="'+wi+'" data-rest="'+(restSec(e.rest)||0)+'"'+(eq?' data-eq="'+eq+'"':'')+(chain?' data-chain="1"':'')+(isSecEx(e)&&uniSide(e)?' data-uni="'+uniSide(e)+'"':'')+'><div class="exo-h"><span class="exo-n">'+(idx+1)+'</span><div><h4>'+esc(e.name||'Ejercicio sin nombre')+'</h4>'+(L&&L.group?'<span class="exo-g">'+esc(L.group)+'</span>':'')+'</div></div>'+exnPin(c,e,e0)+
    '<div class="exo-body'+(photo&&!(e.tech||(L&&L.tips))&&!(L&&(L.group||L.mat))&&!video&&!okLink?' bare':'')+'"><div class="exo-l">'+media+((e.tech||(L&&L.tips))?'<p class="tech"><b>Técnica</b>'+esc(e.tech||L.tips)+'</p>':'')+'</div>'+(e.x?'<div class="rx xnote"><p><span aria-hidden="true">➕</span> Ejercicio añadido por ti. Se guarda solo en tu registro de este día: tu plan no cambia.</p><button type="button" class="btn danger-l" data-act="xDel" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Quitar ejercicio</button></div>':rx)+'<div class="exo-r todo"><div class="todo-h"><span class="todo-t">Tu turno</span><span class="todo-s">La rueda se abre en lo pautado: solo ajusta lo que hayas hecho. Se guarda sola mientras rellenas, aunque cierres la app.</span></div><div class="exo-opt">'+varSel+eqSel+bwBtn+chainBtn+'</div>'+(prev&&!(S.why&&/última vez/i.test(S.why))?'<div class="prev"><b>↺ La última vez</b> ('+dshort(prev.ts)+'): '+prev.sets.map(s=>prev.u==='s'?setTxt(s,'s'):s[0]>0?fmtN(s[0])+' kg × '+s[1]:s[1]+' reps').join(' · ')+'</div>':'')+rows+
    noteBox+
-   (ed?'<p class="ed-h">Corrige lo que necesites y guarda. Tu entrenador verá que lo has actualizado.</p><div class="ed-a"><button type="button" class="btn danger-l" data-act="clearEx" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Borrar todo</button><button type="button" class="btn" data-act="editEx" data-e="'+e.id+'" data-w="'+wi+'">Cancelar</button><button type="button" class="btn primary" data-act="send" data-e="'+e.id+'" data-w="'+wi+'">Guardar cambios</button></div>':done?'<div class="ed-a"><span class="sent-ok">✓ Enviado'+(lg?' el '+dmy(new Date(lg.ts))+(lg.edited?' · corregido':''):'')+'</span>'+(lg?'<button type="button" class="btn" data-act="setMore" data-e="'+e.id+'" data-w="'+wi+'">+ Añadir una serie</button><button type="button" class="btn" data-act="editEx" data-e="'+e.id+'" data-w="'+wi+'">✎ Corregir datos</button><button type="button" class="btn danger-l" data-act="clearEx" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Borrar</button>':'')+'</div>':'<button type="button" class="btn fin-ex" data-act="send" data-e="'+e.id+'" data-w="'+wi+'">Terminar ejercicio</button><p class="fin-h">Cuando acabes todas las series, tócalo para enviarlo.</p>')+'</div></div></div>';
+   (ed?'<p class="ed-h">Corrige lo que necesites y guarda. Tu entrenador verá que lo has actualizado.</p><div class="ed-a"><button type="button" class="btn danger-l" data-act="clearEx" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Borrar todo</button><button type="button" class="btn" data-act="editEx" data-e="'+e.id+'" data-w="'+wi+'">Cancelar</button><button type="button" class="btn primary" data-act="send" data-e="'+e.id+'" data-w="'+wi+'">Guardar cambios</button></div>':done?'<div class="ed-a"><span class="sent-ok">✓ Enviado'+(lg?' el '+dmy(new Date(lg.ts))+(lg.edited?' · corregido':''):'')+'</span>'+(lg?'<button type="button" class="btn" data-act="setMore" data-e="'+e.id+'" data-w="'+wi+'">+ Añadir una serie</button><button type="button" class="btn" data-act="editEx" data-e="'+e.id+'" data-w="'+wi+'">✎ Corregir datos</button><button type="button" class="btn danger-l" data-act="clearEx" data-e="'+e.id+'" data-w="'+wi+'" data-confirm>🗑 Borrar</button>':'')+'</div>':'<button type="button" class="btn fin-ex" data-act="send" data-e="'+e.id+'" data-w="'+wi+'">Terminar ejercicio</button><p class="fin-h">Cuando acabes todas las series, tócalo para enviarlo.</p>'+(e.x?'':'<button type="button" class="linkbtn ex-skip" data-act="exSkip" data-e="'+(e0||e).id+'" data-w="'+wi+'">Hoy no lo hago · quitar de esta sesión</button>'))+'</div></div></div>';
 }
 /* resumen de la sesión terminada: kilos movidos frente a la última vez, series hechas y en qué ha mejorado */
 function sesSum(c,d,w){
@@ -14518,7 +14535,8 @@ function clientTrain(c,days,di,d){
   const B0=baseOf(c,d),VV=[B0].concat(varsOf(c,B0)),vlab=x=>x.place||(x===B0?'Original':x.name);
   const vsel=VV.length>1?'<div class="td-var" role="group" aria-label="¿Dónde entrenas hoy?"><span>¿Dónde entrenas hoy?</span>'+VV.map(x=>'<button type="button" class="td-vb'+(dayDoneC1(c,x,w)?' done':'')+'" data-act="cday" data-i="'+days.indexOf(x)+'" aria-pressed="'+(x===d)+'">'+(dayDoneC1(c,x,w)?'✓ ':'')+esc(vlab(x))+'</button>').join('')+'</div>':'';
   const prN=d.exs.filter(e=>{const l=logFor(c,e.id,w);return l&&l.pr}).length;
-  const fin=tot&&sentN===tot?'<div class="ses-done"><span aria-hidden="true">🎉</span><div><b>¡Sesión completada!</b><small>'+tot+' ejercicios enviados a tu entrenador'+(prN?' · '+prN+(prN===1?' récord':' récords')+' 🏆':'')+'</small></div>'+sesSum(c,d,w)+'<button type="button" class="btn ses-card" data-act="sesC" data-d="'+d.id+'" data-w="'+w+'">✦ Ver la tarjeta de la sesión</button>'+(w===cw&&!state.logTs?'<button type="button" class="btn ses-rep" data-act="repDay" data-d="'+B0.id+'" data-w="'+w+'">↺ Repetir este día hoy</button>':'')+'</div>'+ldAsk(c,d,w):'';
+  const nSk=c.xSkip?d.exs.filter(e=>!logFor(c,e.id,w)&&skipOf(c,e,w)).length:0;
+  const fin=tot&&sentN===tot&&nSk<tot?'<div class="ses-done"><span aria-hidden="true">🎉</span><div><b>¡Sesión completada!</b><small>'+(tot-nSk)+((tot-nSk)===1?' ejercicio enviado':' ejercicios enviados')+' a tu entrenador'+(nSk?' · '+nSk+(nSk===1?' quitado':' quitados'):'')+(prN?' · '+prN+(prN===1?' récord':' récords')+' 🏆':'')+'</small></div>'+sesSum(c,d,w)+'<button type="button" class="btn ses-card" data-act="sesC" data-d="'+d.id+'" data-w="'+w+'">✦ Ver la tarjeta de la sesión</button>'+(w===cw&&!state.logTs?'<button type="button" class="btn ses-rep" data-act="repDay" data-d="'+B0.id+'" data-w="'+w+'">↺ Repetir este día hoy</button>':'')+'</div>'+ldAsk(c,d,w):'';
   const rs=r=>{const s=String(r||'').trim();let m2=/^(\d+)\s*[-–]\s*(\d+)\s*s$/.exec(s);if(m2&&+m2[1]%60===0&&+m2[2]%60===0)return (+m2[1]/60)+'-'+(+m2[2]/60)+' min';m2=/^(\d+)\s*s?$/.exec(s);if(m2){const v=+m2[1];return v>=60?(v%60?Math.floor(v/60)+':'+String(v%60).padStart(2,'0'):v/60)+' min':v+' s'}return s};
   const okey=d.id+'@'+w;let op=state.exO[okey];
   if(op===undefined){const nx=d.exs.find(e=>!doneEx(c,e,w));op=nx?nx.id:''}
@@ -14527,7 +14545,9 @@ function clientTrain(c,days,di,d){
     const lg=logFor(c,e0.id,w),e=exEff(c,e0,lg),S=suggest(c,e,w),done=doneEx(c,e,w),L=libFor(e.name),ph=L&&L.photo,isO=op===e.id;
     const kg=S.kgTxt?S.kgTxt:S.kg>0?fmtN(S.kg)+' kg':'',reps=/[^\d\s]/.test(String(e.reps||''))?e.reps:(S.reps||e.reps);
     const line=e.x?'Añadido por ti':[(S.sets||e.sets)+' × '+reps,kg,'RIR '+W.rir,e.rest?'⏱ '+rs(e.rest):''].filter(Boolean).join(' · ');
-    const dl=lg&&lg.sets?lg.sets.map(s=>setTxt(s,lg.u)).join(' · '):'';
+    const dl=lg&&lg.sets?lg.sets.map(s=>setTxt(s,lg.u)).join(' · '):'',sk=!lg&&!e0.x&&skipOf(c,e0,w);
+    /* 17 nov: quitado solo en esta sesión: cuenta como hecho; «Volver a ponerlo» lo devuelve */
+    if(sk)return '<article class="tx done skip'+(isO?' open':'')+'" id="tx-'+e.id+'" data-d="'+d.id+'" data-dn="'+esc(d.name)+'"><button type="button" class="tx-h" data-act="exT" data-k="'+okey+'" data-e="'+e.id+'" aria-expanded="'+isO+'">'+(ph?'<img class="tx-ph" src="'+esc(mURL(ph))+'\" alt="">':'<span class="tx-ph none" aria-hidden="true">'+(idx+1)+'</span>')+'<span class="tx-t"><b>'+(idx+1)+'. '+esc(e.name)+'</b><span>Quitado de esta sesión</span></span><span class="tx-ok sk" aria-label="Quitado">–</span><span class="tx-ch" aria-hidden="true"></span></button>'+(isO?'<div class="tx-b"><div class="xskip"><p>Hoy no lo haces: tu entrenador lo verá como <b>Quitado</b>. Tu plan no cambia y la próxima vez que toque este día volverá a salir.</p><button type="button" class="btn" data-act="exUnskip" data-s="'+esc(sk.id)+'">↺ Volver a ponerlo</button></div></div>':'')+'</article>';
     return '<article class="tx'+(done?' done':'')+(isO?' open':'')+'" id="tx-'+e.id+'" data-d="'+d.id+'" data-dn="'+esc(d.name)+'"><button type="button" class="tx-h" data-act="exT" data-k="'+okey+'" data-e="'+e.id+'" aria-expanded="'+isO+'">'+(ph?'<img class="tx-ph" src="'+esc(mURL(ph))+'\" alt="">':'<span class="tx-ph none" aria-hidden="true">'+(idx+1)+'</span>')+'<span class="tx-t"><b>'+(idx+1)+'. '+esc(e.name)+(e.orig?' <small class="tx-var">variante</small>':'')+'</b><span>'+(!done&&exnFind(c,e,e0)?'<i class="tx-pin">📌 Nota de '+esc(coachName())+'</i> ':'')+esc(done&&dl?'Hecho: '+dl:line)+'</span></span>'+(done?'<span class="tx-ok" aria-label="Hecho">✓</span>':'')+'<span class="tx-ch" aria-hidden="true"></span></button>'+(isO?'<div class="tx-b">'+exoCard(e,idx,W,w,c,e0)+'</div>':'')+'</article>'};
   const libO=state.lib.slice().sort((a,b)=>String(a.group).localeCompare(b.group,'es')||String(a.name).localeCompare(b.name,'es')),grp=[...new Set(libO.map(x=>x.group||'Otros'))];
   const xadd=state.xAdd===okey?'<div class="xadd-f"><b>Añadir un ejercicio a esta sesión</b><p class="muted">Solo queda en tu registro de este día. Tu plan no cambia.</p><label><span>Elige de la lista</span><select class="in" id="xaSel"><option value="">Elige un ejercicio…</option>'+grp.map(g=>'<optgroup label="'+esc(g)+'">'+libO.filter(x=>(x.group||'Otros')===g).map(x=>'<option>'+esc(x.name)+'</option>').join('')+'</optgroup>').join('')+'</select></label><label><span>O escribe el nombre</span><input class="in" id="xaName" placeholder="Ej.: Curl martillo"></label><div class="actions"><button type="button" class="btn" data-act="xAddNo">Cancelar</button><button type="button" class="btn primary" data-act="xAddOk" data-d="'+d.id+'" data-w="'+w+'" data-k="'+okey+'">Añadir</button></div></div>':'<button type="button" class="btn add-ex" data-act="xAdd" data-k="'+okey+'">+ Añadir un ejercicio</button>';
@@ -15486,6 +15506,13 @@ document.addEventListener('click',e=>{
     case 'xAddOk':{const nm=($('#xaName').value.trim()||$('#xaSel').value).slice(0,80);if(!nm){toast('Elige o escribe un ejercicio');break}
       const w=+t.dataset.w,r=ctxRange(c,w),x={id:'x'+nid(),d:t.dataset.d,w,k:r?isoOf(r[0]):'',name:nm,ts:Date.now()};c.xEx=(c.xEx||[]).concat([x]);state.xAdd=null;state.exO[t.dataset.k]=x.id;renderMain();
       const o=document.getElementById('tx-'+x.id);if(o)o.scrollIntoView({block:'start',behavior:'smooth'});toast('Ejercicio añadido a tu sesión');break}
+    /* 17 nov: quitar un ejercicio solo de esta sesión (va con la sesión ya hecha esa semana, si la hay); el plan no cambia */
+    case 'exSkip':{const w=+t.dataset.w,f=findEx(c,t.dataset.e);if(!f||logFor(c,t.dataset.e,w))break;const tx0=t.closest('.tx'),last=!state.logTs&&(state.vw==null||state.vw===clientWeek(c))&&!$$('.tx-l .tx:not(.done)').some(x=>x!==tx0);
+      const r=ctxRange(c,w)||repR(c,f.e.id,w)||wkWin(c,w),L=c.log.filter(l=>l.w===w&&(!r||l.ts>=r[0]&&l.ts<r[1])&&f.d.exs.some(x=>x.id===lxId(c,l))).sort((a,b)=>b.ts-a.ts)[0];
+      const ts=state.logTs||(L&&isoOf(L.ts)!==isoOf(Date.now())?L.ts+1:Date.now());
+      c.xSkip=(c.xSkip||[]).filter(s=>!(s.e===f.e.id&&s.w===w&&(!r||s.ts>=r[0]&&s.ts<r[1]))).concat([{id:'k'+nid(),e:f.e.id,d:f.d.id,dn:f.d.name,ex:(c.exVar&&c.exVar[f.e.id])||f.e.name,w,ts,fresh:true}]);
+      delete state.exO[f.d.id+'@'+w];renderRail();renderMain();if(last&&L&&isoOf(L.ts)===isoOf(Date.now())){restStop(true);sesEnd(c,tx0)}toast('Quitado de esta sesión. Tu plan no cambia');break}
+    case 'exUnskip':{const s0=(c.xSkip||[]).find(s=>s.id===t.dataset.s);if(!s0)break;c.xSkip=c.xSkip.filter(s=>s!==s0);if(!c.xSkip.length)delete c.xSkip;state.exO[s0.d+'@'+s0.w]=s0.e;renderRail();renderMain();toast('Vuelve a estar en tu sesión');break}
     case 'xDel':{const w=+t.dataset.w,L0=logFor(c,t.dataset.e,w);if(L0)c.log=c.log.filter(l=>l!==L0);draftDel(c,t.dataset.e,w);c.xEx=(c.xEx||[]).filter(x=>x.id!==t.dataset.e);if(!c.xEx.length)delete c.xEx;renderRail();renderMain();toast('Ejercicio quitado');break}
     case 'sendPlan':{const card=t.closest('[data-ex]');if(card)$$('.setrow2',card).forEach(r=>{const k=r.querySelector('.setkg'),rp=r.querySelector('.setreps'),ok=r.querySelector('.setok');if(!k.value&&k.dataset.t)k.value=k.dataset.t;if(!rp.value&&rp.dataset.t)rp.value=rp.dataset.t;uniFill(r);if(ok)ok.checked=true});const b=card&&card.querySelector('[data-act=send]');if(b)b.click();break}
     case 'send':{const k0=Object.keys(state.exO),ex0=t.closest('.exo'),tx0=t.closest('.tx'),last=ex0&&tx0&&!ex0.classList.contains('editing')&&!state.logTs&&(state.vw==null||state.vw===clientWeek(c))&&!$$('.tx-l .tx:not(.done)').some(x=>x!==tx0);sendEx(c,t.dataset.e,t);if(last){restStop(true);sesEnd(c,tx0)}const d0=c.training.days[cdayFor(c)],w0=state.vw!=null?state.vw:clientWeek(c);if(d0&&doneEx(c,(findEx(c,t.dataset.e)||{}).e||{},w0)){delete state.exO[d0.id+'@'+w0];renderMain();setTimeout(()=>{const o=$('.tx.open');if(o)o.scrollIntoView({behavior:'smooth',block:'start'})},60)}break}
@@ -16092,7 +16119,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117113028';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117114116';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -16825,6 +16852,7 @@ function relink(c,old){
   const ol=rlKeys(old),M={};Object.keys(ol).forEach(id=>{if(cur[id])return;const n=ol[id].map(k=>by[k]).find(Boolean);if(n)M[id]=n});
   if(!Object.keys(M).length)return 0;let n=0;const mp=id=>{if(M[id]){n++;return M[id]}return id};
   (c.log||[]).forEach(l=>{if(l&&l.exId&&M[l.exId])l.exId=mp(l.exId)});
+  (c.xSkip||[]).forEach(x=>{if(x&&M[x.e])x.e=mp(x.e)});
   const eatFix=a=>Array.isArray(a)&&a.forEach((x,i)=>{if(Array.isArray(x))a[i]=x.map(mp).filter((v,k,z)=>z.indexOf(v)===k)});
   const altFix=a=>Array.isArray(a)&&a.forEach(o=>o&&Object.keys(o).forEach(k=>{if(M[k]){if(!(M[k] in o))o[M[k]]=o[k];delete o[k];n++}}));
   eatFix(c.eat);Object.values(c.hab||{}).forEach(H=>{if(H){if(H.eat!==c.eat)eatFix(H.eat);altFix(H.alt)}});

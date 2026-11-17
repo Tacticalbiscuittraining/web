@@ -444,6 +444,10 @@
 "al": [
 "huevo",
 "huevos m"
+],
+"ud": [
+55,
+"huevo M"
 ]
 },
 {
@@ -457,6 +461,10 @@
 "sw": true,
 "al": [
 "claras",
+"clara"
+],
+"ud": [
+33,
 "clara"
 ]
 },
@@ -924,6 +932,10 @@
 "al": [
 "tortitas",
 "tortita de arroz"
+],
+"ud": [
+8,
+"tortita"
 ]
 },
 {
@@ -1190,6 +1202,10 @@
 "platanos",
 "plátanos",
 "banana"
+],
+"ud": [
+120,
+"plátano"
 ]
 },
 {
@@ -1201,7 +1217,11 @@
 "fib": 2.4,
 "src": "USDA: Apples, raw, golden delicious, with skin",
 "sw": true,
-"al": []
+"al": [],
+"ud": [
+150,
+"manzana"
+]
 },
 {
 "n": "Pera",
@@ -1223,7 +1243,11 @@
 "fib": 3.0,
 "src": "USDA: Kiwifruit, green, raw",
 "sw": true,
-"al": []
+"al": [],
+"ud": [
+75,
+"kiwi"
+]
 },
 {
 "n": "Naranja",
@@ -1234,7 +1258,11 @@
 "fib": 2.4,
 "src": "USDA: Oranges, raw, all commercial varieties",
 "sw": true,
-"al": []
+"al": [],
+"ud": [
+150,
+"naranja"
+]
 },
 {
 "n": "Fresas",
@@ -1757,7 +1785,11 @@
 "fib": 0,
 "src": "BEDCA: Huevo de gallina, hervido, duro (id 2126)",
 "sw": false,
-"al": []
+"al": [],
+"ud": [
+55,
+"huevo"
+]
 },
 {
 "n": "Huevo frito",

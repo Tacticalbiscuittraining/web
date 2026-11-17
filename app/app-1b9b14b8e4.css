@@ -3445,6 +3445,8 @@ html:has(.dsh .xa-pk),html:has(.dsh .xa-pk) body{overflow:hidden}
 /* 17 nov: unidades (huevos, fruta…) bajo la rueda de cantidad */
 .dsh .swg-ud{margin:0;font-size:13px;line-height:1.3;color:var(--muted);text-align:center}
 .dsh .swg-ud b{color:var(--fg);font-weight:700;font-size:15px}
+/* 17 nov: con la hoja de cantidad o «Añadir» abierta, la página no rebota al estirar hacia abajo (se sigue pudiendo desplazar) */
+html:has(.dsh),html:has(.dsh) body{overscroll-behavior-y:none}
 
 /* ---------- 7 nov 2026 · Cristal en paneles, ventanas y botones (toda la app) ----------
    Estilo iOS actual (Liquid Glass), igual que la hoja de cantidad de Dieta: translúcido con desenfoque suave,

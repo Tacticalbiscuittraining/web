@@ -3814,6 +3814,13 @@ body:has(.p-dock) .rt2.mini .rt-mini{bottom:calc(150px + env(safe-area-inset-bot
 .td-dr-b:active{transform:scale(.96)}
 .td-full{display:grid;gap:6px;justify-items:start;padding:12px 14px;margin-bottom:8px;border-radius:14px;border:1px dashed color-mix(in srgb,#3FE0CC 60%,transparent)}
 .td-full b{font-size:17px}.td-full span{font-size:14px;opacity:.8}
+/* 17 nov (2): todos los días a la vista con ✓ y «＋» a la derecha para empezar otro entreno */
+.td-p.td-plus{min-width:44px;justify-content:center;font-size:18px;font-weight:800;border-style:dashed;border-color:color-mix(in srgb,#3FE0CC 65%,transparent);color:#3FE0CC}
+.td-p.td-plus.on{border-style:solid;background:color-mix(in srgb,#2A9D8F 22%,transparent);font-size:14px}
+.td-menu{display:grid;gap:6px;margin-top:8px;padding:12px 14px;border-radius:14px;border:1px solid color-mix(in srgb,#3FE0CC 50%,transparent);background:var(--surface)}
+.td-menu b{font-size:16px}.td-menu>span{font-size:13px;opacity:.75}
+.td-mb{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.td-dr-b.own{border-style:dashed;border-color:color-mix(in srgb,#3FE0CC 65%,transparent)}
 
 /* 8 nov · Controles de la derecha (e iconos de la izquierda) centrados en vertical respecto a toda la fila */
 /* Dieta: gramos y ✕ en medio de nombre + línea de kcal (si la 2ª línea es una etiqueta larga de cambio, se queda como estaba para no cortarla) */
@@ -9655,7 +9662,7 @@ const first=n=>String(n).trim().split(/\s+/)[0]||'';
 const initials=n=>String(n).trim().split(/\s+/).slice(0,2).map(s=>s[0]||'').join('').toUpperCase()||'?';
 function ago(ts){const s=Math.max(0,Date.now()-ts);const m=Math.round(s/M);if(m<1)return 'ahora mismo';if(m<60)return 'hace '+m+' min';const h=Math.round(s/H);if(h<24)return 'hace '+h+' h';const d=Math.round(s/D);return d===1?'ayer':'hace '+d+' días';}
 function findDay(c,id){return c.training.days.find(d=>d.id===id)}
-function findEx(c,id){for(const d of c.training.days){const e=d.exs.find(x=>x.id===id);if(e)return{d,e}}const x=(c.xEx||[]).find(x=>x.id===id);if(x)return{d:c.training.days.find(d=>d.id===x.d)||{name:'Entreno'},e:{id:x.id,name:x.name,sets:'3',reps:'10',rest:'',x:1}};return null}
+function findEx(c,id){for(const d of c.training.days){const e=d.exs.find(x=>x.id===id);if(e)return{d,e}}const x=(c.xEx||[]).find(x=>x.id===id);if(x)return{d:c.training.days.find(d=>d.id===x.d)||{id:x.d,name:x.d==='mio'?'Mi entreno':'Entreno'},e:{id:x.id,name:x.name,sets:'3',reps:'10',rest:'',x:1}};return null}
 function plannedFor(c,name){for(const d of c.training.days){const e=d.exs.find(x=>x.name.trim().toLowerCase()===String(name).trim().toLowerCase());if(e)return e}return null}
 function freshLogs(c){return c.log.filter(l=>l.fresh).length}
 function freshMsgs(c){return c.msgs.filter(m=>m.fresh&&m.from==='client').length}
@@ -14605,19 +14612,19 @@ function clientTrain(c,days,di,d){
   /* 17 nov: en la semana actual los días ya hechos se apartan: solo salen para entrenar los que faltan; los hechos van en «✓ Hechos» (ver/corregir o repetir hoy) */
   const tdNow=w===cw&&!state.logTs,tdD=x=>!x.of&&x.exs.length&&dayDoneC(c,x,w),tdDn=tdNow?days.filter(tdD):[],tdPd=days.filter(x=>!x.of&&!tdD(x)),tdAll=tdNow&&!tdPd.some(x=>x.exs.length)&&tdDn.length>0,tdView=tdDn.indexOf(baseOf(c,d))>=0;
   const tdWhen=x=>{const L=x.exs.concat(...varsOf(c,x).map(v=>v.exs)).map(e=>logFor(c,e.id,w)).filter(Boolean).sort((a,b)=>b.ts-a.ts)[0];if(!L)return '';const t=new Date(L.ts);return t.getTime()>=dayStart(0,todayIdx())?'hoy':DAYS_S[(t.getDay()+6)%7].toLowerCase()+' '+t.getDate()};
-  const tdOpen=tdAll||tdView||state.tdDn===true;
-  /* semana completa sin haber elegido día: solo la tarjeta y la lista (el día se abre con «Ver / corregir») */
-  const tdHide=tdAll&&state.cday==null&&!dayLogs(c,todayIdx(),0).length;
-  const tdOn=x=>!tdHide&&x===baseOf(c,d);
-  const tdList=tdDn.length&&tdOpen?'<div class="td-dl">'+tdDn.map(x=>'<div class="td-dr'+(tdOn(x)?' on':'')+'"><span class="td-dn-t"><i aria-hidden="true">✓</i><b>'+esc(x.name)+'</b>'+(tdWhen(x)?'<small>hecho '+(tdWhen(x)==='hoy'?'hoy':'el '+esc(tdWhen(x)))+'</small>':'')+'</span><span class="td-dr-a">'+(tdOn(x)?'':'<button type="button" class="td-dr-b" data-act="cday" data-i="'+days.indexOf(x)+'">Ver / corregir</button>')+'<button type="button" class="td-dr-b rep" data-act="repDay" data-d="'+x.id+'" data-w="'+w+'">↺ Repetir hoy</button></span></div>').join('')+'</div>':'';
-  const tdFull=tdAll?'<div class="td-full"><b>✓ Semana completa · ¿entrenas hoy igualmente?</b><span>Ya has hecho '+(tdDn.length===1?'tu entreno':'tus '+tdDn.length+' entrenos')+'. Repite uno aquí abajo o apunta otra actividad.</span></div>':'';
-  const pills=!tdNow||!tdDn.length?pills0:tdFull+'<div class="td-pills" role="group" aria-label="Día de entrenamiento">'+tdPd.map(x=>'<button type="button" class="td-p" data-act="cday" data-i="'+days.indexOf(x)+'" aria-pressed="'+(x===baseOf(c,d))+'">'+esc(x.name)+(x.wd>=0?' · '+DAYS_S[x.wd]:'')+(x.wd===todayIdx()?'<span class="hoy">Hoy</span>':'')+'</button>').join('')+(tdAll?'':'<button type="button" class="td-p td-dn'+(tdOpen?' open':'')+'" data-act="tdDn" aria-expanded="'+tdOpen+'">✓ Hechos ('+tdDn.length+') <span aria-hidden="true">'+(tdOpen?'▴':'▾')+'</span></button>')+'</div>'+tdList;
+  const tdFree=d.id==='mio';
+  /* semana completa sin haber elegido día: solo la tarjeta (el día se abre tocándolo) */
+  const tdHide=tdAll&&!tdFree&&state.cday==null&&!dayLogs(c,todayIdx(),0).length;
+  /* 17 nov: «＋» a la derecha de los días: empezar otro entreno (repetir uno de los días pautados o crear el tuyo) */
+  const tdMenu=tdNow&&state.tdPlus?'<div class="td-menu" role="dialog" aria-label="Empezar un entreno"><b>Empezar un entreno</b><span>Repite uno de tus días o crea tu propio entreno. Lo que ya hiciste queda guardado.</span><div class="td-mb">'+days.filter(x=>!x.of&&x.exs.length).map(x=>tdD(x)?'<button type="button" class="td-dr-b rep" data-act="repDay" data-d="'+x.id+'" data-w="'+w+'">↺ Repetir '+esc(x.name)+'</button>':'<button type="button" class="td-dr-b" data-act="cday" data-i="'+days.indexOf(x)+'">▶ '+esc(x.name)+'</button>').join('')+'<button type="button" class="td-dr-b own" data-act="tdFree" data-w="'+w+'">✎ Crear mi propio entreno</button></div></div>':'';
+  const tdFull=tdAll&&!tdFree?'<div class="td-full"><b>✓ Semana completa · ¿entrenas hoy igualmente?</b><span>Toca un día para verlo o corregirlo, o toca <b>＋</b> para repetir uno o crear tu propio entreno.</span></div>':'';
+  const pills=!tdNow?pills0:tdFull+(tdHide?pills0.replace('aria-pressed="true"','aria-pressed="false"'):pills0).slice(0,-6)+'<button type="button" class="td-p td-plus'+(state.tdPlus||tdFree?' on':'')+'" data-act="tdPlus" aria-expanded="'+!!state.tdPlus+'" aria-label="Empezar otro entreno: repetir un día o crear el tuyo">'+(tdFree?'✎ Mi entreno':'＋')+'</button></div>'+tdMenu;
 
   const fold=(cls,title,txt)=>txt?'<details class="tfold '+cls+'"><summary><b>'+title+'</b><span>'+esc(String(txt).split('\n')[0])+'</span></summary><p>'+esc(txt)+'</p></details>':'';
   const st0=w===cw&&!state.logTs&&tot&&sentN<tot?sesT0(c,d.id,d.name):0;
   /* 17 nov: «Repetir hoy» junto al nombre del día si ya se hizo (o se empezó) otro día de esta semana */
   const rp0=!state.logTs&&repOf(c),rpHd=w===cw&&!state.logTs&&!(rp0&&rp0.w===w&&rp0.d.indexOf(d.id)>=0)&&(l=>l&&l.ts<dayStart(0,todayIdx()))(d.exs.map(e=>logFor(c,e.id,w)).filter(Boolean).sort((a,b)=>b.ts-a.ts)[0]);
-  const dh='<section class="td-h"><div class="td-hl"><h3>'+esc(d.name)+'</h3>'+(d.focus?'<p>'+esc(d.focus)+'</p>':'')+'<p class="td-meta">'+[d.dur?esc(d.dur)+' min':'',d.place?esc(d.place):''].filter(Boolean).join(' · ')+(st0?'<span class="ses-clk" title="Tiempo de sesión"><i aria-hidden="true">⏱</i><b data-sest0="'+st0+'">'+hms((Date.now()-st0)/1000)+'</b></span>':'')+'</p>'+(rpHd?'<button type="button" class="td-rep" data-act="repDay" data-d="'+baseOf(c,d).id+'" data-w="'+w+'">↺ Repetir hoy</button>':'')+'</div><div class="td-pr" role="img" aria-label="'+sentN+' de '+tot+' ejercicios hechos"><b>'+sentN+'<small>/'+tot+'</small></b><span>hechos</span></div></section>';
+  const dh='<section class="td-h"><div class="td-hl"><h3>'+esc(d.name)+'</h3>'+(d.focus?'<p>'+esc(d.focus)+'</p>':'')+'<p class="td-meta">'+[d.dur?esc(d.dur)+' min':'',d.place?esc(d.place):''].filter(Boolean).join(' · ')+(st0?'<span class="ses-clk" title="Tiempo de sesión"><i aria-hidden="true">⏱</i><b data-sest0="'+st0+'">'+hms((Date.now()-st0)/1000)+'</b></span>':'')+'</p>'+(rpHd?'<button type="button" class="td-rep" data-act="repDay" data-d="'+baseOf(c,d).id+'" data-w="'+w+'">↺ Repetir hoy</button>':'')+'</div>'+(d.id==='mio'?'':'<div class="td-pr" role="img" aria-label="'+sentN+' de '+tot+' ejercicios hechos"><b>'+sentN+'<small>/'+tot+'</small></b><span>hechos</span></div>')+'</section>';
   const B0=baseOf(c,d),VV=[B0].concat(varsOf(c,B0)),vlab=x=>x.place||(x===B0?'Original':x.name);
   const vsel=VV.length>1?'<div class="td-var" role="group" aria-label="¿Dónde entrenas hoy?"><span>¿Dónde entrenas hoy?</span>'+VV.map(x=>'<button type="button" class="td-vb'+(dayDoneC1(c,x,w)?' done':'')+'" data-act="cday" data-i="'+days.indexOf(x)+'" aria-pressed="'+(x===d)+'">'+(dayDoneC1(c,x,w)?'✓ ':'')+esc(vlab(x))+'</button>').join('')+'</div>':'';
   const prN=d.exs.filter(e=>{const l=logFor(c,e.id,w);return l&&l.pr}).length;
@@ -14626,7 +14633,7 @@ function clientTrain(c,days,di,d){
   const rs=r=>{const s=String(r||'').trim();let m2=/^(\d+)\s*[-–]\s*(\d+)\s*s$/.exec(s);if(m2&&+m2[1]%60===0&&+m2[2]%60===0)return (+m2[1]/60)+'-'+(+m2[2]/60)+' min';m2=/^(\d+)\s*s?$/.exec(s);if(m2){const v=+m2[1];return v>=60?(v%60?Math.floor(v/60)+':'+String(v%60).padStart(2,'0'):v/60)+' min':v+' s'}return s};
   const okey=d.id+'@'+w;let op=state.exO[okey];
   if(op===undefined){const nx=d.exs.find(e=>!doneEx(c,e,w));op=nx?nx.id:''}
-  const xk=(r=>r?isoOf(r[0]):'')(ctxRange(c,w)),xs=(c.xEx||[]).filter(x=>x.d===d.id&&x.w===w&&(x.k||'')===xk).map(x=>({id:x.id,name:x.name,sets:'3',reps:'10',rest:'',x:1}));
+  const xk=(r=>r?isoOf(r[0]):'')(ctxRange(c,w)||(d.id==='mio'?[dayStart(0,todayIdx())]:null)),xs=(c.xEx||[]).filter(x=>x.d===d.id&&x.w===w&&(x.k||'')===xk).map(x=>({id:x.id,name:x.name,sets:'3',reps:'10',rest:'',x:1}));
   const art=(e0,idx)=>{
     const lg=logFor(c,e0.id,w),e=exEff(c,e0,lg),S=suggest(c,e,w),done=doneEx(c,e,w),L=libFor(e.name),ph=L&&L.photo,isO=op===e.id;
     const kg=S.kgTxt?S.kgTxt:S.kg>0?fmtN(S.kg)+' kg':'',reps=/[^\d\s]/.test(String(e.reps||''))?e.reps:(S.reps||e.reps);
@@ -14644,7 +14651,7 @@ function clientTrain(c,days,di,d){
   const rpB=rpOn?'<div class="wkban cal-log rep-on"><div><b>↺ Repitiendo '+esc(d.name)+' hoy</b><span>'+(rpL?'Lo del '+dshort(rpL.ts)+' queda guardado y te sale como «La última vez».':'Lo anterior queda guardado.')+'</span></div><div class="actions"><button type="button" class="btn" data-act="repX">Cancelar</button></div></div>':'';
   const oth=(lt?'<div class="wkban cal-log"><div><b>📅 Registrando el '+DAYS[(lt.getDay()+6)%7].toLowerCase()+' '+lt.getDate()+' de '+MESES[lt.getMonth()]+'</b><span>Lo que envíes quedará guardado en ese día.</span></div><div class="actions"><button type="button" class="btn" data-act="calLogX">Volver a hoy</button></div></div>':'')+(w===cw&&!lt?'<div class="act-top">'+trAsk(c,todayIdx(),0)+'</div>':'');
   {const ti=todayIdx(),mk=trMark(c,ti,0),acts=dayActs(c,ti,0).filter(a=>!(a.src==='garmin'&&a.type==='Fuerza')),hasLog=dayLogs(c,ti,0).length>0,rdn=runDone(c,ti,0);
-   if(!lt&&w===cw&&!hasLog&&(mk===false||acts.length)&&!state.showRut){
+   if(!lt&&w===cw&&!hasLog&&(mk===false||acts.length)&&!state.showRut&&d.id!=='mio'){
     const msg=rdn&&!acts.length?'':mk===false&&!acts.length?'<div class="rest-card"><span aria-hidden="true">😴</span><div><b>Hoy toca descansar</b><p>Recuperar también es entrenar: descansa, hidrátate y duerme bien.</p></div></div>':'<div class="rest-card act"><span aria-hidden="true">'+actIc(acts[0].type)+'</span><div><b>¡Buen trabajo! Hoy has hecho otra actividad</b><p>'+acts.map(a=>esc((a.type==='Otra'&&a.other?a.other:a.type)+(actSum(a)?' · '+actSum(a):''))).join('<br>')+'</p></div></div>';
     return '<div class="tr2">'+wk+oth+msg+(tdAll?pills:'<button type="button" class="linkbtn rut-show" data-act="showRut">Ver mi rutina de todas formas</button>')+'</div>'}}
   return '<div class="tr2">'+wk+oth+rpB+(state.showRut&&w===cw?'<button type="button" class="linkbtn rut-show" data-act="showRut">Ocultar la rutina</button>':'')+pills+(tdHide?'':dh+vsel+fin+fold('note','Nota de tu entrenador',d.note)+fold('warm','Calentamiento previo',d.warm)+list+fold('warm','Vuelta a la calma',d.cool))+'</div>';
@@ -14870,7 +14877,7 @@ function clientView(c){
   if(state.ctab!=='mensajes')state.mPrev=null;
   if(state.ctab==='inicio')return clientHome(c);
   if(state.ctab==='mensajes'&&!(state.auth&&state.auth.role==='coach')){if(state.mPrev==null)state.mPrev=c.cSeen||0;c.cSeen=Date.now()}
-  const days=c.training.days,di=cdayFor(c),d=days[di];
+  const days=c.training.days,di=cdayFor(c),d=state.ctab==='entreno'&&state.free&&state.vw==null&&!state.logTs?{id:'mio',name:'Mi entreno',focus:'Tu propio entreno de hoy',exs:[]}:days[di];
   let body='';
   if(state.ctab==='perfil')body=clientProfile(c);
   else if(state.ctab==='entreno'&&state.trFs&&typeof trainSheet==='function')body=trFull(c);
@@ -15509,7 +15516,7 @@ document.addEventListener('click',e=>{
       const dv=q('#wDate').value,m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(dv||''),now=new Date(),ts=m?new Date(+m[1],+m[2]-1,+m[3],now.getHours(),now.getMinutes()).getTime():Date.now();
       const odd=q('#wOdd').checked,cond=odd?(q('#wCond').value.trim()||'Condiciones distintas'):'';
       c.chk.push({id:nid(),ts:Math.min(ts,Date.now()),week:clientWeek(c)+1,peso:kg,animo:state.mood||0,cond,comm:q('#wComm').value.trim(),...(state.ck&&Object.keys(state.ck).length?{ck:state.ck}:{}),fresh:true});c.weights.push(kg);state.mood=0;state.ck=null;state.wForm=false;document.body.classList.remove('wz-on');renderMain();renderRail();toast('Peso enviado a tu entrenador');break}
-    case 'cday':state.cday=+t.dataset.i;if(t.closest('.td-dl'))window.scrollTo({top:Math.max(0,($('.td-h')||t).getBoundingClientRect().top+scrollY-90),behavior:'smooth'});renderMain();break;
+    case 'cday':state.cday=+t.dataset.i;state.free=false;state.tdPlus=false;if(t.closest('.td-dl'))window.scrollTo({top:Math.max(0,($('.td-h')||t).getBoundingClientRect().top+scrollY-90),behavior:'smooth'});renderMain();break;
     case 'consentAccept':{c.consent={ts:Date.now(),v:CONSENT_V};renderMain();toast('Consentimiento registrado');break}
     case 'consentRevoke':{c.photos.forEach(p=>{if(typeof mediaGone==='function')mediaGone(p.url);else try{URL.revokeObjectURL(p.url)}catch(_){}});c.photos=[];state.cmp=[];c.consent=null;renderMain();renderRail();toast('Consentimiento retirado y fotos borradas');break}
     case 'swapReset':{const ty=dayKey(c,state.cdd);c.diet.types[ty].meals.forEach(m=>{m.items.forEach(i=>{delete state.swaps[swK(i.id)]});delete state.swaps[xaK(m.id)]});swAuto(c,ty);renderMain();toast('Plan original restablecido');break}
@@ -15532,8 +15539,10 @@ document.addEventListener('click',e=>{
     case 'calLog':{const ts=+t.dataset.ts,wi=(new Date(ts).getDay()+6)%7,di=t.dataset.d!=null?+t.dataset.d:c.training.days.findIndex(d=>d.wd===wi&&d.exs.length),isT=ts===dayStart(0,todayIdx());state.cal=false;state.logTs=isT?null:ts+12*H;state.vw=isT?null:calWeekOf(c,ts);state.showRut=true;if(di>=0)state.cday=di;renderMain();window.scrollTo({top:0});break}
     case 'rnMv':{const w=+t.dataset.w,i=+t.dataset.i,k=w+'-'+i;if(!c.run.mv)c.run.mv={};if(t.dataset.v==='0'){delete c.run.mv[k];toast('Vuelve a su día del plan')}else{const d=rDay0();d.setDate(d.getDate()+1);const p=rDate(c,w,i);if(p&&rIso(p)===rIso(d))delete c.run.mv[k];else c.run.mv[k]=rIso(d);toast('Pasada a mañana. ¡Mañana toca!')}if(!Object.keys(c.run.mv).length)delete c.run.mv;state.rnEdit='';if(!t.dataset.cal)state.cal=false;renderMain();renderBell();break}
     case 'calRunNo':{const w=+t.dataset.w,i=+t.dataset.i,wd=rWhen(c,w,i),t0=rDay0(),nd=wd&&wd<=t0?wd:t0;if(!c.run.logs)c.run.logs=[];if(!rLog(c,w,i))c.run.logs.push({id:nid(),w,i,st:'no',date:rIso(nd),ts:nd.getTime()+12*H,min:null,km:null,up:null,hr:null,hrmax:null,rpe:null,pain:0,painZ:'',note:'',fresh:true});renderMain();renderBell();toast('Anotado. ¡La próxima sale!');break}
-    case 'repDay':{const w=+t.dataset.w,B=c.training.days.find(x=>x.id===t.dataset.d);if(!B)break;const ids=[B].concat(varsOf(c,B)).map(x=>x.id);repSet(c,{d:ids,w,ts:Date.now()});state.cday=c.training.days.indexOf(B);state.tdDn=false;ids.forEach(i=>delete state.exO[i+'@'+w]);renderMain();window.scrollTo({top:0});toast('Día en blanco: lo anterior queda guardado como «La última vez»');break}
+    case 'repDay':{const w=+t.dataset.w,B=c.training.days.find(x=>x.id===t.dataset.d);if(!B)break;const ids=[B].concat(varsOf(c,B)).map(x=>x.id);repSet(c,{d:ids,w,ts:Date.now()});state.cday=c.training.days.indexOf(B);state.tdDn=false;state.free=false;state.tdPlus=false;ids.forEach(i=>delete state.exO[i+'@'+w]);renderMain();window.scrollTo({top:0});toast('Día en blanco: lo anterior queda guardado como «La última vez»');break}
     case 'tdDn':state.tdDn=!(t.getAttribute('aria-expanded')==='true');if(!state.tdDn){const c0=c.training.days[cdayFor(c)],w0=state.vw!=null?state.vw:clientWeek(c);if(c0&&dayDoneC(c,baseOf(c,c0),w0))state.cday=null}renderMain();break;
+    case 'tdPlus':state.tdPlus=!state.tdPlus;renderMain();break;
+    case 'tdFree':state.free=true;state.tdPlus=false;state.xAdd='mio@'+t.dataset.w;renderMain();{const f=$('.xadd-f');if(f)f.scrollIntoView({block:'center',behavior:'smooth'})}break;
     case 'repX':repSet(c,null);renderMain();break;
     case 'calLogX':state.logTs=null;state.vw=null;state.cday=null;renderMain();break;
     case 'calRun':{state.cal=false;state.ctab='carrera';state.rw=+t.dataset.w;state.rpf=null;const k=t.dataset.w+'-'+t.dataset.i;state.rnEdit=k;renderMain();const el=$('[data-rk="'+k+'"]');if(el)setTimeout(()=>el.scrollIntoView({block:'start',behavior:'smooth'}),60);else window.scrollTo({top:0});break}
@@ -15591,7 +15600,7 @@ document.addEventListener('click',e=>{
     case 'xAdd':state.xAdd=t.dataset.k;renderMain();{const f=$('.xadd-f');if(f)f.scrollIntoView({block:'nearest',behavior:'smooth'})}break;
     case 'xAddNo':state.xAdd=null;renderMain();break;
     case 'xAddOk':{const nm=($('#xaName').value.trim()||$('#xaSel').value).slice(0,80);if(!nm){toast('Elige o escribe un ejercicio');break}
-      const w=+t.dataset.w,r=ctxRange(c,w),x={id:'x'+nid(),d:t.dataset.d,w,k:r?isoOf(r[0]):'',name:nm,ts:Date.now()};c.xEx=(c.xEx||[]).concat([x]);state.xAdd=null;state.exO[t.dataset.k]=x.id;renderMain();
+      const w=+t.dataset.w,r=ctxRange(c,w)||(t.dataset.d==='mio'?[dayStart(0,todayIdx())]:null),x={id:'x'+nid(),d:t.dataset.d,w,k:r?isoOf(r[0]):'',name:nm,ts:Date.now()};c.xEx=(c.xEx||[]).concat([x]);state.xAdd=null;state.exO[t.dataset.k]=x.id;renderMain();
       const o=document.getElementById('tx-'+x.id);if(o)o.scrollIntoView({block:'start',behavior:'smooth'});toast('Ejercicio añadido a tu sesión');break}
     /* 17 nov: quitar un ejercicio solo de esta sesión (va con la sesión ya hecha esa semana, si la hay); el plan no cambia */
     case 'exSkip':{const w=+t.dataset.w,f=findEx(c,t.dataset.e);if(!f||logFor(c,t.dataset.e,w))break;const tx0=t.closest('.tx'),last=!state.logTs&&(state.vw==null||state.vw===clientWeek(c))&&!$$('.tx-l .tx:not(.done)').some(x=>x!==tx0);
@@ -16251,7 +16260,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117122830';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117125100';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);

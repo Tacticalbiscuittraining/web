@@ -15357,8 +15357,8 @@ function sendEx(c,exId,btn){
   const w=+btn.dataset.w,key=exId+'@'+w,kg=$$('.setkg',card),rp=$$('.setreps',card),sets=[];
   /* al corregir, desmarcar «Hecha» en una serie ya registrada la quita */
   const nOld=state.editEx[key]?((logFor(c,exId,w)||{}).sets||[]).length:0;
-  kg.forEach((k,i)=>{const r=num(rp[i].value),row=rp[i].closest('.setrow2'),ok=row&&row.querySelector('.setok');if(i<nOld&&ok&&!ok.checked)return;const sL=row&&row.querySelector('.setrepsL'),sR=row&&row.querySelector('.setrepsR');if(r>0)sets.push(sL&&sR?[num(k.value),r,num(sL.value),num(sR.value)]:[num(k.value),r])});
-  if(!sets.length){const o0=logFor(c,exId,w);if(o0&&state.editEx[key]){clearEx(c,exId,w);return}toast('Añade al menos una serie con repeticiones');return}
+  kg.forEach((k,i)=>{const r=num(rp[i].value),row=rp[i].closest('.setrow2'),ok=row&&row.querySelector('.setok');if(ok&&!ok.checked&&(i<nOld||!state.editEx[key]))return;/* 17 nov (Robert): una serie desmarcada no cuenta aunque conserve los números */const sL=row&&row.querySelector('.setrepsL'),sR=row&&row.querySelector('.setrepsR');if(r>0)sets.push(sL&&sR?[num(k.value),r,num(sL.value),num(sR.value)]:[num(k.value),r])});
+  if(!sets.length){const o0=logFor(c,exId,w);if(o0&&state.editEx[key]){clearEx(c,exId,w);return}toast(state.editEx[key]?'Añade al menos una serie con repeticiones':'Marca como hecha al menos una serie');return}
   const rirV=$('.rirsel',card).value,rir=rirV===''?null:num(rirV),note=$('.cnote',card).value.trim();
   const vn=(c.exVar&&c.exVar[exId])||f.e.name,old=logFor(c,exId,w),prev=bestE1(c,vn,old),nb=Math.max.apply(null,sets.map(x=>e1rm(x[0],x[1]))),pr=!isSecEx(f.e)&&prev>0&&nb>prev+.05,u=isSecEx(f.e)?'s':undefined,eq=card.dataset.eq||undefined;
   if(old&&state.editEx[key]){Object.assign(old,{sets,rir,note,pr,u,eq,edited:true,editTs:Date.now(),fresh:true});delete state.editEx[key];renderRail();renderMain();toast('Datos corregidos: tu entrenador verá el cambio');return}
@@ -16333,7 +16333,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117161132';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117162143';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);

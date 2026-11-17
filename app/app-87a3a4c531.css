@@ -3784,6 +3784,9 @@ body:has(.p-dock) .rt2.mini .rt-mini{bottom:calc(150px + env(safe-area-inset-bot
 .td-menu b{font-size:16px}.td-menu>span{font-size:13px;opacity:.75}
 .td-mb{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .td-dr-b.own{border-style:dashed;border-color:color-mix(in srgb,#3FE0CC 65%,transparent)}
+/* 17 nov (3): «＋» pegado a la derecha del todo; seleccionado (menú abierto o «Mi entreno») con borde naranja */
+.td-pills .td-p.td-plus{margin-left:auto}
+body .td-pills .td-p.td-plus.on,body .td-pills .td-p.td-plus[aria-expanded="true"]{border:2px solid #FF7A4D!important;color:#FF9068;background:color-mix(in srgb,#FF7A4D 14%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,#FF7A4D 22%,transparent)}
 
 /* 8 nov · Controles de la derecha (e iconos de la izquierda) centrados en vertical respecto a toda la fila */
 /* Dieta: gramos y ✕ en medio de nombre + línea de kcal (si la 2ª línea es una etiqueta larga de cambio, se queda como estaba para no cortarla) */

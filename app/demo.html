@@ -3821,6 +3821,9 @@ body:has(.p-dock) .rt2.mini .rt-mini{bottom:calc(150px + env(safe-area-inset-bot
 .td-menu b{font-size:16px}.td-menu>span{font-size:13px;opacity:.75}
 .td-mb{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .td-dr-b.own{border-style:dashed;border-color:color-mix(in srgb,#3FE0CC 65%,transparent)}
+/* 17 nov (3): «＋» pegado a la derecha del todo; seleccionado (menú abierto o «Mi entreno») con borde naranja */
+.td-pills .td-p.td-plus{margin-left:auto}
+body .td-pills .td-p.td-plus.on,body .td-pills .td-p.td-plus[aria-expanded="true"]{border:2px solid #FF7A4D!important;color:#FF9068;background:color-mix(in srgb,#FF7A4D 14%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,#FF7A4D 22%,transparent)}
 
 /* 8 nov · Controles de la derecha (e iconos de la izquierda) centrados en vertical respecto a toda la fila */
 /* Dieta: gramos y ✕ en medio de nombre + línea de kcal (si la 2ª línea es una etiqueta larga de cambio, se queda como estaba para no cortarla) */
@@ -13803,7 +13806,7 @@ function bugSend(){const c=cur(),P=BUGP;if(!c||!P)return;const v=($('#bugTxt').v
     /* los efectos solo al cambiar de pestaña, no al marcar una comida o una serie dentro de ella */
     if(t!==last){b.dataset.ctin=t;clearTimeout(tmr);tmr=setTimeout(()=>{delete b.dataset.ctin},1200)}
     /* Entreno: barra de la sesión de hoy en la cabecera (ejercicios hechos / total) */
-    if(t==='entreno'){const pr=document.querySelector('.td-pr'),hd=document.querySelector('.p-top'),m=pr&&/(\d+) de (\d+)/.exec(pr.getAttribute('aria-label')||'');if(hd&&m&&+m[2]){hd.style.setProperty('--tdp',+m[1]/+m[2]);hd.dataset.tdp=m[1]+'/'+m[2]+' hechos'}}
+    if(t==='entreno'){const pr=document.querySelector('.td-pr'),hd=document.querySelector('.p-top'),m=pr&&/(\d+) de (\d+)/.exec(pr.getAttribute('aria-label')||'');if(hd&&m&&+m[2]&&!state.tdPlus&&!state.tdTop){hd.style.setProperty('--tdp',+m[1]/+m[2]);hd.dataset.tdp=m[1]+'/'+m[2]+' hechos'}else if(hd){hd.style.removeProperty('--tdp');delete hd.dataset.tdp}}
     last=t;
   };
 })();
@@ -13813,6 +13816,9 @@ function ctTitle(c){
   try{
     if(state.cal&&state.ctab==='entreno'){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+(state.calM||0));const m=d.toLocaleDateString('es-ES',{month:'long'});return esc(m.charAt(0).toUpperCase()+m.slice(1))+'<span class="ct-s">'+d.getFullYear()+'</span>'}
     if(state.ctab==='perfil')return 'Tu cuenta<span class="ct-s">Datos, avisos y privacidad</span>';
+    if(state.ctab==='entreno'&&state.tdPlus)return 'Empezar un entreno<span class="ct-s">Elige qué entrenar</span>';
+    if(state.ctab==='entreno'&&state.tdTop==='mio')return 'Mi entreno<span class="ct-s">Tu propio entreno de hoy</span>';
+    if(state.ctab==='entreno'&&state.tdTop==='full')return 'Semana completa<span class="ct-s">¿Entrenas hoy igualmente?</span>';
     if(state.ctab==='entreno'){const d=c.training.days[cdayFor(c)];return d?esc(d.name)+(d.focus?'<span class="ct-s">'+esc(d.focus)+'</span>':''):hi}
     if(state.ctab==='dieta'){const i=ctDietDay(),k=Math.round(totalsT(c,dayKey(c,i)).k);return esc(DAYS[(i+7)%7])+(k?'<span class="ct-s">'+fmtN(k)+' kcal</span>':'')}
     if(state.ctab==='seguimiento'||state.ctab==='fotos'){const w=wSeries(c);if(!w.length)return 'Tu progreso';const l=w[w.length-1].y,dl=Math.round((l-w[0].y)*10)/10;return fmtN(l)+' kg'+(w.length>1&&dl?'<span class="ct-s">'+(dl>0?'+':'−')+fmtN(Math.abs(dl))+' kg</span>':'')}
@@ -14617,8 +14623,9 @@ function clientTrain(c,days,di,d){
   const tdHide=tdAll&&!tdFree&&state.cday==null&&!dayLogs(c,todayIdx(),0).length;
   /* 17 nov: «＋» a la derecha de los días: empezar otro entreno (repetir uno de los días pautados o crear el tuyo) */
   const tdMenu=tdNow&&state.tdPlus?'<div class="td-menu" role="dialog" aria-label="Empezar un entreno"><b>Empezar un entreno</b><span>Repite uno de tus días o crea tu propio entreno. Lo que ya hiciste queda guardado.</span><div class="td-mb">'+days.filter(x=>!x.of&&x.exs.length).map(x=>tdD(x)?'<button type="button" class="td-dr-b rep" data-act="repDay" data-d="'+x.id+'" data-w="'+w+'">↺ Repetir '+esc(x.name)+'</button>':'<button type="button" class="td-dr-b" data-act="cday" data-i="'+days.indexOf(x)+'">▶ '+esc(x.name)+'</button>').join('')+'<button type="button" class="td-dr-b own" data-act="tdFree" data-w="'+w+'">✎ Crear mi propio entreno</button></div></div>':'';
+  state.tdTop=tdFree?'mio':tdHide?'full':'';
   const tdFull=tdAll&&!tdFree?'<div class="td-full"><b>✓ Semana completa · ¿entrenas hoy igualmente?</b><span>Toca un día para verlo o corregirlo, o toca <b>＋</b> para repetir uno o crear tu propio entreno.</span></div>':'';
-  const pills=!tdNow?pills0:tdFull+(tdHide?pills0.replace('aria-pressed="true"','aria-pressed="false"'):pills0).slice(0,-6)+'<button type="button" class="td-p td-plus'+(state.tdPlus||tdFree?' on':'')+'" data-act="tdPlus" aria-expanded="'+!!state.tdPlus+'" aria-label="Empezar otro entreno: repetir un día o crear el tuyo">'+(tdFree?'✎ Mi entreno':'＋')+'</button></div>'+tdMenu;
+  const pills=!tdNow?pills0:tdFull+(tdHide||state.tdPlus?pills0.replace('aria-pressed="true"','aria-pressed="false"'):pills0).slice(0,-6)+'<button type="button" class="td-p td-plus'+(state.tdPlus||tdFree?' on':'')+'" data-act="tdPlus" aria-expanded="'+!!state.tdPlus+'" aria-label="Empezar otro entreno: repetir un día o crear el tuyo">'+(tdFree?'✎ Mi entreno':'＋')+'</button></div>'+tdMenu;
 
   const fold=(cls,title,txt)=>txt?'<details class="tfold '+cls+'"><summary><b>'+title+'</b><span>'+esc(String(txt).split('\n')[0])+'</span></summary><p>'+esc(txt)+'</p></details>':'';
   const st0=w===cw&&!state.logTs&&tot&&sentN<tot?sesT0(c,d.id,d.name):0;
@@ -14654,7 +14661,7 @@ function clientTrain(c,days,di,d){
    if(!lt&&w===cw&&!hasLog&&(mk===false||acts.length)&&!state.showRut&&d.id!=='mio'){
     const msg=rdn&&!acts.length?'':mk===false&&!acts.length?'<div class="rest-card"><span aria-hidden="true">😴</span><div><b>Hoy toca descansar</b><p>Recuperar también es entrenar: descansa, hidrátate y duerme bien.</p></div></div>':'<div class="rest-card act"><span aria-hidden="true">'+actIc(acts[0].type)+'</span><div><b>¡Buen trabajo! Hoy has hecho otra actividad</b><p>'+acts.map(a=>esc((a.type==='Otra'&&a.other?a.other:a.type)+(actSum(a)?' · '+actSum(a):''))).join('<br>')+'</p></div></div>';
     return '<div class="tr2">'+wk+oth+msg+(tdAll?pills:'<button type="button" class="linkbtn rut-show" data-act="showRut">Ver mi rutina de todas formas</button>')+'</div>'}}
-  return '<div class="tr2">'+wk+oth+rpB+(state.showRut&&w===cw?'<button type="button" class="linkbtn rut-show" data-act="showRut">Ocultar la rutina</button>':'')+pills+(tdHide?'':dh+vsel+fin+fold('note','Nota de tu entrenador',d.note)+fold('warm','Calentamiento previo',d.warm)+list+fold('warm','Vuelta a la calma',d.cool))+'</div>';
+  return '<div class="tr2">'+wk+oth+rpB+(state.showRut&&w===cw?'<button type="button" class="linkbtn rut-show" data-act="showRut">Ocultar la rutina</button>':'')+pills+(tdHide||(tdNow&&state.tdPlus)?'':dh+vsel+fin+fold('note','Nota de tu entrenador',d.note)+fold('warm','Calentamiento previo',d.warm)+list+fold('warm','Vuelta a la calma',d.cool))+'</div>';
 }
 /* Plan en el móvil: el menú de cada día en tarjetas (la hoja A4 entera, en PDF o a pantalla completa) */
 const mobPlan=()=>!!(window.matchMedia&&matchMedia('(max-width:760px)').matches);
@@ -16260,7 +16267,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117125100';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117131227';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);

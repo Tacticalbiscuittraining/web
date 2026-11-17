@@ -16328,7 +16328,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117152049';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117153459';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -27602,10 +27602,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!NX&&plShut&&Date.n
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&NX&&!e.defaultPrevented&&!document.querySelector('.esh:not([hidden]) .esh-p,.wsheet,.dsh,.fsov,.pmod,#impbox')){e.preventDefault();e.stopImmediatePropagation();if(plBusy)document.body.classList.toggle('nx-was');else nxClose()}},true);
 /* deslizar desde el borde izquierdo para volver: la pantalla sigue al dedo */
 {let D=null;
-  addEventListener('touchstart',e=>{D=null;const el=nxEl();if(!el||plBusy||e.touches.length!==1||PL_RM.matches)return;const x=e.touches[0].clientX;if(x>28||!el.contains(e.target))return;
+  addEventListener('touchstart',e=>{D=null;const el=nxEl();if(!el||plBusy||e.touches.length!==1||PL_RM.matches)return;const x=e.touches[0].clientX,tg=e.target;if(!el.contains(tg)||tg.closest('input,textarea,select,.wh,.whg,.wf,.swg,canvas,svg.wch'))return;
+    /* 17 nov (3): deslizar a la derecha desde cualquier punto (no solo el borde), salvo sobre lo que ya se mueve de lado */
+    for(let a=tg;a&&a!==el;a=a.parentElement){if(a.scrollWidth>a.clientWidth+2&&/auto|scroll/.test(getComputedStyle(a).overflowX))return}
     D={x,y:e.touches[0].clientY,el,dx:0,v:0,t:Date.now(),h:null}},{passive:true});
   addEventListener('touchmove',e=>{if(!D)return;const dx=e.touches[0].clientX-D.x,dy=e.touches[0].clientY-D.y;
-    if(D.h==null){if(Math.abs(dx)<6&&Math.abs(dy)<6)return;D.h=dx>0&&Math.abs(dx)>Math.abs(dy)*1.2;if(!D.h){D=null;return}}
+    if(D.h==null){if(Math.abs(dx)<10&&Math.abs(dy)<10)return;D.h=dx>0&&Math.abs(dx)>Math.abs(dy)*1.4;if(!D.h){D=null;return}}
     if(e.cancelable)e.preventDefault();const n=Date.now();D.v=(dx-D.dx)/Math.max(1,n-D.t);D.t=n;D.dx=Math.max(0,dx);
     D.el.style.transform='translate3d('+D.dx+'px,0,0)';const dm=document.getElementById('nxDim');if(dm)dm.style.opacity=String(1-D.dx/innerWidth)},{passive:false});
   const end=()=>{if(!D)return;const S=D;D=null;if(!S.h)return;const dm=document.getElementById('nxDim');

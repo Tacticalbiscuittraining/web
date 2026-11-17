@@ -12453,5 +12453,26 @@
 15,
 "barquillo"
 ]
+},
+{
+"n": "Milka Choco & Cake (bizcocho relleno de chocolate)",
+"g": "x",
+"p": 5.5,
+"c": 56,
+"f": 21,
+"fib": 1.4,
+"src": "Etiqueta Milka (428 kcal; saturadas 4,1 g; azúcares 30 g; sal 0,57 g); caja 175 g = 5 bizcochos de 35 g",
+"sw": false,
+"al": [
+"milka",
+"choco cake",
+"milka cake",
+"choco & cake",
+"bizcocho milka"
+],
+"ud": [
+35,
+"bizcocho"
+]
 }
 ]

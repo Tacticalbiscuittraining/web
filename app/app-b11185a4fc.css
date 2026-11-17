@@ -2922,6 +2922,10 @@ span.c2-qb{opacity:.55}span.c2-qb.on{opacity:1;background:var(--teal);color:#fff
 .ch-row:not(:has(.ch-in:placeholder-shown)) .c2-mic,.ch-row.c2-att .c2-mic{display:none}
 .dk-chat .c2-pins,.tb-chat .c2-pins{padding-right:54px}
 
+/* 17 nov: buscador y Guardados entran con movimiento */
+@media (prefers-reduced-motion:no-preference){.c2-sb.c2-fx,.c2-chips.c2-fx{animation:c2Dn .24s cubic-bezier(.2,.8,.2,1) both}.c2-fx:not(.c2-sb):not(.c2-chips){animation:c2Up .26s cubic-bezier(.2,.8,.2,1) both}
+@keyframes c2Dn{from{opacity:0;transform:translateY(-10px)}}@keyframes c2Up{from{opacity:0;transform:translateY(8px)}}}
+
 /* ---------- 31 oct (2): el chat como en las apps de mensajería (src/chat3.js) ---------- */
 /* cabecera ligera */
 .ch-h{padding:8px 12px;gap:10px;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
@@ -3416,7 +3420,8 @@ img.tm-ld{background:color-mix(in srgb,currentColor 16%,transparent);animation:t
 .dh2-ph{position:absolute;inset:0;z-index:-2;background:#0E0C08 70% 45%/cover no-repeat;pointer-events:none}
 .dh2-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,11,9,.9) 0%,rgba(12,11,9,.62) 42%,rgba(12,11,9,.2) 100%),linear-gradient(180deg,rgba(12,11,9,0) 30%,rgba(12,11,9,.55) 100%)}
 .dh2:has(>.dh2-ph) .dh2-r{background:rgba(12,11,9,.5);border-radius:50%}
-@media (prefers-reduced-motion:no-preference){.dh2-ph.dh2-in{animation:dfIn .6s ease-out both}@keyframes dfIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}}
+.dh2-ph.dh2-old{z-index:-3}
+@media (prefers-reduced-motion:no-preference){.dh2-ph.dh2-in{animation:dfIn .6s ease-out both}.dh2-ph.dh2-old{animation:dfOut .6s ease-out .2s both}@keyframes dfOut{to{opacity:0}}@keyframes dfIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}}
 @media print{.dh2-ph{display:none}}
 /* 12 nov · «Añadir alimento» en iPhone: al deslizar se movía la Dieta de fondo, y la lista era una cajita de 300 px.
    Ahora la lista llena la hoja y es lo único que se desliza; la página de detrás queda quieta mientras la hoja está abierta. */

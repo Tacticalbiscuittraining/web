@@ -4782,6 +4782,51 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 .sw-bg.go span{transform:scale(1.12)}
 .sw-bg.r.go{background:#d18f22}.sw-bg.l.go{background:#33a465}
 
+/* 17 nov 2026 · mapa de músculos trabajados (src/musculos.js) */
+.mu-fig{--mu1:rgba(212,175,55,.38);--mu2:rgba(212,175,55,.7);--mu3:#E5BE3F}
+.mu-z{fill:var(--xm-mus);stroke:transparent;stroke-width:3;stroke-linejoin:round}
+.mu-z.l1{fill:var(--mu1)}.mu-z.l2{fill:var(--mu2)}.mu-z.l3{fill:var(--mu3)}
+.mu-z.lo{stroke:var(--xm-a);stroke-width:7;stroke-dasharray:14 9}
+.mu-pair{display:flex;justify-content:center;gap:12px;margin:8px 0 4px}
+.mu-pair figure{margin:0;display:grid;justify-items:center;gap:2px;width:min(128px,38vw)}
+.mu-pair figcaption{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mu-card h3{margin:2px 0 4px}
+.mu-sub{margin:8px 0 0;font-size:12.5px;line-height:1.4;color:var(--muted)}
+.mu-ch{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.mu-ch li{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:13px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3)}
+.mu-ch li.l3{background:rgba(212,175,55,.26)}
+.mu-ch b{font-variant-numeric:tabular-nums}
+/* «Sesión terminada» (fondo oscuro) */
+.mu-sx{margin:14px 0 0}
+.mu-sx .mu-t{margin:0;text-align:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#D4AF37;font-weight:700}
+.mu-sx .mu-pair{margin:6px 0 0}
+.mu-sx .mu-pair figure{width:min(96px,28vw)}
+.mu-sx figcaption{color:#8b8f86}
+.mu-sx .xm-fig{--xm-mus:#2c3036;--xm-head:#23262b;--xm-hair:#17191c}
+/* ficha del entrenador */
+.mu-ev{margin:8px 0 12px}
+.mu-lg{margin:4px 0 0;display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;font-size:12px;color:var(--muted)}
+.mu-lg span{display:inline-flex;align-items:center;gap:3px}
+.mu-lg i{display:inline-block;width:12px;height:12px;border-radius:3px}
+.mu-lg i.l1{background:rgba(212,175,55,.38)}.mu-lg i.l2{background:rgba(212,175,55,.7)}.mu-lg i.l3{background:#E5BE3F;margin-right:3px}
+.mu-lg i.lo{border:2px dashed var(--xm-a);margin-right:3px}
+
+/* 17 nov 2026 · discos por lado y calentamiento en la hoja de la serie (src/discos.js) */
+.dk{display:grid;gap:6px;margin:0;padding:8px 12px;border-radius:14px;background:color-mix(in srgb,var(--fg) 6%,transparent);font-size:13px;color:var(--muted)}
+.dk-r{display:flex;align-items:center;gap:8px;min-height:34px}
+.dk-l{flex:none;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.dk-v{flex:1;min-width:0;display:flex;align-items:center;gap:3px;flex-wrap:wrap;color:var(--fg)}
+.dk-d{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:30px;padding:0 4px;border-radius:5px;background:linear-gradient(180deg,#3a3f47,#24282e);color:#fff;font:700 11.5px/1 var(--f-body,inherit);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);transform:scaleY(1)}
+.dk-v small{margin-left:4px;color:var(--muted)}
+.dk-b{flex:none;border:0;border-radius:999px;padding:6px 10px;background:color-mix(in srgb,var(--fg) 9%,transparent);color:var(--fg);font:600 12px/1 var(--f-body,inherit);min-height:30px}
+.dk-w{margin:0;display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px}
+.dk-w>span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;margin-right:2px}
+.dk-w b{color:var(--fg);font-weight:700}.dk-w i{font-style:normal;opacity:.5}
+.dk-w small{margin-left:auto;font-size:11.5px}
+.esh .dk{border:0;box-shadow:none;font:500 13px/1.3 var(--f-body,inherit)}
+.esh .dk b{font:700 13px/1.3 var(--f-body,inherit);color:var(--fg);letter-spacing:0;text-transform:none}
+.esh .dk .dk-d{font:700 12px/1 var(--f-body,inherit);width:auto;min-width:30px;height:auto;padding:0 5px;border:0;background:linear-gradient(180deg,#454b55,#262a31);color:#fff}
+
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{
   --bg:#ECF2F1; --surface:#FFFFFF; --surface-2:#F4F8F7;

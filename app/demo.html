@@ -3253,6 +3253,7 @@ html.tm-min .tm-ses{transform:translateY(62px)}
 .tms-t b{font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tms-t small{font-size:12.5px;color:#ffffffb8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
 .tms-a{flex:none;height:38px;padding:0 14px;border-radius:12px;border:0;background:var(--tm-a);color:#06201e;font:700 14px var(--f-body);cursor:pointer}
+.tms-x{flex:none;width:34px;height:38px;border-radius:12px;border:0;background:#ffffff14;color:#ffffffc8;font:700 15px var(--f-body);cursor:pointer}
 .tms-p{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--tm-a);transform-origin:left;transform:scaleX(0);transition:transform .4s linear}
 html.tm-has .rt2{display:none!important}
 html.tm-has .portal{padding-bottom:64px}
@@ -8483,6 +8484,7 @@ body:has(.rt2.big:not([hidden])) .tr2{padding-bottom:min(460px,60vh)}
 #sesMenu p{margin:2px 6px 2px;font-size:12px;color:var(--muted);font-weight:600}
 #sesMenu button{min-height:44px;border-radius:11px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink,inherit);font:inherit;font-weight:600;text-align:left;padding:0 14px;cursor:pointer}
 #sesMenu .sm-del{color:var(--coral,#e5654b)}
+#sesMenu small{display:block;max-width:220px;margin:0 6px 2px;font-size:11.5px;line-height:1.3;color:var(--muted)}
 /* resumen al terminar la sesión (negro y dorado, como el informe) */
 #sesx{position:fixed;inset:0;z-index:95;overflow:auto;background:radial-gradient(90% 50% at 50% 20%,rgba(212,175,55,.14),transparent 70%),#07090A;color:#fff;font-family:var(--f-body)}
 #sesx[hidden]{display:none}
@@ -10845,14 +10847,28 @@ const sesPOf=(c,t0)=>{const P=c&&c.sesP;return P&&P.t0===+t0?P:null};
 function sesSecs(c,t0,n){const P=sesPOf(c,t0);return((P&&P.pa||n||Date.now())-t0-(P&&P.off||0))/1000}
 function sesClkPaint(){const c=cur(),n=Date.now();document.querySelectorAll('[data-sest0]').forEach(e=>{const t0=+e.dataset.sest0,P=sesPOf(c,t0),k=e.closest('.ses-clk');e.textContent=hms(sesSecs(c,t0,n));if(k){k.classList.toggle('pau',!!(P&&P.pa));const i=k.querySelector('i');if(i)i.textContent=P&&P.pa?'⏸':'⏱'}})}
 function sesMenuX(){const m=$('#sesMenu');if(m)m.remove()}
+/* 17 nov: descartar un entreno empezado (sin guardar): quita las series marcadas sin enviar, el cronómetro, el descanso y la ventanita «en marcha».
+   Lo ya enviado con «Terminar ejercicio» se queda guardado */
+function sesDiscard(){const c=cur(),n=Date.now();if(!c)return;const t=isoOf(n);
+  if(c.draft){Object.keys(c.tmx||{}).forEach(k=>{delete c.draft[k]});
+    Object.keys(c.draft).forEach(k=>{const d=c.draft[k];if(d&&d.ts&&isoOf(d.ts)===t&&(d.s||[]).some(r=>r&&r[2]))delete c.draft[k]});
+    if(!Object.keys(c.draft).length)delete c.draft}
+  c.sesX=n;delete c.tmx;delete c.sesP;state.sesEnd=n;state.sesA=0;try{restStop(true)}catch(_){}wakeOff();sesClkOff();sesMenuX();
+  if(typeof markDirty==='function')markDirty();if(state.ctab==='entreno')renderMain();toast('Entreno descartado')}
+/* menú de la ventanita «en marcha» (fuera de Entreno): seguir o descartar */
+function sesDiscMenu(btn){if($('#sesMenu')){sesMenuX();return}const r=btn.getBoundingClientRect(),m=document.createElement('div');m.id='sesMenu';m.setAttribute('role','menu');
+  m.innerHTML='<p>Entreno en marcha</p><button type="button" data-sm="go" role="menuitem">▶ Seguir entrenando</button><button type="button" data-sm="dis" class="sm-del" role="menuitem">🗑 Descartar entreno</button><small>Se borran las series sin enviar. Lo enviado se queda.</small>';
+  document.body.appendChild(m);const w=m.offsetWidth,h=m.offsetHeight;m.style.top=Math.round(Math.max(12,r.top-h-8))+'px';m.style.left=Math.round(Math.max(12,Math.min(innerWidth-w-12,r.right-w)))+'px'}
 document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;const mi=t.closest('#sesMenu button'),k=t.closest('.ses-clk');
-  if(!mi&&!k){if($('#sesMenu')&&!t.closest('#sesMenu'))sesMenuX();return}
+  if(!mi&&!k){if($('#sesMenu')&&!t.closest('#sesMenu')&&!t.closest('[data-sesdis]'))sesMenuX();return}
   e.preventDefault();e.stopPropagation();const c=cur();if(!c)return;
   if(k){if($('#sesMenu')){sesMenuX();return}const b=k.querySelector('[data-sest0]'),t0=b&&+b.dataset.sest0;if(!t0)return;const P=sesPOf(c,t0),r=k.getBoundingClientRect();
     const m=document.createElement('div');m.id='sesMenu';m.dataset.t0=t0;m.setAttribute('role','menu');
-    m.innerHTML='<p>Cronómetro de la sesión</p><button type="button" data-sm="pau" role="menuitem">'+(P&&P.pa?'▶ Reanudar':'⏸ Pausar')+'</button><button type="button" data-sm="del" class="sm-del" role="menuitem">✕ Eliminar</button>';
+    m.innerHTML='<p>Cronómetro de la sesión</p><button type="button" data-sm="pau" role="menuitem">'+(P&&P.pa?'▶ Reanudar':'⏸ Pausar')+'</button><button type="button" data-sm="del" class="sm-del" role="menuitem">✕ Eliminar cronómetro</button><button type="button" data-sm="dis" class="sm-del" role="menuitem">🗑 Descartar entreno</button><small>Descartar borra las series sin enviar.</small>';
     document.body.appendChild(m);const w=m.offsetWidth;m.style.top=Math.round(r.bottom+8)+'px';m.style.left=Math.round(Math.max(12,Math.min(innerWidth-w-12,r.left+r.width/2-w/2)))+'px';return}
   const m=$('#sesMenu'),t0=+m.dataset.t0,n=Date.now();
+  if(mi.dataset.sm==='go'){sesMenuX();const d=$('.p-dock [data-t=entreno]');if(d)d.click();return}
+  if(mi.dataset.sm==='dis'){if(!arm(mi))return;sesDiscard();return}
   if(mi.dataset.sm==='pau'){let P=sesPOf(c,t0);if(!P)P=c.sesP={t0,off:0,pa:0};
     if(P.pa){P.off+=n-P.pa;P.pa=0;state.sesA=n;state.sesEnd=0;toast('Cronómetro en marcha')}else{P.pa=n;toast('Cronómetro en pausa')}
     sesMenuX();sesClkPaint();if(typeof markDirty==='function')markDirty();return}
@@ -16150,7 +16166,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261117103937';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261117105910';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -24824,7 +24840,7 @@ if(typeof inboxView==='function'){const V0=inboxView;inboxView=function(){const 
     H.classList.toggle('tm-has',show);
     const el=document.getElementById('tmSes');
     if(!show){if(el)el.hidden=true;return}
-    const b=mk('tmSes','tm-ses','<button type="button" class="tms-go" data-tm="go"><span class="tms-r">'+RING+'<b></b></span><span class="tms-t"><b></b><small></small></span></button><button type="button" class="tms-a" data-tm="act"></button><i class="tms-p" aria-hidden="true"></i>');
+    const b=mk('tmSes','tm-ses','<button type="button" class="tms-go" data-tm="go"><span class="tms-r">'+RING+'<b></b></span><span class="tms-t"><b></b><small></small></span></button><button type="button" class="tms-a" data-tm="act"></button><button type="button" class="tms-x" data-tm="x" data-sesdis aria-label="Seguir o descartar el entreno">✕</button><i class="tms-p" aria-hidden="true"></i>');
     b.hidden=false;b.style.setProperty('--tm-a',ACC.entreno);
     const rt=rtLive(),now=Date.now();let p,rb,t1,t2,act;
     if(rt){const left=Math.max(0,RT.pz!=null?RT.pz:RT.end-now);p=Math.min(1,1-left/1000/RT.tot);rb=mmss(Math.ceil(left/1000));
@@ -24838,6 +24854,7 @@ if(typeof inboxView==='function'){const V0=inboxView;inboxView=function(){const 
     b.querySelector('.tms-go').setAttribute('aria-label',t1+'. '+t2+'. Volver a Entreno');
   }
   document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('#tmSes [data-tm]');if(!t)return;
+    if(t.dataset.tm==='x'){if(typeof sesDiscMenu==='function')sesDiscMenu(t);return}
     if(t.dataset.tm==='act'&&rtLive()){rtAdd(15);sesPaint();return}
     minSet(false);const d=q('.p-dock [data-t=entreno]');if(d)d.click()});
 

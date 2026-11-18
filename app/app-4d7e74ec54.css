@@ -4952,6 +4952,137 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 }
 @media (prefers-reduced-motion:reduce){body[data-ct] .p-top .p-hello,body[data-ct] .hub-id{transform:none!important;opacity:1!important}}
 
+/* ---------- 18 nov 2026 · Dieta «en directo + reto contigo mismo» (src/dieta4.js). Solo transform y opacity ---------- */
+/* tarjeta del día: 3 anillos (comidas · proteína · kcal) */
+.dh2-r.d4-r3{width:96px;height:96px;cursor:pointer}
+.dh2-r.d4-r3 svg{width:96px;height:96px}
+.d4-rg .d4-rt{fill:none;opacity:.2}
+.d4-rg .d4-rp{fill:none;stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.32,.72,0,1)}
+.dh2-r.d4-r3>div b{font-size:17px;font-variant-numeric:tabular-nums}
+.dh2-r.d4-r3>div small{font-size:10px}
+.dh2:has(>.dh2-ph) .dh2-r.d4-r3,.dh2 .dh2-r.d4-r3{background:none}
+.d4-lg{display:flex;flex-wrap:wrap;gap:4px 12px;margin:0;font-size:13px;line-height:1.3;color:var(--muted)}
+.d4-lg span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.d4-lg i{width:8px;height:8px;border-radius:50%;flex:none}
+.d4-lg b{color:var(--fg);font-variant-numeric:tabular-nums}
+.d4-st{display:flex;flex-wrap:wrap;gap:6px;margin:0}
+.d4-st>span{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;font-size:12.5px;font-weight:600;background:color-mix(in srgb,var(--fg) 7%,transparent)}
+.d4-st .d4-xp{background:rgba(110,76,255,.16);color:#9C86FF}
+.dh2:has(>.dh2-ph) .d4-st .d4-xp{color:#CDBFFF}
+.dh2:has(>.dh2-ph) .d4-lg,.dh2:has(>.dh2-ph) .d4-lg b{color:inherit}
+/* «Siguiente»: la comida que toca, en grande (siempre oscura, como la tarjeta del día con foto) */
+.d4-nx{position:relative;overflow:hidden;margin:12px 0 0;border-radius:22px;background:#111;color:#F4F1EA;border:1px solid rgba(255,255,255,.08);isolation:isolate}
+.d4-nx-ph{position:absolute;inset:0;z-index:-1;background-size:cover;background-position:68% 40%;opacity:.8}
+.d4-nx-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(12,12,12,.55) 42%,rgba(12,12,12,.95) 80%),linear-gradient(90deg,rgba(12,12,12,.75),transparent 70%)}
+.d4-nx-b{padding:16px 16px 14px}
+.d4-nx-e{margin:0;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#F6D27A}
+.d4-nx h3{margin:2px 0 0;font-size:32px;line-height:1.05;font-weight:800;color:#fff}
+.d4-nx-d{margin:4px 0 0;font-size:14px;color:rgba(255,255,255,.75)}
+.d4-nx-i{margin:10px 0 0;font-size:15px;line-height:1.5}
+.d4-nx-i span{color:rgba(255,255,255,.62);font-variant-numeric:tabular-nums}
+.d4-nx-c{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 14px}
+.d4-nx-c span{padding:4px 9px;border-radius:99px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.12);font-variant-numeric:tabular-nums}
+.d4-nx-c .g{background:rgba(231,185,62,.22);color:#F6D27A}
+.d4-nx-a{display:grid;grid-template-columns:1.35fr 1fr;gap:8px}
+.d4-nx-a button{min-height:50px;border-radius:15px;border:0;font:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.d4-nx-a button:active{transform:scale(.96);transition-duration:.1s}
+.d4-ok{background:#E7B93E;color:#1d1503;box-shadow:0 8px 24px rgba(231,185,62,.25)}
+.d4-chg{background:rgba(255,255,255,.14);color:#fff}
+.d4-gh{display:flex;align-items:center;gap:8px;margin:12px 0 0;padding:8px 11px;border-radius:13px;background:rgba(110,76,255,.18);color:#D8CCFF;font-size:13.5px;line-height:1.3}
+.d4-gh b{color:#fff}
+.d4-nx-in{animation:d4In .5s cubic-bezier(.32,.72,0,1)}
+@keyframes d4In{from{transform:translate3d(44px,0,0);opacity:0}to{transform:none;opacity:1}}
+.d4-sec{margin:18px 4px 8px;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+/* «Tu día»: línea con la hora y el punto de cada comida (el punto es el círculo de marcar) */
+.mx-l.d4-tl{position:relative}
+.mx-l.d4-tl::before{content:"";position:absolute;left:51px;top:24px;bottom:24px;width:2px;border-radius:2px;background:color-mix(in srgb,var(--fg) 12%,transparent);pointer-events:none}
+.d4-tl>.mx{margin-left:72px;overflow:visible;position:relative}
+.d4-tl>.mx>.mx-h{padding-left:12px;gap:10px;border-radius:0 13px 13px 0}
+.d4-tl>.mx>.sx-eat{left:-41px;top:50%;margin-top:-15px;width:30px;height:30px;background:var(--bg,var(--surface))}
+.d4-tl>.mx.d4-nxm>.sx-eat{border-color:#E7B93E;box-shadow:0 0 0 4px color-mix(in srgb,#E7B93E 22%,transparent)}
+.d4-tl>.mx.d4-nxm>.sx-eat::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid #E7B93E;opacity:0;animation:d4Pulse 1.8s ease-out infinite}
+@keyframes d4Pulse{0%{transform:scale(.75);opacity:.8}100%{transform:scale(1.35);opacity:0}}
+.d4-tm{position:absolute;left:-77px;top:50%;width:30px;transform:translateY(-50%);font-size:12px;font-weight:700;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;pointer-events:none}
+.d4-tl>.mx.done .d4-tm{color:color-mix(in srgb,#C9A227 80%,var(--fg))}
+.d4-th{width:44px;height:44px;border-radius:12px;flex:none;background-size:cover;background-position:65% 45%;background-color:#222}
+.d4-tl>.mx.done .mx-t b{color:color-mix(in srgb,#B8901C 70%,var(--fg))}
+.d4-now{position:relative;display:flex;align-items:center;gap:8px;margin:0 0 0 30px;height:20px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#C9A227;pointer-events:none}
+.d4-now::before{content:"";width:9px;height:9px;margin-left:17px;border-radius:50%;background:#E7B93E;box-shadow:0 0 0 3px color-mix(in srgb,#E7B93E 25%,transparent)}
+.d4-now::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#E7B93E,transparent)}
+.d4-now span{order:1;white-space:nowrap}.d4-now::after{order:2}
+.fx-card.d4-fx{margin-top:12px}
+.d4-tl .mx-t .tag{display:none}
+html.d4-meal #tmBar{display:none!important}
+.d4-tl>.mx.d4-pop{animation:d4Pop .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes d4Pop{40%{transform:scale(1.025)}}
+/* retos de la semana */
+.d4-rts{margin:4px 0 14px}
+.d4-rc{display:flex;flex-direction:column;gap:12px;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.d4-rn{display:flex;justify-content:space-between;gap:10px;margin-bottom:6px;font-size:14px}
+.d4-rn span{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.d4-ri.ok .d4-rn span{color:#B8901C;font-weight:700}
+.d4-rb{height:7px;border-radius:9px;overflow:hidden;background:color-mix(in srgb,var(--fg) 9%,transparent)}
+.d4-rb i{display:block;height:100%;border-radius:9px;transform-origin:left;background:linear-gradient(90deg,#C9962A,#F6D27A);transition:transform .9s cubic-bezier(.32,.72,0,1)}
+/* una comida abierta = su propia pantalla */
+html.d4-meal #main .p-top,html.d4-meal #main .p-body>:not(.mx-l):not(.dsh):not(.fx-sh),html.d4-meal #main .mx-l>:not(.mx.open){display:none!important}
+html.d4-meal #main .p-body{padding-top:0}
+html.d4-meal #main .mx-l.d4-tl::before{display:none}
+.mx.open.d4-o{margin:0 -10px;border:0;border-radius:0;background:transparent;overflow:visible}
+.mx.open.d4-o>.mx-h,.mx.open.d4-o>.sx-eat,.mx.open.d4-o>.d4-tm{display:none!important}
+.d4-bar{position:sticky;top:0;z-index:5;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;background:color-mix(in srgb,var(--bg,var(--surface)) 82%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border-bottom:.5px solid var(--line)}
+.d4-bar b{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d4-bar>span{justify-self:end;font-size:13px;font-weight:600;color:var(--muted)}
+.d4-bk{justify-self:start;display:inline-flex;align-items:center;gap:3px;min-height:40px;padding:0 10px 0 4px;border:0;background:none;color:#B8901C;font:inherit;font-size:17px;font-weight:600;cursor:pointer}
+.d4-bk span{font-size:30px;line-height:0;margin-top:-3px}
+.d4-hph{position:relative;height:210px;margin:0 0 6px;background-size:cover;background-position:65% 45%;background-color:#141414}
+.d4-hph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.15) 35%,rgba(12,12,12,.9))}
+.d4-hph>div{position:absolute;left:16px;right:16px;bottom:12px;z-index:1;color:#fff}
+.d4-hph p{margin:0;font-size:13px;font-weight:700;color:#F6D27A}
+.d4-hph h2{margin:2px 0 0;font-size:34px;line-height:1.05;font-weight:800;color:#fff}
+.mx.open.d4-o>.mx-b{padding:6px 14px 18px}
+.mx.open.d4-o .mx-mac{margin:14px 2px;padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--fg) 5%,transparent);font-size:14px}
+.mx.open.d4-o .mx-mac b{font-size:18px}
+.mx.open.d4-o .eatb{min-height:54px;border-radius:16px;font-size:17px}
+/* número que vuela al anillo y +XP */
+.d4-fly{position:fixed;left:0;top:0;z-index:9000;padding:5px 10px;border-radius:99px;background:#E7B93E;color:#1d1503;font-weight:800;font-size:14px;white-space:nowrap;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.25);will-change:transform,opacity}
+.d4-fly.xp{background:#6E4CFF;color:#fff}
+.d4-cf{position:fixed;left:0;top:0;z-index:9500;width:8px;height:12px;border-radius:2px;pointer-events:none;will-change:transform,opacity}
+/* aviso de logro (proteína del día, mejor racha) */
+#d4Rec{position:fixed;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 12px);z-index:9400;display:flex;align-items:center;gap:12px;max-width:460px;margin:0 auto;padding:13px 14px;border-radius:20px;background:linear-gradient(135deg,#3a2c08,#1b1609);border:1px solid rgba(231,185,62,.5);color:#fff;box-shadow:0 20px 50px rgba(0,0,0,.45);transform:translate3d(0,-160%,0);transition:transform .55s cubic-bezier(.34,1.56,.64,1)}
+#d4Rec.on{transform:none}
+#d4Rec .d4-rs{display:grid;place-items:center;width:42px;height:42px;flex:none;border-radius:50%;background:#E7B93E;color:#1d1503;font-size:21px}
+#d4Rec small{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#F6D27A}
+#d4Rec b{font-size:15px}
+/* resumen del día */
+#d4Sum{position:fixed;inset:0;z-index:9300;overflow-y:auto;overscroll-behavior:contain;background:#0B0C0D;color:#F2EFE8;opacity:0;transform:translate3d(0,40px,0);transition:opacity .35s,transform .55s cubic-bezier(.32,.72,0,1)}
+#d4Sum.on{opacity:1;transform:none}
+html.d4-sum-on .p-dock{opacity:0;pointer-events:none}
+.d4-sw{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 26px) 16px calc(env(safe-area-inset-bottom) + 24px)}
+.d4-sh{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:16px}
+.d4-sh h2{margin:14px 0 0;font-size:34px;font-weight:800}
+.d4-sh p{margin:4px 0 0;color:#A39E93}
+.d4-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.d4-tile,.d4-blk{padding:14px;border-radius:18px;background:#16181B;border:1px solid rgba(255,255,255,.08);opacity:0;transform:translate3d(0,14px,0);transition:opacity .4s,transform .5s cubic-bezier(.34,1.56,.64,1)}
+.d4-tile.on,.d4-blk.on{opacity:1;transform:none}
+.d4-tile b{display:block;font-size:30px;line-height:1;font-weight:800;font-variant-numeric:tabular-nums}
+.d4-tile b small{font-size:17px;color:#A39E93}
+.d4-tile span{display:block;margin-top:5px;font-size:13px;color:#A39E93}
+.d4-tile em,.d4-cmp em{font-style:normal;font-weight:700;color:#3DDC97}
+.d4-blk{margin-top:10px}
+.d4-blk h4{display:flex;justify-content:space-between;margin:0 0 10px;font-size:15px}
+.d4-blk h4 span{color:#C9B8FF}
+.d4-xb{height:10px;border-radius:9px;overflow:hidden;background:rgba(255,255,255,.1)}
+.d4-xb i{display:block;height:100%;border-radius:9px;transform-origin:left;background:linear-gradient(90deg,#6E4CFF,#B79CFF);transition:transform 1.1s cubic-bezier(.32,.72,0,1)}
+.d4-xb.gd{height:7px}.d4-xb.gd i{background:linear-gradient(90deg,#C9962A,#F6D27A)}
+.d4-sm,.d4-cmp{display:flex;justify-content:space-between;gap:10px;margin:8px 0 4px;font-size:12.5px;color:#A39E93}
+.d4-sm b{color:#fff}
+.d4-wk{display:flex;justify-content:space-between}
+.d4-wd{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:#A39E93}
+.d4-wd.t b{color:#F6D27A}
+.d4-sok{display:block;width:100%;min-height:54px;margin-top:16px;border:0;border-radius:17px;background:#E7B93E;color:#1d1503;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
+@media (max-width:360px){.d4-tl>.mx{margin-left:62px}.mx-l.d4-tl::before{left:43px}.d4-tm{left:-67px;width:26px;font-size:11px}.d4-nx h3{font-size:27px}.d4-th{width:38px;height:38px}}
+@media (prefers-reduced-motion:reduce){.d4-rg .d4-rp,.d4-rb i,.d4-xb i{transition:none}.d4-nx-in,.d4-tl>.mx.d4-pop,.d4-tl>.mx.d4-nxm>.sx-eat::before{animation:none}#d4Sum,.d4-tile,.d4-blk,#d4Rec{transition:none}}
+
 /* ---------- 18 nov 2026 · Entreno «en directo + reto contigo mismo» (src/directo.js) ---------- */
 .dx-rs{display:block;width:100%;height:100%;overflow:visible}
 .dx-rs circle{fill:none;stroke-width:10;stroke-linecap:round}

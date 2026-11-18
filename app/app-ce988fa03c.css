@@ -4933,6 +4933,10 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   #main .tx.nx>.tx-h .tx-t b{font-size:28px;line-height:1.1}
   #main .tx.nx>.tx-h .tx-t>span{font-size:15px}
   #main .tx.nx>.tx-h .tx-ch,#main .tx.nx>.tx-h .tx-ok{display:none}
+  .nx-mu{display:none}
+  #main .tx.nx>.tx-h .nx-mu{display:block;margin-bottom:2px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  #main .tx.nx .exo-vid>span.muted{display:none}
+  #main .tx.nx .exo-vid:not(:has(button,a,video,iframe)){display:none}
   /* 17 nov (6): sin el brillo de «abierto» (ambiente.css): con la pantalla desplazada su borde de abajo cruzaba las series como una línea */
   #main .tx.nx::before,#main .nx-snap::before{display:none!important;animation:none!important}
   #main .tx.nx>.tx-b{border-top:0}
@@ -5185,6 +5189,9 @@ html.d4-sum-on .p-dock{opacity:0;pointer-events:none}
 .dx-lvb small{display:block;margin-top:8px;font-size:13px;color:var(--muted)}
 .dx-lvb small b{color:var(--fg)}
 @media (prefers-reduced-motion:reduce){.dx-rs .dx-fg,.dx-pb>i{transition:none}}
+
+/* 18 nov (Robert): la imagen para compartir no lleva «Contárselo a Robert»; ni «frente a la última vez» (con ejercicios sin enviar salía ▼) */
+.sx-ex .pe-share,.sx-ex .dx-cmp{display:none!important}
 
 /* ---------- 18 nov 2026 · el estilo nuevo de Entreno/Dieta en el resto de pestañas (src/pestanas.js). Solo transform y opacity ---------- */
 .pe-rg .pe-rt{fill:none;opacity:.2}

@@ -5290,6 +5290,12 @@ html[data-theme=dark] .pe-t em.up{color:#3DDC97}
 :root .tx-b .rt-go{background:#207D72;border-color:#207D72}
 :root .rv-cli.today .rv-n,:root .rv-t.today .rv-n,:root .rv-bar.today .rv-n{background:#C4472B}
 
+/* 18 nov: sin barra de desplazamiento en toda la app (móvil, PWA, demo): que no parezca una web.
+   Solo se queda en el Panel del entrenador en el ordenador (body[data-desk="1"]), donde ayuda con listas largas.
+   Solo esconde la barra: el desplazamiento y el rebote siguen igual. */
+html:not(:has(body[data-desk="1"])),html:not(:has(body[data-desk="1"])) *{scrollbar-width:none!important}
+html:not(:has(body[data-desk="1"]))::-webkit-scrollbar,html:not(:has(body[data-desk="1"])) *::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;background:transparent!important}
+
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{
   --bg:#ECF2F1; --surface:#FFFFFF; --surface-2:#F4F8F7;

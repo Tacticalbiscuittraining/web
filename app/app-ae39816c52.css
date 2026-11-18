@@ -3244,6 +3244,8 @@ html.tm-has .portal{padding-bottom:64px}
   background:linear-gradient(180deg,#ffffff30 0%,#ffffff10 17%,#ffffff00 64%,#ffffff14 100%),color-mix(in srgb,color-mix(in srgb,var(--tb-bg,var(--tb-a,var(--tm-a,#29c8bf))) 28%,rgb(22,19,30)) 90%,transparent);
   box-shadow:inset 0 2px 2px #ffffff4b,inset 0 -2px 4px #0009,0 14px 30px #0008,0 0 0 1px #0006;text-shadow:0 1px 2px #000c;
   opacity:0;transform:translateY(-14px);pointer-events:none;transition:opacity .2s ease,transform .25s ease}
+/* 18 nov: lo que pasa por debajo de la cabecera fina se veía (Robert, captura de Inicio): cristal desenfocado y algo más tapado */
+#tmBar{-webkit-backdrop-filter:blur(18px) saturate(1.3);backdrop-filter:blur(18px) saturate(1.3);background:linear-gradient(180deg,#ffffff30 0%,#ffffff10 17%,#ffffff00 64%,#ffffff14 100%),color-mix(in srgb,color-mix(in srgb,var(--tb-bg,var(--tb-a,var(--tm-a,#29c8bf))) 28%,rgb(22,19,30)) 95%,transparent)}
 html.tm-bar #tmBar{opacity:1;transform:none;pointer-events:auto}
 .tmb-in{width:100%;height:50px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
 .tmb-t{min-width:0;display:grid;line-height:1.15}

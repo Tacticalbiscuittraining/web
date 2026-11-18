@@ -5190,33 +5190,48 @@ html.d4-sum-on .p-dock{opacity:0;pointer-events:none}
 .dx-lvb small b{color:var(--fg)}
 @media (prefers-reduced-motion:reduce){.dx-rs .dx-fg,.dx-pb>i{transition:none}}
 
-/* 18 nov (Robert): la imagen para compartir no lleva «Contárselo a Robert»; ni «frente a la última vez» (con ejercicios sin enviar salía ▼) */
-.sx-ex .pe-share,.sx-ex .dx-cmp{display:none!important}
-/* 18 nov (Robert): imagen de historia de Instagram (360 × 640 → 1080 × 1920). Libre arriba (~60) y abajo (~100): barra y cuadro de Instagram */
-.sx-st{position:fixed;left:-10000px;top:0;width:360px;height:640px;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:9px;padding:56px 24px 80px;
-  background:radial-gradient(80% 36% at 50% 34%,rgba(212,175,55,.2),transparent 70%),radial-gradient(120% 50% at 50% 110%,rgba(231,111,81,.16),transparent 70%),#07090A;color:#fff;font-family:var(--f-body);text-align:center}
-.sx-st .st-top{display:flex;align-items:center;gap:8px;max-width:100%}
-.sx-st .st-top img{flex:none;width:30px;height:30px;border-radius:50%}
-.sx-st .st-top p{margin:0;font:700 10px/1.25 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:#D4AF37;text-align:left}
-.sx-st h2{margin:4px 0 0;font:700 40px/.92 var(--f-display);text-transform:uppercase;letter-spacing:.01em;color:#fff}
-.sx-st .st-d{margin:-4px 0 0;font-size:13px;color:#a7aba3}
-.sx-st .st-kg{display:flex;flex-direction:column;align-items:center;margin-top:2px}
-.sx-st .st-kg b{font:700 62px/.9 var(--f-display);color:#E9C46A;letter-spacing:-.01em}
-.sx-st .st-kg span{font:700 11px/1.2 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:#cfd2cb;margin-top:2px}
-.sx-st .st-n{display:flex;justify-content:center;gap:10px;width:100%}
-.sx-st .st-n>div{flex:1;display:flex;flex-direction:column;align-items:center;padding:7px 4px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}
-.sx-st .st-n b{font:700 26px/1 var(--f-display);color:#fff;font-variant-numeric:tabular-nums}
-.sx-st .st-n span{margin-top:3px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#a7aba3}
-.sx-st .st-pr{width:100%;display:flex;flex-direction:column;gap:4px}
-.sx-st .st-pr p{margin:0;padding:6px 10px;border-radius:10px;background:rgba(212,175,55,.12);font-size:12px;line-height:1.25;color:#f1e3b5;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sx-st .st-mu{display:flex;align-items:flex-start;justify-content:center}
-.sx-st .st-mu .mu-pair{margin:0;display:flex;gap:18px}
-.sx-st .st-mu figure{width:92px;margin:0}
-.sx-st .st-mu figcaption{color:#8b8f86;font-size:9px;letter-spacing:.12em}
-.sx-st .st-f{position:absolute;left:26px;right:26px;bottom:62px;margin:0;display:flex;justify-content:space-between;font:600 9px/1 var(--f-body);letter-spacing:.2em;color:#8b8f86}
-.sx-st .st-f span{color:#D4AF37}
-.sx-st.st-t1 .st-pr p:nth-child(n+2){display:none}
-.sx-st.st-t2 .st-mu{display:none}
+/* 18 nov (Robert): la imagen para compartir no lleva «Contárselo a Robert» */
+.sx-ex .pe-share{display:none!important}
+/* 18 nov (Robert): «Sesión terminada» es una tarjeta de historia de Instagram (360 × 640 → 1080 × 1920); la misma en pantalla y al compartir.
+   Libre arriba (~44) y abajo (~56) para la barra y el cuadro de responder de Instagram */
+.sx-in.sx-9c{justify-content:flex-start;align-items:center;gap:14px;max-width:none}
+.sx-9c>:not(.s9):not(.sx-a){display:none!important}
+.sx-9c>.sx-a{width:min(360px,100%)}
+.s9{position:relative;flex:none;width:360px;height:640px;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:44px 20px 56px;border-radius:22px;
+  background:radial-gradient(90% 40% at 50% 26%,rgba(212,175,55,.18),transparent 70%),radial-gradient(120% 45% at 50% 108%,rgba(231,111,81,.18),transparent 70%),#07090A;color:#fff;font-family:var(--f-body);text-align:center;box-shadow:0 0 0 1px rgba(212,175,55,.25),0 20px 50px rgba(0,0,0,.5)}
+.s9.s9-ex *{animation:none!important;transition:none!important}
+.s9.s9-ex{position:fixed;left:-10000px;top:0;border-radius:0;box-shadow:none;zoom:1!important}
+.s9 .s9-top{display:flex;align-items:center;justify-content:center;gap:8px;min-height:34px}
+.s9 .s9-top .sx-logo{flex:none;display:block;width:34px;height:34px;margin:0!important;align-self:center}
+.s9 .s9-top .sx-e{margin:0;font:700 10px/1.25 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:#D4AF37;text-align:left}
+.s9 .xr-sxw{margin:0 auto!important;transform:scale(.85);transform-origin:center}
+.s9 h2{margin:0;font:700 40px/.95 var(--f-display);text-transform:uppercase;letter-spacing:.01em;color:#fff}
+.s9 .sx-s{margin:-6px 0 0;font-size:12.5px;color:#a7aba3}
+.s9 .sx-s .sx-sent{display:none}
+.s9 .s9-kg{display:flex;flex-direction:column;align-items:center;margin-top:2px}
+.s9 .s9-kg b{font:700 66px/.9 var(--f-display);color:#E9C46A;font-variant-numeric:tabular-nums}
+.s9 .s9-kg span{margin-top:3px;font:700 10.5px/1.2 var(--f-body);letter-spacing:.18em;text-transform:uppercase;color:#cfd2cb}
+.s9 .sx-ts{display:flex;gap:8px}
+.s9 .sx-ts>.sx-t{flex:1;margin:0;padding:8px 6px;border-radius:14px;text-align:center;min-width:0}
+.s9 .sx-t span{font-size:9.5px;letter-spacing:.12em}
+.s9 .sx-t b{font-size:24px;line-height:1.15}
+.s9 .sx-t small{display:block;font-size:10px;color:#8b8f86;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s9 .dx-ups{margin:0;padding:8px 12px;border-radius:14px}
+.s9 .dx-ups>b{font-size:12px;margin-bottom:0}
+.s9 .dx-ups p{margin:0;padding:3px 0;font-size:12px}
+.s9 .dx-ups p>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s9 .dx-ups p small{font-size:9.5px}
+.s9 .s9-pr{display:flex;flex-direction:column;gap:5px}
+.s9 .s9-pr .sx-pr{margin:0;padding:6px 10px;font-size:12px;text-align:left}
+.s9 .s9-b{flex:1;min-height:0;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
+.s9 .s9-b>:only-child{grid-column:1/-1}
+.s9 .mu-sx{margin:0}
+.s9 .mu-sx .mu-t{font-size:9px}
+.s9 .mu-sx .mu-pair{gap:6px;margin:4px 0 0}
+.s9 .mu-sx .mu-pair figure{width:82px}
+.s9 .mu-sx figcaption{font-size:8.5px}
+.s9 .dx-lvb{margin:0;padding:10px 12px;border-radius:14px}
+.s9 .sx-f{position:absolute;left:20px;right:20px;bottom:30px;margin:0;font-size:8.5px}
 
 /* ---------- 18 nov 2026 · el estilo nuevo de Entreno/Dieta en el resto de pestañas (src/pestanas.js). Solo transform y opacity ---------- */
 .pe-rg .pe-rt{fill:none;opacity:.2}

@@ -4924,6 +4924,8 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   #main .tx.nx{position:fixed!important;inset:0;z-index:58;margin:0!important;border:0!important;border-radius:0!important;clip-path:none;
     overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--bg)!important;animation:none!important;
     padding:calc(env(safe-area-inset-top) + 52px) 0 calc(env(safe-area-inset-bottom) + 110px);box-shadow:-14px 0 34px rgba(0,0,0,.45)!important}
+  /* 18 nov (Robert): con el descanso abierto (sin minimizar) la hoja tapaba el final y no se llegaba a «Siguiente»: más hueco abajo */
+  html:has(#rt:not([hidden]):not(.mini)) #main .tx.nx{padding-bottom:calc(env(safe-area-inset-bottom) + 270px)}
   #main .nx-ph{pointer-events:none;animation:none!important}
   #main .tx.nx>.tx-h{pointer-events:none;display:block;padding:4px 16px 12px}
   #main .tx.nx>.tx-h .tx-ph{display:block;width:100%;height:auto;aspect-ratio:4/3;max-height:40vh;border-radius:18px;margin-bottom:14px}
@@ -5120,11 +5122,9 @@ html.d4-sum-on .p-dock{opacity:0;pointer-events:none}
 .dx-card .sx-go.dx-go{width:100%;margin:14px 0 0;min-height:50px;border-radius:16px;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s ease-out}
 .dx-card .sx-go.dx-go:active{transform:scale(.97)}
 /* anillo de un ejercicio empezado en la lista */
-.dx-xr{flex:none;width:26px;height:26px;margin-right:4px}
-.dx-xr svg{display:block;width:100%;height:100%}
-.dx-xr circle{fill:none;stroke-width:4;stroke:#3DDC97}
-.dx-xr .dx-bg{opacity:.2}
-.dx-xr .dx-fg{stroke-dasharray:100 100;stroke-linecap:round}
+.dx-xr{display:block;margin-top:3px;font-style:normal;font-size:12px;line-height:16px;font-weight:600;color:var(--coral-ink,#F4A261)}
+/* 18 nov: en la pantalla del ejercicio sobra (la barra de arriba ya lleva el progreso) */
+#main .tx.nx>.tx-h .dx-xr{display:none}
 /* barra de arriba en directo (pantalla del ejercicio) */
 .dx-lv{position:absolute;right:10px;bottom:0;height:48px;display:flex;align-items:center;gap:8px}
 .dx-t{font:600 16px var(--f-body);font-variant-numeric:tabular-nums;color:var(--muted)}

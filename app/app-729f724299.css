@@ -4952,6 +4952,107 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 }
 @media (prefers-reduced-motion:reduce){body[data-ct] .p-top .p-hello,body[data-ct] .hub-id{transform:none!important;opacity:1!important}}
 
+/* ---------- 18 nov 2026 · Entreno «en directo + reto contigo mismo» (src/directo.js) ---------- */
+.dx-rs{display:block;width:100%;height:100%;overflow:visible}
+.dx-rs circle{fill:none;stroke-width:10;stroke-linecap:round}
+.dx-rs .dx-bg{opacity:.2;stroke-linecap:butt}
+.dx-rs .dx-fg{stroke-dasharray:100 100;transition:stroke-dashoffset .8s cubic-bezier(.32,.72,0,1)}
+/* tarjeta del reto */
+.dx-card{position:relative;margin:12px 0 10px;padding:16px;border-radius:22px;border:1px solid var(--line);
+  background:radial-gradient(120% 90% at 0% 0%,color-mix(in srgb,#E7B93E 9%,transparent),transparent 60%),var(--surface);overflow:hidden}
+.dx-card.full{border-color:color-mix(in srgb,#3DDC97 45%,var(--line))}
+.dx-top{display:flex;align-items:center;gap:16px}
+.dx-rw{flex:none;width:92px;height:92px}
+.dx-leg{min-width:0;display:grid;gap:5px}
+.dx-leg p{margin:0;display:flex;align-items:center;gap:7px;font-size:14px;color:var(--muted);white-space:nowrap}
+.dx-leg p i{flex:none;width:9px;height:9px;border-radius:50%}
+.dx-leg b{color:var(--fg);font-variant-numeric:tabular-nums;font-weight:600}
+.dx-goal{margin:14px 0 0;display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;font-size:14px;line-height:1.3;
+  background:color-mix(in srgb,#E7B93E 11%,transparent);border:1px solid color-mix(in srgb,#E7B93E 28%,transparent)}
+.dx-goal>span:first-child{font-size:18px}
+.dx-goal b{color:#C8931E}
+:root[data-theme=dark] .dx-goal b,html.dark .dx-goal b{color:#F6D27A}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])):not([data-theme=light]) .dx-goal b{color:#F6D27A}}
+:root:where([data-theme="dark"]):not([data-theme=light]) .dx-goal b{color:#F6D27A}
+.dx-path{display:flex;align-items:center;margin-top:12px}
+.dx-nd{flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;
+  background:color-mix(in srgb,var(--fg) 10%,transparent);color:var(--muted)}
+.dx-nd.ok{background:#3DDC97;color:#06231A}
+.dx-nd.now{background:var(--teal,#1FB5A9);color:#04211E;box-shadow:0 0 0 3px color-mix(in srgb,var(--teal,#1FB5A9) 30%,transparent)}
+.dx-nd.ok.now{background:#3DDC97}
+.dx-seg{flex:1;height:3px;margin:0 4px;border-radius:2px;background:color-mix(in srgb,var(--fg) 12%,transparent)}
+.dx-seg.ok{background:#3DDC97}
+.dx-fire{margin-left:10px;padding:4px 9px;border-radius:99px;font-size:13px;font-weight:700;white-space:nowrap;
+  background:color-mix(in srgb,#FF7A4D 16%,transparent);color:#FF8E66}
+.dx-card .sx-go.dx-go{width:100%;margin:14px 0 0;min-height:50px;border-radius:16px;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s ease-out}
+.dx-card .sx-go.dx-go:active{transform:scale(.97)}
+/* anillo de un ejercicio empezado en la lista */
+.dx-xr{flex:none;width:26px;height:26px;margin-right:4px}
+.dx-xr svg{display:block;width:100%;height:100%}
+.dx-xr circle{fill:none;stroke-width:4;stroke:#3DDC97}
+.dx-xr .dx-bg{opacity:.2}
+.dx-xr .dx-fg{stroke-dasharray:100 100;stroke-linecap:round}
+/* barra de arriba en directo (pantalla del ejercicio) */
+.dx-lv{position:absolute;right:10px;bottom:0;height:48px;display:flex;align-items:center;gap:8px}
+.dx-t{font:600 16px var(--f-body);font-variant-numeric:tabular-nums;color:var(--muted)}
+.dx-t.clk{color:var(--fg)}
+.dx-lv .dx-mini{width:30px;height:30px}
+.dx-lv .dx-mini circle{stroke-width:13}
+.dx-pb{position:absolute;left:0;right:0;bottom:-1px;height:2px;overflow:hidden;pointer-events:none}
+.dx-pb>i{display:block;height:100%;background:linear-gradient(90deg,var(--teal,#1FB5A9),#3DDC97);transform-origin:0 50%;transform:scaleX(0);transition:transform .6s cubic-bezier(.32,.72,0,1)}
+@media (max-width:380px){.dx-lv .dx-mini{display:none}}
+/* copia de la pantalla que se va a la izquierda al pasar al siguiente */
+#main .dx-snap{position:fixed!important;inset:0;z-index:57;margin:0!important;border:0!important;border-radius:0!important;overflow:hidden;background:var(--bg)!important;
+  padding:calc(env(safe-area-inset-top) + 52px) 0 calc(env(safe-area-inset-bottom) + 110px);pointer-events:none;animation:none!important}
+#main .dx-snap>.tx-h{display:block;padding:4px 16px 12px}
+#main .dx-snap>.tx-h .tx-ph{display:block;width:100%;height:auto;aspect-ratio:4/3;max-height:40vh;border-radius:18px;margin-bottom:14px}
+#main .dx-snap>.tx-h .tx-t b{font-size:28px;line-height:1.1}
+#main .dx-snap>.tx-h .tx-ch,#main .dx-snap>.tx-h .tx-ok{display:none}
+#main .dx-snap::before{display:none!important}
+/* serie que mejora la última vez */
+.setrow2{position:relative}
+.dx-d{display:inline-block;font-weight:700;color:#B9851A;white-space:nowrap}
+.dx-d small{font-weight:500;opacity:.75;font-size:inherit!important;display:inline!important}
+:root[data-theme=dark] .dx-d{color:#F6D27A}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])):not([data-theme=light]) .dx-d{color:#F6D27A}}
+:root:where([data-theme="dark"]):not([data-theme=light]) .dx-d{color:#F6D27A}
+.dx-glow{position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 0 2px #E7B93E;opacity:0}
+/* récord personal */
+#dxPr{position:fixed;z-index:80;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 58px);display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:20px;
+  background:linear-gradient(135deg,#3a2c08,#1d1606);border:1px solid rgba(231,185,62,.55);color:#fff;box-shadow:0 14px 40px rgba(0,0,0,.45);
+  opacity:0;transform:translate3d(0,-24px,0) scale(.94);pointer-events:none;transition:opacity .25s,transform .45s cubic-bezier(.34,1.56,.64,1)}
+#dxPr.on{opacity:1;transform:none}
+#dxPr .dx-md{flex:none;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:21px;color:#3a2c08;background:radial-gradient(circle at 35% 30%,#FFE8A3,#C8931E)}
+#dxPr>span:nth-child(2){flex:1;min-width:0;display:grid}
+#dxPr b{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#F6D27A}
+#dxPr>span>span{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dxPr em{font-style:normal;font-weight:700;color:#F6D27A;white-space:nowrap}
+@media (min-width:881px){#dxPr{left:auto;right:24px;width:380px;top:24px}}
+.dx-cf{position:fixed;z-index:81;width:7px;height:11px;margin:-5px 0 0 -3px;border-radius:2px;pointer-events:none}
+/* «Sesión terminada» */
+.dx-sum{width:112px;height:112px;margin:4px auto 8px}
+.dx-cmp,.dx-ups,.dx-lvb{margin:10px 0 0;padding:12px 14px;border-radius:16px;border:1px solid var(--line,rgba(255,255,255,.1));background:color-mix(in srgb,var(--fg,#fff) 4%,transparent);text-align:left}
+.dx-cmp>b,.dx-ups>b{display:block;font-size:14px;margin-bottom:4px}
+.dx-cmp p,.dx-ups p{margin:6px 0 3px;display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+.dx-cmp .up{color:#3DDC97;font-weight:600}.dx-cmp .dn{color:var(--muted)}
+.dx-bar,.dx-xb{display:block;height:8px;border-radius:4px;overflow:hidden;background:color-mix(in srgb,var(--fg,#fff) 10%,transparent)}
+.dx-bar>i,.dx-xb>i{display:block;height:100%;border-radius:4px;transform-origin:0 50%;background:color-mix(in srgb,var(--fg,#fff) 40%,transparent)}
+.dx-bar.dx-hoy>i{background:#3DDC97}
+.dx-ups{background:linear-gradient(135deg,rgba(231,185,62,.14),rgba(231,185,62,.04));border-color:rgba(231,185,62,.32)}
+.dx-ups>b{color:#E7B93E}
+.dx-ups p{color:var(--fg);font-size:14px;align-items:baseline;padding:4px 0;border-bottom:1px solid rgba(231,185,62,.14)}
+.dx-ups p:last-child{border:0}
+.dx-ups p span:last-child{display:flex;flex-direction:column;align-items:flex-end}
+.dx-ups p small{font-size:11px;color:var(--muted)}
+.dx-ups i{font-style:normal}
+.dx-lvb>div{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.dx-lvb em{font-style:normal;font-weight:700;color:#E7B93E}
+.dx-xb{height:10px}
+.dx-xb>i{background:linear-gradient(90deg,#C8931E,#FFE08A)}
+.dx-lvb small{display:block;margin-top:8px;font-size:13px;color:var(--muted)}
+.dx-lvb small b{color:var(--fg)}
+@media (prefers-reduced-motion:reduce){.dx-rs .dx-fg,.dx-pb>i{transition:none}}
+
 /* 18 nov (Robert, A + B): botones fáciles de tocar en el móvil y más contraste en textos que se leían mal */
 /* A · botones pequeños a 40 px de alto en pantallas táctiles */
 @media (max-width:880px) and (pointer:coarse){.btn.sm{min-height:40px;padding-top:6px;padding-bottom:6px}}

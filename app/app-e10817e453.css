@@ -5184,6 +5184,93 @@ html.d4-sum-on .p-dock{opacity:0;pointer-events:none}
 .dx-lvb small b{color:var(--fg)}
 @media (prefers-reduced-motion:reduce){.dx-rs .dx-fg,.dx-pb>i{transition:none}}
 
+/* ---------- 18 nov 2026 · el estilo nuevo de Entreno/Dieta en el resto de pestañas (src/pestanas.js). Solo transform y opacity ---------- */
+.pe-rg .pe-rt{fill:none;opacity:.2}
+.pe-rg .pe-rt.off{opacity:.1}
+.pe-rg .pe-rp{fill:none;stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.32,.72,0,1)}
+.pe-dh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px}
+.pe-dh h3{margin:0;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pe-fire{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:700;background:rgba(255,122,89,.14);color:#D9542F;white-space:nowrap}
+.pe-x{width:30px;height:30px;border-radius:50%;border:0;background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--muted);font:inherit;font-size:13px;cursor:pointer}
+/* Inicio · Tu día */
+.pe-day{padding:14px 14px 12px}
+.pe-dt{display:grid;grid-template-columns:112px 1fr;gap:14px;align-items:center}
+.pe-rw{width:112px;height:112px}
+.pe-lgs{display:grid;gap:4px;min-width:0}
+.pe-lg{display:grid;grid-template-columns:10px 1fr auto;align-items:center;gap:9px;padding:6px 4px;border:0;background:none;text-align:left;font:inherit;color:inherit;cursor:pointer;border-radius:12px;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.pe-lg:active{transform:scale(.97);transition-duration:.1s}
+.pe-lg i{width:10px;height:10px;border-radius:50%}
+.pe-lg span{display:grid;min-width:0}
+.pe-lg b{font-size:15px;line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pe-lg small{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pe-lg em{font-style:normal;color:var(--muted);font-size:18px}
+.pe-run{display:block;width:100%;margin:10px 0 0;padding:9px 12px;border:0;border-radius:13px;background:color-mix(in srgb,#1FB5A5 12%,transparent);color:inherit;font:inherit;font-size:14px;text-align:left;cursor:pointer}
+.pe-run small{display:block;font-size:12px;color:var(--muted)}
+.pe-now{position:relative;display:grid;grid-template-columns:1fr auto;align-items:end;width:100%;margin:10px 0 0;padding:12px 14px;border:0;border-radius:18px;background:#16130f;color:#F4F1EA;text-align:left;font:inherit;cursor:pointer;overflow:hidden;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.pe-now:active{transform:scale(.97);transition-duration:.1s}
+.pe-now small{grid-column:1/-1;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#F6D27A}
+.pe-now b{font-size:24px;line-height:1.1;font-weight:800;color:#fff}
+.pe-now span{padding:7px 12px;border-radius:99px;background:#E7B93E;color:#1d1503;font-weight:700;font-size:14px}
+/* Inicio · Tu semana pasada / Progreso · Tu mes / Perfil · trayectoria: cifras */
+.pe-ts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.pe-ts.three{grid-template-columns:1fr}
+.pe-t{display:grid;align-content:start;padding:10px 12px;border-radius:15px;background:color-mix(in srgb,var(--fg) 5%,transparent)}
+.pe-t b{font-size:28px;line-height:1.05;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.pe-t .pe-of{font-size:12px;color:var(--muted);margin-top:-2px}
+.pe-t span{font-size:12.5px;color:var(--muted);line-height:1.3}
+.pe-t em{font-style:normal;font-size:12px;font-weight:700;margin-top:3px}
+.pe-t em.up{color:#1F9E6E}.pe-t em.dn{color:var(--muted)}.pe-t em.eq{color:var(--muted);font-weight:600}
+.pe-ts.three .pe-t{grid-template-columns:auto 1fr;column-gap:12px;align-items:center}
+.pe-ts.three .pe-t b{grid-row:span 2;min-width:44px;text-align:center}
+.pe-share{display:block;width:100%;margin:10px 0 0;min-height:44px;border-radius:14px;border:1px solid color-mix(in srgb,var(--fg) 12%,transparent);background:color-mix(in srgb,var(--fg) 4%,transparent);color:inherit;font:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.pe-share:active{transform:scale(.97);transition-duration:.1s}
+#d4Sum .pe-share,#sesx .pe-share{margin:0 0 10px}
+.pe-prs h4{margin:14px 0 6px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pe-pr{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:10px;width:100%;padding:8px 6px;border:0;border-top:1px solid color-mix(in srgb,var(--fg) 7%,transparent);background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.pe-pr span:nth-child(2){display:grid;min-width:0}
+.pe-pr b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pe-pr small{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pe-pr em{font-style:normal;font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:99px;background:rgba(231,185,62,.18);color:#A97E0B}
+.pe-tro{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#E7B93E 60%,#B8860B);font-size:17px;box-shadow:0 4px 12px rgba(231,185,62,.35)}
+/* Perfil */
+.pe-tray{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin:12px 0 4px}
+.pe-tray .pe-t{background:rgba(255,255,255,.07);text-align:center;padding:9px 6px}
+.pe-tray .pe-t b{font-size:24px;color:#fff}
+.pe-tray .pe-t span{color:rgba(255,255,255,.62);font-size:11.5px}
+.pe-best{margin:4px 0 8px;font-size:13px;color:rgba(255,255,255,.7);text-align:center}
+.pe-best b{color:#F6D27A}
+.pf-hero .pe-since{font-size:12.5px}
+.pe-gh{margin:18px 6px 6px;font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pf>.pe-gh{margin:20px 8px 7px}
+.pf-hero+.pe-gh{margin-top:16px}
+.pe-us:not(.open)>*:not(.pe-ush),.pe-us>.us-ph{display:none}
+.pe-ush{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:2px 0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.pe-ush span{display:grid}.pe-ush b{font-size:16px}.pe-ush small{font-size:13px;color:var(--muted)}
+.pe-ush i{font-style:normal;color:var(--muted);font-size:18px;transition:transform .3s cubic-bezier(.32,.72,0,1)}
+.pe-us.open .pe-ush i{transform:rotate(180deg)}
+.pe-us.open .pe-ush{margin-bottom:10px}
+/* Mensajes · respuestas rápidas (se van al escribir) */
+.pe-qr{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 12px 8px;margin:0 -2px;-webkit-overflow-scrolling:touch}
+.pe-qr::-webkit-scrollbar{display:none}
+.pe-q{flex:none;display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:99px;border:1px solid rgba(231,185,62,.35);background:rgba(231,185,62,.1);color:#F6D27A;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .2s}
+.pe-q:active{transform:scale(.94);transition-duration:.1s}
+.ch-comp:has(#mText:not(:placeholder-shown)) .pe-qr{display:none}
+/* Entrenador */
+.pe-cr{display:grid;place-items:center;width:38px;height:38px;flex:none;margin-left:auto}
+.dh-r:has(.pe-cr) .ws-n{margin-left:8px}
+.pe-cgl{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.pe-cgl li{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line,rgba(0,0,0,.07))}
+.pe-cgl li:first-child{border-top:0}
+.pe-cgt{display:grid;min-width:0;border:0;background:none;padding:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.pe-cgt b{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pe-cgt small{font-size:12.5px;color:var(--muted)}
+@media (prefers-color-scheme:dark){:where(:root:not([data-theme="light"])) .pe-fire{color:#FF9A7A}:where(:root:not([data-theme="light"])) .pe-pr em{color:#F6D27A}:where(:root:not([data-theme="light"])) .pe-t em.up{color:#3DDC97}}
+:where(:root[data-theme="dark"]) .pe-fire{color:#FF9A7A}:where(:root[data-theme="dark"]) .pe-pr em{color:#F6D27A}:where(:root[data-theme="dark"]) .pe-t em.up{color:#3DDC97}
+html[data-theme=dark] .pe-fire{color:#FF9A7A}
+html[data-theme=dark] .pe-pr em{color:#F6D27A}
+html[data-theme=dark] .pe-t em.up{color:#3DDC97}
+@media (prefers-reduced-motion:reduce){.pe-rg .pe-rp,.pe-lg,.pe-now,.pe-share,.pe-q,.pe-ush i{transition:none}}
+
 /* 18 nov (Robert, A + B): botones fáciles de tocar en el móvil y más contraste en textos que se leían mal */
 /* A · botones pequeños a 40 px de alto en pantallas táctiles */
 @media (max-width:880px) and (pointer:coarse){.btn.sm{min-height:40px;padding-top:6px;padding-bottom:6px}}

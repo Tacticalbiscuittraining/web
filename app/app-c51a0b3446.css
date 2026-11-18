@@ -5296,6 +5296,29 @@ html[data-theme=dark] .pe-t em.up{color:#3DDC97}
 html:not(:has(body[data-desk="1"])),html:not(:has(body[data-desk="1"])) *{scrollbar-width:none!important}
 html:not(:has(body[data-desk="1"]))::-webkit-scrollbar,html:not(:has(body[data-desk="1"])) *::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;background:transparent!important}
 
+/* 18 nov: que se note mucho la opción elegida frente a la no elegida (selectores de toda la app) */
+.nb-b[aria-pressed=false],.x-chip[aria-pressed=false],.tr-b[aria-pressed=false],.tr-w[aria-pressed=false],.xt-qb[aria-pressed=false],.ck-o .pill[aria-pressed=false]{background:transparent;border-color:color-mix(in srgb,var(--fg) 16%,transparent);color:color-mix(in srgb,var(--fg) 55%,transparent);font-weight:600;box-shadow:none}
+.nb-b[aria-pressed=true],.x-chip[aria-pressed=true],.tr-b[aria-pressed=true],.tr-w[aria-pressed=true],.xt-qb[aria-pressed=true],.ck-o .pill[aria-pressed=true]{font-weight:800;box-shadow:0 0 0 2px color-mix(in srgb,var(--teal) 35%,transparent),0 4px 12px -4px color-mix(in srgb,var(--teal) 70%,transparent)}
+.tr-w[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:#fff}
+.nb-b[aria-pressed=true]::before,.x-chip[aria-pressed=true]::before,.tr-b[aria-pressed=true]:not(:has(i))::before,.tr-w[aria-pressed=true]::before,.xt-qb[aria-pressed=true]::before,.ck-o .pill[aria-pressed=true]::before{content:"✓";margin-right:6px;font-weight:800}
+.nb-b[aria-pressed=true]:disabled{opacity:.85}
+/* Interruptores (Peso corporal, Encadenar…) */
+.bw-t[aria-pressed=false]{color:color-mix(in srgb,var(--fg) 55%,transparent)}
+.bw-t[aria-pressed=false] .tsw{background:color-mix(in srgb,var(--fg) 12%,transparent)}
+.bw-t[aria-pressed=false] .tsw i{opacity:.7}
+.bw-t[aria-pressed=true]{color:var(--fg);font-weight:800}
+.exo-r .exo-opt>.bw-t[aria-pressed=true]{background:color-mix(in srgb,var(--good) 18%,transparent);border-color:var(--good)}
+/* Ejercicio abierto: imagen grande que se mueve y se amplía al tocarla; sin miniatura junto a la técnica */
+#main .tx.nx>.tx-h .tx-phw{display:block;position:relative;cursor:zoom-in;pointer-events:auto;margin-bottom:14px}
+#main .tx.nx>.tx-h .tx-phw>.tx-ph{margin-bottom:0}
+#main .tx.nx>.tx-h .tx-phw>.tx-f2{position:absolute;left:0;top:0;width:100%;height:100%;margin:0;max-height:none;object-fit:cover;opacity:0;pointer-events:none}
+@media (prefers-reduced-motion:no-preference){#main .tx.nx>.tx-h .tx-phw>.tx-f2.ok{animation:tbHeroFr 2.4s ease-in-out infinite}}
+@keyframes tbHeroFr{0%,38%{opacity:0}50%,88%{opacity:1}100%{opacity:0}}
+#main .tx.nx>.tx-h .tx-phw:active{transform:scale(.985);transition:transform .12s}
+#main .tx.nx .exo-m>.exo-ph{display:none}
+#main .tx.nx .tx-b .exo-l{grid-template-columns:minmax(0,1fr)}
+#main .tx.nx .tx-b .exo-l>.exo-m>.exo-vid,#main .tx.nx .tx-b .exo-l .tech{grid-column:1}
+
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{
   --bg:#ECF2F1; --surface:#FFFFFF; --surface-2:#F4F8F7;

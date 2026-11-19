@@ -1201,6 +1201,7 @@ img:is(.exo-ph,.tx-ph,.phs-t,.bub-img,.rn-img,.exm-img),.ch-att img,.phv-img img
 @keyframes xjShake{0%,100%{transform:none}10%,50%,90%{transform:translateX(-6px) rotate(-4deg)}30%,70%{transform:translateX(6px) rotate(4deg)}}
 @keyframes xjFlash{0%{transform:scale(.2);opacity:1}100%{transform:scale(2.2);opacity:.15}}
 .xj-tap{font-size:13px;animation:xmPulse 1.6s ease-in-out infinite!important}
+.xj-later.xj-see{font-size:15px;color:#E8D49A;margin-top:12px;padding:8px 14px}
 .xj-later{border:0;background:none;color:#A79F8C;font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;margin-top:6px}
 .xj-rw{display:grid;justify-items:center;gap:8px}.xj-rw[hidden]{display:none}
 .xj-rwn{font:800 44px var(--f-display,inherit);color:#F1ECE0;font-variant-numeric:tabular-nums}

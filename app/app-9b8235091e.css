@@ -5125,18 +5125,25 @@ html.d4-sum-on .p-dock{opacity:0;pointer-events:none}
 .d4-tl>.mx>.mx-h .tx-ch{position:relative}
 .d4-tl>.mx>.mx-h .tx-ch::after{content:"";position:absolute;inset:-17px} /* zona de toque grande para la flecha */
 .d4-tl>.mx.d4-qo-on>.mx-h .tx-ch{transform:rotate(-135deg);margin:4px 4px 0 0}
-.d4-qo{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px 10px 10px 14px}
+.d4-qo{padding:2px 12px 12px 14px}
 .d4-qo-in{animation:d4QoIn .32s cubic-bezier(.32,.72,0,1)}
 @keyframes d4QoIn{from{opacity:0;transform:translate3d(0,-8px,0)}to{opacity:1;transform:none}}
-.d4-qb{display:flex;align-items:center;gap:7px;min-height:42px;padding:0 11px;border-radius:12px;border:1px solid color-mix(in srgb,var(--fg) 10%,transparent);background:color-mix(in srgb,var(--fg) 5%,transparent);color:var(--fg);font:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;transition:transform .15s}
+.d4-qd{margin:0 0 6px;font-size:13px;color:var(--muted)}
+.d4-qi{list-style:none;margin:0;padding:0}
+.d4-qi li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:14.5px;border-bottom:1px solid color-mix(in srgb,var(--fg) 7%,transparent)}
+.d4-qi li:last-child{border-bottom:0}
+.d4-qi b{flex:none;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.d4-qc{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 10px}
+.d4-qc span{padding:3px 8px;border-radius:99px;font-size:12px;font-weight:600;background:color-mix(in srgb,var(--fg) 8%,transparent);font-variant-numeric:tabular-nums}
+.d4-qc .g{background:rgba(231,185,62,.2);color:#C9A227}
+.d4-qa{display:flex;flex-wrap:wrap;gap:6px}
+.d4-qb{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 10px;border-radius:99px;border:1px solid color-mix(in srgb,var(--fg) 10%,transparent);background:color-mix(in srgb,var(--fg) 5%,transparent);color:var(--fg);font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:transform .15s}
 .d4-qb:active{transform:scale(.96)}
-.d4-qb svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.d4-qb.ok svg{color:#C9A227}.d4-qb.otra svg{color:#E9A23B}.d4-qb.fuera svg{color:#5AA9E6}.d4-qb.no svg{color:#E76F51}
-.d4-qb.ok.on{background:#E7B93E;border-color:#E7B93E;color:#1d1503}.d4-qb.ok.on svg{color:#1d1503}
+.d4-qb svg{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.d4-qb.otra svg{color:#E9A23B}.d4-qb.fuera svg{color:#5AA9E6}
 .d4-qb.otra.on{border-color:#E9A23B;background:color-mix(in srgb,#E9A23B 16%,transparent)}
 .d4-qb.fuera.on{border-color:#5AA9E6;background:color-mix(in srgb,#5AA9E6 16%,transparent)}
-.d4-qb.no.on{border-color:#E76F51;background:color-mix(in srgb,#E76F51 16%,transparent)}
-.d4-qv{grid-column:1/-1;justify-content:space-between;color:var(--muted);font-weight:600}
+.d4-qv{margin-left:auto;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){.d4-qo-in{animation:none}}
 
 /* ---------- 18 nov 2026 · Entreno «en directo + reto contigo mismo» (src/directo.js) ---------- */

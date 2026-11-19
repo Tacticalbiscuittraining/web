@@ -4919,7 +4919,10 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   /* al tocar un ejercicio la fila responde al momento (se hunde un poco), antes de que entre su pantalla */
   body[data-ct=entreno] #main .tx-l>.tx:not(.open){transition:scale .12s ease-out}
   body[data-ct=entreno] #main .tx-l>.tx:not(.open):has(>.tx-h:active){scale:.97}
-  body[data-ct=entreno] .tx:not(.open) .tx-ch{transform:rotate(-45deg);margin:0 6px 0 0}
+  /* 19 nov: el ejercicio vuelve a desplegarse en la lista (flecha hacia abajo, como siempre); pantalla completa con su botón */
+  #main .tx.open:not(.nx)>.tx-b>.nx-full{display:flex;align-items:center;gap:6px;margin:2px 12px 0 auto;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted);font:500 13px var(--f-body);cursor:pointer;transition:transform .12s}
+  #main .tx.open:not(.nx)>.tx-b>.nx-full:active{transform:scale(.95)}
+  .nx-full svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   /* C · el ejercicio abierto es una pantalla entera encima de la lista */
   html.nx-on{overflow:hidden}
   #main .tx.nx{position:fixed!important;inset:0;z-index:58;margin:0!important;border:0!important;border-radius:0!important;clip-path:none;
@@ -4942,6 +4945,7 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   #main .tx.nx::before,#main .nx-snap::before{display:none!important;animation:none!important}
   #main .tx.nx>.tx-b{border-top:0}
   #nxBar,#nxDim{display:none}
+  #main .tx.nx .nx-full,#main .nx-ph .nx-full{display:none!important}
   html.nx-on #nxBar{display:flex;position:fixed;z-index:59;top:0;left:0;right:0;height:calc(env(safe-area-inset-top) + 48px);padding-top:env(safe-area-inset-top);
     align-items:center;justify-content:center;background:var(--bg);border-bottom:.5px solid var(--line);color:var(--fg)}
   html.nx-on #nxDim{display:block;position:fixed;inset:0;z-index:57;background:rgba(0,0,0,.5);pointer-events:none}
@@ -4960,6 +4964,8 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
   .nx-go.nx-end{display:flex;justify-content:center}
 }
 @media (prefers-reduced-motion:reduce){body[data-ct] .p-top .p-hello,body[data-ct] .hub-id{transform:none!important;opacity:1!important}}
+
+.nx-full{display:none}
 
 /* ---------- 18 nov 2026 · Dieta «en directo + reto contigo mismo» (src/dieta4.js). Solo transform y opacity ---------- */
 /* tarjeta del día: 3 anillos (comidas · proteína · kcal) */

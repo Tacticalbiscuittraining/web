@@ -1763,6 +1763,14 @@ button.xr-fm.e{cursor:pointer;font:inherit;background:transparent}
 .sx-eat.on::after{border-color:#fff}
 .sx-eat.off{border-style:dashed}
 .sx-eat:active{transform:scale(.9)}
+/* 19 nov: un icono para cada estado (hecha con cambios, otra cosa, fuera, no hecha) */
+.sx-eat.sx-ic::after{display:none}
+.sx-eat svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.sx-eat.sx-chg{color:#fff}
+.sx-eat.sx-otra{--sc:#E9A23B}.sx-eat.sx-fuera{--sc:#5AA9E6}.sx-eat.sx-no{--sc:#E76F51}
+.sx-eat.sx-otra,.sx-eat.sx-fuera,.sx-eat.sx-no{color:var(--sc);border-color:var(--sc);background:color-mix(in srgb,var(--sc) 16%,var(--surface))}
+.sx-eat.sx-otra,.sx-eat.sx-fuera{border-style:solid}
+.sx-eat.sx-no{border-color:color-mix(in srgb,var(--sc) 75%,transparent)}
 .sx-alt{margin-top:8px}
 .sx-alt-t{margin:0 0 6px;font-size:13px;font-weight:600;opacity:.8}
 .sx-alt .altb{transition:transform .15s ease}
@@ -5014,6 +5022,16 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 .d4-tl>.mx{margin-left:72px;overflow:visible;position:relative}
 .d4-tl>.mx>.mx-h{padding-left:12px;gap:10px;border-radius:0 13px 13px 0}
 .d4-tl>.mx>.sx-eat{left:-41px;top:50%;margin-top:-15px;width:30px;height:30px;background:var(--bg,var(--surface))}
+/* 19 nov: en la línea cada estado se ve en su círculo (hecha rellena; otra cosa, fuera y no hecha con su color e icono) */
+.d4-tl>.mx>.sx-eat.on{background:var(--mc,#2A9D8F)}
+.d4-tl>.mx>.sx-eat.sx-otra,.d4-tl>.mx>.sx-eat.sx-fuera,.d4-tl>.mx>.sx-eat.sx-no{background:color-mix(in srgb,var(--sc) 18%,var(--bg,var(--surface)))}
+/* «Tu día»: título que manda, pegado a la línea (sin el hueco doble del margen + el espacio de la página) y a la derecha lo apuntado */
+.d4-dh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:-6px 4px -8px}
+.d4-dh h3{margin:0;font-size:22px;line-height:1.1;font-weight:800;color:var(--fg)}
+.d4-dh-s{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px 10px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.d4-dh-s span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.d4-dh-s svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.d4-dh-s .ok{color:#C9A227}.d4-dh-s .otra{color:#E9A23B}.d4-dh-s .fuera{color:#5AA9E6}.d4-dh-s .no{color:#E76F51}
 .d4-tl>.mx.d4-nxm>.sx-eat{border-color:#E7B93E;box-shadow:0 0 0 4px color-mix(in srgb,#E7B93E 22%,transparent)}
 .d4-tl>.mx.d4-nxm>.sx-eat::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid #E7B93E;opacity:0;animation:d4Pulse 1.8s ease-out infinite}
 @keyframes d4Pulse{0%{transform:scale(.75);opacity:.8}100%{transform:scale(1.35);opacity:0}}

@@ -10995,17 +10995,23 @@
 },
 {
 "n": "Panes especiales con tomate y orégano Hacendado",
-"g": "x",
-"p": 9.6,
-"c": 57.6,
-"f": 23.1,
-"fib": 3.3,
-"src": "Mercadona: etiqueta (Open Food Facts, EAN 8480000223968)",
+"g": "c",
+"p": 8.6,
+"c": 53,
+"f": 30,
+"fib": 3.1,
+"src": "Mercadona: etiqueta «Pan con tomate y orégano» (522 kcal; saturadas 3,4 g; azúcares 5 g; sal 1,2 g; bolsa 170 g = 17 tostas de ~10 g; EAN 8480000223968)",
 "sw": false,
-"al": [],
+"al": [
+"tostas de tomate",
+"pan con tomate y oregano",
+"pan tostado de tomate",
+"tostadas de tomate",
+"pan de tomate"
+],
 "ud": [
-80,
-"paquete"
+10,
+"tosta"
 ]
 },
 {

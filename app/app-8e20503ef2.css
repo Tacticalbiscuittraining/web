@@ -5427,6 +5427,21 @@ html:not(:has(body[data-desk="1"]))::-webkit-scrollbar,html:not(:has(body[data-d
 #main .tx.nx .tx-b .exo-l{grid-template-columns:minmax(0,1fr)}
 #main .tx.nx .tx-b .exo-l>.exo-m>.exo-vid,#main .tx.nx .tx-b .exo-l .tech{grid-column:1}
 
+/* 20 nov: un solo acceso por actividad en el calendario (src/calver.js) */
+.cal-ver{display:flex;align-items:center;justify-content:space-between;width:100%;margin:10px 0 0;padding:10px 14px;border:1px solid color-mix(in srgb,var(--rt,var(--accent,#7c5cff)) 40%,transparent);border-radius:12px;background:color-mix(in srgb,var(--rt,var(--accent,#7c5cff)) 10%,transparent);color:inherit;font:inherit;font-weight:700;cursor:pointer;text-align:left}
+.cal-ver i{font-style:normal;font-size:1.25em;line-height:1;opacity:.7}
+.cal-ver:active{transform:scale(.98)}
+.cal-b .rn-bits{margin:8px 0 0}
+.cal-exn{margin:6px 0 0;font-size:.86em;line-height:1.35}
+.cv-d{margin:0}
+.cv-ts{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.cv-t{padding:10px 12px;border-radius:12px;background:color-mix(in srgb,currentColor 6%,transparent)}
+.cv-t small{display:block;opacity:.7;font-size:.78em}
+.cv-t b{font-size:1.15em}
+.cv-ex{margin:0}
+.cv-a{display:flex;flex-wrap:wrap;gap:8px}
+.cv .cal-del{margin:0}
+
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{
   --bg:#ECF2F1; --surface:#FFFFFF; --surface-2:#F4F8F7;

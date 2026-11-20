@@ -4219,6 +4219,11 @@ span.fx-ch{display:inline-flex;align-items:center;cursor:default}
 .fx-grid .fx-ch i{font-style:normal;font-size:20px}
 .fx-grid .fx-ch small{font-size:12px;opacity:.75}
 .dsh .dsh-p.fx-pr .fx-r{display:grid;gap:6px;align-content:start}
+.dsh .fx-why{align-items:center;margin-top:2px}
+.fx-why .fx-ch{flex:none;min-height:32px;padding:0 10px;font-size:13.5px;white-space:nowrap}
+.fx-wl{flex:none;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.fx-wl i{font-style:normal;font-size:11px}
+.fx-wn{flex:none;font-size:12px;color:var(--muted);white-space:nowrap;padding-right:4px}
 .fx-ok{width:100%;min-height:48px;font-size:16px}
 /* entrenador */
 .fx-cd{margin:8px 0 0;padding:8px 10px;border-radius:12px;background:var(--fx-l);display:grid;gap:4px}

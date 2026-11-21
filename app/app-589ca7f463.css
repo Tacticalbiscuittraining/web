@@ -4466,6 +4466,19 @@ html.rc-lock,html.rc-lock body{overflow:hidden!important;overscroll-behavior:non
 #rcCook:has(.rc-add.on) .rk-card,html.c4-kb #rcCook .rk-card{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(22,19,14,.94)}
 #rcCook:has(.rc-add.on) :is(.rk-f button,.rk-tm),html.c4-kb #rcCook :is(.rk-f button,.rk-tm){-webkit-backdrop-filter:none;backdrop-filter:none}
 
+/* 21 nov (Robert, capturas iPhone): 1) modo cocinar › buscar alimento: el teclado tapaba las opciones. Con el buscador abierto
+   la pantalla se ajusta a la parte visible (visualViewport, JS en recetas2.js) y solo queda el buscador arriba con sus opciones
+   debajo; al cerrar vuelve todo. 2) la ⭐ de favorita se salía del círculo: el ✓ de «opción elegida» (elegido.css) se colaba dentro */
+#rcCook:has(.rc-add.on){bottom:auto;height:var(--rkh,100%);top:var(--rkt,0)}
+#rcCook:has(.rc-add.on) .rk-b{justify-content:flex-start}
+#rcCook:has(.rc-add.on) .rk-card{margin-block:0;padding:14px}
+#rcCook:has(.rc-add.on) :is(.rk-dots,.rk-tm,.rk-f,.rk-wk,.rk-ing,.rk-x,.rk-ey,.rc-an){display:none}
+#rcCook:has(.rc-add.on) .rc-al .rc-an{display:block}
+#rcCook:has(.rc-add.on) .rc-add{margin-top:0}
+#rcCook:has(.rc-add.on) .rc-al{max-height:none}
+.rc-fvb[aria-pressed]::before{content:none!important;display:none!important}
+.rc-hero .rc-fvh[aria-pressed=true]{box-shadow:0 0 0 2px var(--gold,#d8b14a)}
+
 .gm-pf .pf-cb{display:grid;gap:10px}
 .gm-p{margin:0;line-height:1.45}
 .gm-s{margin:0;font-size:13px;color:var(--mut,#9a9a9a)}

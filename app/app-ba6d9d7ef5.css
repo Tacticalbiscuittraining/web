@@ -5432,9 +5432,10 @@ html body[data-ct=calendario]::before{background:rgb(185,174,255)!important;opac
 /* el logo de en medio: en #tbLs (pestanas.js), con reflejo al entrar y movimiento más lento al deslizar */
 #tbLs{display:none;position:fixed;inset:-10vh 0;z-index:-1;pointer-events:none;will-change:transform;-webkit-mask:url(icons/marca.webp?v=1) center/min(78vw,78vh,560px) no-repeat;mask:url(icons/marca.webp?v=1) center/min(78vw,78vh,560px) no-repeat;overflow:hidden}
 :is(html body[data-ct=entreno],html body[data-ct=dieta],html body[data-ct=seguimiento],html body[data-ct=perfil],html body[data-ct=calendario]) #tbLs{display:block}
+html body[data-ct=inicio] .hub>#tbLs{display:block}
 :is(html body[data-ct=entreno],html body[data-ct=dieta],html body[data-ct=seguimiento],html body[data-ct=perfil],html body[data-ct=calendario])::before{display:none!important}
 #tbLs i{position:absolute;inset:0;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.5) 50%,transparent 62%);opacity:0;transform:translateX(-70%)}
-@media (prefers-reduced-motion:no-preference){:is(html body[data-ctin=entreno],html body[data-ctin=dieta],html body[data-ctin=seguimiento],html body[data-ctin=perfil],html body[data-ctin=calendario]) #tbLs i{animation:tbLsS .9s cubic-bezier(.45,.05,.3,1) .12s both}
+@media (prefers-reduced-motion:no-preference){:is(html body[data-ctin=entreno],html body[data-ctin=dieta],html body[data-ctin=seguimiento],html body[data-ctin=perfil],html body[data-ctin=calendario],html body[data-ctin=inicio]) #tbLs i{animation:tbLsS .9s cubic-bezier(.45,.05,.3,1) .12s both}
 @keyframes tbLsS{0%{opacity:0;transform:translateX(-70%)}15%{opacity:1}85%{opacity:1}100%{opacity:0;transform:translateX(70%)}}}
 @media (prefers-reduced-motion:reduce){#tbLs{transform:none!important}}
 @media print{#tbLs{display:none!important}}
@@ -5443,6 +5444,7 @@ html body[data-ct=dieta] #tbLs{background:rgba(241,207,106,.09)}
 html body[data-ct=seguimiento] #tbLs{background:rgba(156,194,238,.09)}
 html body[data-ct=perfil] #tbLs{background:rgba(215,222,230,.09)}
 html body[data-ct=calendario] #tbLs{background:rgba(185,174,255,.09)}
+html body[data-ct=inicio] #tbLs{background:rgba(255,184,160,.11)}
 /* Mensajes (chat del cliente): degradado dorado y terracota, logo dorado y el mismo reflejo al entrar */
 html body[data-ct=mensajes] .chat-card.cli .chat{background:radial-gradient(110% 55% at 100% 0%,rgba(217,169,75,.26),transparent 64%),radial-gradient(110% 50% at 0% 100%,rgba(231,111,81,.2),transparent 68%),#0d0c0b!important}
 html body[data-ct=mensajes] .chat-card.cli .chat:has(>.tb-lsc)::before{display:none}

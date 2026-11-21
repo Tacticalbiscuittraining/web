@@ -4628,6 +4628,8 @@ html.gmx-on,html.gmx-on body{overflow:hidden;overscroll-behavior:none}
 .gx-big b{font-size:28px;line-height:1.05;font-variant-numeric:tabular-nums;white-space:nowrap}
 .gx-big small{color:var(--gx-m);font-size:12px}
 @media (max-width:370px){.gx-big b{font-size:23px}}
+.gx-big.gx-bs b{font-size:22px}@media (max-width:370px){.gx-big.gx-bs b{font-size:19px}}
+.gx-nomap .gx-rt{margin-top:6px}
 .gx-tabs{position:sticky;top:-14px;z-index:2;display:flex;gap:4px;padding:4px;border-radius:14px;background:rgba(20,27,28,.94);border:1px solid var(--gx-l);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .gx-tabs button{flex:1;border:0;background:none;color:var(--gx-m);font:inherit;font-size:13.5px;font-weight:600;padding:9px 4px;border-radius:10px;cursor:pointer;white-space:nowrap}
 .gx-tabs button[aria-selected="true"]{background:var(--gx-a);color:#06211d}

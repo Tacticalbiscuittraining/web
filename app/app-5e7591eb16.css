@@ -4021,7 +4021,7 @@ rect.nv-se{fill:var(--muted,#888)}
 .nv-hl{position:absolute;left:14px;top:12px;width:42px;height:42px;border-radius:50%;background:#000 url(icons/logo-color.webp?v=1) center/cover no-repeat;box-shadow:0 0 0 1.5px rgba(255,255,255,.25),0 3px 10px rgba(0,0,0,.55);pointer-events:none}
 /* 11 nov (Robert): misma separación entre secciones distintas de Inicio (16 px) y menos (8 px) entre las que van juntas:
    la foto del entreno de hoy y «¿Cómo estás hoy?» */
-.hub-body>.nv-hero,.hub-body>.nv-wb,.hub-body>.pz-hub{margin:0 0 16px}
+.hub-body>.nv-hero,.hub-body>.nv-wb,.hub-body>.pz-hub,.hub-body>.pe-day{margin:0 0 16px}
 .hub-body>.nv-hero:has(+.nv-wb){margin-bottom:8px}
 .hub-body>.hub-grid{margin-bottom:0}
 .hub-body>.hub-grid+.tq-home{margin-top:16px}

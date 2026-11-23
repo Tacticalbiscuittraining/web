@@ -5322,6 +5322,17 @@ html.d4-sum-on .p-dock{opacity:0;pointer-events:none}
 .s9 .s9-best p{margin:6px 0 0;padding-top:7px;border-top:1px solid rgba(231,185,62,.2);width:100%;font-size:12px;color:#cfd2cb}
 .s9 .s9-best p b{font-size:12px}
 
+/* 23 nov: la tarjeta 9:16 se compacta por pasos si no cabe (sx9Fit), para no pisar el pie */
+.s9.s9-c1{gap:7px;padding-top:36px}
+.s9.s9-c1 .s9-best{padding:9px 12px}
+.s9.s9-c1 .s9-best em{font-size:25px}
+.s9.s9-c1 .s9-best p{margin-top:4px;padding-top:5px}
+.s9.s9-c2 .xr-sxw{transform:scale(.7);margin:-12px auto!important}
+.s9.s9-c2 .s9-kg b{font-size:54px}
+.s9.s9-c3 h2{font-size:32px}
+.s9.s9-c3 .sx-t b{font-size:20px}
+.s9.s9-c3 .sx-ts>.sx-t{padding:6px}
+
 /* ---------- 18 nov 2026 · el estilo nuevo de Entreno/Dieta en el resto de pestañas (src/pestanas.js). Solo transform y opacity ---------- */
 .pe-rg .pe-rt{fill:none;opacity:.2}
 .pe-rg .pe-rt.off{opacity:.1}

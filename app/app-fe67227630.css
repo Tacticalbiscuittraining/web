@@ -3808,6 +3808,10 @@ body:has(.p-dock) .rt2.mini .rt-mini{bottom:calc(150px + env(safe-area-inset-bot
 .td-p.td-plus.on .td-ring{opacity:1}
 body .td-pills .td-p.td-plus.on{color:#FF9068}
 
+/* 23 nov: «↓ Hacerlo al final» / «↑ Volver a su sitio» (solo la sesión de hoy) */
+.exo-r .ex-ord{display:block;margin:12px auto 0;font-size:13px;font-weight:600;color:var(--accent,#1FB5A9)}
+.exo-r .ex-ord+.ex-skip{margin-top:6px}
+
 /* 8 nov · Controles de la derecha (e iconos de la izquierda) centrados en vertical respecto a toda la fila */
 /* Dieta: gramos y ✕ en medio de nombre + línea de kcal (si la 2ª línea es una etiqueta larga de cambio, se queda como estaba para no cortarla) */
 .mx .fl.d2:not(:has(.fl-chg)){grid-template-areas:'t g a' 's g a'}
@@ -5528,6 +5532,16 @@ html:not(:has(body[data-desk="1"]))::-webkit-scrollbar,html:not(:has(body[data-d
 .cv-ex{margin:0}
 .cv-a{display:flex;flex-wrap:wrap;gap:8px}
 .cv .cal-del{margin:0}
+
+/* 23 nov: móvil en horizontal → aviso a pantalla completa (ver src/girar.js) */
+#tbGirar{display:none}
+@media (orientation:landscape) and (max-height:500px) and (pointer:coarse){
+  #tbGirar{display:flex;position:fixed;inset:0;z-index:2147483000;align-items:center;justify-content:center;text-align:center;background:#0b1716;color:#e8f4f2;padding:24px}
+  #tbGirar>div{display:flex;flex-direction:column;align-items:center;gap:8px;max-width:340px}
+  #tbGirar svg{color:#1FB5A9}
+  #tbGirar b{font-size:20px}
+  #tbGirar span{font-size:15px;opacity:.75}
+  html:has(#tbGirar),body:has(#tbGirar){overflow:hidden}}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

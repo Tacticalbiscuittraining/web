@@ -4860,6 +4860,56 @@ button.gx-hdb>i{font-style:normal;color:var(--teal,#4fc6b4);margin-left:4px}
 #gmxm .gxm-bar{bottom:calc(env(safe-area-inset-bottom) + 74px)}
 #gmxm .leaflet-control-zoom{margin-bottom:calc(env(safe-area-inset-bottom) + 128px)}
 .gm-anw.gm-fin .gm-dh{animation:none}
+/* 24 nov: Salud · diseño «Recuperación» (src/garmin5.js ghToday) */
+#gmx{--gh5-g:#4cd39a;--gh5-w:#f2b84b;--gh5-r:#ff6b7a}
+#gmx .gh5-l{font-size:11px;letter-spacing:1.1px;text-transform:uppercase;color:var(--gx-m);font-weight:600}
+#gmx .gh5-n{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+#gmx .gh5-hero{grid-template-columns:118px 1fr;gap:14px;align-items:center;padding:16px;background:radial-gradient(120% 140% at 0 0,rgba(76,201,176,.18),transparent 60%),var(--gx-c)}
+#gmx .gh5-hero.gh5-a{background:radial-gradient(120% 140% at 0 0,rgba(242,184,75,.16),transparent 60%),var(--gx-c)}
+#gmx .gh5-hero.gh5-r{background:radial-gradient(120% 140% at 0 0,rgba(255,107,122,.16),transparent 60%),var(--gx-c)}
+.gh5-ring{position:relative;width:118px;height:118px}
+.gh5-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gh5-ring circle{fill:none;stroke-width:11}.gh5-ring .bg{stroke:rgba(255,255,255,.08)}
+.gh5-ring .fg{stroke:#4cc9b0;stroke-linecap:round}
+.gh5-a .gh5-ring .fg{stroke:#f2b84b}.gh5-r .gh5-ring .fg{stroke:#ff6b7a}
+@media (prefers-reduced-motion:no-preference){.gh5-ring .fg{animation:gh5in .9s cubic-bezier(.2,.8,.3,1) both}}
+@keyframes gh5in{from{stroke-dashoffset:327}}
+.gh5-ring span{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.gh5-ring b{font-size:40px;line-height:1;font-weight:800;font-variant-numeric:tabular-nums}
+.gh5-ring small{color:var(--gx-m);font-size:11.5px}
+.gh5-ht{min-width:0;display:grid;gap:3px}
+.gh5-ht>b{font-size:18px;line-height:1.2}
+.gh5-ht p{margin:0;color:var(--gx-m);font-size:13px;line-height:1.35}
+.gh5-f{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.gh5-f span{font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px;background:rgba(255,255,255,.07)}
+.gh5-f .g{color:var(--gh5-g)}.gh5-f .w{color:var(--gh5-w)}
+#gmx .gh5-sl{gap:10px;padding:14px 16px}
+.gh5-slh{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.gh5-slh .gh5-n{display:block;font-size:34px;line-height:1.05}
+.gh5-sc{display:flex;align-items:center;gap:7px;color:var(--gx-m);font-size:11.5px;line-height:1.2;text-align:left}
+.gh5-sc b{font-size:24px;color:var(--gx-t);font-variant-numeric:tabular-nums}
+.gh5-tl{display:flex;justify-content:space-between;gap:8px;color:var(--gx-m);font-size:12px}
+#gmx .gh5-ph{height:12px;border-radius:7px;gap:2px}
+.gh5-lg{display:grid;grid-template-columns:1fr 1fr;gap:5px 14px;font-size:12.5px}
+.gh5-lg span{display:flex;align-items:center;gap:7px;min-width:0}
+.gh5-lg i{width:9px;height:9px;border-radius:3px;flex:none}
+.gh5-lg em{font-style:normal;color:var(--gx-m);margin-left:auto;font-variant-numeric:tabular-nums}
+.gh5-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gh5-g.odd>:last-child{grid-column:1/-1}
+#gmx .gh5-t{gap:3px;padding:12px 13px 10px;align-content:start}
+.gh5-v{margin:0;display:flex;align-items:baseline;gap:4px}
+.gh5-v .gh5-n{font-size:26px;line-height:1.1}.gh5-v em{font-style:normal;color:var(--gx-m);font-size:12px}
+.gh5-sub{color:var(--gx-m);font-size:12px}
+.gh5-chip{justify-self:start;font-size:11px;font-weight:600;padding:2px 7px;border-radius:99px;background:rgba(255,255,255,.07);color:var(--gx-m);white-space:nowrap}
+.gh5-chip.g{background:rgba(76,211,154,.14);color:var(--gh5-g)}.gh5-chip.w{background:rgba(242,184,75,.14);color:var(--gh5-w)}
+.gh5-sp{position:relative;display:block;height:32px;margin-top:6px}
+.gh5-sp svg{width:100%;height:100%;display:block}
+.gh5-sp i{position:absolute;width:6px;height:6px;border-radius:50%;transform:translate(-50%,-50%)}
+#gmx .gh5-bb{gap:6px;padding:12px 14px}
+.gh5-bbr{display:flex;align-items:center;gap:12px}
+.gh5-bbr .gh5-n{font-size:24px}
+.gh5-bat{flex:1;height:14px;border-radius:8px;background:rgba(255,255,255,.08);position:relative;overflow:hidden}
+.gh5-bat i{position:absolute;top:0;bottom:0;border-radius:8px;background:linear-gradient(90deg,#3fb6ff,#4cd39a)}
 
 /* 14 nov: contenido de un desplegable de Perfil al abrirlo (src/perfil-fold.js) */
 @keyframes pfIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}

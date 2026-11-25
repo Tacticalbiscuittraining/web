@@ -5714,6 +5714,82 @@ html.ci-on,html.ci-on body{overflow:hidden}
 .ci-tr span{display:flex;flex-direction:column;min-width:0}.ci-tr small{color:var(--muted);font-size:12px}
 .ci-nx{font-size:12px;margin:6px 0 0}
 @media (max-width:760px){.ci-ha{margin-left:0}.ci-lg{display:none}.ci-h h2{font-size:22px;width:100%}.ci-rb{display:none!important}.ci-fr{flex-wrap:wrap}.ci-fr .ci-f{flex:1 1 40%}}
+/* 25 nov tarde: diseño B (Robert: «más profesional»): cabecera con iconos, tira de semana con puntitos, lista de próximas, botón ＋ */
+.ci-h{flex-wrap:nowrap;gap:8px}
+.ci-h h2{flex:1;font-size:30px;letter-spacing:.3px;text-transform:uppercase}
+.ci-ib{width:40px;height:40px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--fg);display:grid;place-items:center;cursor:pointer;padding:0;font:inherit;font-size:20px;line-height:1}
+.ci-ib svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ci-ib.sm{width:34px;height:34px;font-size:18px}
+.ci-ib:hover,.ci-pill:hover{background:var(--surface-2)}
+.ci-tbs{align-self:flex-start}
+.ci-nav{gap:8px;flex-wrap:nowrap}
+.ci-nav>b{font-size:17px;font-weight:600;min-width:0;text-align:left;white-space:nowrap}
+.ci-nav>.muted{font-size:14px;white-space:nowrap}
+.ci-sp{flex:1}
+.ci-pill{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 14px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.ci-wk{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.ci-dy{border:0;background:none;color:inherit;font:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;cursor:pointer;border-radius:14px}
+.ci-dy small{font-size:12px;color:var(--muted)}
+.ci-dy b{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:600}
+.ci-dy.ci-hoy small,.ci-dy.ci-hoy:not([aria-pressed="true"]) b{color:var(--teal);font-weight:700}
+.ci-dy[aria-pressed="true"] b{background:var(--teal);color:#fff}
+:root[data-theme="dark"] .ci-dy[aria-pressed="true"] b{color:#04201d}
+.ci-dots{display:flex;gap:3px;height:6px;justify-content:center}
+.ci-dots i{width:6px;height:6px;border-radius:50%}
+.ci-ch{height:52px;gap:1px}.ci-ch .ci-dots{height:5px}.ci-ch .ci-dots i{width:5px;height:5px}
+.ci-hc{padding-top:52px}.ci-has-au .ci-hc{padding-top:calc(52px + var(--au,46px))}
+.ci-ls{display:flex;flex-direction:column;padding-bottom:90px}
+.ci-dhd{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:18px 2px 8px}
+.ci-dhd.t{color:var(--teal)}
+.ci-cd{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;margin:0 0 8px;cursor:pointer;box-sizing:border-box}
+.ci-cd.past{opacity:.55}
+.ci-tm{width:52px;flex:none;font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;display:flex;flex-direction:column}
+.ci-tm small{font-weight:400;font-size:12px;color:var(--muted)}
+.ci-br{width:4px;align-self:stretch;border-radius:2px;background:var(--c);flex:none}
+.ci-tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.ci-tx b{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-tx small{color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis}
+.ci-cd .avatar{flex:none}
+.ci-cdr{cursor:default}
+.ci-dh{flex:none;border:1.5px solid var(--teal);color:var(--teal-ink,var(--teal));background:none;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.ci-nada{font-size:14px;margin:0 2px 6px}
+.ci-fin{font-size:12.5px;margin:14px 2px 0}
+.ci-fab{position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:max(24px,calc(env(safe-area-inset-bottom,0px) + 12px));width:58px;height:58px;border-radius:50%;border:0;background:var(--teal);color:#fff;font-size:30px;line-height:1;display:grid;place-items:center;box-shadow:0 8px 24px color-mix(in srgb,var(--teal) 40%,transparent);cursor:pointer;z-index:2}
+:root[data-theme="dark"] .ci-fab{color:#04201d}
+.ci-grid{border-radius:16px}
+.ci-tb[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.18)}
+@media (max-width:760px){.ci-h h2{width:auto;font-size:28px}.ci-w{gap:10px}}
+/* A · día con horas (móvil) */
+.ci-dt{margin:6px 2px 0;font-size:15px;font-weight:600}
+.ci-ads{display:flex;gap:8px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
+.ci-adl{width:50px;flex:none;font-size:11px;color:var(--muted);text-align:right;padding-top:8px;line-height:1.15}
+.ci-ads>div{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ci-ad{display:flex;align-items:center;justify-content:space-between;gap:8px;border:0;border-left:3px solid var(--c);background:color-mix(in srgb,var(--c) 18%,var(--surface));color:inherit;font:inherit;font-size:14px;font-weight:500;text-align:left;border-radius:9px;padding:8px 10px;cursor:pointer;min-width:0}
+.ci-ad span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci-ad em{font-style:normal;color:var(--teal-ink,var(--teal));font-size:13px;font-weight:600;flex:none}
+.ci-tl{--hh:58px;position:relative;margin-top:10px;padding-bottom:100px}
+.ci-th{height:var(--hh);display:grid;grid-template-columns:58px 1fr;grid-template-rows:1fr 1fr;position:relative}
+.ci-th span{grid-row:1/3;font-size:12px;color:var(--muted);text-align:right;padding-right:10px;transform:translateY(-8px)}
+.ci-th button{grid-column:2;border:0;border-top:1px solid var(--line);background:none;padding:0;cursor:pointer}
+.ci-th button+button{border-top:1px dashed color-mix(in srgb,var(--line) 55%,transparent)}
+.ci-th.off button{background:color-mix(in srgb,currentColor 3%,transparent)}
+.ci-th button:active{background:color-mix(in srgb,var(--teal) 14%,transparent)}
+.ci-dpos{right:auto}
+.ci-dpos .ci-ev{font-size:14px;padding:6px 10px;border-left-width:4px;border-radius:10px}
+.ci-dpos .ci-ev small{font-size:12.5px}
+.ci-now{position:absolute;left:52px;right:0;height:2px;background:var(--coral);z-index:3;pointer-events:none}
+.ci-now::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--coral)}
+/* fondo como el resto de la app: degradado y el logo en medio con reflejo al abrir */
+.ci-bg{background:radial-gradient(120% 60% at 50% -10%,color-mix(in srgb,var(--teal) 16%,transparent),transparent 70%),var(--bg)}
+.ci-logo{position:fixed;inset:0;z-index:0;pointer-events:none;background:color-mix(in srgb,var(--teal) 10%,transparent);-webkit-mask:url(icons/marca.webp?v=1) center 58%/min(78vw,70vh,560px) no-repeat;mask:url(icons/marca.webp?v=1) center 58%/min(78vw,70vh,560px) no-repeat;overflow:hidden}
+.ci-logo i{position:absolute;inset:0;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.5) 50%,transparent 62%);opacity:0}
+@media (prefers-reduced-motion:no-preference){.ci-logo i{animation:tbLsS .9s cubic-bezier(.45,.05,.3,1) .15s both}}
+.ci-w{position:relative;z-index:1}
+.ci-grid,.ci-cb{background:color-mix(in srgb,var(--surface) 72%,transparent)}
+.ci-th.off button{background:color-mix(in srgb,currentColor 4%,transparent)}
+.ci-fab{z-index:3}
+@media print{.ci-logo{display:none}}
+.ci-dpos{min-height:26px}.ci-dpos .ci-ev.sh{padding:2px 10px;font-size:13px;justify-content:center}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

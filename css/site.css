@@ -88,3 +88,14 @@ p { margin: 0; }
 @media (max-width: 860px) { .btn-client { min-height: 44px; display: inline-flex; align-items: center; } .lang a { min-height: 40px; } }
 .btn-client + .lang { margin-left: -12px; }
 @media (max-width: 560px) { .btn-client + .lang { margin-left: -4px; } }
+/* 25 nov: acceso entrenadores junto a acceso clientes (en el móvil, dentro del menú ☰) */
+.btn-coach { border-color: color-mix(in srgb, var(--band-fg) 30%, transparent); }
+.btn-coach:hover { background: var(--band-fg); color: var(--band); border-color: var(--band-fg); }
+.btn-client + .btn-coach { margin-left: -14px; }
+.btn-coach + .lang { margin-left: -12px; }
+.site-nav .nav-coach { display: none; }
+@media (max-width: 1100px) { .btn-coach { display: none; } }
+@media (max-width: 860px) { .site-nav .nav-coach { display: inline-block; } }
+@media (max-width: 560px) { .btn-coach + .lang { margin-left: -4px; } }
+.site-nav a { white-space: nowrap; }
+@media (max-width: 1280px) { .site-nav { gap: 18px; } }

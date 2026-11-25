@@ -14,7 +14,32 @@
 <style>
 .tr-band { background: var(--band); color: var(--band-fg); position: relative; overflow: hidden; }
 .tr-band::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 70% at 85% 40%, color-mix(in srgb, var(--teal) 20%, transparent), transparent 70%); pointer-events: none; }
-.tr-hero { position: relative; padding-block: 72px 80px; max-width: 820px; }
+.tr-hero-g { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 48px; align-items: center; padding-block: 72px 88px; }
+.tr-hero { position: relative; max-width: 640px; }
+.tr-shot { position: relative; margin: 0; }
+.tr-shot .pc { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--band-fg) 14%, transparent); box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+.tr-shot .ph { position: absolute; right: -14px; bottom: -40px; width: 30%; height: auto; border-radius: 22px; border: 5px solid #0b0f0f; box-shadow: 0 24px 60px rgba(0,0,0,.55); }
+.tr-home { font-size: 14px; font-weight: 600; text-decoration: none; color: var(--band-fg); opacity: .85; padding: 8px 4px; white-space: nowrap; }
+.tr-home:hover { opacity: 1; color: var(--teal); }
+.tr-see { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.tr-fig { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.tr-fig img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--line); }
+.tr-fig figcaption { padding: 18px 22px 22px; display: grid; gap: 6px; }
+.tr-fig figcaption b { font-family: var(--font-display); font-size: 22px; text-transform: uppercase; letter-spacing: .01em; }
+.tr-fig figcaption span { color: var(--muted); font-size: 15px; }
+.tr-see .col { display: grid; gap: 20px; }
+.tr-see .mob { display: grid; grid-template-columns: 42% 1fr; align-items: center; }
+.tr-see .mob img { border-bottom: 0; border-right: 1px solid var(--line); }
+.tr-cta { background: var(--band); color: var(--band-fg); border-radius: 24px; padding: 48px; margin-top: 96px; position: relative; overflow: hidden; }
+.tr-cta::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 90% at 90% 20%, color-mix(in srgb, var(--teal) 22%, transparent), transparent 70%); pointer-events: none; }
+.tr-cta > * { position: relative; }
+.tr-cta .sec-head p { color: var(--band-muted); }
+.tr-cta .sec-head p.eyebrow { color: var(--teal); }
+.tr-cta .btn.ghost { border-color: color-mix(in srgb, var(--band-fg) 40%, transparent); color: var(--band-fg); }
+.tr-cta .btn.ghost:hover { background: var(--band-fg); color: var(--band); }
+.rv { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+.rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } }
 .tr-hero .eyebrow { color: var(--teal); }
 .tr-hero h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 900; margin-top: 18px; }
 .tr-hero h1 em { font-style: normal; color: var(--teal); }
@@ -40,12 +65,11 @@
 .chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 10px 16px; font-size: 15px; font-weight: 600; }
 .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; counter-reset: s; }
 .steps .pillar h3::before { counter-increment: s; content: counter(s); display: inline-grid; place-items: center; width: 34px; height: 34px; margin-right: 10px; border-radius: 50%; background: var(--teal-soft); color: var(--teal-ink); font-size: 17px; vertical-align: 3px; }
-.tr-end { padding-block: 80px 96px; }
+.tr-end { padding-block: 0 96px; }
 .tr-end .cta-row { margin-top: 20px; }
-.tr-end .btn.ghost { border-color: var(--line); color: inherit; }
-.tr-end .btn.ghost:hover { background: var(--surface); }
 .back { display: inline-block; margin-top: 28px; color: var(--teal-ink); }
-@media (max-width: 900px) { .pillars, .steps { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 900px) { .pillars, .steps, .tr-see, .tr-hero-g { grid-template-columns: minmax(0, 1fr); } .tr-hero-g { gap: 40px; padding-block: 48px 72px; } .tr-shot { margin-right: 18px; } .tr-cta { padding: 32px 22px; margin-top: 72px; } }
+@media (max-width: 560px) { .tr-see .mob { grid-template-columns: 46% 1fr; } .tr-fig figcaption { padding: 14px 16px 18px; } }
 @media (max-width: 480px) { .site-head .brand b { display: none; } .tr-hero { padding-block: 48px 56px; } }
 </style>
 </head>
@@ -56,24 +80,34 @@
       <img src="../img/logo-s.jpg" alt="" width="40" height="40">
       <b>Tactical Biscuit<br>Training</b>
     </a>
-    <a class="btn-client" href="../app/">Client login</a>
+    <a class="tr-home" href="../">← Home</a>
     <nav class="lang" aria-label="Language"><a href="../entrenadores.html" lang="es" hreflang="es">ES</a><a href="./trainers.html" lang="en" aria-current="page">EN</a></nav>
   </div>
 </header>
 <main class="tr">
-<div class="tr-band"><div class="wrap"><div class="tr-hero">
+<div class="tr-band"><div class="wrap tr-hero-g"><div class="tr-hero">
   <p class="eyebrow">Team Biscuit for trainers</p>
   <h1>Manage your clients <em>from a single app</em></h1>
   <p class="lead">Plan training and nutrition, follow up on every client and talk to them, all from one place. Your clients have everything on their phone, with your name, your logo and your colour.</p>
   <div class="cta-row"><a class="btn primary" href="../app/entrenadores.html">See the demo</a><a class="btn ghost" href="https://wa.me/34601565820?text=Hi%2C%20I%20am%20a%20personal%20trainer%20and%20I%20would%20like%20to%20request%20access%20to%20Team%20Biscuit." target="_blank" rel="noopener">Request access</a></div>
   <small>Access by request: we review every account personally. The app is in Spanish.</small>
-</div></div></div>
+</div>
+<figure class="tr-shot"><img class="pc" src="../img/tr-panel.webp" alt="Trainer Today dashboard in Team Biscuit" width="1600" height="1000"><img class="ph" src="../img/tr-cliente.webp" alt="Client app with the trainer’s brand" width="640" height="1182"></figure>
+</div></div>
 <div class="wrap">
-  <section><div class="sec-head"><p class="eyebrow">What we offer</p><h2>All your work in one place</h2><p>Stop jumping between WhatsApp, spreadsheets, your calendar and notes. You design and adjust the plans; your clients follow them and log their progress on their phone.</p></div><div class="pillars"><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/></svg></span><h3>Training</h3><p>Exercise library with images, sets, loads and rest. Build your templates and assign them to one or several clients in seconds.</p></div><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M17 3c-2 1-3 4-3 7h3v11"/></svg></span><h3>Nutrition</h3><p>Nutrition plans with amounts and equivalent alternatives. Clients log what they eat and you see their adherence.</p></div><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6v3H9z"/><path d="M7 5H5v15h14V5h-2"/><path d="m9 13 2 2 4-4"/></svg></span><h3>Custom check-ins</h3><p>Your own weekly or monthly forms, with photos and measurements, automatically compared with the previous check-in.</p></div><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><h3>Bookings and packs</h3><p>Session types, working hours, client bookings, sessions left in each pack and cancellation policy.</p></div><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span><h3>Communication</h3><p>Chat with each client, saved replies and automatic messages: welcome, reminders and inactivity alerts.</p></div><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></span><h3>Your brand</h3><p>Your name, logo and colour in your clients' app, plus your own page to win new clients.</p></div></div></section>
-  <section><div class="sec-head"><p class="eyebrow">Who it is for</p><h2>Built for personal trainers</h2></div><div class="chips"><span class="chip">Online coaching</span><span class="chip">In-person or hybrid</span><span class="chip">Running coaching, connected to Garmin</span><span class="chip">From your first clients to a large roster</span><span class="chip">Spanish-speaking clients</span></div></section>
-  <section><div class="sec-head"><p class="eyebrow">How to start</p><h2>Three steps</h2></div><div class="steps"><div class="pillar"><h3>Explore the demo</h3><p>Walk through the app with a sample trainer and sample clients, without signing up.</p></div><div class="pillar"><h3>Request access</h3><p>Tell us how you work and we will get in touch to activate your account.</p></div><div class="pillar"><h3>Add your clients</h3><p>Send them a link: they complete their intake questionnaire and you start working with them.</p></div></div></section>
-  <section class="tr-end"><div class="sec-head"><p class="eyebrow">Privacy</p><h2>Your clients and your method are yours</h2><p>Each trainer only has access to their own clients. Your templates, your plans and your way of working stay private.</p></div>
-    <div class="cta-row"><a class="btn primary" href="../app/entrenadores.html">See the demo</a><a class="btn ghost" href="https://wa.me/34601565820?text=Hi%2C%20I%20am%20a%20personal%20trainer%20and%20I%20would%20like%20to%20request%20access%20to%20Team%20Biscuit." target="_blank" rel="noopener">Request access</a></div>
+  <section><div class="sec-head rv"><p class="eyebrow">What we offer</p><h2>All your work in one place</h2><p>Stop jumping between WhatsApp, spreadsheets, your calendar and notes. You design and adjust the plans; your clients follow them and log their progress on their phone.</p></div><div class="pillars rv"><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/></svg></span><h3>Training</h3><p>Exercise library with images, sets, loads and rest. Build your templates and assign them to one or several clients in seconds.</p></div><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M17 3c-2 1-3 4-3 7h3v11"/></svg></span><h3>Nutrition</h3><p>Nutrition plans with amounts and equivalent alternatives. Clients log what they eat and you see their adherence.</p></div><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6v3H9z"/><path d="M7 5H5v15h14V5h-2"/><path d="m9 13 2 2 4-4"/></svg></span><h3>Custom check-ins</h3><p>Your own weekly or monthly forms, with photos and measurements, automatically compared with the previous check-in.</p></div><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><h3>Bookings and packs</h3><p>Session types, working hours, client bookings, sessions left in each pack and cancellation policy.</p></div><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span><h3>Communication</h3><p>Chat with each client, saved replies and automatic messages: welcome, reminders and inactivity alerts.</p></div><div class="pillar"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></span><h3>Your brand</h3><p>Your name, logo and colour in your clients' app, plus your own page to win new clients.</p></div></div></section>
+  <section><div class="sec-head rv"><p class="eyebrow">See it</p><h2>Built for a trainer’s everyday work</h2><p>A «Today» screen with everything that needs your attention and, for each client, their plan, progress and chat in view.</p></div>
+    <div class="tr-see rv">
+      <figure class="tr-fig"><img src="../img/tr-panel.webp" alt="Trainer Today dashboard in Team Biscuit" width="1600" height="1000" loading="lazy"><figcaption><b>«Today» dashboard</b><span>Messages, check-ins, sessions and payments for the day, plus shortcuts to what you do most.</span></figcaption></figure>
+      <div class="col">
+        <figure class="tr-fig"><img src="../img/tr-ficha.webp" alt="Client profile in the trainer dashboard" width="1600" height="1000" loading="lazy"><figcaption><b>Client profile</b><span>Training, nutrition, progress and alerts at a glance, with the chat alongside.</span></figcaption></figure>
+        <figure class="tr-fig mob"><img src="../img/tr-cliente.webp" alt="Client app with the trainer’s brand" width="640" height="1182" loading="lazy"><figcaption><b>Your client’s app</b><span>With your name, logo and colour. Your client sees their day and their plan, and messages you from there.</span></figcaption></figure>
+      </div>
+    </div></section>
+  <section><div class="sec-head rv"><p class="eyebrow">Who it is for</p><h2>Built for personal trainers</h2></div><div class="chips rv"><span class="chip">Online coaching</span><span class="chip">In-person or hybrid</span><span class="chip">Running coaching, connected to Garmin</span><span class="chip">From your first clients to a large roster</span><span class="chip">Spanish-speaking clients</span></div></section>
+  <section><div class="sec-head rv"><p class="eyebrow">How to start</p><h2>Three steps</h2></div><div class="steps rv"><div class="pillar"><h3>Explore the demo</h3><p>Walk through the app with a sample trainer and sample clients, without signing up.</p></div><div class="pillar"><h3>Request access</h3><p>Tell us how you work and we will get in touch to activate your account.</p></div><div class="pillar"><h3>Add your clients</h3><p>Send them a link: they complete their intake questionnaire and you start working with them.</p></div></div></section>
+  <section class="tr-end"><div class="tr-cta rv"><div class="sec-head"><p class="eyebrow">Privacy</p><h2>Your clients and your method are yours</h2><p>Each trainer only has access to their own clients. Your templates, your plans and your way of working stay private.</p></div>
+    <div class="cta-row"><a class="btn primary" href="../app/entrenadores.html">See the demo</a><a class="btn ghost" href="https://wa.me/34601565820?text=Hi%2C%20I%20am%20a%20personal%20trainer%20and%20I%20would%20like%20to%20request%20access%20to%20Team%20Biscuit." target="_blank" rel="noopener">Request access</a></div></div>
     <a class="back" href="../">← Back to the website</a>
   </section>
 </div>
@@ -82,12 +116,14 @@
   <div class="wrap">
     <span>© 2026 Tactical Biscuit Training</span>
     <nav aria-label="Footer links">
-      <a href="../app/">Client login</a>
+      <a href="../">Home</a>
       <a href="legal-notice.html">Legal notice</a>
       <a href="privacy.html">Privacy</a>
       <a href="cookies.html">Cookies</a>
     </nav>
   </div>
 </footer>
+<script>(function(){var els=[].slice.call(document.querySelectorAll('.rv'));if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:0.08});els.forEach(function(e){io.observe(e)})})();</script>
 </body>
 </html>

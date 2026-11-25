@@ -12502,5 +12502,26 @@
 30,
 "ración"
 ]
+},
+{
+"n": "Halva de girasol con cacao",
+"g": "x",
+"p": 17,
+"c": 44,
+"f": 34,
+"fib": 8,
+"src": "Etiqueta rumana (546 kcal; saturadas 4,1 g; azúcares 27 g; sal 0,05 g); paquete 200 g",
+"sw": false,
+"al": [
+"halva",
+"halwa",
+"halva de girasol",
+"halva con cacao",
+"halva cacao"
+],
+"ud": [
+200,
+"paquete"
+]
 }
 ]

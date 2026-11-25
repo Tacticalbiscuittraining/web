@@ -12480,5 +12480,27 @@
 35,
 "bizcocho"
 ]
+},
+{
+"n": "Lay's Campesinas (patatas fritas)",
+"g": "x",
+"p": 6,
+"c": 53,
+"f": 29,
+"fib": 4.8,
+"src": "Etiqueta Lay's (506 kcal; saturadas 2,2 g; azúcares 3,0 g; sal 0,83 g); bolsa 150 g = 5 raciones de 30 g",
+"sw": false,
+"al": [
+"lays",
+"lays campesinas",
+"campesinas",
+"patatas lays",
+"patatas campesinas",
+"lay's"
+],
+"ud": [
+30,
+"ración"
+]
 }
 ]

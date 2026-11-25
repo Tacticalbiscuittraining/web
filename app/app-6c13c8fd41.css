@@ -5867,6 +5867,31 @@ html.ci-on,html.ci-on body{overflow:hidden}
 .ci-ccb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .ci-ccm{width:100%;margin:0;font-size:12.5px;color:var(--muted);padding-left:68px}
 
+/* vista Día/Semana | Mes */
+.ci-vs{display:flex;background:var(--surface-2);border-radius:12px;padding:3px;margin:0 0 10px;max-width:320px}
+.ci-vs button{flex:1;border:0;background:none;color:var(--muted);font:inherit;font-size:14px;font-weight:600;padding:7px 10px;border-radius:9px;cursor:pointer}
+.ci-vs button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.ci-mo{margin-top:8px}
+.ci-mh,.ci-mg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.ci-mh span{text-align:center;font-size:12px;color:var(--muted);padding:4px 0}
+.ci-mg{border-top:1px solid var(--line)}
+.ci-mc{border:0;border-bottom:1px solid var(--line);background:none;color:inherit;font:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px 8px;min-height:54px;cursor:pointer;min-width:0}
+.ci-mc b{font-size:16px;font-weight:600;width:32px;height:32px;display:grid;place-items:center;border-radius:50%}
+.ci-mc.out{opacity:.38}
+.ci-mc.ci-hoy:not([aria-pressed="true"]) b{color:var(--teal);font-weight:700}
+.ci-mc[aria-pressed="true"] b{background:var(--teal);color:#fff}
+:root[data-theme="dark"] .ci-mc[aria-pressed="true"] b{color:#04201d}
+.ci-md{margin-top:14px}
+.ci-mdh{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ci-mdh .ci-dt{margin:0}
+.ci-mdl{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+@media (min-width:760px){
+  .ci-mc{align-items:stretch;min-height:104px;padding:6px;border-right:1px solid var(--line);gap:3px}
+  .ci-mc:nth-child(7n){border-right:0}
+  .ci-mc b{width:28px;height:28px;font-size:14px;align-self:flex-end}
+  .ci-mi{display:block;font-size:12px;line-height:1.3;padding:2px 6px;border-radius:6px;background:color-mix(in srgb,var(--c) 16%,transparent);border-left:3px solid var(--c);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+  .ci-mm{font-size:12px;color:var(--muted);text-align:left;padding-left:4px}}
+
 /* ---------- 25 nov: panel del entrenador «Atardecer» (ver atardecer.js) ----------
    Mismos colores que la app de clientes: degradado de atardecer arriba, granate profundo abajo, acento coral/melocotón y botones verde azulado.
    Todo va con body.at-on[data-screen="coach"] para no tocar nada de la app del cliente. */
@@ -6036,6 +6061,29 @@ body.at-on .tb-w.min{background:linear-gradient(180deg,#2D1720,#191D20)}
 body.at-on .tb-w.min:hover{border-color:#5C3340}
 body.at-on .tb-mn{color:#9E7E75}
 body.at-on .tb-mn:hover{background:#3E2129}
+
+/* 25 nov: Administración de entrenadores (solo el entrenador principal, src/admin.js) */
+.ad-list{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:8px}
+.ad-r{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.ad-r.off{opacity:.65}
+.ad-t{display:flex;flex-direction:column;min-width:0}
+.ad-t b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ad-t small{color:var(--muted);font-size:12.5px}
+.ad-b{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.ad-l{margin:0 0 14px}
+.ad-h{display:block;margin-top:10px}
+@media (max-width:560px){.ad-r{flex-direction:column;align-items:stretch}.ad-b{justify-content:flex-start}}
+
+/* 25 nov: plataforma de entrenadores (src/pro.js). Solo con html.tb-pro (otro entrenador o su cliente). */
+html.tb-pro [data-nsrc="subir"],html.tb-pro .nf-p[data-np="subir"],html.tb-pro .pl-dl,html.tb-pro label:has(#upImp),html.tb-pro label:has([data-phadd]){display:none!important}
+html.tb-pro img.pro-logo{object-fit:contain;border-radius:22%}
+.pro-sws{display:flex;flex-wrap:wrap;gap:8px}
+.pro-sw{width:34px;height:34px;border-radius:50%;border:2px solid transparent;box-shadow:0 0 0 1px var(--line);cursor:pointer}
+.pro-sw.on{border-color:var(--fg);box-shadow:0 0 0 3px var(--bg) inset}
+.pro-lg img{width:56px;height:56px;border-radius:14px;object-fit:contain;background:var(--line)}
+/* sin la marca ni el logo de Robert (marcas de agua y círculos con su logo) */
+html.tb-pro #tbLs,html.tb-pro .tb-lsc,html.tb-pro body::before,html.tb-pro .hub::before,html.tb-pro .chat-card.cli .chat::before,html.tb-pro body[data-ct=inicio] .hub::after{display:none!important;background-image:none!important}
+html.tb-pro .nv-hl,html.tb-pro #mopPeek i{background-image:var(--pro-logo)!important;background-color:#fff!important;background-size:contain!important}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

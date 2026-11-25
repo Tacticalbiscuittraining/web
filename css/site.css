@@ -99,3 +99,27 @@ p { margin: 0; }
 @media (max-width: 560px) { .btn-coach + .lang { margin-left: -4px; } }
 .site-nav a { white-space: nowrap; }
 @media (max-width: 1280px) { .site-nav { gap: 18px; } }
+
+/* «Acceso entrenadores» visible en todas las pantallas (25 nov): en pantallas medianas y móvil, textos cortos */
+@media (max-width: 1100px) {
+  .btn-coach { display: inline-block; }
+  .btn-client { font-size: 0; }
+  .btn-client::after { content: "Clientes"; font-size: 14px; }
+  .btn-client.btn-coach::after { content: "Entrenadores"; }
+}
+@media (max-width: 860px) { .site-nav .nav-coach { display: none !important; } }
+@media (max-width: 560px) {
+  .btn-client { padding: 7px 10px; }
+  .btn-client::after { font-size: 13px; }
+  .btn-client + .btn-coach { margin-left: -18px; }
+}
+@media (min-width: 861px) and (max-width: 1100px) {
+  .site-nav { gap: 12px !important; }
+  .site-nav a { font-size: 14px; }
+  .btn-client { padding: 7px 12px; }
+  .btn-client::after { font-size: 13px; }
+  .btn-client + .btn-coach { margin-left: -18px; }
+}
+@media (min-width: 861px) and (max-width: 940px) { .site-nav { gap: 9px !important; } .site-nav a { font-size: 13px; } }
+html[lang="en"] .btn-client::after { content: "Clients"; }
+html[lang="en"] .btn-client.btn-coach::after { content: "Trainers"; }

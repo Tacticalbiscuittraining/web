@@ -123,3 +123,10 @@ p { margin: 0; }
 @media (min-width: 861px) and (max-width: 940px) { .site-nav { gap: 9px !important; } .site-nav a { font-size: 13px; } }
 html[lang="en"] .btn-client::after { content: "Clients"; }
 html[lang="en"] .btn-client.btn-coach::after { content: "Trainers"; }
+/* Recuadro «¿Eres entrenador?» en la página principal (25 nov) */
+.coach-cta { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 8px 0 72px; padding: 28px 32px; border: 1px solid var(--line, rgba(127,127,127,.25)); border-radius: 20px; }
+.coach-cta h2 { font-size: clamp(24px, 3vw, 32px); margin: 6px 0 8px; }
+.coach-cta p:not(.eyebrow) { color: var(--muted, inherit); max-width: 60ch; margin: 0; }
+.coach-cta .btn.ghost { flex-shrink: 0; color: var(--fg); border-color: color-mix(in srgb, var(--fg) 35%, transparent); }
+.coach-cta .btn.ghost:hover { background: var(--fg); color: var(--bg); }
+@media (max-width: 700px) { .coach-cta { flex-direction: column; align-items: flex-start; padding: 22px 20px; margin-bottom: 48px; } }

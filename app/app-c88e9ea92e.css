@@ -5647,6 +5647,7 @@ html.ci-on,html.ci-on body{overflow:hidden}
 .ci-col>.ci-aus{height:var(--au,46px);flex:none;box-sizing:border-box;overflow:auto;padding:3px;display:flex;flex-direction:column;gap:2px;border-bottom:1px solid var(--line);scrollbar-width:none}
 .ci-aus{display:flex;flex-direction:column;gap:3px}
 .ci-au{border:0;background:color-mix(in srgb,var(--teal) 12%,transparent);color:inherit;font:inherit;font-size:11px;text-align:left;border-radius:6px;padding:2px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;flex:none}
+.ci-au-rev{background:color-mix(in srgb,var(--c) 16%,var(--surface));border-left:3px solid var(--c);font-weight:600}
 .ci-au-end{background:color-mix(in srgb,var(--coral) 14%,transparent)}
 .ci-au:hover{filter:brightness(.95)}
 .ci-dl .ci-au{font-size:13px;padding:7px 10px;white-space:normal}

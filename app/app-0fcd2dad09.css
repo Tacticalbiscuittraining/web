@@ -6,6 +6,8 @@
 @font-face{font-family:'Barlow';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/barlow-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Barlow';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/barlow-600-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Barlow';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/barlow-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Barlow';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/barlow-700-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Barlow';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/barlow-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/barlow-condensed-500-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/barlow-condensed-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/barlow-condensed-600-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
@@ -5995,78 +5997,91 @@ body.at-on[data-desk="1"] .rail .seg>button[aria-pressed="true"],body.at-on[data
 /* agenda (agenda.js): fondo con el atardecer */
 body.at-on #ciL{background:linear-gradient(180deg,#C4533A 0%,#8A2C34 22%,#3D1222 50%,var(--bg) 80%)!important}
 body.at-on.at-lt #ciL{background:linear-gradient(180deg,#E9906D 0%,#F2C1A6 26%,#F6E2D6 55%,var(--bg) 85%)!important}
+/* 25 nov noche: letra más nítida en fondo oscuro (en el Mac el suavizado por defecto engorda y emborrona el texto claro sobre oscuro) */
+body.at-on:not(.at-lt){-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+/* el subrayado de puntos en cada línea de los avisos de dieta ensuciaba el texto: más suave */
+body.at-on .d3-go{text-decoration-color:color-mix(in srgb,currentColor 30%,transparent)}
+/* 25 nov noche: cuadro de escribir del chat en el escritorio (Robert: «se ve mal»).
+   Con el chat estrecho el aviso «Escribe a…» se partía en dos líneas y el clip caía debajo: ahora todo en una fila
+   (salvo cuando el texto escrito es largo, .ch-in.big, que sigue ocupando el ancho entero como siempre) */
+body.at-on .c3-pill:not(:has(.ch-in.big)){flex-wrap:nowrap;align-items:center}
+body.at-on .c3-pill .ch-in::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.at-on .c3-pill .ch-in:placeholder-shown{white-space:nowrap;overflow:hidden}
+/* respuestas rápidas: en el escritorio no se pueden deslizar con el dedo → en varias líneas, sin cortarse por la derecha */
+body.at-on .tb-chat .pe-qr,body.at-on[data-desk="1"] .pe-qr,body.at-on .tb-chat .ch-quick,body.at-on[data-desk="1"] .ch-quick{flex-wrap:wrap;overflow:visible;max-height:none;padding-bottom:10px}
+body.at-on .tb-chat .pe-qr>*,body.at-on[data-desk="1"] .pe-qr>*,body.at-on .tb-chat .ch-quick>*,body.at-on[data-desk="1"] .ch-quick>*{flex:none;max-width:100%;white-space:normal;text-align:left}
 
 /* 25/11 · pulido visual del entrenador */
 #newform .nf-p>label.btn{align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;width:auto;text-align:center}
 #newform .nf-seg{row-gap:8px}
 
 /* generado por tools/atardecer_desk.py */
-body.at-on[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}
-body.at-on[data-desk="1"] .dk-brand img{box-shadow:0 0 0 2px #E9765A}
-body.at-on[data-desk="1"] .dk-brand small{color:#E9765A}
-body.at-on[data-desk="1"] .rail .seg>button{color:#E3C4B8}
-body.at-on[data-desk="1"] .rail .seg>button:hover{background:#2A1520}
-body.at-on[data-desk="1"] .rail .seg>button[aria-pressed="true"]{background:#4A2230}
-body.at-on[data-desk="1"] #clist .client:hover{background:#2A1520}
-body.at-on[data-desk="1"] #clist .client[aria-current="true"]{background:#4A2230;border-color:#5C3340}
-body.at-on[data-desk="1"] .dk-fb{color:#E3C4B8}
-body.at-on[data-desk="1"] .dk-fb:hover{background:#2A1520}
-body.at-on[data-desk="1"] .rail .seg>.tb-nav[aria-pressed="true"]{background:#3A1A17;color:#FFC9AA;box-shadow:inset 3px 0 0 #FF8A6B}
-body.at-on.tb-on{--tb-au:#FF8A6B;--tb-au2:#FFC9AA;--tb-bg:#150A10;--tb-w:#22111A;--tb-w2:#2A1520;--tb-ln:#3E2129}
-body.at-on.tb-on .shell>.top,body.at-on.tb-on #main{--surface:#22111A;--surface-2:#2A1520;--bg:#150A10;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--teal:#FF8A6B;--teal-ink:#FFC9AA;--teal-soft:#3A1A17;--btn-bg:#FF8A6B;--btn-fg:#1A0A10;--ink-btn:#FBEFE8;--ink-btn-fg:#150A10}
-body.at-on.tb-on .shell>.top{border-bottom-color:#331A22}
-body.at-on.tb-on #main{background:
+body:where(.at-on)[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}
+body:where(.at-on)[data-desk="1"] .dk-brand img{box-shadow:0 0 0 2px #E9765A}
+body:where(.at-on)[data-desk="1"] .dk-brand small{color:#E9765A}
+body:where(.at-on)[data-desk="1"] .rail .seg>button{color:#E3C4B8}
+body:where(.at-on)[data-desk="1"] .rail .seg>button:hover{background:#2A1520}
+body:where(.at-on)[data-desk="1"] .rail .seg>button[aria-pressed="true"]{background:#4A2230}
+body:where(.at-on)[data-desk="1"] #clist .client:hover{background:#2A1520}
+body:where(.at-on)[data-desk="1"] #clist .client[aria-current="true"]{background:#4A2230;border-color:#5C3340}
+body:where(.at-on)[data-desk="1"] .dk-fb{color:#E3C4B8}
+body:where(.at-on)[data-desk="1"] .dk-fb:hover{background:#2A1520}
+body:where(.at-on)[data-desk="1"] .rail .seg>.tb-nav[aria-pressed="true"]{background:#3A1A17;color:#FFC9AA;box-shadow:inset 3px 0 0 #FF8A6B}
+body:where(.at-on).tb-on{--tb-au:#FF8A6B;--tb-au2:#FFC9AA;--tb-bg:#150A10;--tb-w:#22111A;--tb-w2:#2A1520;--tb-ln:#3E2129}
+body:where(.at-on).tb-on .shell>.top,body:where(.at-on).tb-on #main{--surface:#22111A;--surface-2:#2A1520;--bg:#150A10;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--teal:#FF8A6B;--teal-ink:#FFC9AA;--teal-soft:#3A1A17;--btn-bg:#FF8A6B;--btn-fg:#1A0A10;--ink-btn:#FBEFE8;--ink-btn-fg:#150A10}
+body:where(.at-on).tb-on .shell>.top{border-bottom-color:#331A22}
+body:where(.at-on).tb-on #main{background:
   radial-gradient(circle at 1px 1px,rgba(255,138,107,.10) 1px,transparent 1.4px) 0 0/22px 22px,
   radial-gradient(1200px 500px at 70% -10%,rgba(255,138,107,.07),transparent 60%),var(--tb-bg)}
-body.at-on .tb-tab{background:#1B0D14}
-body.at-on .tb-tab:hover{border-color:#5C3340}
-body.at-on .tb-tab[aria-selected="true"]{background:linear-gradient(180deg,#3A1A17,#2E1512)}
-body.at-on .tb-btn{background:#1B0D14;color:#E8D2C8}
-body.at-on .tb-btn.pri{color:#1A0A10}
-body.at-on .tb-cat{background:#1B0D14}
-body.at-on .tb-ci{color:#F2DED5}
-body.at-on .tb-ci:hover{background:#2A1520}
-body.at-on .tb-brief{border:1px solid #3A1A17;background:linear-gradient(90deg,rgba(255,138,107,.10),rgba(255,138,107,0) 70%)}
-body.at-on .tb-bc{color:#9E7E75}
-body.at-on .tb-w.flash{box-shadow:0 0 0 2px var(--tb-au),0 0 30px rgba(255,138,107,.35)}
-body.at-on .tb-gh{background:rgba(255,138,107,.07)}
-body.at-on .tb-wh h3{color:#FBEFE8}
-body.at-on .tb-wh h3 small{color:#B8968C}
-body.at-on .tb-n{color:#E8D2C8}
-body.at-on .tb-x:hover{background:#3E2129}
-body.at-on .tb-wb{scrollbar-color:#5C3340 transparent}
-body.at-on .tb-rs{background:linear-gradient(135deg,transparent 50%,rgba(255,138,107,.55) 50%,rgba(255,138,107,.55) 58%,transparent 58%,transparent 70%,rgba(255,138,107,.55) 70%,rgba(255,138,107,.55) 78%,transparent 78%)}
-body.at-on .tb-e{color:#B8968C}
-body.at-on .tb-r{border-bottom:1px solid #2D1720}
-body.at-on .tb-r:hover{background:#2A1520}
-body.at-on .tb-r1 b{color:#F2DED5}
-body.at-on .tb-r1 small{color:#9E7E75}
-body.at-on .tb-r2{color:#C9A69C}
-body.at-on .tb-ch>div>span{color:#C9A69C}
-body.at-on .tb-k span{color:#B8968C}
-body.at-on .tb-k small{color:#C9A69C}
-body.at-on .tb-at li{background:#1B0D14}
-body.at-on .tb-go .btn{background:#2A1520}
-body.at-on .tb-go .btn:first-child{color:#1A0A10}
-body.at-on .tb-t th{color:#B8968C;border-bottom:1px solid #3E2129}
-body.at-on .tb-t td{border-bottom:1px solid #2D1720}
-body.at-on .tb-t tbody tr:hover{background:#2A1520}
-body.at-on .tb-t tr.on{background:#3A1A17}
-body.at-on .tb-pz span{color:#C9A69C}
-body.at-on .tb-sv .gr line{stroke:#3E2129}
-body.at-on .tb-sv text{fill:#9E7E75}
-body.at-on .tb-sv .ar{fill:rgba(255,138,107,.12)}
-body.at-on .tb-tl{border:1px solid #3E2129;background:#1B0D14}
-body.at-on .tb-tl small{color:#B8968C}
-body.at-on .tb-tl.pri{background:linear-gradient(180deg,#3A1A17,#2E1512)}
-body.at-on .tb-ps i{background:#2A1520;color:#E8D2C8}
-body.at-on .tb-sv0[data-st="saving"]{background:#2E1512}
-body.at-on .tb.ed .tb-w{outline:1px dashed rgba(255,138,107,.45)}
-body.at-on .tb-edh{background:rgba(255,138,107,.08)}
-body.at-on .tb-w.min{background:linear-gradient(180deg,#2D1720,#191D20)}
-body.at-on .tb-w.min:hover{border-color:#5C3340}
-body.at-on .tb-mn{color:#9E7E75}
-body.at-on .tb-mn:hover{background:#3E2129}
+:where(body.at-on) .tb-tab{background:#1B0D14}
+:where(body.at-on) .tb-tab:hover{border-color:#5C3340}
+:where(body.at-on) .tb-tab[aria-selected="true"]{background:linear-gradient(180deg,#3A1A17,#2E1512)}
+:where(body.at-on) .tb-btn{background:#1B0D14;color:#E8D2C8}
+:where(body.at-on) .tb-btn.pri{color:#1A0A10}
+:where(body.at-on) .tb-cat{background:#1B0D14}
+:where(body.at-on) .tb-ci{color:#F2DED5}
+:where(body.at-on) .tb-ci:hover{background:#2A1520}
+:where(body.at-on) .tb-brief{border:1px solid #3A1A17;background:linear-gradient(90deg,rgba(255,138,107,.10),rgba(255,138,107,0) 70%)}
+:where(body.at-on) .tb-bc{color:#9E7E75}
+:where(body.at-on) .tb-w.flash{box-shadow:0 0 0 2px var(--tb-au),0 0 30px rgba(255,138,107,.35)}
+:where(body.at-on) .tb-gh{background:rgba(255,138,107,.07)}
+:where(body.at-on) .tb-wh h3{color:#FBEFE8}
+:where(body.at-on) .tb-wh h3 small{color:#B8968C}
+:where(body.at-on) .tb-n{color:#E8D2C8}
+:where(body.at-on) .tb-x:hover{background:#3E2129}
+:where(body.at-on) .tb-wb{scrollbar-color:#5C3340 transparent}
+:where(body.at-on) .tb-rs{background:linear-gradient(135deg,transparent 50%,rgba(255,138,107,.55) 50%,rgba(255,138,107,.55) 58%,transparent 58%,transparent 70%,rgba(255,138,107,.55) 70%,rgba(255,138,107,.55) 78%,transparent 78%)}
+:where(body.at-on) .tb-e{color:#B8968C}
+:where(body.at-on) .tb-r{border-bottom:1px solid #2D1720}
+:where(body.at-on) .tb-r:hover{background:#2A1520}
+:where(body.at-on) .tb-r1 b{color:#F2DED5}
+:where(body.at-on) .tb-r1 small{color:#9E7E75}
+:where(body.at-on) .tb-r2{color:#C9A69C}
+:where(body.at-on) .tb-ch>div>span{color:#C9A69C}
+:where(body.at-on) .tb-k span{color:#B8968C}
+:where(body.at-on) .tb-k small{color:#C9A69C}
+:where(body.at-on) .tb-at li{background:#1B0D14}
+:where(body.at-on) .tb-go .btn{background:#2A1520}
+:where(body.at-on) .tb-go .btn:first-child{color:#1A0A10}
+:where(body.at-on) .tb-t th{color:#B8968C;border-bottom:1px solid #3E2129}
+:where(body.at-on) .tb-t td{border-bottom:1px solid #2D1720}
+:where(body.at-on) .tb-t tbody tr:hover{background:#2A1520}
+:where(body.at-on) .tb-t tr.on{background:#3A1A17}
+:where(body.at-on) .tb-pz span{color:#C9A69C}
+:where(body.at-on) .tb-sv .gr line{stroke:#3E2129}
+:where(body.at-on) .tb-sv text{fill:#9E7E75}
+:where(body.at-on) .tb-sv .ar{fill:rgba(255,138,107,.12)}
+:where(body.at-on) .tb-tl{border:1px solid #3E2129;background:#1B0D14}
+:where(body.at-on) .tb-tl small{color:#B8968C}
+:where(body.at-on) .tb-tl.pri{background:linear-gradient(180deg,#3A1A17,#2E1512)}
+:where(body.at-on) .tb-ps i{background:#2A1520;color:#E8D2C8}
+:where(body.at-on) .tb-sv0[data-st="saving"]{background:#2E1512}
+:where(body.at-on) .tb.ed .tb-w{outline:1px dashed rgba(255,138,107,.45)}
+:where(body.at-on) .tb-edh{background:rgba(255,138,107,.08)}
+:where(body.at-on) .tb-w.min{background:linear-gradient(180deg,#2D1720,#191D20)}
+:where(body.at-on) .tb-w.min:hover{border-color:#5C3340}
+:where(body.at-on) .tb-mn{color:#9E7E75}
+:where(body.at-on) .tb-mn:hover{background:#3E2129}
 
 /* 25 nov: Administración de entrenadores (solo el entrenador principal, src/admin.js) */
 .ad-list{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:8px}

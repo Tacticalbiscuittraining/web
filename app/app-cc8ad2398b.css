@@ -5867,6 +5867,176 @@ html.ci-on,html.ci-on body{overflow:hidden}
 .ci-ccb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .ci-ccm{width:100%;margin:0;font-size:12.5px;color:var(--muted);padding-left:68px}
 
+/* ---------- 25 nov: panel del entrenador «Atardecer» (ver atardecer.js) ----------
+   Mismos colores que la app de clientes: degradado de atardecer arriba, granate profundo abajo, acento coral/melocotón y botones verde azulado.
+   Todo va con body.at-on[data-screen="coach"] para no tocar nada de la app del cliente. */
+:root:root body.at-on[data-screen="coach"]{
+  --bg:#150A10;--surface:#241219;--surface-2:#2D1720;--line:#3E2129;--line-strong:#5C3340;
+  --fg:#FBEFE8;--muted:#C9A69C;
+  --teal:#2FB3A3;--teal-ink:#7FE0CF;--teal-soft:#16302D;
+  --coral:#FF8A6B;--coral-ink:#FFB38A;--coral-soft:#3A1A17;
+  --btn-bg:#2A9D8F;--btn-fg:#fff;--ink-btn:#FBEFE8;--ink-btn-fg:#1A0A10;
+  --at-peach:#FFC9AA;--at-glass:rgba(48,18,28,.62);--at-rim:rgba(255,255,255,.11);
+  color-scheme:dark;background:var(--bg);color:var(--fg)
+}
+/* modo claro: papel cálido, con el mismo atardecer arriba */
+:root:root body.at-on.at-lt[data-screen="coach"]{
+  --bg:#F6ECE4;--surface:#FFFAF6;--surface-2:#FBEFE6;--line:#EED8CB;--line-strong:#DDBBA8;
+  --fg:#2A1418;--muted:#8A6A62;--teal:#1F8F83;--teal-ink:#17766C;--teal-soft:#DFF2EE;
+  --coral:#D9573A;--coral-ink:#B2512F;--coral-soft:#FBE5DC;--btn-bg:#1F8F83;--btn-fg:#fff;--ink-btn:#2A1418;--ink-btn-fg:#fff;
+  --at-peach:#B2512F;--at-glass:rgba(255,250,246,.9);--at-rim:rgba(120,60,40,.12);color-scheme:light
+}
+/* fondo: atardecer arriba que se funde en el granate (fijo, como en Inicio del cliente) */
+body.at-on[data-screen="coach"]::after{content:"";position:fixed;inset:0 0 auto;height:min(78vh,720px);z-index:-2;pointer-events:none;
+  background:linear-gradient(180deg,#C4533A 0%,#8A2C34 26%,#3D1222 58%,var(--bg) 100%)}
+body.at-on.at-lt[data-screen="coach"]::after{background:linear-gradient(180deg,#E9906D 0%,#F2C1A6 30%,#F6E2D6 60%,var(--bg) 100%)}
+body.at-on[data-screen="coach"]::before{background:var(--at-peach)!important;opacity:.07!important}
+
+/* tarjetas: cristal granate, esquinas como en la app de clientes */
+body.at-on[data-screen="coach"] .card,body.at-on[data-screen="coach"] .dsec{background:var(--at-glass);border-color:var(--at-rim);border-radius:22px}
+body.at-on[data-screen="coach"] .dsec>summary h2{font-family:var(--f-display);letter-spacing:.14em;color:var(--at-peach)}
+body.at-on[data-screen="coach"] .btn.primary{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-fg)}
+
+/* ---- Panel (móvil) ---- */
+:root:root body.at-on[data-screen="coach"] .dash>.dash-h{background:none!important;box-shadow:none!important;color:var(--fg);padding-bottom:6px}
+:root:root body.at-on[data-screen="coach"] .dash>.dash-h::before,:root:root body.at-on[data-screen="coach"] .dash>.dash-h::after{display:none!important}
+body.at-on[data-screen="coach"] .dash>.dash-h .dh-e{color:var(--at-peach);font-family:var(--f-display);letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+body.at-on[data-screen="coach"] .dash>.dash-h h2{font-family:var(--f-display);font-weight:700;font-size:30px;line-height:1.05;color:#fff}
+body.at-on.at-lt[data-screen="coach"] .dash>.dash-h h2,:root:root body.at-on.at-lt[data-screen="coach"] .dash>.dash-h .dh-day p,:root:root body.at-on.at-lt[data-screen="coach"] .dash>.dash-h .dh-day p *{color:var(--fg)}
+:root:root body.at-on[data-screen="coach"] .dash>.dks{margin-top:0;padding:0}
+body.at-on[data-screen="coach"] .dash>.dks>.dk{background:var(--at-glass);border:1px solid var(--at-rim);border-radius:18px;box-shadow:none}
+body.at-on[data-screen="coach"] .dash>.dks>.dk::before{display:none}
+body.at-on[data-screen="coach"] .dash>.dks>.dk span{font-family:var(--f-display);letter-spacing:.12em;color:var(--muted)}
+body.at-on[data-screen="coach"] .dash>.dks>.dk b{font-family:var(--f-display);color:var(--fg)}
+body.at-on[data-screen="coach"] .dash>.dks>.dk.hot b{color:var(--coral-ink)}
+
+.at-hero{position:relative;overflow:hidden;isolation:isolate;margin:14px 0 0;padding:18px 18px 16px;border-radius:24px;color:#fff;min-height:186px;border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(90deg,rgba(18,6,10,.94) 0%,rgba(18,6,10,.6) 58%,rgba(18,6,10,.12)),url(ep/f-prog.webp) 70% 60%/cover #1a0b10;box-shadow:0 14px 34px rgba(20,4,10,.35)}
+.at-hero::after{content:"";position:absolute;left:0;top:18px;bottom:18px;width:4px;border-radius:0 3px 3px 0;background:var(--c,#7FE0CF)}
+.at-k{margin:0;font-family:var(--f-display);font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:12.5px;color:#7FE0CF}
+.at-t{margin:8px 0 4px;font-family:var(--f-display);font-weight:700;font-size:30px;line-height:1.02;color:#fff;letter-spacing:0;text-transform:none}
+.at-t span{color:#FFD9BF}
+.at-s{margin:0;font-size:14px;color:rgba(255,255,255,.82)}
+.at-free .at-t{font-size:24px}
+.at-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.at-row button{border:0;border-radius:999px;padding:10px 16px;font-weight:600;font-size:14.5px;min-height:42px}
+.at-b1{background:#2A9D8F;color:#fff}
+.at-b2{background:rgba(255,255,255,.16);color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.at-qa{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0 14px}
+.at-q{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:78px;padding:10px 4px;border-radius:18px;
+  background:var(--at-glass);border:1px solid var(--at-rim);color:var(--fg);font-size:12.5px;font-weight:600;line-height:1.15;text-align:center}
+.at-q svg{width:23px;height:23px;fill:none;stroke:var(--coral-ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.at-q:active,.at-row button:active{transform:scale(.97)}
+/* «Citas de hoy» como línea de tiempo */
+body.at-on[data-screen="coach"] #ds-cit .ci-tr>b{font-family:var(--f-display);font-size:18px;font-weight:700;color:var(--fg)}
+
+/* ---- barra de abajo (móvil): Panel · Clientes · AGENDA · Mensajes · Tú ---- */
+@media (max-width:880px){
+  :root:root body.at-on[data-screen="coach"]:not([data-desk="1"]) .rail .seg.ft-seg{background:rgba(30,12,18,.8);border:1px solid rgba(255,255,255,.14);border-radius:32px;overflow:visible;
+    -webkit-backdrop-filter:blur(20px) saturate(1.3);backdrop-filter:blur(20px) saturate(1.3);box-shadow:0 10px 30px rgba(10,2,6,.45)}
+  :root:root body.at-on.at-lt[data-screen="coach"]:not([data-desk="1"]) .rail .seg.ft-seg{background:rgba(255,250,246,.9);border-color:rgba(120,60,40,.14)}
+  body.at-on[data-screen="coach"]:not([data-desk="1"]) .rail .seg.ft-seg>[data-v="lib"],body.at-on[data-screen="coach"]:not([data-desk="1"]) .rail .seg.ft-seg>.tb-nav{display:none!important}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>[data-v="dash"]{order:1}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>[data-v="clients"]{order:2}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>.ci-rb{order:3}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>[data-v="msgs"]{order:4}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>[data-v="cprof"]{order:5}
+  body.at-on[data-screen="coach"]:not([data-desk="1"]) .rail .seg.ft-seg{height:64px;padding:0 4px;align-items:stretch}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;font-weight:600;padding:0 2px!important;min-height:0;height:62px;background:none!important;box-shadow:none!important;color:rgba(255,255,255,.6)}
+  body.at-on.at-lt[data-screen="coach"] .rail .seg.ft-seg>button{color:#9C8B80}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>button[aria-pressed="true"]{color:#fff}
+  body.at-on.at-lt[data-screen="coach"] .rail .seg.ft-seg>button[aria-pressed="true"]{color:var(--fg)}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>button[data-v]::before{content:"";width:22px;height:22px;background:currentColor;-webkit-mask:var(--at-i) center/contain no-repeat;mask:var(--at-i) center/contain no-repeat}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>[data-v="dash"]{--at-i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z'/%3E%3C/svg%3E")}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>[data-v="clients"]{--at-i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='8' r='4'/%3E%3Cpath d='M2 21c0-4 3-6 7-6s7 2 7 6M17 4a4 4 0 0 1 0 8M22 21c0-3-1.5-5-4-5.7'/%3E%3C/svg%3E")}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>[data-v="msgs"]{--at-i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5h16v11H9l-5 4z'/%3E%3C/svg%3E");position:relative}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>[data-v="cprof"]{--at-i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21c0-4 4-6 8-6s8 2 8 6'/%3E%3C/svg%3E")}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>[data-v="msgs"] .seg-b{position:absolute;top:6px;left:calc(50% + 4px);margin:0;min-width:18px;height:18px;padding:0 5px;font-size:11px;line-height:18px;width:auto!important;max-width:none}
+  /* Agenda: botón redondo en medio, por encima de la barra */
+  :root:root body.at-on[data-screen="coach"]:not([data-desk="1"]) .rail .seg.ft-seg>.ci-rb{display:flex!important;position:relative;justify-content:flex-end;padding-bottom:9px!important;color:#fff}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>.ci-rb svg{position:absolute;left:50%;top:-24px;margin-left:-28px;box-sizing:content-box;width:26px;height:26px;padding:15px;border-radius:50%;stroke:#fff;fill:none;
+    background:linear-gradient(160deg,#FF8A6B,#C4533A);box-shadow:0 8px 22px rgba(196,83,58,.55),inset 0 1px 0 rgba(255,255,255,.35)}
+  body.at-on[data-screen="coach"] .rail .seg.ft-seg>.ci-rb .at-l{color:rgba(255,255,255,.75)}
+  body.at-on.at-lt[data-screen="coach"] .rail .seg.ft-seg>.ci-rb .at-l{color:var(--fg)}
+}
+
+/* ---- ordenador (escritorio): la barra lateral también en granate ---- */
+body.at-on[data-desk="1"] .rail{background:linear-gradient(180deg,#3D1222 0%,#1E0B12 60%,#150A10 100%)!important;border-color:rgba(255,255,255,.08)!important}
+body.at-on[data-desk="1"] .rail .seg>button[aria-pressed="true"],body.at-on[data-desk="1"] .rail .seg>button:hover{background:rgba(255,138,107,.14)!important;color:#FFD9BF!important}
+/* el brillo verde azulado de arriba del Panel hacía un recuadro sobre el atardecer */
+:root:root body.at-on[data-screen="coach"]:not([data-desk="1"]) #main.main{background-image:none!important;background-color:transparent!important;box-shadow:none!important;border-color:transparent!important}
+/* agenda (agenda.js): fondo con el atardecer */
+body.at-on #ciL{background:linear-gradient(180deg,#C4533A 0%,#8A2C34 22%,#3D1222 50%,var(--bg) 80%)!important}
+body.at-on.at-lt #ciL{background:linear-gradient(180deg,#E9906D 0%,#F2C1A6 26%,#F6E2D6 55%,var(--bg) 85%)!important}
+
+/* generado por tools/atardecer_desk.py */
+body.at-on[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}
+body.at-on[data-desk="1"] .dk-brand img{box-shadow:0 0 0 2px #E9765A}
+body.at-on[data-desk="1"] .dk-brand small{color:#E9765A}
+body.at-on[data-desk="1"] .rail .seg>button{color:#E3C4B8}
+body.at-on[data-desk="1"] .rail .seg>button:hover{background:#2A1520}
+body.at-on[data-desk="1"] .rail .seg>button[aria-pressed="true"]{background:#4A2230}
+body.at-on[data-desk="1"] #clist .client:hover{background:#2A1520}
+body.at-on[data-desk="1"] #clist .client[aria-current="true"]{background:#4A2230;border-color:#5C3340}
+body.at-on[data-desk="1"] .dk-fb{color:#E3C4B8}
+body.at-on[data-desk="1"] .dk-fb:hover{background:#2A1520}
+body.at-on[data-desk="1"] .rail .seg>.tb-nav[aria-pressed="true"]{background:#3A1A17;color:#FFC9AA;box-shadow:inset 3px 0 0 #FF8A6B}
+body.at-on.tb-on{--tb-au:#FF8A6B;--tb-au2:#FFC9AA;--tb-bg:#150A10;--tb-w:#22111A;--tb-w2:#2A1520;--tb-ln:#3E2129}
+body.at-on.tb-on .shell>.top,body.at-on.tb-on #main{--surface:#22111A;--surface-2:#2A1520;--bg:#150A10;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--teal:#FF8A6B;--teal-ink:#FFC9AA;--teal-soft:#3A1A17;--btn-bg:#FF8A6B;--btn-fg:#1A0A10;--ink-btn:#FBEFE8;--ink-btn-fg:#150A10}
+body.at-on.tb-on .shell>.top{border-bottom-color:#331A22}
+body.at-on.tb-on #main{background:
+  radial-gradient(circle at 1px 1px,rgba(255,138,107,.10) 1px,transparent 1.4px) 0 0/22px 22px,
+  radial-gradient(1200px 500px at 70% -10%,rgba(255,138,107,.07),transparent 60%),var(--tb-bg)}
+body.at-on .tb-tab{background:#1B0D14}
+body.at-on .tb-tab:hover{border-color:#5C3340}
+body.at-on .tb-tab[aria-selected="true"]{background:linear-gradient(180deg,#3A1A17,#2E1512)}
+body.at-on .tb-btn{background:#1B0D14;color:#E8D2C8}
+body.at-on .tb-btn.pri{color:#1A0A10}
+body.at-on .tb-cat{background:#1B0D14}
+body.at-on .tb-ci{color:#F2DED5}
+body.at-on .tb-ci:hover{background:#2A1520}
+body.at-on .tb-brief{border:1px solid #3A1A17;background:linear-gradient(90deg,rgba(255,138,107,.10),rgba(255,138,107,0) 70%)}
+body.at-on .tb-bc{color:#9E7E75}
+body.at-on .tb-w.flash{box-shadow:0 0 0 2px var(--tb-au),0 0 30px rgba(255,138,107,.35)}
+body.at-on .tb-gh{background:rgba(255,138,107,.07)}
+body.at-on .tb-wh h3{color:#FBEFE8}
+body.at-on .tb-wh h3 small{color:#B8968C}
+body.at-on .tb-n{color:#E8D2C8}
+body.at-on .tb-x:hover{background:#3E2129}
+body.at-on .tb-wb{scrollbar-color:#5C3340 transparent}
+body.at-on .tb-rs{background:linear-gradient(135deg,transparent 50%,rgba(255,138,107,.55) 50%,rgba(255,138,107,.55) 58%,transparent 58%,transparent 70%,rgba(255,138,107,.55) 70%,rgba(255,138,107,.55) 78%,transparent 78%)}
+body.at-on .tb-e{color:#B8968C}
+body.at-on .tb-r{border-bottom:1px solid #2D1720}
+body.at-on .tb-r:hover{background:#2A1520}
+body.at-on .tb-r1 b{color:#F2DED5}
+body.at-on .tb-r1 small{color:#9E7E75}
+body.at-on .tb-r2{color:#C9A69C}
+body.at-on .tb-ch>div>span{color:#C9A69C}
+body.at-on .tb-k span{color:#B8968C}
+body.at-on .tb-k small{color:#C9A69C}
+body.at-on .tb-at li{background:#1B0D14}
+body.at-on .tb-go .btn{background:#2A1520}
+body.at-on .tb-go .btn:first-child{color:#1A0A10}
+body.at-on .tb-t th{color:#B8968C;border-bottom:1px solid #3E2129}
+body.at-on .tb-t td{border-bottom:1px solid #2D1720}
+body.at-on .tb-t tbody tr:hover{background:#2A1520}
+body.at-on .tb-t tr.on{background:#3A1A17}
+body.at-on .tb-pz span{color:#C9A69C}
+body.at-on .tb-sv .gr line{stroke:#3E2129}
+body.at-on .tb-sv text{fill:#9E7E75}
+body.at-on .tb-sv .ar{fill:rgba(255,138,107,.12)}
+body.at-on .tb-tl{border:1px solid #3E2129;background:#1B0D14}
+body.at-on .tb-tl small{color:#B8968C}
+body.at-on .tb-tl.pri{background:linear-gradient(180deg,#3A1A17,#2E1512)}
+body.at-on .tb-ps i{background:#2A1520;color:#E8D2C8}
+body.at-on .tb-sv0[data-st="saving"]{background:#2E1512}
+body.at-on .tb.ed .tb-w{outline:1px dashed rgba(255,138,107,.45)}
+body.at-on .tb-edh{background:rgba(255,138,107,.08)}
+body.at-on .tb-w.min{background:linear-gradient(180deg,#2D1720,#191D20)}
+body.at-on .tb-w.min:hover{border-color:#5C3340}
+body.at-on .tb-mn{color:#9E7E75}
+body.at-on .tb-mn:hover{background:#3E2129}
+
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{
   --bg:#ECF2F1; --surface:#FFFFFF; --surface-2:#F4F8F7;

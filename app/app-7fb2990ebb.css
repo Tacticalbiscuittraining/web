@@ -6010,6 +6010,20 @@ body.at-on .c3-pill .ch-in:placeholder-shown{white-space:nowrap;overflow:hidden}
 /* respuestas rápidas: en el escritorio no se pueden deslizar con el dedo → en varias líneas, sin cortarse por la derecha */
 body.at-on .tb-chat .pe-qr,body.at-on[data-desk="1"] .pe-qr,body.at-on .tb-chat .ch-quick,body.at-on[data-desk="1"] .ch-quick{flex-wrap:wrap;overflow:visible;max-height:none;padding-bottom:10px}
 body.at-on .tb-chat .pe-qr>*,body.at-on[data-desk="1"] .pe-qr>*,body.at-on .tb-chat .ch-quick>*,body.at-on[data-desk="1"] .ch-quick>*{flex:none;max-width:100%;white-space:normal;text-align:left}
+/* escritorio: botón «Abrir en grande» de cada pieza (atardecer.js, AT_BIG) */
+.tb-big{flex:none;display:grid;place-items:center;border:0;background:none;color:var(--muted);width:26px;height:24px;border-radius:5px;cursor:pointer;padding:0;margin-left:auto}
+.tb-big+.tb-mn{margin-left:0}
+.tb-big svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tb-big:hover,.tb-big:focus-visible{color:var(--coral-ink);background:rgba(255,138,107,.12)}
+#tbG .tb-w[data-k="peso"] .tb-wb{cursor:zoom-in}
+/* pieza ampliada encima del escritorio */
+#tbG.at-maxon{position:relative}
+#tbG .at-maxbg{position:fixed;inset:0;z-index:60;background:rgba(10,3,7,.62);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+#tbG .tb-w.at-max{position:fixed!important;z-index:61;left:calc(var(--dk-side,260px) + 40px)!important;right:40px!important;top:90px!important;bottom:28px!important;width:auto!important;height:auto!important;
+  transform:none!important;box-shadow:0 30px 80px rgba(0,0,0,.6);display:flex;flex-direction:column}
+#tbG .tb-w.at-max .tb-wb{flex:1;overflow:auto;max-height:none!important;font-size:1.06em}
+#tbG .tb-w.at-max .tb-rs{display:none}
+#tbG .tb-w.at-max .tb-chat{height:100%}
 
 /* 25/11 · pulido visual del entrenador */
 #newform .nf-p>label.btn{align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;width:auto;text-align:center}

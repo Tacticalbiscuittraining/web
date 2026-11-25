@@ -6048,6 +6048,20 @@ body.at-on .c3-pill .ch-in:placeholder-shown{white-space:nowrap;overflow:hidden}
 /* respuestas rápidas: en el escritorio no se pueden deslizar con el dedo → en varias líneas, sin cortarse por la derecha */
 body.at-on .tb-chat .pe-qr,body.at-on[data-desk="1"] .pe-qr,body.at-on .tb-chat .ch-quick,body.at-on[data-desk="1"] .ch-quick{flex-wrap:wrap;overflow:visible;max-height:none;padding-bottom:10px}
 body.at-on .tb-chat .pe-qr>*,body.at-on[data-desk="1"] .pe-qr>*,body.at-on .tb-chat .ch-quick>*,body.at-on[data-desk="1"] .ch-quick>*{flex:none;max-width:100%;white-space:normal;text-align:left}
+/* escritorio: botón «Abrir en grande» de cada pieza (atardecer.js, AT_BIG) */
+.tb-big{flex:none;display:grid;place-items:center;border:0;background:none;color:var(--muted);width:26px;height:24px;border-radius:5px;cursor:pointer;padding:0;margin-left:auto}
+.tb-big+.tb-mn{margin-left:0}
+.tb-big svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tb-big:hover,.tb-big:focus-visible{color:var(--coral-ink);background:rgba(255,138,107,.12)}
+#tbG .tb-w[data-k="peso"] .tb-wb{cursor:zoom-in}
+/* pieza ampliada encima del escritorio */
+#tbG.at-maxon{position:relative}
+#tbG .at-maxbg{position:fixed;inset:0;z-index:60;background:rgba(10,3,7,.62);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+#tbG .tb-w.at-max{position:fixed!important;z-index:61;left:calc(var(--dk-side,260px) + 40px)!important;right:40px!important;top:90px!important;bottom:28px!important;width:auto!important;height:auto!important;
+  transform:none!important;box-shadow:0 30px 80px rgba(0,0,0,.6);display:flex;flex-direction:column}
+#tbG .tb-w.at-max .tb-wb{flex:1;overflow:auto;max-height:none!important;font-size:1.06em}
+#tbG .tb-w.at-max .tb-rs{display:none}
+#tbG .tb-w.at-max .tb-chat{height:100%}
 
 /* 25/11 · pulido visual del entrenador */
 #newform .nf-p>label.btn{align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;width:auto;text-align:center}
@@ -17466,7 +17480,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261125220411';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261125222624';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -30405,6 +30419,37 @@ function atQuick(){
 const AT_MQ=matchMedia('(prefers-color-scheme: light)');
 function atTheme(){const t=document.documentElement.getAttribute('data-theme'),B=document.body;B.classList.toggle('at-on',atOn());B.classList.toggle('at-lt',t?t==='light':AT_MQ.matches)}
 try{AT_MQ.addEventListener('change',atTheme);new MutationObserver(atTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']})}catch(e){console.warn(e)}
+/* 25 nov noche (Robert): en el escritorio, cada pieza se puede abrir «en grande» (su pantalla completa), igual en todas.
+   Botón ⤢ en la cabecera de cada pieza que tiene pantalla propia; en «Peso» tocar la gráfica también la abre (Progreso). */
+/* pieza del cliente → su pestaña de la ficha; Mensajes, Cartera y Agenda → su pantalla; lo demás (piezas del Panel) se amplía ahí mismo, encima del escritorio */
+const AT_BIG={cli:['c','resumen'],peso:['c','seguimiento'],notes:['c','cliente'],tasks:['c','cliente'],tools:['plan'],
+  msgs:['v','msgs'],cart:['v','clients'],'ds:rev':['ag'],'ds:cit':['ag']};
+const AT_MAX_IC='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10h6V4M20 14h-6v6M10 10L3 3M14 14l7 7"/></svg>';
+const AT_BIG_IC='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg>';
+if(typeof tbView==='function'){const V=tbView;tbView=function(){const h=V.apply(this,arguments);try{
+  let o=h.replace(/<button type="button" class="tb-mn" data-tbmin="([^"]+)"/g,(m,k)=>{const g=AT_BIG[k];
+    if(state.atMax===k)return '<button type="button" class="tb-big" data-atbig="'+k+'" aria-label="Volver al escritorio" title="Volver al escritorio (Esc)">'+AT_MAX_IC+'</button>'+m;
+    if(g&&g[0]==='c'&&!(typeof tbC==='function'&&tbC()))return m;
+    return '<button type="button" class="tb-big" data-atbig="'+k+'" aria-label="Abrir en grande" title="Abrir en grande">'+AT_BIG_IC+'</button>'+m});
+  if(state.atMax){const k=state.atMax.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),re=new RegExp('<section class="tb-w([^"]*)" data-k="'+k+'"');
+    if(re.test(o))o=o.replace(re,'<section class="tb-w$1 at-max" data-k="'+state.atMax+'"').replace('<div class="tb-g" id="tbG">','<div class="tb-g at-maxon" id="tbG"><div class="at-maxbg" data-atbig="'+state.atMax+'" aria-hidden="true"></div>');else state.atMax=null}
+  return o}catch(e){console.warn(e);return h}}}
+function atBig(k){const g=AT_BIG[k];
+  if(!g||state.atMax===k){state.atMax=state.atMax===k?null:k;renderMain();return}
+  state.atMax=null;
+  if(g[0]==='ag'){const b=document.createElement('button');b.dataset.ci='open';b.hidden=true;document.body.appendChild(b);b.click();b.remove();return}
+  if(g[0]==='v'){state.view=g[1];state.cart=g[1]==='clients'&&k==='cart';state.mList=true;renderAll();window.scrollTo(0,0);return}
+  const c=typeof tbC==='function'&&tbC();if(!c)return;
+  if(g[0]==='plan'){state.sel=c.id;state.view='clients';state.cart=false;state.tab='resumen';state.ftPlan=true;renderAll();window.scrollTo(0,0);return}
+  let t=g[1];if(t==='cliente')t=typeof ftDef==='function'?ftDef('cliente','datos'):'datos';
+  state.mList=false;state.sel=c.id;state.tab=t;state.view='clients';state.cart=false;state.calD=null;if(typeof attSeen==='function')attSeen(c);renderAll();window.scrollTo(0,0);
+}
+document.addEventListener('click',e=>{if(!e.target.closest)return;
+  const b=e.target.closest('#tbG [data-atbig]');if(b){e.preventDefault();e.stopPropagation();atBig(b.dataset.atbig);return}
+  /* tocar la gráfica del peso = abrirla en grande */
+  const p=e.target.closest('#tbG .tb-w[data-k="peso"] .tb-wb');if(p&&!e.target.closest('button,a,input,select,textarea')&&typeof tbC==='function'&&tbC())atBig('peso');
+},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.atMax&&!document.querySelector('#ciM,.modal:not([hidden])')){state.atMax=null;renderMain()}});
 
 /* 25/11 · pulido visual del entrenador: el alta de cliente se cierra al cambiar de pestaña */
 {let v0=null;const R=renderAll;renderAll=function(){const r=R.apply(this,arguments);try{if(state.mode==='coach'){if(v0!==null&&state.view!==v0){const f=document.getElementById('newform');if(f&&!f.hidden)f.hidden=true}v0=state.view}}catch(e){console.warn(e)}return r}}

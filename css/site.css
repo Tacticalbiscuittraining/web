@@ -111,14 +111,12 @@ p { margin: 0; }
 @media (max-width: 560px) {
   .btn-client { padding: 7px 10px; }
   .btn-client::after { font-size: 13px; }
-  .btn-client + .btn-coach { margin-left: -18px; }
 }
 @media (min-width: 861px) and (max-width: 1100px) {
   .site-nav { gap: 12px !important; }
   .site-nav a { font-size: 14px; }
   .btn-client { padding: 7px 12px; }
   .btn-client::after { font-size: 13px; }
-  .btn-client + .btn-coach { margin-left: -18px; }
 }
 @media (min-width: 861px) and (max-width: 940px) { .site-nav { gap: 9px !important; } .site-nav a { font-size: 13px; } }
 html[lang="en"] .btn-client::after { content: "Clients"; }
@@ -130,3 +128,7 @@ html[lang="en"] .btn-client.btn-coach::after { content: "Trainers"; }
 .coach-cta .btn.ghost { flex-shrink: 0; color: var(--fg); border-color: color-mix(in srgb, var(--fg) 35%, transparent); }
 .coach-cta .btn.ghost:hover { background: var(--fg); color: var(--bg); }
 @media (max-width: 700px) { .coach-cta { flex-direction: column; align-items: flex-start; padding: 22px 20px; margin-bottom: 48px; } }
+/* 25 nov: separación fija de 8px entre «Clientes» y «Entrenadores» (antes se pisaban en pantallas estrechas) */
+.btn-client + .btn-coach { margin-left: -16px; }
+@media (max-width: 860px) { .btn-client + .btn-coach { margin-left: -2px; } .btn-coach + .lang { margin-left: -2px; } }
+@media (max-width: 1100px) { .btn-client { display: inline-flex; align-items: center; justify-content: center; line-height: 1; } .btn-client::after { line-height: 1.2; } }

@@ -6024,10 +6024,18 @@ body.at-on .tb-chat .pe-qr>*,body.at-on[data-desk="1"] .pe-qr>*,body.at-on .tb-c
 #tbG .tb-w.at-max .tb-wb{flex:1;overflow:auto;max-height:none!important;font-size:1.06em}
 #tbG .tb-w.at-max .tb-rs{display:none}
 #tbG .tb-w.at-max .tb-chat{height:100%}
+/* 25 nov noche: una pieza minimizada («Semana pasada», «Sin noticias tuyas») al abrirla en grande salía vacía, solo con su título en medio */
+#tbG .tb-w.at-max.min>.tb-wb{display:block}
+#tbG .tb-w.at-max.min{background:linear-gradient(180deg,var(--tb-w2),var(--tb-w) 60px)}
+#tbG .tb-w.at-max.min>.tb-wh{flex:none;border-bottom:1px solid var(--line)}
+/* 25 nov noche: «SEMANA» bajo el anillo del saludo era verde menta casi blanco y en claro no se leía */
+body.at-on.at-lt .dh-ring i{color:var(--muted);opacity:1}
 
 /* 25/11 · pulido visual del entrenador */
 #newform .nf-p>label.btn{align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;width:auto;text-align:center}
 #newform .nf-seg{row-gap:8px}
+/* 25 nov noche: en el móvil, la cabecera del Panel (margin-top negativo, estilo Atardecer) tapaba la parte de abajo del formulario «Nuevo cliente»: «Crear cliente» y «Cancelar» no respondían al tocarlos */
+#newform{position:relative;z-index:3}
 
 /* generado por tools/atardecer_desk.py */
 body:where(.at-on)[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}

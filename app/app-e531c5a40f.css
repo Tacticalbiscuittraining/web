@@ -6030,6 +6030,9 @@ body.at-on .tb-chat .pe-qr>*,body.at-on[data-desk="1"] .pe-qr>*,body.at-on .tb-c
 #tbG .tb-w.at-max.min>.tb-wh{flex:none;border-bottom:1px solid var(--line)}
 /* 25 nov noche: «SEMANA» bajo el anillo del saludo era verde menta casi blanco y en claro no se leía */
 body.at-on.at-lt .dh-ring i{color:var(--muted);opacity:1}
+/* 26 nov: en oscuro, las etiquetas de revisión «Hoy» y «Vencida» eran blanco sobre coral claro (poco contraste): letra oscura, como los botones coral */
+body.at-on:not(.at-lt) .rvc.today,body.at-on:not(.at-lt) .rvc.late{color:#2A0F14}
+body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
 
 /* 25/11 · pulido visual del entrenador */
 #newform .nf-p>label.btn{align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;width:auto;text-align:center}

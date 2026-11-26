@@ -12523,5 +12523,28 @@
 200,
 "paquete"
 ]
+},
+{
+"n": "Tortitas de legumbres y arroz Hacendado",
+"g": "c",
+"p": 25,
+"c": 55,
+"f": 3.1,
+"fib": 7.9,
+"src": "Mercadona: etiqueta (366 kcal; 44 % legumbres: guisante verde, guisante amarillo y lenteja roja; paquete 109 g = 4 packs de 4 tortitas, ración 4 tortitas = 27,3 g)",
+"sw": false,
+"al": [
+"tortitas de legumbres",
+"tortitas legumbres",
+"tortitas de leguminosas",
+"tortita de legumbres",
+"tortitas de lentejas",
+"tortitas de guisante",
+"tortitas proteicas"
+],
+"ud": [
+6.8,
+"tortita"
+]
 }
 ]

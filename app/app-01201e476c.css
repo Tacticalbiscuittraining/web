@@ -436,7 +436,7 @@ button.cx-k:hover{border-color:var(--teal)}
 .xs-a{display:flex;gap:6px;flex-wrap:wrap}
 .xs-a a.btn{text-decoration:none;color:var(--fg)}
 .xs-a a.btn.primary{color:var(--btn-fg)}
-.xs-tg{display:flex;flex-direction:row;gap:5px;flex-wrap:wrap;align-items:center}
+.xs-tg{display:flex;flex-direction:row;gap:5px;flex-wrap:wrap;align-items:center;margin-top:6px}
 /* 6 nov: solo las etiquetas (.xs-tg); sin esto las tablas del plan (.xs-t de real.css) salían como una píldora oscura e ilegible */
 .xs-tg .xs-t{flex:none;width:auto;display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:2px 4px 2px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}
 .xs-tg .xs-t button{border:0;background:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;padding:0 4px}
@@ -601,7 +601,7 @@ body[data-ct] .hub-body>div.x-rmed,.x-rmed{display:flex;align-items:center;gap:1
 .in.sm{min-height:34px;padding:4px 8px;font-size:13.5px;width:auto}
 
 /* entrenador: cabecera de la ficha */
-.x-strip{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.x-strip{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 12px}
 .x-st{display:inline-flex;align-items:center;gap:4px;font:inherit;font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2,var(--surface));color:var(--fg)}
 button.x-st{cursor:pointer}
 .x-st.hot{border-color:var(--coral);color:var(--coral-ink,var(--coral));background:color-mix(in srgb,var(--coral) 10%,var(--surface))}
@@ -5929,6 +5929,8 @@ body.at-on[data-screen="coach"]::before{background:var(--at-peach)!important;opa
 
 /* tarjetas: cristal granate, esquinas como en la app de clientes */
 body.at-on[data-screen="coach"] .card,body.at-on[data-screen="coach"] .dsec{background:var(--at-glass);border-color:var(--at-rim);border-radius:22px}
+/* 26 nov: dentro de las piezas del Escritorio (oscuro) las tarjetas van sin fondo: con el tema claro salían blancas con letra blanca (Notas privadas, Agenda del cliente) */
+body.at-on[data-screen="coach"] .tb-wb .card{background:transparent;border:0;box-shadow:none;border-radius:0}
 body.at-on[data-screen="coach"] .dsec>summary h2{font-family:var(--f-display);letter-spacing:.14em;color:var(--at-peach)}
 body.at-on[data-screen="coach"] .btn.primary{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-fg)}
 
@@ -6045,6 +6047,10 @@ body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
 #newform .nf-seg{row-gap:8px}
 /* 25 nov noche: en el móvil, la cabecera del Panel (margin-top negativo, estilo Atardecer) tapaba la parte de abajo del formulario «Nuevo cliente»: «Crear cliente» y «Cancelar» no respondían al tocarlos */
 #newform{position:relative;z-index:3}
+/* 26 nov: en Revisiones, «Para comentar», «Ajustar el plan con IA» y «Cuestionario» iban pegadas una a otra */
+.card.rv-dg+.card,.card.rv-ai+.card,.card+.card.rv-ai,.card+.card.ck-r{margin-top:12px}
+/* 26 nov: Carrera › «Salidas registradas» pegada a «Volumen de carrera por semana» */
+.card.rn-logc+.rn-d{margin-top:12px}
 
 /* generado por tools/atardecer_desk.py */
 body:where(.at-on)[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}

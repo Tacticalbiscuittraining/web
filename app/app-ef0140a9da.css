@@ -5258,6 +5258,10 @@ html.d4-sum-on .p-dock{opacity:0;pointer-events:none}
 .d4-qb.otra.on{border-color:#E9A23B;background:color-mix(in srgb,#E9A23B 16%,transparent)}
 .d4-qb.fuera.on{border-color:#5AA9E6;background:color-mix(in srgb,#5AA9E6 16%,transparent)}
 @media (prefers-reduced-motion:reduce){.d4-qo-in{animation:none}}
+/* 28 nov (Robert eligió «Atardecer»): fondo del resumen como el resto de la app, cuadros en cristal */
+#d4Sum{background:linear-gradient(180deg,#C4533A 0%,#8A2C34 20%,#3D1222 44%,#150A10 72%) #150A10}
+#d4Sum .d4-tile,#d4Sum .d4-blk,#d4Sum .d4-ft .pe-share{background:rgba(48,18,28,.62);border-color:rgba(255,255,255,.11)}
+#d4Sum .d4-ft{background:linear-gradient(rgba(21,10,16,0),#150A10 14px)}
 
 /* ---------- 18 nov 2026 · Entreno «en directo + reto contigo mismo» (src/directo.js) ---------- */
 .dx-rs{display:block;width:100%;height:100%;overflow:visible}

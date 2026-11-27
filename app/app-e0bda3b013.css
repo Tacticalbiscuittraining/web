@@ -6130,7 +6130,10 @@ body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
 .sp-sh{display:flex;align-items:center;gap:8px;font-size:13.5px}
 .sp-sh input{width:18px;height:18px;accent-color:#E7B93E}
 /* medicación: su propio cuadro, con azul en vez de dorado para distinguirlo */
-.sp-row[data-spk=med] .sp-l{color:#9CC2EE!important}
+.sp-row[data-spk=med] .sp-l{color:#3D6A9E!important}/* 28 nov: en claro (Dieta) el azul pálido casi no se leía */
+.sp-row[data-spw=home][data-spk=med] .sp-l,:root[data-theme="dark"] .sp-row[data-spk=med] .sp-l{color:#9CC2EE!important}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sp-row[data-spk=med] .sp-l{color:#9CC2EE!important}}
+:root[data-theme="dark"] .sp-row[data-spk=med] .sp-l{color:#9CC2EE!important}
 .sp-row[data-spk=med] .sp-b[aria-pressed=true] i{background:#7FB2E5!important;border-color:#7FB2E5!important;color:#0b1a2a}
 .pe-day .sp-row[data-spk=med]{border-color:rgba(156,194,238,.25)}
 /* 27 nov 18:35 (Robert): la medicación en Inicio con su foto (blísteres de pastillas), oscurecida como la de suplementos.
@@ -6291,6 +6294,8 @@ html.tb-pro img.pro-logo{object-fit:contain;border-radius:22%}
 /* sin la marca ni el logo de Robert (marcas de agua y círculos con su logo) */
 html.tb-pro #tbLs,html.tb-pro .tb-lsc,html.tb-pro body::before,html.tb-pro .hub::before,html.tb-pro .chat-card.cli .chat::before,html.tb-pro body[data-ct=inicio] .hub::after{display:none!important;background-image:none!important}
 html.tb-pro .nv-hl,html.tb-pro #mopPeek i{background-image:var(--pro-logo)!important;background-color:#fff!important;background-size:contain!important}
+/* 28 nov: la IA (análisis, planes, leer capturas de carrera) va con la cuenta de Team Biscuit: de momento no para otros entrenadores ni sus clientes */
+html.tb-pro .ai-c,html.tb-pro .ai-note,html.tb-pro .alta-ai,html.tb-pro .shot.rf-shot{display:none!important}
 
 /* Layout: consola de entrenador. Columna izquierda con los clientes, espacio de trabajo a la derecha; en móvil la lista pasa arriba como tira horizontal. */
 :root{

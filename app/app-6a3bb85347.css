@@ -6052,6 +6052,57 @@ body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
 /* 26 nov: Carrera › «Salidas registradas» pegada a «Volumen de carrera por semana» */
 .card.rn-logc+.rn-d{margin-top:12px}
 
+/* 27 nov: suplementos (src/suple.js). Fila fina, sin colores de alarma; solo transform/opacity en la animación */
+.sp-row{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px 10px;margin:10px 0 0;padding:8px 10px;border-radius:14px;border:1px solid var(--line,rgba(127,127,127,.18));background:color-mix(in srgb,currentColor 4%,transparent)}
+.pe-day .sp-row{margin-top:10px;border-color:rgba(244,238,223,.14);background:rgba(255,255,255,.04)}
+.sp-l{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.sp-ch{display:flex;gap:6px;min-width:0}
+.sp-b{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:11px;border:1px solid transparent;background:color-mix(in srgb,currentColor 6%,transparent);color:inherit;font:inherit;text-align:left;cursor:pointer;transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .25s}
+.sp-b:active{transform:scale(.96);transition-duration:.08s}
+.sp-b i{flex:none;width:18px;height:18px;border-radius:50%;border:1.5px solid color-mix(in srgb,currentColor 38%,transparent);display:grid;place-items:center;font-style:normal;font-size:11px;line-height:1}
+.sp-b[aria-pressed=true] i{background:#E7B93E;border-color:#E7B93E;color:#1d1503}
+.sp-b[aria-pressed=true] i::before{content:'✓';font-weight:800}
+.sp-b span{min-width:0;display:grid}
+.sp-b b{font-size:13px;font-weight:700;line-height:1.2}
+.sp-b small{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.sp-b[aria-pressed=true] b,.sp-b[aria-pressed=true] small{opacity:.6}
+.sp-all{opacity:.75}
+@media (max-width:480px){.sp-row{grid-template-columns:1fr;gap:6px}.sp-l{padding-left:2px}}
+/* entrenador */
+.sp-ed{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:-4px 0 12px;font-size:12.5px;color:var(--muted)}
+.sp-eb{padding:4px 10px;border-radius:99px;border:1px solid var(--line,rgba(127,127,127,.3));background:transparent;color:inherit;font:inherit;font-size:12.5px;cursor:pointer}
+.sp-eb[aria-pressed=true]{background:#E7B93E;border-color:#E7B93E;color:#1d1503;font-weight:700}
+.sp-adh{margin:4px 0 10px;font-size:13px;color:var(--muted)}
+.sp-adh b{color:var(--fg)}
+.sp-cb{margin:12px 0 0;padding:10px 12px;border-radius:12px;border:1px dashed var(--line,rgba(127,127,127,.3))}
+.sp-cb h3{margin:0 0 6px;font-size:13px}
+.sp-cb p{margin:3px 0;font-size:13.5px}
+.sp-cb small{color:var(--muted)}
+/* el cliente añade o quita */
+.sp-mine{margin-top:10px;display:grid;gap:8px}
+.sp-ln{display:grid;gap:6px}
+.sp-it{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sp-it span{display:grid;min-width:0}
+.sp-it b{font-size:14px}
+.sp-it small{font-size:12px;color:var(--muted)}
+.sp-offi b{text-decoration:line-through;opacity:.6}
+.sp-x,.sp-new,.sp-use{border:0;background:none;color:var(--muted);font:inherit;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px 0;white-space:nowrap}
+.sp-new{justify-self:start;color:inherit;font-weight:600;text-decoration:none;padding:6px 0}
+.sp-use{color:inherit;font-weight:700;margin-left:4px}
+.sp-note{margin:0;font-size:11.5px;color:var(--muted)}
+.sp-add{display:grid;gap:8px;padding:10px;border-radius:12px;background:color-mix(in srgb,currentColor 4%,transparent)}
+.sp-add .sp-ed{margin:0}
+.sp-rec{margin:0;font-size:12.5px;line-height:1.4;color:var(--muted)}
+.sp-rec b{color:var(--fg)}
+.sp-aa{display:flex;justify-content:flex-end;gap:8px}
+
+/* 27 nov (Robert): en Inicio, el cuadro de suplementos con un dibujo de fondo (cacito de creatina, perlas de omega 3 y una cápsula), apagado como las fotos de «Tu día» */
+.sp-row[data-spw=home]{color-scheme:dark;--fg:#F4EEDF;--muted:#B9AE94;color:#F4EEDF;background:#0E0C08;border-color:rgba(233,185,73,.22);position:relative;isolation:isolate;overflow:hidden;min-height:124px;align-content:end;padding-top:14px}
+.sp-row[data-spw=home]::before{content:"";position:absolute;inset:0;z-index:-2;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 120'%3E %3Cdefs%3E %3CradialGradient id='g' cx='.35' cy='.3' r='.8'%3E%3Cstop offset='0' stop-color='%23FFE7A3'/%3E%3Cstop offset='.45' stop-color='%23E7A93A'/%3E%3Cstop offset='1' stop-color='%238A5410'/%3E%3C/radialGradient%3E %3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%236A717B'/%3E%3Cstop offset='1' stop-color='%232E333A'/%3E%3C/linearGradient%3E %3CradialGradient id='p' cx='.4' cy='.3' r='.9'%3E%3Cstop offset='0' stop-color='%23FFFFFF'/%3E%3Cstop offset='1' stop-color='%23CFC8BA'/%3E%3C/radialGradient%3E %3ClinearGradient id='c1' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23F3EEE4'/%3E%3Cstop offset='1' stop-color='%23B9B2A4'/%3E%3C/linearGradient%3E %3ClinearGradient id='c2' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%234FD1C1'/%3E%3Cstop offset='1' stop-color='%231B7F73'/%3E%3C/linearGradient%3E %3C/defs%3E %3Cpath d='M150 62 L226 36' stroke='url(%23s)' stroke-width='9' stroke-linecap='round'/%3E %3Cellipse cx='128' cy='70' rx='34' ry='12' fill='%233C424A'/%3E %3Cpath d='M94 70 Q96 104 128 104 Q160 104 162 70 Z' fill='url(%23s)'/%3E %3Cpath d='M98 70 Q104 46 128 44 Q152 46 158 70 Q128 80 98 70Z' fill='url(%23p)'/%3E %3Ccircle cx='112' cy='84' r='1.4' fill='%23fff' opacity='.5'/%3E%3Ccircle cx='168' cy='92' r='1.2' fill='%23E9E3D6' opacity='.7'/%3E%3Ccircle cx='174' cy='98' r='1' fill='%23E9E3D6' opacity='.6'/%3E%3Ccircle cx='162' cy='100' r='1.3' fill='%23E9E3D6' opacity='.6'/%3E %3Cg transform='rotate(-20 200 88)'%3E%3Cellipse cx='200' cy='88' rx='17' ry='10' fill='url(%23g)'/%3E%3Cellipse cx='194' cy='84' rx='6' ry='2.4' fill='%23FFF6D8' opacity='.75'/%3E%3C/g%3E %3Cg transform='rotate(25 62 96)'%3E%3Cellipse cx='62' cy='96' rx='15' ry='9' fill='url(%23g)'/%3E%3Cellipse cx='57' cy='92' rx='5' ry='2' fill='%23FFF6D8' opacity='.75'/%3E%3C/g%3E %3Cg transform='rotate(-8 224 106)'%3E%3Cellipse cx='224' cy='106' rx='13' ry='7.5' fill='url(%23g)' opacity='.9'/%3E%3C/g%3E %3Cg transform='rotate(-35 54 50)'%3E%3Crect x='34' y='42' width='40' height='16' rx='8' fill='url(%23c1)'/%3E%3Cpath d='M54 42h12a8 8 0 0 1 0 16H54z' fill='url(%23c2)'/%3E%3Crect x='38' y='45' width='30' height='3' rx='1.5' fill='%23fff' opacity='.45'/%3E%3C/g%3E %3C/svg%3E") right -6px top -4px/auto 78px no-repeat;opacity:.95;pointer-events:none}
+.sp-row[data-spw=home]::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(14,12,8,.7) 0%,rgba(14,12,8,.25) 45%,rgba(14,12,8,0) 100%),linear-gradient(180deg,rgba(14,12,8,0) 45%,rgba(14,12,8,.55) 100%)}
+.sp-row[data-spw=home] .sp-l{align-self:start;color:#F6D27A;padding-bottom:22px}
+.sp-row[data-spw=home] .sp-b{background:rgba(14,12,8,.62);box-shadow:inset 0 0 0 1px rgba(244,238,223,.1)}
+
 /* generado por tools/atardecer_desk.py */
 body:where(.at-on)[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}
 body:where(.at-on)[data-desk="1"] .dk-brand img{box-shadow:0 0 0 2px #E9765A}

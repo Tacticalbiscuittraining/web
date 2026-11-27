@@ -6097,6 +6097,14 @@ body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
 
 .sp-xs{display:flex;flex-direction:column;align-items:flex-end;gap:0;flex:none}
 .sp-edn{margin:0;font-size:14px}
+/* 27 nov 14:25 (Robert): en Inicio, foto real de fondo (como «Tu día»), oscurecida para que se lea.
+   public/dt/suple.webp = https://unsplash.com/photos/5YKjTD8xrnw (Andrey Khoviakov, licencia Unsplash) */
+.sp-row[data-spw=home]{position:relative;isolation:isolate;overflow:hidden;color-scheme:dark;--fg:#F4EEDF;--muted:#C9BFA6;color:#F4EEDF;background:#0E0C08;border-color:rgba(233,185,73,.24)}
+.sp-row[data-spw=home]::before{content:"";position:absolute;inset:0;z-index:-2;background:#0E0C08 url(dt/suple.webp?v=1) 70% 55%/cover no-repeat;pointer-events:none}
+.sp-row[data-spw=home]::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(12,11,9,.88) 0%,rgba(12,11,9,.7) 50%,rgba(12,11,9,.5) 100%)}
+.sp-row[data-spw=home] .sp-l{color:#F6D27A}
+.sp-row[data-spw=home] .sp-b i{border-color:rgba(244,238,223,.55);background:rgba(12,11,9,.35)}
+.sp-row[data-spw=home] .sp-b[aria-pressed=true] i{background:#E7B93E;border-color:#E7B93E}
 
 /* generado por tools/atardecer_desk.py */
 body:where(.at-on)[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}

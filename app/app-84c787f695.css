@@ -6147,6 +6147,38 @@ body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
 .pc-op{display:flex;gap:8px;flex-wrap:wrap}.pc-op button{padding:9px 16px}.pc-op.col{flex-direction:column}.pc-op.col button{text-align:left}
 .pc-sc button[aria-pressed=true],.pc-op button[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:#fff}
 .pc-ok{text-align:center;padding:24px 0}.pc-ok>div{font-size:40px;color:var(--teal)}
+/* 28 nov: Inicio con el color del entrenador (--pro-c, lo pone src/pro.js) en vez del atardecer rosa de la app de Robert */
+:root.tb-pro:root body[data-ct=inicio]:has(.hub){
+  --s1:color-mix(in oklab,var(--pro-c) 45%,#fff5e6);--s2:color-mix(in oklab,var(--pro-c) 80%,#fff);--s3:var(--pro-c);--s4:color-mix(in oklab,var(--pro-c) 45%,#0b0d14);
+  --ct-l:color-mix(in oklab,var(--pro-c) 30%,#fff);--teal:var(--pro-c);--teal-ink:color-mix(in oklab,var(--pro-c) 75%,#000);--teal-soft:color-mix(in oklab,var(--pro-c) 14%,#fff);
+  --btn-bg:var(--pro-c);--btn-fg:#fff;--bg:color-mix(in oklab,var(--pro-c) 9%,#fbfaf8)}
+:root.tb-pro[data-theme="dark"]:root body[data-ct=inicio]:has(.hub){
+  --s1:color-mix(in oklab,var(--pro-c) 70%,#2a1d10);--s2:color-mix(in oklab,var(--pro-c) 60%,#10131a);--s3:color-mix(in oklab,var(--pro-c) 32%,#0d1016);--s4:#0b0d12;
+  --bg:#0d0f14;--surface:color-mix(in oklab,var(--pro-c) 8%,#151820);--surface-2:color-mix(in oklab,var(--pro-c) 10%,#1b1f28);--line:color-mix(in oklab,var(--pro-c) 16%,#2a2f3a);
+  --teal:color-mix(in oklab,var(--pro-c) 70%,#fff);--teal-ink:color-mix(in oklab,var(--pro-c) 45%,#fff);--teal-soft:color-mix(in oklab,var(--pro-c) 22%,#11141b);--btn-bg:color-mix(in oklab,var(--pro-c) 80%,#fff);--btn-fg:#0b0d12}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])).tb-pro:not([data-theme="light"]):root body[data-ct=inicio]:has(.hub){
+  --s1:color-mix(in oklab,var(--pro-c) 70%,#2a1d10);--s2:color-mix(in oklab,var(--pro-c) 60%,#10131a);--s3:color-mix(in oklab,var(--pro-c) 32%,#0d1016);--s4:#0b0d12;
+  --bg:#0d0f14;--surface:color-mix(in oklab,var(--pro-c) 8%,#151820);--surface-2:color-mix(in oklab,var(--pro-c) 10%,#1b1f28);--line:color-mix(in oklab,var(--pro-c) 16%,#2a2f3a);
+  --teal:color-mix(in oklab,var(--pro-c) 70%,#fff);--teal-ink:color-mix(in oklab,var(--pro-c) 45%,#fff);--teal-soft:color-mix(in oklab,var(--pro-c) 22%,#11141b);--btn-bg:color-mix(in oklab,var(--pro-c) 80%,#fff);--btn-fg:#0b0d12}}
+:root:where([data-theme="dark"]).tb-pro:not([data-theme="light"]):root body[data-ct=inicio]:has(.hub){
+  --s1:color-mix(in oklab,var(--pro-c) 70%,#2a1d10);--s2:color-mix(in oklab,var(--pro-c) 60%,#10131a);--s3:color-mix(in oklab,var(--pro-c) 32%,#0d1016);--s4:#0b0d12;
+  --bg:#0d0f14;--surface:color-mix(in oklab,var(--pro-c) 8%,#151820);--surface-2:color-mix(in oklab,var(--pro-c) 10%,#1b1f28);--line:color-mix(in oklab,var(--pro-c) 16%,#2a2f3a);
+  --teal:color-mix(in oklab,var(--pro-c) 70%,#fff);--teal-ink:color-mix(in oklab,var(--pro-c) 45%,#fff);--teal-soft:color-mix(in oklab,var(--pro-c) 22%,#11141b);--btn-bg:color-mix(in oklab,var(--pro-c) 80%,#fff);--btn-fg:#0b0d12}
+.pc-ph{display:flex;flex-wrap:wrap;gap:8px}
+.pc-pi{position:relative;width:76px;height:96px;border-radius:12px;overflow:hidden;background:rgba(127,127,127,.15)}
+.pc-pi img{width:100%;height:100%;object-fit:cover}
+.pc-pi button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:12px;line-height:24px;padding:0}
+.pc-pa{width:76px;height:96px;border-radius:12px;border:1.5px dashed rgba(127,127,127,.5);display:grid;place-content:center;text-align:center;font-size:22px;color:var(--teal);cursor:pointer}
+.pc-pa small{display:block;font-size:11px;color:var(--muted,#888)}
+.pc-hb{display:grid;gap:8px;padding:4px 2px}.pc-hb>small{color:var(--muted,#888)}
+.pc-hb>div{display:flex;flex-wrap:wrap;gap:8px}
+.pc-hb button{font:inherit;display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit}
+.pc-hb button small{color:var(--muted,#888);font-size:12px}
+.pc-hb button[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:#fff}.pc-hb button[aria-pressed=true] small{color:rgba(255,255,255,.85)}
+.pc-dc{border-radius:14px;background:var(--surface,rgba(127,127,127,.08));padding:10px 12px}
+.pc-dc summary{cursor:pointer;font-weight:600}
+.pc-dc button{font:inherit;display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:10px 2px;border:0;border-top:1px solid rgba(127,127,127,.18);background:transparent;color:inherit}
+.pc-dc button:first-of-type{margin-top:8px}
 
 /* generado por tools/atardecer_desk.py */
 body:where(.at-on)[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}

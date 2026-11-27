@@ -6117,6 +6117,11 @@ body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
 .sp-row[data-spw=home][data-spk=med]{position:relative;isolation:isolate;overflow:hidden;color-scheme:dark;--fg:#F4EEDF;--muted:#C2CCD8;color:#F4EEDF;background:#0B1016}
 .sp-row[data-spw=home][data-spk=med]::before{content:"";position:absolute;inset:0;z-index:-2;background:#0B1016 url(dt/medicacion.webp?v=1) 60% 50%/cover no-repeat;pointer-events:none}
 .sp-row[data-spw=home][data-spk=med]::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(8,11,15,.9) 0%,rgba(8,11,15,.74) 50%,rgba(8,11,15,.55) 100%)}
+/* en Inicio el cuadro se puede tocar (lleva a Dieta): flecha como en las demás filas */
+.sp-row[data-spw=home]{cursor:pointer}
+.sp-row[data-spw=home] .sp-l::after{content:" ›";font-weight:800;opacity:.8}
+.sp-water{margin:14px 0 0!important;padding-top:10px;border-top:1px solid var(--line,rgba(127,127,127,.2));font-size:13px;color:var(--muted)}
+.sp-water b{font-weight:600}
 
 /* generado por tools/atardecer_desk.py */
 body:where(.at-on)[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}

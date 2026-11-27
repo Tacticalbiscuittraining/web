@@ -6123,6 +6123,31 @@ body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
 .sp-water{margin:14px 0 0!important;padding-top:10px;border-top:1px solid var(--line,rgba(127,127,127,.2));font-size:13px;color:var(--muted)}
 .sp-water b{font-weight:600}
 
+/* 27 nov: cliente de otro entrenador (src/pro-cliente.js) */
+.pc-c{display:grid;gap:10px}
+.pc-h{margin:0;font-size:15px;letter-spacing:.02em}
+.pc-r{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:var(--surface,rgba(127,127,127,.08))}
+.pc-r.warn{outline:1.5px solid var(--teal)}
+.pc-i{font-size:20px;line-height:1}
+.pc-t{flex:1;min-width:0;display:grid;gap:2px}
+.pc-t small{color:var(--muted,#888)}
+.pc-p{color:#d64545}
+.pc-bg{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center}
+.pc-box{background:var(--bg,#fff);color:var(--ink,#111);width:100%;max-width:560px;max-height:92vh;border-radius:20px 20px 0 0;display:flex;flex-direction:column}
+@media (min-width:700px){.pc-bg{align-items:center}.pc-box{border-radius:20px}}
+.pc-b{overflow:auto;padding:20px 18px 8px}
+.pc-b h2{margin:0 0 4px}
+.pc-ft{display:flex;gap:10px;justify-content:flex-end;padding:12px 18px calc(12px + env(safe-area-inset-bottom));border-top:1px solid rgba(127,127,127,.2)}
+.pc-q{display:grid;gap:8px;margin:16px 0}
+.pc-q textarea,.pc-num input{font:inherit;padding:10px;border-radius:10px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit}
+.pc-q textarea{width:100%;box-sizing:border-box}
+.pc-num input{width:110px}
+.pc-sc{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.pc-sc button,.pc-op button{font:inherit;padding:9px 0;border-radius:10px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit}
+.pc-op{display:flex;gap:8px;flex-wrap:wrap}.pc-op button{padding:9px 16px}.pc-op.col{flex-direction:column}.pc-op.col button{text-align:left}
+.pc-sc button[aria-pressed=true],.pc-op button[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:#fff}
+.pc-ok{text-align:center;padding:24px 0}.pc-ok>div{font-size:40px;color:var(--teal)}
+
 /* generado por tools/atardecer_desk.py */
 body:where(.at-on)[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}
 body:where(.at-on)[data-desk="1"] .dk-brand img{box-shadow:0 0 0 2px #E9765A}

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Entrena conmigo · Team Biscuit</title>
+<!-- 27 nov 2026: página pública de cada entrenador de la plataforma (no de Robert). entrena.html#<su-marca>.
+     Lee lo que el entrenador publica (rpc coach_page) y el formulario deja el contacto (rpc lead_add). supabase/captacion.sql -->
+<style>
+:root{--c:#2f7de1;--bg:#f6f7f9;--card:#fff;--ink:#14171c;--mut:#5d6570;--line:#e3e6ea}
+@media (prefers-color-scheme:dark){:root{--bg:#111418;--card:#1a1e24;--ink:#eef1f4;--mut:#9aa3ad;--line:#2a3038}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:640px;margin:0 auto;padding:24px 16px 40px}
+.hd{display:flex;align-items:center;gap:14px;margin:8px 0 18px}
+.lg{width:64px;height:64px;border-radius:18px;flex:none;object-fit:cover;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:700;font-size:24px}
+h1{margin:0;font-size:26px;line-height:1.15}
+.who{color:var(--mut);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0}
+.bio{white-space:pre-line}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px;color:var(--mut)}
+.sv{padding:12px 0;border-top:1px solid var(--line)}.sv:first-of-type{border-top:0;padding-top:0}
+.sv b{display:block}.sv small{color:var(--mut)}.sv .p{float:right;font-weight:700}
+label{display:grid;gap:6px;margin:12px 0;font-size:14px;color:var(--mut)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px;width:100%}
+textarea{resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:480px){.row{grid-template-columns:1fr}}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px 18px;width:100%;background:var(--c);color:#fff;cursor:pointer;margin-top:6px}
+button:disabled{opacity:.6}
+.ok{text-align:center;padding:30px 10px}.ok div{font-size:42px;color:var(--c)}
+.err{color:#d64545;font-size:14px;min-height:20px;margin:6px 0 0}
+.priv{font-size:12px;color:var(--mut);margin-top:10px}
+footer{text-align:center;color:var(--mut);font-size:12px;margin-top:22px}
+.nf{text-align:center;padding:60px 10px;color:var(--mut)}
+</style>
+</head>
+<body>
+<main id="m"><p class="nf">Cargando…</p></main>
+<script>
+(function(){
+const U='https://qadqhxrfhrrdgdwmfcxt.supabase.co',K='sb_publishable_cH6Y1fUdSQAOYSzINLVEGQ_Dqo47USj',slug=decodeURIComponent(location.hash.slice(1)||new URLSearchParams(location.search).get('c')||'').trim().toLowerCase();
+const m=document.getElementById('m'),esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rpc=(f,b)=>fetch(U+'/rest/v1/rpc/'+f,{method:'POST',headers:{apikey:K,'content-type':'application/json'},body:JSON.stringify(b)});
+const OBJ=['Perder grasa','Ganar músculo','Correr mejor','Salud y energía','Rendimiento deportivo'];
+const nf=()=>{m.innerHTML='<p class="nf">Esta página no existe o ya no está disponible.</p><footer>con Team Biscuit</footer>'};
+if(!slug){nf();return}
+rpc('coach_page',{p_slug:slug}).then(r=>r.ok?r.json():null).then(P=>{
+  if(!P||!P.n){nf();return}
+  if(/^#[0-9a-f]{6}$/i.test(P.col||''))document.documentElement.style.setProperty('--c',P.col);
+  document.title=P.n+' · Entrena conmigo';
+  const ini=String(P.n).trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+  const logo=/^data:image\/(png|jpeg|webp);base64,/.test(P.logo||'')?'<img class="lg" src="'+P.logo+'" alt="">':'<div class="lg" aria-hidden="true">'+esc(ini)+'</div>';
+  const S=Array.isArray(P.svc)?P.svc:[];
+  m.innerHTML='<header class="hd">'+logo+'<div><h1>'+esc(P.n)+'</h1>'+(P.who?'<div class="who">con '+esc(P.who)+'</div>':'')+'</div></header>'+
+    (P.bio?'<section class="card bio">'+esc(P.bio)+'</section>':'')+
+    (S.length?'<section class="card"><h2>Cómo puedo ayudarte</h2>'+S.map(s=>'<div class="sv">'+(s.p?'<span class="p">'+esc(s.p)+'</span>':'')+'<b>'+esc(s.n)+'</b>'+(s.inc?'<small>'+esc(s.inc)+'</small>':'')+'</div>').join('')+'</section>':'')+
+    '<section class="card" id="f"><h2>'+esc(P.cta||'Quiero empezar')+'</h2><p style="margin:0">Déjame tus datos y te escribo para hablar de lo que buscas.</p>'+
+    '<form id="fm" novalidate><label>Nombre<input name="name" autocomplete="name" maxlength="60" required></label>'+
+    '<div class="row"><label>Teléfono<input name="tel" type="tel" autocomplete="tel" maxlength="30"></label><label>Email<input name="email" type="email" autocomplete="email" maxlength="80"></label></div>'+
+    '<label>Tu objetivo<select name="obj"><option value="">Elige uno</option>'+OBJ.map(o=>'<option>'+o+'</option>').join('')+'</select></label>'+
+    (S.length?'<label>Lo que te interesa<select name="svc"><option value="">Aún no lo sé</option>'+S.map(s=>'<option>'+esc(s.n)+'</option>').join('')+'</select></label>':'')+
+    '<label>¿Algo que quieras contarme? <small>(si quieres)</small><textarea name="msg" rows="3" maxlength="600"></textarea></label>'+
+    '<button type="submit">'+esc(P.cta||'Quiero empezar')+'</button><p class="err" id="er" role="alert"></p>'+
+    '<p class="priv">Tus datos solo los recibe '+esc(P.who||P.n)+' para contactarte. No se usan para nada más.</p></form></section>'+
+    '<footer>con Team Biscuit</footer>';
+  const f=document.getElementById('fm'),er=document.getElementById('er');
+  f.addEventListener('submit',e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f).entries());
+    if(!String(d.name||'').trim()){er.textContent='Pon tu nombre.';return}
+    if(!String(d.tel||'').trim()&&!String(d.email||'').trim()){er.textContent='Pon un teléfono o un email para que pueda contactarte.';return}
+    const b=f.querySelector('button');b.disabled=true;er.textContent='';
+    rpc('lead_add',{p_slug:slug,p_data:d}).then(r=>{if(!r.ok)return r.json().then(x=>{throw new Error(x&&x.message||'error')});
+      document.getElementById('f').innerHTML='<div class="ok"><div>✓</div><h2 style="color:var(--ink)">¡Recibido!</h2><p>'+esc(P.who?P.who.split(' ')[0]:P.n)+' te escribirá muy pronto.</p></div>'})
+     .catch(x=>{b.disabled=false;er.textContent=/Demasiados/.test(x.message)?'Ahora mismo no se pueden enviar más. Prueba mañana.':'No se ha podido enviar. Revisa la conexión y prueba otra vez.'})});
+}).catch(nf);
+})();
+</script>
+</body>
+</html>

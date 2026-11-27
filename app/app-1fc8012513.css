@@ -6102,6 +6102,8 @@ body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
 .sp-row[data-spw=home]::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(14,12,8,.7) 0%,rgba(14,12,8,.25) 45%,rgba(14,12,8,0) 100%),linear-gradient(180deg,rgba(14,12,8,0) 45%,rgba(14,12,8,.55) 100%)}
 .sp-row[data-spw=home] .sp-l{align-self:start;color:#F6D27A;padding-bottom:22px}
 .sp-row[data-spw=home] .sp-b{background:rgba(14,12,8,.62);box-shadow:inset 0 0 0 1px rgba(244,238,223,.1)}
+.sp-xs{display:flex;flex-direction:column;align-items:flex-end;gap:0;flex:none}
+.sp-edn{margin:0;font-size:14px}
 
 /* generado por tools/atardecer_desk.py */
 body:where(.at-on)[data-desk="1"] .rail{--surface-2:#24111A;--line:#3E2129;--line-strong:#5C3340;--fg:#FBEFE8;--muted:#C9A69C;--ink-btn:#FBEFE8;box-shadow:inset -1px 0 0 #2D1720}

@@ -5214,6 +5214,23 @@ html.d4-sum-on .p-dock{opacity:0;pointer-events:none}
 .d4-wd{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:#A39E93}
 .d4-wd.t b{color:#F6D27A}
 .d4-sok{display:block;width:100%;min-height:54px;margin-top:16px;border:0;border-radius:17px;background:#E7B93E;color:#1d1503;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
+/* 27 nov (Robert): que quepa entero sin deslizar; «Contárselo» y «Listo» juntos, fijos abajo */
+.d4-sw{display:flex;flex-direction:column;min-height:100%;box-sizing:border-box;padding-top:calc(env(safe-area-inset-top) + 12px);padding-bottom:0}
+.d4-sh{margin-bottom:12px}.d4-sh h2{margin-top:8px;font-size:28px}.d4-sh p{margin-top:2px;font-size:14px}
+.d4-tiles{gap:8px}
+.d4-tile,.d4-blk{padding:10px 13px;border-radius:16px}
+.d4-tile b{font-size:26px}.d4-tile span{margin-top:3px;font-size:12.5px}
+.d4-tile.d4-st{grid-column:1/-1;display:flex;padding:8px 13px}
+.d4-st p{flex:1;display:flex;align-items:baseline;gap:7px;min-width:0;margin:0}
+.d4-st p+p{padding-left:12px;border-left:1px solid rgba(255,255,255,.08)}
+.d4-st b{font-size:19px}.d4-st b small{font-size:13px}.d4-st span{margin:0;font-size:12px;line-height:1.2}
+.d4-blk{margin-top:8px}.d4-blk h4{margin-bottom:7px;font-size:14px}
+.d4-sm,.d4-cmp{margin:6px 0 3px;font-size:12px}
+.d4-wd{gap:2px}
+.d4-sw>.d4-blk:last-of-type{margin-bottom:4px}
+.d4-ft{position:sticky;bottom:0;z-index:2;display:flex;gap:8px;margin-top:auto;padding:10px 0 calc(env(safe-area-inset-bottom) + 12px);background:linear-gradient(rgba(11,12,13,0),#0B0C0D 14px)}
+.d4-ft .d4-sok{flex:1 1 34%;min-height:50px;margin:0}
+#d4Sum .d4-ft .pe-share{flex:1 1 66%;min-width:0;min-height:50px;margin:0;font-size:14px;white-space:nowrap;background:#16181B}
 @media (max-width:360px){.d4-tl>.mx{margin-left:62px}.mx-l.d4-tl::before{left:43px}.d4-tm{left:-67px;width:26px;font-size:11px}.d4-nx h3{font-size:27px}.d4-th{width:38px;height:38px}}
 @media (prefers-reduced-motion:reduce){.d4-rg .d4-rp,.d4-rb i,.d4-xb i{transition:none}.d4-nx-in,.d4-tl>.mx.d4-pop,.d4-tl>.mx.d4-nxm>.sx-eat::before{animation:none}#d4Sum,.d4-tile,.d4-blk,#d4Rec{transition:none}}
 

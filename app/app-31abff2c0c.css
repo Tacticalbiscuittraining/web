@@ -10926,3 +10926,8 @@ button.rvc{font-family:inherit;cursor:pointer}
 
 /* 28 nov: el balance de la dieta no se parte dentro del paréntesis («(−5 / %)») */
 .tgt-n #r-bal{white-space:nowrap}
+
+/* 28 nov: entrevista «Por pasos» en el ordenador: la hoja siempre a todo el ancho y «Anterior/Siguiente» debajo (en Nutrición se iban a un lado) */
+#ivW{display:block}
+#ivW>.ivsheet{max-width:960px;margin-left:auto;margin-right:auto}
+#ivW.steps>.iv-pg{max-width:960px;margin-left:auto;margin-right:auto}

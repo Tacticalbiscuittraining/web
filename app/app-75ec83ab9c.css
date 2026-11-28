@@ -6143,9 +6143,15 @@ body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
 .sp-row[data-spw=home][data-spk=med]::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(8,11,15,.9) 0%,rgba(8,11,15,.74) 50%,rgba(8,11,15,.55) 100%)}
 /* en Inicio el cuadro se puede tocar (lleva a Dieta): flecha como en las demás filas */
 .sp-row[data-spw=home]{cursor:pointer}
-.sp-row[data-spw=home] .sp-l::after{content:" ›";font-weight:800;opacity:.8}
+.sp-row[data-spw=home] .sp-l::after{content:" ›";font-weight:800;opacity:.8}.sp-row[data-spw=home].sp-all .sp-l::after{content:" ✓ ›"}
 .sp-water{margin:14px 0 0!important;padding-top:10px;border-top:1px solid var(--line,rgba(127,127,127,.2));font-size:13px;color:var(--muted)}
 .sp-water b{font-weight:600}
+
+/* 28 nov (Robert, iPhone): marcar la última toma hacía «saltar» el cuadro. Ahora el ✓ del título va por CSS (no cambia el contenido),
+   lo hecho se apaga suave y el iPhone no ilumina el cuadro entero al tocar */
+.sp-all .sp-l::after{content:" ✓"}
+.sp-nm{transition:opacity .3s ease}
+.sp-row,.sp-row .sp-b{-webkit-tap-highlight-color:transparent}
 
 /* 27 nov: cliente de otro entrenador (src/pro-cliente.js) */
 .pc-c{display:grid;gap:10px}

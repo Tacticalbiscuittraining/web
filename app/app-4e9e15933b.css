@@ -718,6 +718,11 @@ img:is(.exo-ph,.tx-ph,.phs-t,.bub-img,.rn-img,.exm-img),.ch-att img,.phv-img img
 /* 15 nov: semanas del plan con nombres largos («S3 Semana de carrera») montaban el texto sobre la siguiente. Cada botón crece hasta 150 px y la fila se desliza. */
 .pl-wk>.pl-w{flex:1 0 auto;max-width:150px}.pl-wk>.pl-w span{white-space:normal}
 
+/* 28 nov: hueco de la foto mientras carga (ejercicios y Biblioteca): late suave hasta que llega; como mucho ~7 s por si no avisa */
+@keyframes tbImgWait{from{opacity:.35}to{opacity:.8}}
+:is(.exo-ph,.tx-h) img:not([data-ld]),img:is(.exm-img,.tx-ph):not([data-ld]){animation:tbImgWait .9s ease-in-out 8 alternate}
+@media (prefers-reduced-motion:reduce){:is(.exo-ph,.tx-h) img:not([data-ld]),img:is(.exm-img,.tx-ph):not([data-ld]){animation:none}}
+
 /* ---------- molestias ---------- */
 :root{--xm-g:#3BA776;--xm-a:#E9A23B;--xm-r:#D9534F}
 .xm-fig{--xm-mus:#383d45;--xm-head:#2b2f35;--xm-hair:#1c1f23}
@@ -6071,6 +6076,11 @@ body.at-on.at-lt .dh-ring i{color:var(--muted);opacity:1}
 /* 26 nov: en oscuro, las etiquetas de revisión «Hoy» y «Vencida» eran blanco sobre coral claro (poco contraste): letra oscura, como los botones coral */
 body.at-on:not(.at-lt) .rvc.today,body.at-on:not(.at-lt) .rvc.late{color:#2A0F14}
 body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
+/* 28 nov: la lista de «Citas de hoy» dentro de «Tu agenda» */
+.at-hero .at-ci{margin:12px 0 0;padding:8px 0 0;border-top:1px solid rgba(255,255,255,.16);gap:2px}
+.at-hero .at-ci .ci-tr{color:#fff;padding:6px 2px}
+.at-hero .at-ci .ci-tr small,.at-hero .at-ci .ci-nx{color:rgba(255,255,255,.72)}
+.at-hero .at-ci .ci-nx{margin:4px 0 0;text-transform:uppercase;letter-spacing:.08em;font-size:11px}
 
 /* 25/11 · pulido visual del entrenador */
 #newform .nf-p>label.btn{align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;width:auto;text-align:center}

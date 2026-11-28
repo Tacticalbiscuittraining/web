@@ -756,6 +756,11 @@ img:is(.exo-ph,.tx-ph,.phs-t,.bub-img,.rn-img,.exm-img),.ch-att img,.phv-img img
 /* 15 nov: semanas del plan con nombres largos («S3 Semana de carrera») montaban el texto sobre la siguiente. Cada botón crece hasta 150 px y la fila se desliza. */
 .pl-wk>.pl-w{flex:1 0 auto;max-width:150px}.pl-wk>.pl-w span{white-space:normal}
 
+/* 28 nov: hueco de la foto mientras carga (ejercicios y Biblioteca): late suave hasta que llega; como mucho ~7 s por si no avisa */
+@keyframes tbImgWait{from{opacity:.35}to{opacity:.8}}
+:is(.exo-ph,.tx-h) img:not([data-ld]),img:is(.exm-img,.tx-ph):not([data-ld]){animation:tbImgWait .9s ease-in-out 8 alternate}
+@media (prefers-reduced-motion:reduce){:is(.exo-ph,.tx-h) img:not([data-ld]),img:is(.exm-img,.tx-ph):not([data-ld]){animation:none}}
+
 /* ---------- molestias ---------- */
 :root{--xm-g:#3BA776;--xm-a:#E9A23B;--xm-r:#D9534F}
 .xm-fig{--xm-mus:#383d45;--xm-head:#2b2f35;--xm-hair:#1c1f23}
@@ -6109,6 +6114,11 @@ body.at-on.at-lt .dh-ring i{color:var(--muted);opacity:1}
 /* 26 nov: en oscuro, las etiquetas de revisión «Hoy» y «Vencida» eran blanco sobre coral claro (poco contraste): letra oscura, como los botones coral */
 body.at-on:not(.at-lt) .rvc.today,body.at-on:not(.at-lt) .rvc.late{color:#2A0F14}
 body.at-on:not(.at-lt) .tb-ch .rvc.late{color:#fff}
+/* 28 nov: la lista de «Citas de hoy» dentro de «Tu agenda» */
+.at-hero .at-ci{margin:12px 0 0;padding:8px 0 0;border-top:1px solid rgba(255,255,255,.16);gap:2px}
+.at-hero .at-ci .ci-tr{color:#fff;padding:6px 2px}
+.at-hero .at-ci .ci-tr small,.at-hero .at-ci .ci-nx{color:rgba(255,255,255,.72)}
+.at-hero .at-ci .ci-nx{margin:4px 0 0;text-transform:uppercase;letter-spacing:.08em;font-size:11px}
 
 /* 25/11 · pulido visual del entrenador */
 #newform .nf-p>label.btn{align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;width:auto;text-align:center}
@@ -17693,7 +17703,7 @@ window.addEventListener('pagehide',()=>{if(RB.role)saveNow()});
 window.addEventListener('beforeunload',e=>{if(!RB.role)return;const dirty=RB.saving||state.clients.some(c=>RB.base[c.id]&&diff(c,RB.base[c.id].s).n);if(dirty){saveNow();e.preventDefault();e.returnValue=''}});
 
 /* ---------- versión nueva disponible ---------- */
-const APP_VER='20261128044305';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
+const APP_VER='20261128070315';let verTop=APP_VER,verT=0,verNew=false,verTouch=false,verLast=0,verOpen=Date.now(),verGo=false;
 /* versión nueva (7 nov): el cliente no ve ningún aviso y no tiene que abrir la app dos veces.
    Se mira version.json nada más abrir (y al volver a la app) y, si hay versión nueva, se pone sola:
    - al momento, si acaba de abrir (sin tocar nada, o en los primeros 10 s y con 1,5 s sin tocar);
@@ -26617,6 +26627,9 @@ if(typeof inboxView==='function'){const V0=inboxView;inboxView=function(){const 
     if(state.ctab==='entreno'){sesGrab();clockCopy()}sesPaint();if(rtBig())minSet(false);imgs()}catch(_){}},500);
 }
 
+
+/* 28 nov: las fotos avisan al cargar (o fallar) para quitar el «hueco» que late mientras llegan (extra.css tbImgWait) */
+{const ok=e=>{const t=e.target;if(t&&t.tagName==='IMG'&&!t.hasAttribute('data-ld'))t.setAttribute('data-ld','')};document.addEventListener('load',ok,true);document.addEventListener('error',ok,true);setTimeout(()=>document.querySelectorAll('img').forEach(i=>{if(i.complete)i.setAttribute('data-ld','')}),0)}
 /* ---------- red de seguridad: va la última, envuelve el pintado final ----------
    Si una pantalla falla al pintarse, en vez de quedarse congelada o en blanco se ve un aviso
    con «Volver al inicio», el fallo se apunta (errRep) y el resto de la app sigue funcionando. */
@@ -30655,8 +30668,13 @@ function atQuick(){
   const H=d.querySelector(':scope>.dash-h');if(!H)return h;
   const nb=H.querySelector(':scope>[data-act="toggleNew"]');if(nb)nb.remove();
   H.insertAdjacentHTML('afterend',atHero()+atQuick());
-  const k=d.querySelector(':scope>.dks'),ci=d.querySelector(':scope>#ds-cit');
-  if(k&&ci)k.after(ci);
+  /* 28 nov (Robert eligió juntarlas): «Citas de hoy» ya no va en otra tarjeta; su lista (hoy y próximas) entra en «Tu agenda» */
+  const ci=d.querySelector(':scope>#ds-cit'),hero=d.querySelector(':scope>.at-hero');
+  if(ci&&hero){const L=ci.querySelector('.ci-sec');
+    if(L&&L.querySelector('.ci-tr')){const a=L.querySelector(':scope>.actions');if(a)a.remove();L.classList.add('at-ci');
+      const nh=L.querySelector(':scope>p.muted:not(.ci-nx)');if(nh)nh.remove();else L.insertAdjacentHTML('afterbegin','<p class="ci-nx">Hoy</p>');
+      const r=hero.querySelector('.at-row');if(r)r.before(L);else hero.append(L)}
+    ci.remove()}
   const ag=d.querySelector('#ds-rev>summary>h2');if(ag&&ag.textContent.trim()==='Agenda')ag.textContent='Revisiones y planes';
   return T.innerHTML}catch(e){console.warn(e);return h}}}
 /* «Nuevo cliente» de los accesos sustituye al botón del saludo: mismo data-act=toggleNew, así el alta funciona igual que siempre */

@@ -1999,8 +1999,8 @@ span.sg-chip{cursor:default}
 .sg-wki.m b{color:var(--ld-wa)}
 .sg-wki p{margin:2px 0 0;font-size:14px}
 /* constancia */
-.sg-me{display:flex;align-items:center;flex-wrap:wrap;gap:2px;margin:0;font-size:13px;color:var(--muted)}
-.sg-me .sg-dot{margin:0 3px 0 4px;width:8px;height:8px}
+.sg-me{display:flex;align-items:flex-start;flex-wrap:nowrap;gap:2px;margin:0;font-size:13px;color:var(--muted)}
+.sg-me .xi{margin-top:2px}.sg-me .sg-dot{margin:0 3px 0 1px;width:8px;height:8px}
 .sg-ql{list-style:none;margin:0;padding:0;display:grid}
 .sg-ql li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
 .sg-ql li:first-child{border-top:0}
@@ -3815,6 +3815,8 @@ body .td-pills .td-p.td-plus.on{color:#FF9068}
 /* 23 nov: «↓ Hacerlo al final» / «↑ Volver a su sitio» (solo la sesión de hoy) */
 .exo-r .ex-ord{display:block;margin:12px auto 0;font-size:13px;font-weight:600;color:var(--accent,#1FB5A9)}
 .exo-r .ex-ord+.ex-skip{margin-top:6px}
+/* 28 nov: series por lado (izq / dcha) con peso: las píldoras no cabían y el ✓ tapaba «dcha» (visto en real a 390 px). Ahora bajan a otra línea */
+.tx-b .exo-r .setrow2.sp2.uni>.esv,.setrow2.sp2.uni>.esv{flex-wrap:wrap;row-gap:4px}
 
 /* 8 nov · Controles de la derecha (e iconos de la izquierda) centrados en vertical respecto a toda la fila */
 /* Dieta: gramos y ✕ en medio de nombre + línea de kcal (si la 2ª línea es una etiqueta larga de cambio, se queda como estaba para no cortarla) */
@@ -10911,3 +10913,6 @@ button.rvc{font-family:inherit;cursor:pointer}
   .food-row:not(.head) .cell .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;letter-spacing:.02em}
   .food-row:not(.head) .in.num,.food-row:not(.head) .ro{padding-left:6px;padding-right:6px;min-width:0}
 }
+
+/* 28 nov: el balance de la dieta no se parte dentro del paréntesis («(−5 / %)») */
+.tgt-n #r-bal{white-space:nowrap}
